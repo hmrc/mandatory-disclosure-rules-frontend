@@ -5,7 +5,7 @@ import uk.gov.hmrc.DefaultBuildSettings
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
 lazy val appName: String = "mandatory-disclosure-rules-frontend"
-val silencerVersion = "1.6.0"
+val silencerVersion = "1.7.0"
 
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala, SbtAutoBuildPlugin, SbtDistributablesPlugin)
@@ -19,7 +19,7 @@ lazy val root = (project in file("."))
   .settings(majorVersion := 0)
   .settings(useSuperShell in ThisBuild := false)
   .settings(
-    scalaVersion := "2.12.10",
+    scalaVersion := "2.12.12",
     name := appName,
     RoutesKeys.routesImport ++= Seq(
       "models._",
@@ -29,7 +29,6 @@ lazy val root = (project in file("."))
       "play.twirl.api.HtmlFormat",
       "play.twirl.api.HtmlFormat._",
       "uk.gov.hmrc.govukfrontend.views.html.components._",
-      "uk.gov.hmrc.govukfrontend.views.html.helpers._",
       "uk.gov.hmrc.hmrcfrontend.views.html.components._",
       "uk.gov.hmrc.hmrcfrontend.views.html.helpers._",
       "views.ViewUtils._",
@@ -46,8 +45,6 @@ lazy val root = (project in file("."))
     scalacOptions ++= Seq("-feature"),
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
-    evictionWarningOptions in update :=
-      EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
     resolvers ++= Seq(Resolver.jcenterRepo),
     // concatenate js
     Concat.groups := Seq(
