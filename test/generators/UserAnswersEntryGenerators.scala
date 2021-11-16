@@ -16,5 +16,4 @@
 
 package generators
 
-trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
-}
+trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {}
