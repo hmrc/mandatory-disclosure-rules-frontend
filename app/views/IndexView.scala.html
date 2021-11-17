@@ -15,7 +15,8 @@
  *@
 
 @this(
-    layout: templates.Layout
+    layout: templates.Layout,
+    link: templates.Link
 )
 
 @()(implicit request: Request[_], messages: Messages)
@@ -27,5 +28,13 @@
 
     <h1 class="govuk-heading-xl">@messages("index.heading")</h1>
 
-    <p class="govuk-body">@messages("index.guidance")</p>
+    <p class="govuk-body">@Html(messages("index.p1", link("#", "index.p1.link")))</p>
+
+    <p class="govuk-body">@messages("index.p2", "XXXXXXXXXX")</p>
+
+    <p class="govuk-body">@messages("index.p3")</p>
+
+    <p class="govuk-body">@Html(messages("index.p4", link("#", "index.p4.link", openInNewWindow = true)))</p>
+
+    <p class="govuk-body">@Html(messages("index.p5", link("mailto:enquiries.aeoi@hmrc.gov.uk", "index.p5.link")))</p>
 }
