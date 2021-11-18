@@ -64,17 +64,17 @@ class AuthenticatedIdentifierAction @Inject() (
     val mdrEnrolment  = "HMRC-MDR-ORG"
     val mdrIdentifier = "MDRID"
 
-    val enrolment: Option[Enrolment] = for {
-      enrolment <- enrolments.getEnrolment(mdrEnrolment)
-      id        <- enrolment.getIdentifier(mdrIdentifier)
-      _         <- if (id.value.nonEmpty) Some(id) else None
-    } yield enrolment
+    val subscriptionId: Option[String] = for {
+      enrolment      <- enrolments.getEnrolment(mdrEnrolment)
+      id             <- enrolment.getIdentifier(mdrIdentifier)
+      subscriptionId <- if (id.value.nonEmpty) Some(id.value) else None
+    } yield subscriptionId
 
-    enrolment.fold {
+    subscriptionId.fold {
       throw new UnauthorizedException("Unable to retrieve MDR Id")
     } {
-      enrolment =>
-        block(IdentifierRequest(request, internalId, enrolment.getIdentifier(mdrIdentifier).get.value))
+      mdrId =>
+        block(IdentifierRequest(request, internalId, mdrId))
     }
   }
 }
