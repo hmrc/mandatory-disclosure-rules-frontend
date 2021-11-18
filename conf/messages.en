@@ -1,4 +1,4 @@
-service.name = mandatory-disclosure-rules-frontend
+service.name = Report cross-border arrangements for MDR
 
 site.back = Back
 site.remove = Remove

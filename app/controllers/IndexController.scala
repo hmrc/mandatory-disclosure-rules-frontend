@@ -32,6 +32,6 @@ class IndexController @Inject() (
 
   def onPageLoad: Action[AnyContent] = identify {
     implicit request =>
-      Ok(view("XAMDR0000123456")) //Todo: Get the real MDR ID
+      Ok(view("XAMDR0000123456"))
   }
 }
