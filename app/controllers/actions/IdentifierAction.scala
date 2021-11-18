@@ -24,6 +24,7 @@ import play.api.mvc.Results._
 import play.api.mvc._
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
+import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.http.{HeaderCarrier, UnauthorizedException}
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
@@ -43,10 +44,9 @@ class AuthenticatedIdentifierAction @Inject() (
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
-    authorised().retrieve(Retrievals.internalId) {
-      _.map {
-        internalId => block(IdentifierRequest(request, internalId))
-      }.getOrElse(throw new UnauthorizedException("Unable to retrieve internal Id"))
+    authorised().retrieve(Retrievals.internalId and Retrievals.allEnrolments) {
+      case Some(internalId) ~ enrolments => getSubscriptionId(request, enrolments, internalId, block)
+      case _                             => throw new UnauthorizedException("Unable to retrieve internal Id")
     } recover {
       case _: NoActiveSession =>
         Redirect(config.loginUrl, Map("continue" -> Seq(config.loginContinueUrl)))
@@ -54,22 +54,27 @@ class AuthenticatedIdentifierAction @Inject() (
         Redirect(routes.UnauthorisedController.onPageLoad())
     }
   }
-}
 
-class SessionIdentifierAction @Inject() (
-  val parser: BodyParsers.Default
-)(implicit val executionContext: ExecutionContext)
-    extends IdentifierAction {
+  private def getSubscriptionId[A](request: Request[A],
+                                   enrolments: Enrolments,
+                                   internalId: String,
+                                   block: IdentifierRequest[A] => Future[Result]
+  ): Future[Result] = {
 
-  override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
+    val mdrEnrolment  = "HMRC-MDR-ORG"
+    val mdrIdentifier = "MDRID"
 
-    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+    val enrolment: Option[Enrolment] = for {
+      enrolment <- enrolments.getEnrolment(mdrEnrolment)
+      id        <- enrolment.getIdentifier(mdrIdentifier)
+      _         <- if (id.value.nonEmpty) Some(id) else None
+    } yield enrolment
 
-    hc.sessionId match {
-      case Some(session) =>
-        block(IdentifierRequest(request, session.value))
-      case None =>
-        Future.successful(Redirect(routes.JourneyRecoveryController.onPageLoad()))
+    enrolment.fold {
+      throw new UnauthorizedException("Unable to retrieve MDR Id")
+    } {
+      enrolment =>
+        block(IdentifierRequest(request, internalId, enrolment.getIdentifier(mdrIdentifier).get.value))
     }
   }
 }

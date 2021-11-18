@@ -20,13 +20,18 @@ import base.SpecBase
 import com.google.inject.Inject
 import config.FrontendAppConfig
 import controllers.routes
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
+import org.mockito.MockitoSugar.mock
+import play.api.mvc.Results.Ok
 import play.api.mvc.{BodyParsers, Results}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.auth.core.retrieve.Retrieval
+import uk.gov.hmrc.auth.core.retrieve.{~, Retrieval}
 import uk.gov.hmrc.http.HeaderCarrier
+import utils.RetrievalOps._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
@@ -98,6 +103,43 @@ class AuthActionSpec extends SpecBase {
 
           status(result) mustBe SEE_OTHER
           redirectLocation(result).value mustBe routes.UnauthorisedController.onPageLoad().url
+        }
+      }
+    }
+
+    "the user has an HMRC-MDR-ORG enrolment and internalId" - {
+
+      "must create an IdentifierRequest with a subscriptionId and allow the user to proceed" in {
+
+        type AuthRetrievals = Option[String] ~ Enrolments
+
+        val application = applicationBuilder(userAnswers = None).build()
+
+        running(application) {
+          val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+          val appConfig   = application.injector.instanceOf[FrontendAppConfig]
+
+          val mockAuthConnector: AuthConnector = mock[AuthConnector]
+          val mdrEnrolment = Enrolment(
+            key = "HMRC-MDR-ORG",
+            identifiers = Seq(EnrolmentIdentifier("MDRID", "subscriptionId")),
+            state = "",
+            delegatedAuthRule = None
+          )
+
+          val retrieval: AuthRetrievals = Some("internalID") ~ Enrolments(Set(mdrEnrolment))
+          when(mockAuthConnector.authorise[AuthRetrievals](any(), any())(any(), any())) thenReturn Future.successful(retrieval)
+
+          val action = new AuthenticatedIdentifierAction(mockAuthConnector, appConfig, bodyParsers)
+          val controller = action {
+            request =>
+              val value = request.subscriptionId
+              Ok(value)
+          }
+          val result = controller()(FakeRequest())
+
+          status(result) mustBe OK
+          contentAsString(result) mustEqual "subscriptionId"
         }
       }
     }
