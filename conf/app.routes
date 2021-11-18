@@ -8,7 +8,7 @@ GET         /assets/*file                                controllers.Assets.vers
 
 GET         /language/:lang                              controllers.LanguageSwitchController.switchToLanguage(lang: String)
 
-GET         /refresh-session                            controllers.KeepAliveController.keepAlive
+GET         /refresh-session                             controllers.KeepAliveController.keepAlive
 
 GET         /there-is-a-problem                          controllers.JourneyRecoveryController.onPageLoad(continueUrl: Option[RedirectUrl] ?= None)
 
@@ -19,3 +19,9 @@ GET         /account/sign-out                            controllers.auth.AuthCo
 GET         /account/signed-out                          controllers.auth.SignedOutController.onPageLoad
 
 GET         /unauthorised                                controllers.UnauthorisedController.onPageLoad
+
+GET         /file-too-large                               controllers.FileTooLargeController.onPageLoad()
+
+GET         /not-xml-file                                 controllers.NotXMLFileController.onPageLoad()
+
+GET         /virus-file-found                             controllers.VirusFileFoundController.onPageLoad()
