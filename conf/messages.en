@@ -1,4 +1,4 @@
-service.name = mandatory-disclosure-rules-frontend
+service.name = Report cross-border arrangements for MDR
 
 site.back = Back
 site.remove = Remove
@@ -35,12 +35,16 @@ error.number = Please enter a valid number
 error.required = Please enter a value
 error.summary.title = There is a problem
 
-index.title = mandatory-disclosure-rules-frontend
-index.heading = mandatory-disclosure-rules-frontend
-index.guidance = Welcome to your new frontend. Please see the README file for a guide to getting started.
-
-checkYourAnswers.title = Check Your Answers
-checkYourAnswers.heading = Check Your Answers
+index.title = Report cross-border arrangements for MDR
+index.heading = Report cross-border arrangements for MDR
+index.p1 = You can {0} to tell us about a cross-border arrangement.
+index.p1.link = upload an XML file
+index.p2 = The file must be 20MB or less and include your MDR ID, which is {0}
+index.p3 = We will check your file is the correct type, size and for viruses.
+index.p4 = Find out {0}.
+index.p4.link = more about MDR XML files (opens in new tab)
+index.p5 = If you’re having problems with the service, you can email {0}.
+index.p5.link = enquiries.aeoi@hmrc.gov.uk
 
 journeyRecovery.continue.title = Sorry, there is a problem with the service
 journeyRecovery.continue.heading = Sorry, there is a problem with the service
