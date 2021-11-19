@@ -20,6 +20,7 @@ import com.google.inject.Inject
 import config.FrontendAppConfig
 import controllers.routes
 import models.requests.IdentifierRequest
+import play.api.Logging
 import play.api.mvc.Results._
 import play.api.mvc._
 import uk.gov.hmrc.auth.core._
@@ -38,7 +39,8 @@ class AuthenticatedIdentifierAction @Inject() (
   val parser: BodyParsers.Default
 )(implicit val executionContext: ExecutionContext)
     extends IdentifierAction
-    with AuthorisedFunctions {
+    with AuthorisedFunctions
+    with Logging {
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
 
@@ -46,7 +48,9 @@ class AuthenticatedIdentifierAction @Inject() (
 
     authorised().retrieve(Retrievals.internalId and Retrievals.allEnrolments) {
       case Some(internalId) ~ enrolments => getSubscriptionId(request, enrolments, internalId, block)
-      case _                             => throw new UnauthorizedException("Unable to retrieve internal Id")
+      case _ =>
+        logger.warn("Unable to retrieve internal id")
+        throw AuthorisationException.fromString("Unable to retrieve internal Id")
     } recover {
       case _: NoActiveSession =>
         Redirect(config.loginUrl, Map("continue" -> Seq(config.loginContinueUrl)))
@@ -71,7 +75,8 @@ class AuthenticatedIdentifierAction @Inject() (
     } yield subscriptionId
 
     subscriptionId.fold {
-      throw new UnauthorizedException("Unable to retrieve MDR Id")
+      logger.warn("Unable to retrieve MDR id from Enrolments")
+      throw new InsufficientEnrolments
     } {
       mdrId =>
         block(IdentifierRequest(request, internalId, mdrId))

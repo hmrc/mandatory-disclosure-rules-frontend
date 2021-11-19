@@ -144,6 +144,105 @@ class AuthActionSpec extends SpecBase {
       }
     }
 
+    "the user has an HMRC-MDR-ORG enrolment but no MDRID value" - {
+
+      "must redirect the user to the unauthorised page" in {
+
+        type AuthRetrievals = Option[String] ~ Enrolments
+
+        val application = applicationBuilder(userAnswers = None).build()
+
+        running(application) {
+          val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+          val appConfig   = application.injector.instanceOf[FrontendAppConfig]
+
+          val mockAuthConnector: AuthConnector = mock[AuthConnector]
+          val mdrEnrolment = Enrolment(
+            key = "HMRC-MDR-ORG",
+            identifiers = Seq(EnrolmentIdentifier("MDRID", "")),
+            state = "",
+            delegatedAuthRule = None
+          )
+
+          val retrieval: AuthRetrievals = Some("internalID") ~ Enrolments(Set(mdrEnrolment))
+          when(mockAuthConnector.authorise[AuthRetrievals](any(), any())(any(), any())) thenReturn Future.successful(retrieval)
+
+          val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, appConfig, bodyParsers)
+          val controller = new Harness(authAction)
+          val result     = controller.onPageLoad()(FakeRequest())
+
+          status(result) mustBe SEE_OTHER
+          redirectLocation(result).value mustBe routes.UnauthorisedController.onPageLoad().url
+        }
+      }
+    }
+
+    "the user has no HMRC-MDR-ORG enrolment" - {
+
+      "must redirect the user to the unauthorised page" in {
+
+        type AuthRetrievals = Option[String] ~ Enrolments
+
+        val application = applicationBuilder(userAnswers = None).build()
+
+        running(application) {
+          val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+          val appConfig   = application.injector.instanceOf[FrontendAppConfig]
+
+          val mockAuthConnector: AuthConnector = mock[AuthConnector]
+          val mdrEnrolment = Enrolment(
+            key = "INVALID-ENROLMENT",
+            identifiers = Seq(EnrolmentIdentifier("ID", "")),
+            state = "",
+            delegatedAuthRule = None
+          )
+
+          val retrieval: AuthRetrievals = Some("internalID") ~ Enrolments(Set(mdrEnrolment))
+          when(mockAuthConnector.authorise[AuthRetrievals](any(), any())(any(), any())) thenReturn Future.successful(retrieval)
+
+          val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, appConfig, bodyParsers)
+          val controller = new Harness(authAction)
+          val result     = controller.onPageLoad()(FakeRequest())
+
+          status(result) mustBe SEE_OTHER
+          redirectLocation(result).value mustBe routes.UnauthorisedController.onPageLoad().url
+        }
+      }
+    }
+
+    "the user has no internalId" - {
+
+      "must redirect the user to the unauthorised page" in {
+
+        type AuthRetrievals = Option[String] ~ Enrolments
+
+        val application = applicationBuilder(userAnswers = None).build()
+
+        running(application) {
+          val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
+          val appConfig   = application.injector.instanceOf[FrontendAppConfig]
+
+          val mockAuthConnector: AuthConnector = mock[AuthConnector]
+          val mdrEnrolment = Enrolment(
+            key = "HMRC-MDR-ORG",
+            identifiers = Seq(EnrolmentIdentifier("MDRID", "subscriptionId")),
+            state = "",
+            delegatedAuthRule = None
+          )
+
+          val retrieval: AuthRetrievals = None ~ Enrolments(Set(mdrEnrolment))
+          when(mockAuthConnector.authorise[AuthRetrievals](any(), any())(any(), any())) thenReturn Future.successful(retrieval)
+
+          val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, appConfig, bodyParsers)
+          val controller = new Harness(authAction)
+          val result     = controller.onPageLoad()(FakeRequest())
+
+          status(result) mustBe SEE_OTHER
+          redirectLocation(result).value mustBe routes.UnauthorisedController.onPageLoad().url
+        }
+      }
+    }
+
     "the user doesn't have sufficient confidence level" - {
 
       "must redirect the user to the unauthorised page" in {
