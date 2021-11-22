@@ -59,3 +59,11 @@ signedOut.guidance = We did not save your answers.
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
+
+invalidXMLFile.title = There is a problem with your file
+invalidXMLFile.heading = There is a problem with your file
+invalidXMLFile.p1 = Your file {0} has not been formatted correctly.
+invalidXMLFile.p2 = You can restructure the XML and upload it again.
+invalidXMLFile.uploadLink = Upload a different file
+invalidXMLFile.p3 = To ensure your XML is structured correctly, {0}.
+invalidXMLFile.p3.link = read the MDR technical guidance for XML files (opens in new tab)
