@@ -14,22 +14,25 @@
  * limitations under the License.
  */
 
-package controllers.actions
+package controllers
 
+import controllers.actions._
 import javax.inject.Inject
-import models.requests.IdentifierRequest
-import play.api.mvc._
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.NotXMLFileView
 
-import scala.concurrent.{ExecutionContext, Future}
+class NotXMLFileController @Inject() (
+  override val messagesApi: MessagesApi,
+  identify: IdentifierAction,
+  val controllerComponents: MessagesControllerComponents,
+  view: NotXMLFileView
+) extends FrontendBaseController
+    with I18nSupport {
 
-class FakeIdentifierAction @Inject() (bodyParsers: PlayBodyParsers) extends IdentifierAction {
-
-  override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] =
-    block(IdentifierRequest(request, "id", "subscriptionId"))
-
-  override def parser: BodyParser[AnyContent] =
-    bodyParsers.default
-
-  override protected def executionContext: ExecutionContext =
-    scala.concurrent.ExecutionContext.Implicits.global
+  def onPageLoad: Action[AnyContent] = identify {
+    implicit request =>
+      Ok(view())
+  }
 }

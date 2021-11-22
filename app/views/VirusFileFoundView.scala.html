@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,10 +12,22 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package models.requests
+@this(
+        layout: templates.Layout,
+        govukButton: GovukButton
+)
 
-import play.api.mvc.{Request, WrappedRequest}
+@()(implicit request: Request[_], messages: Messages)
 
-case class IdentifierRequest[A](request: Request[A], userId: String, subscriptionId: String) extends WrappedRequest[A](request)
+@layout(pageTitle = titleNoForm(messages("virusFileFound.title")),
+        showBackLink = false,
+) {
+
+    <h1 class="govuk-heading-l">@messages("virusFileFound.heading")</h1>
+
+    <p class="govuk-body">@messages("virusFileFound.p1")</p>
+    <p class="govuk-body">@messages("problemPage.upload")</p>
+    <p class="govuk-body">@messages("problemPage.MDR.guidance")</p>
+}

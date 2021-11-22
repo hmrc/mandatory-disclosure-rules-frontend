@@ -19,26 +19,25 @@ package controllers
 import base.SpecBase
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.IndexView
+import views.html.FileTooLargeView
 
-class IndexControllerSpec extends SpecBase {
+class FileTooLargeControllerSpec extends SpecBase {
 
-  "Index Controller" - {
+  "FileTooLarge Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, routes.IndexController.onPageLoad().url)
+        val request = FakeRequest(GET, routes.FileTooLargeController.onPageLoad().url)
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[IndexView]
+        val view = application.injector.instanceOf[FileTooLargeView]
 
         status(result) mustEqual OK
-
-        contentAsString(result) mustEqual view("subscriptionId")(request, messages(application)).toString
+        contentAsString(result) mustEqual view()(request, messages(application)).toString
       }
     }
   }

@@ -20,4 +20,10 @@ GET         /account/signed-out                          controllers.auth.Signed
 
 GET         /unauthorised                                controllers.UnauthorisedController.onPageLoad
 
+GET         /report/problem/file-too-large               controllers.FileTooLargeController.onPageLoad()
+
+GET         /report/problem/not-xml-file                 controllers.NotXMLFileController.onPageLoad()
+
+GET         /report/problem/virus-file-found             controllers.VirusFileFoundController.onPageLoad()
+
 GET         /report/problem/invalid-xml-file             controllers.InvalidXMLFileController.onPageLoad()
