@@ -16,16 +16,20 @@
 
 @this(
         layout: templates.Layout,
-        govukButton: GovukButton
+        link: templates.Link
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@(fileName: String)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("fileTooLarge.title"))) {
+@layout(pageTitle = titleNoForm(messages("invalidXMLFile.title"))) {
 
-    <h1 class="govuk-heading-l">@messages("fileTooLarge.heading")</h1>
+    <h1 class="govuk-heading-l">@messages("invalidXMLFile.heading")</h1>
 
-    <p class="govuk-body">@messages("fileTooLarge.p1")</p>
-    <p class="govuk-body">@messages("problemPage.upload")</p>
-    <p class="govuk-body">@messages("problemPage.MDR.guidance")</p>
+    <p class="govuk-body">@messages("invalidXMLFile.p1", fileName)</p>
+
+    <p class="govuk-body">@messages("invalidXMLFile.p2")</p>
+
+    <p class="govuk-body">@link("#", "invalidXMLFile.uploadLink")</p> @*Todo: update link href*@
+
+    <p class="govuk-body">@Html(messages("invalidXMLFile.p3", link("#", "invalidXMLFile.p3.link")))</p> @*Todo: update link href*@
 }
