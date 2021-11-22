@@ -146,7 +146,7 @@ class AuthActionSpec extends SpecBase {
 
     "the user has an HMRC-MDR-ORG enrolment but no MDRID value" - {
 
-      "must redirect the user to the unauthorised page" in {
+      "must redirect the user to register-for-exchange-of-information-frontend" in {
 
         type AuthRetrievals = Option[String] ~ Enrolments
 
@@ -172,14 +172,14 @@ class AuthActionSpec extends SpecBase {
           val result     = controller.onPageLoad()(FakeRequest())
 
           status(result) mustBe SEE_OTHER
-          redirectLocation(result).value mustBe routes.UnauthorisedController.onPageLoad().url
+          redirectLocation(result).value mustBe appConfig.registerUrl
         }
       }
     }
 
     "the user has no HMRC-MDR-ORG enrolment" - {
 
-      "must redirect the user to the unauthorised page" in {
+      "must redirect the user to register-for-exchange-of-information-frontend" in {
 
         type AuthRetrievals = Option[String] ~ Enrolments
 
@@ -205,7 +205,7 @@ class AuthActionSpec extends SpecBase {
           val result     = controller.onPageLoad()(FakeRequest())
 
           status(result) mustBe SEE_OTHER
-          redirectLocation(result).value mustBe routes.UnauthorisedController.onPageLoad().url
+          redirectLocation(result).value mustBe appConfig.registerUrl
         }
       }
     }
