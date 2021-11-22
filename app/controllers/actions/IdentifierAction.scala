@@ -76,7 +76,7 @@ class AuthenticatedIdentifierAction @Inject() (
 
     subscriptionId.fold {
       logger.warn("Unable to retrieve MDR id from Enrolments")
-      throw new InsufficientEnrolments
+      Future.successful(Redirect(config.registerUrl))
     } {
       mdrId =>
         block(IdentifierRequest(request, internalId, mdrId))
