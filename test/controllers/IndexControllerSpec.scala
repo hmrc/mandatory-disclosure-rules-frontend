@@ -38,7 +38,7 @@ class IndexControllerSpec extends SpecBase {
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view("XAMDR0000123456")(request, messages(application)).toString
+        contentAsString(result) mustEqual view("subscriptionId")(request, messages(application)).toString
       }
     }
   }
