@@ -30,7 +30,12 @@
 
  <h1 class="govuk-heading-l">@messages("uploadFile.heading")</h1>
 
- @formHelper(action = Call("POST", upscanInitiateResponse.postTarget), 'autoComplete -> "off", 'enctype -> "multipart/form-data") {
+ @formHelper(action = Call("POST", upscanInitiateResponse.postTarget), 'autoComplete -> "off", 'enctype -> "multipart/form-data", 'id -> "dac6UploadForm") {
+
+  @for((key, value) <- upscanInitiateResponse.formFields){
+   <input type="hidden" name=key value=value/>
+  }
+
   @govukFileUpload(FileUpload(
    name = "file",
    id = "file-upload",
