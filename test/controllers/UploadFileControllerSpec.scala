@@ -17,55 +17,55 @@
 package controllers
 
 import base.SpecBase
-import connectors.{UpscanConnector, ValidationConnector}
+import connectors.UpscanConnector
+import forms.UploadFileFormProvider
 import generators.Generators
-import models.{Dac6MetaData, UserAnswers}
+import helpers.FakeUpscanConnector
+import models.UserAnswers
 import models.upscan._
-import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{times, verify, when}
+import org.mockito.Mockito.when
+import org.mockito.MockitoSugar.mock
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.UploadIDPage
+import play.api.Application
 import play.api.inject.bind
-import play.api.libs.json.JsObject
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{status, _}
-import play.twirl.api.Html
 import repositories.SessionRepository
-import uk.gov.hmrc.viewmodels.NunjucksSupport
+import views.html.{FileCheckView, JourneyRecoveryStartAgainView, UploadFileView}
 
 import scala.concurrent.Future
 
 class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
-  val fakeUpscanConnector     = app.injector.instanceOf[FakeUpscanConnector]
-  val mockSessionRepository   = mock[SessionRepository]
-  val mockValidationConnector = mock[ValidationConnector]
+  val fakeUpscanConnector: FakeUpscanConnector = app.injector.instanceOf[FakeUpscanConnector]
+  val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-  val userAnswers = UserAnswers(userAnswersId)
+  val userAnswers: UserAnswers = UserAnswers(userAnswersId)
     .set(UploadIDPage, UploadId("uploadId"))
     .success
     .value
 
-  val application = applicationBuilder(userAnswers = Some(userAnswers))
+  val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
     .overrides(
       bind[UpscanConnector].toInstance(fakeUpscanConnector)
     )
     .build()
 
-  "upload form controller" - {
+  "upload file controller" - {
 
     "must initiate a request to upscan to bring back an upload form" in {
       when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
-      when(mockRenderer.render(any(), any())(any())).thenReturn(Future.successful(Html("")))
 
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val request        = FakeRequest(GET, routes.UploadFileController.onPageLoad().url)
-      val result         = route(application, request).value
+      val form    = app.injector.instanceOf[UploadFileFormProvider]
+      val request = FakeRequest(GET, routes.UploadFileController.onPageLoad().url)
+      val result  = route(application, request).value
 
-      status(result) mustBe OK
-      verify(mockRenderer, times(1)).render(templateCaptor.capture(), any())(any())
-      templateCaptor.getValue mustEqual "upload-form.njk"
+      val view = application.injector.instanceOf[UploadFileView]
+
+      status(result) mustEqual OK
+      contentAsString(result) mustEqual view(form(), UpscanInitiateResponse(Reference(""), "target", Map.empty))(request, messages(application)).toString
     }
 
     "must read the progress of the upload from the backend" in {
@@ -82,82 +82,68 @@ class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
         fakeUpscanConnector.setStatus(uploadStatus)
 
-        when(mockRenderer.render(any(), any())(any())).thenReturn(Future.successful(Html("")))
-
-        val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-
         val result = route(application, request).value
 
         status(result) mustBe expectedResult
         if (expectedResult == OK) {
-          verify(mockRenderer, times(1)).render(templateCaptor.capture(), any())(any())
-          templateCaptor.getValue mustEqual expectedUI
+          contentAsString(result) mustEqual expectedUI
         }
 
         application.stop()
-        reset(mockRenderer)
       }
 
-      verifyResult(InProgress, OK, "upload-result.njk")
+      val fileCheckView  = application.injector.instanceOf[FileCheckView]
+      val uploadFileView = application.injector.instanceOf[UploadFileView]
+      val errorView      = application.injector.instanceOf[JourneyRecoveryStartAgainView]
+
+      val form = app.injector.instanceOf[UploadFileFormProvider]
+
+      verifyResult(InProgress, OK, fileCheckView()(request, messages(application)).toString())
       verifyResult(Quarantined)
-      verifyResult(UploadRejected(ErrorDetails("REJECTED", "message")), OK, "upload-form.njk")
-      verifyResult(Failed, INTERNAL_SERVER_ERROR, "serviceError.njk")
+      verifyResult(
+        UploadRejected(ErrorDetails("REJECTED", "message")),
+        OK,
+        uploadFileView(form().withError("file", "uploadFile.error.file.invalid"), UpscanInitiateResponse(Reference("file-reference"), "target", Map.empty))(
+          request,
+          messages(application)
+        ).toString()
+      )
+      verifyResult(Failed, INTERNAL_SERVER_ERROR, errorView()(request, messages(application)).toString())
       verifyResult(UploadedSuccessfully("name", "downloadUrl"))
 
     }
 
     "must show any returned error" in {
 
-      val controller = application.injector.instanceOf[UploadFileController]
+      val request = FakeRequest(GET, routes.UploadFileController.showError("errorCode", "errorMessage", "errorReqId").url)
+      val result  = route(application, request).value
 
-      when(mockRenderer.render(any(), any())(any())).thenReturn(Future.successful(Html("")))
-      when(mockAppConfig.sendEmailToggle).thenReturn(true)
+      val view = application.injector.instanceOf[JourneyRecoveryStartAgainView]
 
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val argumentCaptor = ArgumentCaptor.forClass(classOf[JsObject])
-
-      val result = controller.showError("errorCode", "errorMessage", "errorReqId")(FakeRequest("", ""))
-
-      status(result) mustBe INTERNAL_SERVER_ERROR
-      verify(mockRenderer, times(1)).render(templateCaptor.capture(), argumentCaptor.capture())(any())
-      templateCaptor.getValue mustEqual "serviceError.njk"
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+      contentAsString(result) mustEqual view()(request, messages(application)).toString
     }
 
     "must show File to large error when the errorCode is EntityTooLarge" in {
 
-      val controller = application.injector.instanceOf[UploadFileController]
+      val request =
+        FakeRequest(GET, routes.UploadFileController.showError("EntityTooLarge", "Your proposed upload exceeds the maximum allowed size", "errorReqId").url)
+      val result = route(application, request).value
 
-      when(mockRenderer.render(any(), any())(any())).thenReturn(Future.successful(Html("")))
-      when(mockAppConfig.sendEmailToggle).thenReturn(true)
-
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val argumentCaptor = ArgumentCaptor.forClass(classOf[JsObject])
-
-      val result = controller.showError("EntityTooLarge", "Your proposed upload exceeds the maximum allowed size", "errorReqId")(FakeRequest("", ""))
-
-      status(result) mustBe OK
-      verify(mockRenderer, times(1)).render(templateCaptor.capture(), argumentCaptor.capture())(any())
-      templateCaptor.getValue mustEqual "fileTooLargeError.njk"
-      val captured = argumentCaptor.getValue
-      (captured \\ "xmlTechnicalGuidanceUrl").head
-        .as[String] mustEqual "https://www.gov.uk/government/publications/cross-border-tax-arrangements-schema-and-supporting-documents"
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result) mustBe Some(controllers.routes.FileTooLargeController.onPageLoad().url)
     }
 
-    "must display result page while file is successfully updated " in {
+    "must display file check page while file is successfully updated " in {
 
-      val controller = application.injector.instanceOf[UploadFileController]
+      val request = FakeRequest(GET, routes.UploadFileController.showResult().url)
+      val result  = route(application, request).value
 
-      when(mockRenderer.render(any(), any())(any())).thenReturn(Future.successful(Html("")))
-
-      val templateCaptor = ArgumentCaptor.forClass(classOf[String])
-      val result         = controller.showResult()(FakeRequest("", ""))
+      val view = application.injector.instanceOf[FileCheckView]
 
       status(result) mustBe OK
-      verify(mockRenderer, times(1)).render(templateCaptor.capture(), any())(any())
-      templateCaptor.getValue mustEqual "upload-result.njk"
-
+      contentAsString(result) mustEqual view()(request, messages(application)).toString
     }
-
   }
 
 }

@@ -30,14 +30,14 @@ class VirusFileFoundControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, routes.VirusFileFoundController.onPageLoad().url)
+        val request = FakeRequest(GET, routes.VirusFileFoundController.onPageLoad("example.xml").url)
 
         val result = route(application, request).value
 
         val view = application.injector.instanceOf[VirusFileFoundView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view()(request, messages(application)).toString
+        contentAsString(result) mustEqual view("example.xml")(request, messages(application)).toString
       }
     }
   }

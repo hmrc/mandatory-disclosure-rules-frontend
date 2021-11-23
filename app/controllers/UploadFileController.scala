@@ -30,7 +30,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.{FileCheckView, FileTooLargeView, JourneyRecoveryStartAgainView, UploadFileView}
+import views.html.{FileCheckView, JourneyRecoveryStartAgainView, UploadFileView}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
