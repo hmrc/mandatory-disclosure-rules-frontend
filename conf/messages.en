@@ -70,11 +70,10 @@ notXMLFile.p1 = The selected file example.xml could not be uploaded. The file ty
 
 virusFileFound.title = There is a problem with your file
 virusFileFound.heading = There is a problem with your file
-virusFileFound.p1 = The selected file example.xml could not be uploaded. It contains a virus.
+virusFileFound.p1 = The selected file {0} could not be uploaded. It contains a virus.
 
-problemPage.upload = Upload a different file
-problemPage.MDR.guidance = Read the MDR technical guidance for XML files (opens in new tab)
-problemPage.getHelp = Get help with this page (opens in a new tab)
+problemPage.uploadLink = Upload a different file
+problemPage.MDR.guidanceLink = Read the MDR technical guidance for XML files (opens in new tab)
 
 invalidXMLFile.title = There is a problem with your file
 invalidXMLFile.heading = There is a problem with your file
@@ -86,6 +85,11 @@ invalidXMLFile.p3.link = read the MDR technical guidance for XML files (opens in
 
 uploadFile.title = Upload an XML file
 uploadFile.heading = Upload an XML file
+uploadFile.error.file.invalid = The selected file must be an XML
+uploadFile.error.file.empty = Select a file to upload
 
-fileCheck.title = fileCheck
-fileCheck.heading = fileCheck
+fileCheck.title = We are checking your file
+fileCheck.heading = We are checking your file
+
+fileValidation.title = fileValidation
+fileValidation.heading = fileValidation

@@ -22,8 +22,8 @@
 @()(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("fileCheck.title"))) {
-    <script src="@routes.Assets.versioned("javascripts/upload-spinner.js").url"></script>
-    <link href='@routes.Assets.versioned("stylesheets/spinner.css") media="not speech" rel="stylesheet" type="text/css'>
+
+    <input type="hidden" id="fileUploadRefreshUrl" value="@routes.UploadFileController.getStatus().url" />
 
     <div id="processing" aria-live="polite" class="govuk-!-margin-bottom-5">
     <h1 class="govuk-heading-l">@messages("fileCheck.heading")</h1>

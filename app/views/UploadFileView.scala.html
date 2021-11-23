@@ -15,7 +15,6 @@
  *@
 
 @import models.upscan.UpscanInitiateResponse
-@import controllers.routes._
 
 @this(
         layout: templates.Layout,
@@ -28,23 +27,33 @@
 
 @layout(pageTitle = titleNoForm(messages("uploadFile.title"))) {
 
- <h1 class="govuk-heading-l">@messages("uploadFile.heading")</h1>
+ <h1 class="govuk-label-wrapper">
+  <label class="govuk-label govuk-label--l" for="file-upload">
+  @messages("uploadFile.heading")
+  </label>
+ </h1>
 
- @formHelper(action = Call("POST", upscanInitiateResponse.postTarget), 'autoComplete -> "off", 'enctype -> "multipart/form-data", 'id -> "dac6UploadForm") {
+ @formHelper(action = Call("POST", upscanInitiateResponse.postTarget), 'enctype -> "multipart/form-data", 'id -> "fileUploadForm", 'novalidate -> "true") {
 
   @for((key, value) <- upscanInitiateResponse.formFields){
-   <input type="hidden" name=key value=value/>
+   <input type="hidden" name="@key" value="@value" />
   }
 
-  @govukFileUpload(FileUpload(
-   name = "file",
-   id = "file-upload",
-   classes = "hmrc-file-upload",
-   attributes = Map(
-    "accept" -> ".xml,application/xml",
-    "required" -> "required")
+  <div class="js-visible mt-3">
+
+  @govukFileUpload(
+   FileUpload(
+    name = "file",
+    id = "file-upload",
+    classes = "hmrc-file-upload",
+    errorMessage = form("file").error.map(x => ErrorMessage(content = x.message)),
+    attributes = Map(
+     "accept" -> ".xml,application/xml",
+     "required" -> "required")
+   )
   )
-  )
+
+  </div>
 
   <p class="govuk-body">
   @govukButton(

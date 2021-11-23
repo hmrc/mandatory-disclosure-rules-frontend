@@ -16,16 +16,16 @@
 
 @this(
         layout: templates.Layout,
-        govukButton: GovukButton
+        link: templates.Link
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@(fileName: String)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("virusFileFound.title"))) {
 
     <h1 class="govuk-heading-l">@messages("virusFileFound.heading")</h1>
 
-    <p class="govuk-body">@messages("virusFileFound.p1")</p>
-    <p class="govuk-body">@messages("problemPage.upload")</p>
-    <p class="govuk-body">@messages("problemPage.MDR.guidance")</p>
+    <p class="govuk-body">@messages("virusFileFound.p1", fileName)</p>
+    <p class="govuk-body">@link(routes.UploadFileController.onPageLoad().url, "problemPage.uploadLink")</p>
+    <p class="govuk-body">@link("#", "problemPage.MDR.guidanceLink")</p>
 }

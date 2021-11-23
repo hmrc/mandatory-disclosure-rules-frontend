@@ -21,15 +21,15 @@ import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.FileCheckView
+import views.html.FileValidationView
 
-class FileCheckController @Inject() (
+class FileValidationController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
-  view: FileCheckView
+  view: FileValidationView
 ) extends FrontendBaseController
     with I18nSupport {
 

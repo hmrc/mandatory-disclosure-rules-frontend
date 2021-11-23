@@ -21,13 +21,13 @@ function ready(fn) {
 
 ready(function() {
 
-    const dac6UploadRefreshUrl     = document.getElementById("dac6UploadRefreshUrl");
+    const fileUploadRefreshUrl     = document.getElementById("fileUploadRefreshUrl");
 
-    if (dac6UploadRefreshUrl) {
+    if (fileUploadRefreshUrl) {
 
         window.refreshIntervalId = setInterval(function () {
 
-            window.location.assign(dac6UploadRefreshUrl.value);
+            window.location.assign(fileUploadRefreshUrl.value);
         }, 3000);
     }
 

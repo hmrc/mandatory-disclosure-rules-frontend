@@ -16,7 +16,7 @@
 
 @this(
         layout: templates.Layout,
-        govukButton: GovukButton
+        link: templates.Link
 )
 
 @()(implicit request: Request[_], messages: Messages)
@@ -26,6 +26,6 @@
     <h1 class="govuk-heading-l">@messages("fileTooLarge.heading")</h1>
 
     <p class="govuk-body">@messages("fileTooLarge.p1")</p>
-    <p class="govuk-body">@messages("problemPage.upload")</p>
-    <p class="govuk-body">@messages("problemPage.MDR.guidance")</p>
+    <p class="govuk-body">@link(routes.UploadFileController.onPageLoad().url, "problemPage.uploadLink")</p>
+    <p class="govuk-body">@link("#", "problemPage.MDR.guidanceLink")</p>
 }
