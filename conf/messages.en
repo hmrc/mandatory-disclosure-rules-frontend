@@ -56,6 +56,10 @@ pageNotFound.p2 = If the web address is correct or you selected a link or button
 pageNotFound.email = enquiries.aeoi@hmrc.gov.uk
 pageNotFound.p3 = Check you have entered the correct details.
 
+thereIsAProblem.title = Sorry, there is a problem with the service
+thereIsAProblem.heading = Sorry, there is a problem with the service
+thereIsAProblem.paragraph.1 = Try again later.
+thereIsAProblem.paragraph.2 = Your file upload has been unsuccessful. We have not saved your answers. If you need to contact someone about your MDR reporting, you can email
 thereIsAProblem.emailAddress = enquiries.aeoi@hmrc.gov.uk
 
 journeyRecovery.continue.title = Sorry, there is a problem with the service
