@@ -106,7 +106,7 @@ class UploadFileController @Inject() (
               logger.debug(s"Show errorForm on rejection $errorForm")
               toResponse(errorForm)
             case Some(Quarantined) =>
-              Future.successful(Redirect(routes.VirusFileFoundController.onPageLoad("example.xml")))
+              Future.successful(Redirect(routes.VirusFileFoundController.onPageLoad()))
             case Some(Failed) =>
               Future.successful(InternalServerError(errorView()))
             case Some(_) =>

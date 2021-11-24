@@ -31,8 +31,8 @@ class VirusFileFoundController @Inject() (
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(fileName: String): Action[AnyContent] = identify {
+  def onPageLoad(): Action[AnyContent] = identify {
     implicit request =>
-      Ok(view(fileName))
+      Ok(view())
   }
 }

@@ -32,7 +32,7 @@ GET         /report/problem/file-too-large               controllers.FileTooLarg
 
 GET         /report/problem/not-xml-file                 controllers.NotXMLFileController.onPageLoad()
 
-GET         /report/problem/virus-file-found/:fileName   controllers.VirusFileFoundController.onPageLoad(fileName: String)
+GET         /report/problem/virus-file-found             controllers.VirusFileFoundController.onPageLoad()
 
 GET         /report/problem/invalid-xml-file             controllers.InvalidXMLFileController.onPageLoad()
 
