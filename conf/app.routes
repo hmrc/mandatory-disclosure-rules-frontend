@@ -10,7 +10,7 @@ GET         /language/:lang                              controllers.LanguageSwi
 
 GET         /refresh-session                             controllers.KeepAliveController.keepAlive
 
-GET         /there-is-a-problem                          controllers.JourneyRecoveryController.onPageLoad(continueUrl: Option[RedirectUrl] ?= None)
+GET         /report/problem/there-is-a-problem           controllers.ThereIsAProblemController.onPageLoad()
 
 GET         /check-your-answers                          controllers.CheckYourAnswersController.onPageLoad
 
@@ -27,3 +27,4 @@ GET         /report/problem/not-xml-file                 controllers.NotXMLFileC
 GET         /report/problem/virus-file-found             controllers.VirusFileFoundController.onPageLoad()
 
 GET         /report/problem/invalid-xml-file             controllers.InvalidXMLFileController.onPageLoad()
+

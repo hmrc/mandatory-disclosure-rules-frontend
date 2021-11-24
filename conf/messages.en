@@ -46,6 +46,22 @@ index.p4.link = more about MDR XML files (opens in new tab)
 index.p5 = If you’re having problems with the service, you can email {0}
 index.p5.link = enquiries.aeoi@hmrc.gov.uk
 
+pageNotFound.title = Page not found
+pageNotFound.heading = Page not found
+pageNotFound.p1 = This may be because:
+pageNotFound.bullet1 = the link or button you selected is for a page that does not exist
+pageNotFound.bullet2 = you’ve typed or copied a web address for a page that does not exist
+pageNotFound.bullet3 = you’ve typed or copied a web address incorrectly
+pageNotFound.p2 = If the web address is correct or you selected a link or button, and you have queries, you can email
+pageNotFound.email = enquiries.aeoi@hmrc.gov.uk
+pageNotFound.p3 = Check you have entered the correct details.
+
+thereIsAProblem.title = Sorry, there is a problem with the service
+thereIsAProblem.heading = Sorry, there is a problem with the service
+thereIsAProblem.paragraph.1 = Try again later.
+thereIsAProblem.paragraph.2 = Your file upload has been unsuccessful. We have not saved your answers. If you need to contact someone about your MDR reporting, you can email
+thereIsAProblem.emailAddress = enquiries.aeoi@hmrc.gov.uk
+
 journeyRecovery.continue.title = Sorry, there is a problem with the service
 journeyRecovery.continue.heading = Sorry, there is a problem with the service
 journeyRecovery.continue.guidance = [Add content to explain how to proceed.]
