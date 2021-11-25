@@ -141,5 +141,4 @@ class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
       contentAsString(result) mustEqual view()(request, messages(application)).toString
     }
   }
-
 }

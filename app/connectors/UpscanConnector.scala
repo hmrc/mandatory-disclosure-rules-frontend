@@ -19,7 +19,7 @@ package connectors
 import config.FrontendAppConfig
 import controllers.routes
 import models.upscan._
-import org.slf4j.LoggerFactory
+import play.api.Logging
 import play.api.http.HeaderNames
 import play.api.http.Status.OK
 import play.api.libs.json.{JsError, JsSuccess}
@@ -30,9 +30,7 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class UpscanConnector @Inject() (configuration: FrontendAppConfig, httpClient: HttpClient)(implicit ec: ExecutionContext) {
-
-  private val logger = LoggerFactory.getLogger(getClass)
+class UpscanConnector @Inject() (configuration: FrontendAppConfig, httpClient: HttpClient)(implicit ec: ExecutionContext) extends Logging {
 
   private val headers = Map(
     HeaderNames.CONTENT_TYPE -> "application/json"
