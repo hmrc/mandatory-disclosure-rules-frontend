@@ -53,7 +53,7 @@ class UploadFileController @Inject() (
 
   val form = formProvider()
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData).async {
+  def onPageLoad: Action[AnyContent] = (identify andThen getData()).async {
     implicit request =>
       toResponse(form)
   }
@@ -74,7 +74,7 @@ class UploadFileController @Inject() (
       Future.successful(Ok(fileCheckView()))
   }
 
-  def showError(errorCode: String, errorMessage: String, errorRequestId: String): Action[AnyContent] = (identify andThen getData).async {
+  def showError(errorCode: String, errorMessage: String, errorRequestId: String): Action[AnyContent] = (identify andThen getData()).async {
     implicit request =>
       errorCode match {
         case "EntityTooLarge" =>
@@ -88,7 +88,7 @@ class UploadFileController @Inject() (
       }
   }
 
-  def getStatus: Action[AnyContent] = (identify andThen getData).async {
+  def getStatus: Action[AnyContent] = (identify andThen getData()).async {
     implicit request =>
       logger.debug("Show status called")
       request.userAnswers.flatMap(_.get(UploadIDPage)) match {
