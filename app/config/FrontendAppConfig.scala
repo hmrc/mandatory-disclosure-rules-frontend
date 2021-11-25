@@ -21,9 +21,10 @@ import play.api.Configuration
 import play.api.i18n.Lang
 import play.api.mvc.RequestHeader
 import uk.gov.hmrc.play.bootstrap.binders.SafeRedirectUrl
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 @Singleton
-class FrontendAppConfig @Inject() (configuration: Configuration) {
+class FrontendAppConfig @Inject() (configuration: Configuration, servicesConfig: ServicesConfig) {
 
   val host: String    = configuration.get[String]("host")
   val appName: String = configuration.get[String]("appName")
@@ -38,6 +39,14 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   val loginContinueUrl: String = configuration.get[String]("urls.loginContinue")
   val signOutUrl: String       = configuration.get[String]("urls.signOut")
   val registerUrl: String      = configuration.get[String]("urls.register")
+
+  val upscanInitiateHost: String = servicesConfig.baseUrl("upscan")
+  val upscanBucketHost: String   = servicesConfig.baseUrl("upscan")
+  val upscanProtocol: String     = servicesConfig.getConfString("upscan.protocol", "https")
+  val upscanRedirectBase: String = configuration.get[String]("microservice.services.upscan.redirect-base")
+  val upscanMaxFileSize: Int     = configuration.get[Int]("microservice.services.upscan.max-file-size-in-mb")
+
+  val mdrUrl: String = servicesConfig.baseUrl("mandatory-disclosure-rules")
 
   private val exitSurveyBaseUrl: String = configuration.get[Service]("microservice.services.feedback-frontend").baseUrl
   val exitSurveyUrl: String             = s"$exitSurveyBaseUrl/feedback/mandatory-disclosure-rules-frontend"

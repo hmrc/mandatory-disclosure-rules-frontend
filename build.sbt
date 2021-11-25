@@ -38,8 +38,9 @@ lazy val root = (project in file("."))
       "viewmodels.govuk.all._"
     ),
     PlayKeys.playDefaultPort := 10018,
-    ScoverageKeys.coverageExcludedFiles := "<empty>;Reverse.*;.*handlers.*;.*components.*;" +
-      ".*Routes.*;.*viewmodels.govuk.*;",
+    ScoverageKeys.coverageExcludedFiles := "<empty>;Reverse.*;.*handlers.*;.*components.*;.*repositories.*;" +
+      ".*BuildInfo.*;.*javascript.*;.*Routes.*;.*viewmodels.*;.*GuiceInjector;" +
+      ".*ControllerConfiguration;.*LanguageSwitchController",
     ScoverageKeys.coverageMinimumStmtTotal := 78,
     ScoverageKeys.coverageFailOnMinimum := true,
     ScoverageKeys.coverageHighlighting := true,
@@ -51,7 +52,8 @@ lazy val root = (project in file("."))
     Concat.groups := Seq(
       "javascripts/application.js" ->
         group(Seq(
-          "javascripts/app.js"
+          "javascripts/app.js",
+          "javascripts/upload-spinner.js"
         ))
     ),
     // prevent removal of unused code which generates warning errors due to use of third-party libs

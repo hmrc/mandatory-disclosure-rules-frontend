@@ -20,6 +20,14 @@ GET         /account/signed-out                          controllers.auth.Signed
 
 GET         /unauthorised                                controllers.UnauthorisedController.onPageLoad
 
+GET         /report/upload-file                          controllers.UploadFileController.onPageLoad()
+
+GET         /report/status                               controllers.UploadFileController.getStatus()
+
+GET         /report/success                              controllers.UploadFileController.showResult()
+
+GET         /report/error                                controllers.UploadFileController.showError(errorCode: String, errorMessage: String, errorRequestId: String)
+
 GET         /report/problem/file-too-large               controllers.FileTooLargeController.onPageLoad()
 
 GET         /report/problem/not-xml-file                 controllers.NotXMLFileController.onPageLoad()
@@ -28,3 +36,4 @@ GET         /report/problem/virus-file-found             controllers.VirusFileFo
 
 GET         /report/problem/invalid-xml-file             controllers.InvalidXMLFileController.onPageLoad()
 
+GET         /report/fileValidation                       controllers.FileValidationController.onPageLoad()

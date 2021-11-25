@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,20 +12,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@this(
-        layout: templates.Layout,
-        link: templates.Link
-)
+package models.upscan
 
-@()(implicit request: Request[_], messages: Messages)
+import play.api.libs.json.Json
 
-@layout(pageTitle = titleNoForm(messages("notXMLFile.title"))) {
+case class UpscanIdentifiers(uploadId: UploadId, fileReference: Reference)
 
-    <h1 class="govuk-heading-l">@messages("notXMLFile.heading")</h1>
-
-    <p class="govuk-body">@messages("notXMLFile.p1")</p>
-    <p class="govuk-body">@link(routes.UploadFileController.onPageLoad().url, "problemPage.uploadLink")</p>
-    <p class="govuk-body">@link("#", "problemPage.MDR.guidanceLink")</p>
+object UpscanIdentifiers {
+  implicit val format = Json.format[UpscanIdentifiers]
 }

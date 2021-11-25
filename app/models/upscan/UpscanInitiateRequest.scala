@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,20 +12,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@this(
-        layout: templates.Layout,
-        link: templates.Link
+package models.upscan
+
+import play.api.libs.json.{Json, OFormat}
+
+case class UpscanInitiateRequest(
+  callbackUrl: String,
+  successRedirect: String,
+  errorRedirect: String,
+  minimumFileSize: Option[Int] = None,
+  maximumFileSize: Option[Int] = None,
+  expectedContentType: Option[String] = None
 )
 
-@()(implicit request: Request[_], messages: Messages)
-
-@layout(pageTitle = titleNoForm(messages("notXMLFile.title"))) {
-
-    <h1 class="govuk-heading-l">@messages("notXMLFile.heading")</h1>
-
-    <p class="govuk-body">@messages("notXMLFile.p1")</p>
-    <p class="govuk-body">@link(routes.UploadFileController.onPageLoad().url, "problemPage.uploadLink")</p>
-    <p class="govuk-body">@link("#", "problemPage.MDR.guidanceLink")</p>
+object UpscanInitiateRequest {
+  implicit val format: OFormat[UpscanInitiateRequest] = Json.format[UpscanInitiateRequest]
 }

@@ -19,26 +19,25 @@ package controllers
 import base.SpecBase
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.InvalidXMLFileView
+import views.html.FileValidationView
 
-class InvalidXMLFileControllerSpec extends SpecBase {
+class FileValidationControllerSpec extends SpecBase {
 
-  "InvalidXMLFile Controller" - {
+  "FileValidation Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, routes.InvalidXMLFileController.onPageLoad().url)
+        val request = FakeRequest(GET, routes.FileValidationController.onPageLoad().url)
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[InvalidXMLFileView]
+        val view = application.injector.instanceOf[FileValidationView]
 
         status(result) mustEqual OK
-
-        contentAsString(result) mustEqual view("example.xml")(request, messages(application)).toString
+        contentAsString(result) mustEqual view()(request, messages(application)).toString
       }
     }
   }
