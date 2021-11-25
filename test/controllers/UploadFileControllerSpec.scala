@@ -24,15 +24,12 @@ import helpers.FakeUpscanConnector
 import models.UserAnswers
 import models.upscan._
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
-import org.mockito.MockitoSugar.mock
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.UploadIDPage
 import play.api.Application
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{status, _}
-import repositories.SessionRepository
 import views.html.{FileCheckView, JourneyRecoveryStartAgainView, UploadFileView}
 
 import scala.concurrent.Future
@@ -40,7 +37,6 @@ import scala.concurrent.Future
 class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   val fakeUpscanConnector: FakeUpscanConnector = app.injector.instanceOf[FakeUpscanConnector]
-  val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
   val userAnswers: UserAnswers = UserAnswers(userAnswersId)
     .set(UploadIDPage, UploadId("uploadId"))

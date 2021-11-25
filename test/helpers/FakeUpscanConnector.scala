@@ -25,7 +25,7 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class FakeUpscanConnector @Inject() (configuration: FrontendAppConfig, httpClient: HttpClient)(implicit ec: ExecutionContext)
-    extends UpscanConnector(configuration, httpClient, "name") {
+    extends UpscanConnector(configuration, httpClient) {
 
   var statusBuffer: Option[UploadStatus]          = None
   var detailsBuffer: Option[UploadSessionDetails] = None

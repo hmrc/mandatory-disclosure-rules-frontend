@@ -24,12 +24,13 @@ import play.api.http.HeaderNames
 import play.api.http.Status.OK
 import play.api.libs.json.{JsError, JsSuccess}
 import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.HttpReads.is2xx
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 
-import javax.inject.{Inject, Named}
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class UpscanConnector @Inject() (configuration: FrontendAppConfig, httpClient: HttpClient, @Named("appName") appName: String)(implicit ec: ExecutionContext) {
+class UpscanConnector @Inject() (configuration: FrontendAppConfig, httpClient: HttpClient)(implicit ec: ExecutionContext) {
 
   private val logger = LoggerFactory.getLogger(getClass)
 
@@ -60,7 +61,7 @@ class UpscanConnector @Inject() (configuration: FrontendAppConfig, httpClient: H
     httpClient.GET[HttpResponse](detailsUrl).map {
       response =>
         response.status match {
-          case OK =>
+          case status if is2xx(status) =>
             response.json.validate[UploadSessionDetails] match {
               case JsSuccess(details, _) => Some(details)
               case JsError(_)            => None
