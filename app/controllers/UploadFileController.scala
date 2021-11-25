@@ -66,7 +66,9 @@ class UploadFileController @Inject() (
       _                      <- sessionRepository.set(updatedAnswers)
     } yield Ok(view(preparedForm, upscanInitiateResponse)))
       .recover {
-        case _: Exception => Redirect(routes.ThereIsAProblemController.onPageLoad())
+        case e: Exception =>
+          logger.info(s"An exception occurred when contacting Upscan: $e")
+          Redirect(routes.ThereIsAProblemController.onPageLoad())
       }
 
   def showResult: Action[AnyContent] = Action.async {
