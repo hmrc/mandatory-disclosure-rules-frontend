@@ -57,7 +57,7 @@
 
   <p class="govuk-body">
   @govukButton(
-   ButtonViewModel(messages("site.continue"))
+   ButtonViewModel(messages("site.continue")).withAttribute( "id" -> "submit")
   )
   </p>
  }
