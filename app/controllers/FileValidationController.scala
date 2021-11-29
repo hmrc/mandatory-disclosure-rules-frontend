@@ -16,25 +16,79 @@
 
 package controllers
 
-import controllers.actions._
-import javax.inject.Inject
+import connectors.{UpscanConnector, ValidationConnector}
+import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import models.upscan.{UploadId, UploadSessionDetails, UploadedSuccessfully}
+import models.{NormalMode, UserAnswers, ValidationErrors}
+import navigation.Navigator
+import pages._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.FileValidationView
+
+import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 class FileValidationController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
+  val sessionRepository: SessionRepository,
   val controllerComponents: MessagesControllerComponents,
-  view: FileValidationView
-) extends FrontendBaseController
+  upscanConnector: UpscanConnector,
+  requireData: DataRequiredAction,
+  validationConnector: ValidationConnector,
+  navigator: Navigator
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData) {
+  def onPageLoad(): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
-      Ok(view())
+      {
+        for {
+          uploadId       <- getUploadId(request.userAnswers)
+          uploadSessions <- upscanConnector.getUploadDetails(uploadId)
+          (fileName, upScanUrl) = getDownloadUrl(uploadSessions)
+          validation: Option[Either[ValidationErrors, Boolean]] <- validationConnector.sendForValidation(upScanUrl)
+        } yield validation match {
+          case Some(Right(_)) =>
+            for {
+              updatedAnswers        <- Future.fromTry(request.userAnswers.set(ValidXMLPage, fileName))
+              updatedAnswersWithURL <- Future.fromTry(updatedAnswers.set(URLPage, upScanUrl))
+              _                     <- sessionRepository.set(updatedAnswersWithURL)
+            } yield Redirect(navigator.nextPage(ValidXMLPage, NormalMode, updatedAnswers))
+
+          case Some(Left(ValidationErrors(errors, _))) =>
+            for {
+              updatedAnswers           <- Future.fromTry(UserAnswers(request.userId).set(InvalidXMLPage, fileName))
+              updatedAnswersWithErrors <- Future.fromTry(updatedAnswers.set(GenericErrorPage, errors))
+              _                        <- sessionRepository.set(updatedAnswersWithErrors)
+            } yield Redirect(navigator.nextPage(InvalidXMLPage, NormalMode, updatedAnswers))
+
+          case _ =>
+            for {
+              updatedAnswers <- Future.fromTry(UserAnswers(request.userId).set(InvalidXMLPage, fileName))
+              _              <- sessionRepository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(InvalidXMLPage, NormalMode, updatedAnswers))
+        }
+      }.flatten
   }
+
+  private def getUploadId(userAnswers: UserAnswers): Future[UploadId] =
+    userAnswers.get(UploadIDPage) match {
+      case Some(uploadId) => Future.successful(uploadId)
+      case None           => throw new RuntimeException("Cannot find uploadId")
+    }
+
+  private def getDownloadUrl(uploadSessions: Option[UploadSessionDetails]) =
+    uploadSessions match {
+      case Some(uploadDetails) =>
+        uploadDetails.status match {
+          case UploadedSuccessfully(name, downloadUrl) => (name, downloadUrl)
+          case _                                       => throw new RuntimeException("File not uploaded successfully")
+        }
+      case _ => throw new RuntimeException("File not uploaded successfully")
+    }
 }

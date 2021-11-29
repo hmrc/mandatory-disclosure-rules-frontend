@@ -82,7 +82,7 @@ fileTooLarge.p1 = The selected file could not be uploaded. The file must be 20MB
 
 notXMLFile.title = There is a problem with your file
 notXMLFile.heading = There is a problem with your file
-notXMLFile.p1 = The selected file example.xml could not be uploaded. The file type must be XML.
+notXMLFile.p1 = The selected file {0} could not be uploaded. The file type must be XML.
 
 virusFileFound.title = There is a problem with your file
 virusFileFound.heading = There is a problem with your file
