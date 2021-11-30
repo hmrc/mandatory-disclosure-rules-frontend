@@ -16,7 +16,7 @@
 
 @this(
     layout: templates.Layout,
-    govukButton: GovukButton
+    link: templates.Link
 )
 
 @()(implicit request: Request[_], messages: Messages)
@@ -32,10 +32,6 @@
 
     <p class="govuk-body">@messages("signedOut.guidance")</p>
 
-    <p class="govuk-body">
-        @govukButton(
-            ButtonViewModel(messages("site.signIn"))
-                .asLink(routes.IndexController.onPageLoad().url)
-        )
-    </p>
+    <p class="govuk-body">@link(routes.IndexController.onPageLoad().url, "signedOut.back")</p>
+
 }
