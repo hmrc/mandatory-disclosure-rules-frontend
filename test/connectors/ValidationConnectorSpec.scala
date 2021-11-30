@@ -27,7 +27,6 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.Application
 import play.api.http.Status.{BAD_REQUEST, OK}
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.JsString
 import utils.WireMockHelper
 
 import scala.concurrent.ExecutionContext.Implicits.global

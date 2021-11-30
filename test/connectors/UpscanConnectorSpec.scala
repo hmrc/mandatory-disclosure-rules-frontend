@@ -150,4 +150,150 @@ class UpscanConnectorSpec extends SpecBase with GuiceOneAppPerSuite with WireMoc
       }
     }
   }
+
+  "getUploadStatus" - {
+    "should return an UploadStatus for a valid UploadId" - {
+      "when an UploadedSuccessfully response is returned" in {
+        val body =
+          """{
+            | "_type": "UploadedSuccessfully",
+            | "name": "name",
+            | "downloadUrl": "downloadUrl"
+            | }
+            |""".stripMargin
+
+        server.stubFor(
+          WireMock
+            .get(urlEqualTo("/mandatory-disclosure-rules/upscan/status/12345"))
+            .willReturn(
+              aResponse()
+                .withStatus(OK)
+                .withBody(body)
+            )
+        )
+
+        whenReady(connector.getUploadStatus(UploadId("12345"))) {
+          result =>
+            result mustBe Some(UploadedSuccessfully("name", "downloadUrl"))
+        }
+      }
+
+      "when a NotStarted response is returned" in {
+
+        val body =
+          """{
+            | "_type": "NotStarted"
+            | }
+            |""".stripMargin
+
+        server.stubFor(
+          WireMock
+            .get(urlEqualTo("/mandatory-disclosure-rules/upscan/status/12345"))
+            .willReturn(
+              aResponse()
+                .withStatus(OK)
+                .withBody(body)
+            )
+        )
+
+        whenReady(connector.getUploadStatus(UploadId("12345"))) {
+          result =>
+            result mustBe Some(NotStarted)
+        }
+      }
+
+      "when a InProgress response is returned" in {
+
+        val body =
+          """{
+            | "_type": "InProgress"
+            | }
+            |""".stripMargin
+
+        server.stubFor(
+          WireMock
+            .get(urlEqualTo("/mandatory-disclosure-rules/upscan/status/12345"))
+            .willReturn(
+              aResponse()
+                .withStatus(OK)
+                .withBody(body)
+            )
+        )
+
+        whenReady(connector.getUploadStatus(UploadId("12345"))) {
+          result =>
+            result mustBe Some(InProgress)
+        }
+      }
+
+      "when a Failed response is returned" in {
+
+        val body =
+          """{
+            | "_type": "Failed"
+            | }
+            |""".stripMargin
+
+        server.stubFor(
+          WireMock
+            .get(urlEqualTo("/mandatory-disclosure-rules/upscan/status/12345"))
+            .willReturn(
+              aResponse()
+                .withStatus(OK)
+                .withBody(body)
+            )
+        )
+
+        whenReady(connector.getUploadStatus(UploadId("12345"))) {
+          result =>
+            result mustBe Some(Failed)
+        }
+      }
+
+      "when a Quarantined response is returned" in {
+
+        val body =
+          """{
+            | "_type": "Quarantined"
+            | }
+            |""".stripMargin
+
+        server.stubFor(
+          WireMock
+            .get(urlEqualTo("/mandatory-disclosure-rules/upscan/status/12345"))
+            .willReturn(
+              aResponse()
+                .withStatus(OK)
+                .withBody(body)
+            )
+        )
+
+        whenReady(connector.getUploadStatus(UploadId("12345"))) {
+          result =>
+            result mustBe Some(Quarantined)
+        }
+      }
+    }
+
+    "should return None" - {
+      "when an invalid response is returned" in {
+
+        server.stubFor(
+          WireMock
+            .get(urlEqualTo("/mandatory-disclosure-rules/upscan/status/12345"))
+            .willReturn(
+              aResponse()
+                .withStatus(OK)
+                .withBody(Json.obj().toString())
+            )
+        )
+
+        whenReady(connector.getUploadStatus(UploadId("12345"))) {
+          result =>
+            result mustBe None
+        }
+
+      }
+    }
+  }
 }
