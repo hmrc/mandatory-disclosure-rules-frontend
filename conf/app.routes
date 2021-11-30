@@ -37,5 +37,3 @@ GET         /report/problem/virus-file-found             controllers.VirusFileFo
 GET         /report/problem/invalid-xml-file             controllers.InvalidXMLFileController.onPageLoad()
 
 GET         /report/fileValidation                       controllers.FileValidationController.onPageLoad()
-
-GET        /signedOut                                    controllers.auth.SignedOutController.onPageLoad()
