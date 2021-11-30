@@ -17,34 +17,24 @@
 package controllers
 
 import controllers.actions._
-import handlers.ErrorHandler
-import pages.InvalidXMLPage
-
-import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.NotXMLFileView
 
+import javax.inject.Inject
 import scala.concurrent.Future
 
 class NotXMLFileController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
-  getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
-  errorHandler: ErrorHandler,
   val controllerComponents: MessagesControllerComponents,
   view: NotXMLFileView
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData).async {
+  def onPageLoad: Action[AnyContent] = identify.async {
     implicit request =>
-      request.userAnswers.get(InvalidXMLPage) match {
-        case Some(fileName) =>
-          Future.successful(Ok(view(fileName)))
-        case None => errorHandler.onServerError(request, throw new RuntimeException("File name missing for file error page"))
-      }
+      Future.successful(Ok(view()))
   }
 }

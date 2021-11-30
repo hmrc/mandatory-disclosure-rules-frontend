@@ -27,16 +27,10 @@ import models._
 class Navigator @Inject() () {
 
   private val normalRoutes: Page => UserAnswers => Call = {
-    case InvalidXMLPage => ua => checkFileTypeForInvalidFiles(ua)
+    case InvalidXMLPage => ua => routes.InvalidXMLFileController.onPageLoad()
     case ValidXMLPage   => _ => routes.CheckYourAnswersController.onPageLoad()
     case _              => _ => routes.IndexController.onPageLoad()
   }
-
-  private def checkFileTypeForInvalidFiles(ua: UserAnswers): Call =
-    ua.get(InvalidXMLPage) match {
-      case Some(fileName) if fileName.toLowerCase.endsWith(".xml") => routes.InvalidXMLFileController.onPageLoad()
-      case _                                                       => routes.NotXMLFileController.onPageLoad()
-    }
 
   private val checkRouteMap: Page => UserAnswers => Call = {
     case _ => _ => routes.CheckYourAnswersController.onPageLoad()

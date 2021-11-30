@@ -99,14 +99,13 @@ class UploadFileController @Inject() (
             case Some(_: UploadedSuccessfully) =>
               Future.successful(Redirect(routes.FileValidationController.onPageLoad()))
             case Some(r: UploadRejected) =>
-              val errorMessage = if (r.details.message.contains("octet-stream")) {
-                "uploadFile.error.file.empty"
+              if (r.details.message.contains("octet-stream")) {
+                val errorForm: Form[String] = form.withError("file", "uploadFile.error.file.empty")
+                logger.debug(s"Show errorForm on rejection $errorForm")
+                toResponse(errorForm)
               } else {
-                "uploadFile.error.file.invalid"
+                Future.successful(Redirect(routes.NotXMLFileController.onPageLoad()))
               }
-              val errorForm: Form[String] = form.withError("file", errorMessage)
-              logger.debug(s"Show errorForm on rejection $errorForm")
-              toResponse(errorForm)
             case Some(Quarantined) =>
               Future.successful(Redirect(routes.VirusFileFoundController.onPageLoad()))
             case Some(Failed) =>
