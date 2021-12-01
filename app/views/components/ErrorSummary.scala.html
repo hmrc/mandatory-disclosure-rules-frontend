@@ -24,9 +24,7 @@
 
 @if(errors.nonEmpty) {
     @govUkErrorSummary(ErrorSummary(
-        errorList = errors
-            .map(err => err.copy(key = errorHref(err, radioOptions), args = formatArgs(err.args)))
-            .asTextErrorLinks,
+        errorList = errors.asTextErrorLinks,
         title = Text(messages("error.summary.title"))
     ))
 }

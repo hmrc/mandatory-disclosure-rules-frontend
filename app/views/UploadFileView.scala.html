@@ -18,6 +18,7 @@
 
 @this(
         layout: templates.Layout,
+        errorSummary: components.ErrorSummary,
         govukFileUpload: GovukFileUpload,
         govukButton: GovukButton
 )
@@ -39,6 +40,8 @@
   }
 
   <div class="js-visible mt-3">
+
+  @errorSummary(form.errors)
 
   @govukFileUpload(
    FileUpload(
