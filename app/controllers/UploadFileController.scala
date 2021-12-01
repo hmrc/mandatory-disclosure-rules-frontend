@@ -82,7 +82,7 @@ class UploadFileController @Inject() (
         case "EntityTooLarge" =>
           Future.successful(Redirect(routes.FileTooLargeController.onPageLoad()))
         case "InvalidArgument" =>
-          val formWithErrors: Form[String] = form.withError("file", "uploadFile.error.file.empty")
+          val formWithErrors: Form[String] = form.withError("file-upload", "uploadFile.error.file.empty")
           toResponse(formWithErrors)
         case _ =>
           logger.error(s"Upscan error $errorCode: $errorMessage, requestId is $errorRequestId")
@@ -100,11 +100,11 @@ class UploadFileController @Inject() (
               Future.successful(Redirect(routes.FileValidationController.onPageLoad()))
             case Some(r: UploadRejected) =>
               if (r.details.message.contains("octet-stream")) {
-                val errorForm: Form[String] = form.withError("file", "uploadFile.error.file.empty")
+                val errorForm: Form[String] = form.withError("file-upload", "uploadFile.error.file.empty")
                 logger.debug(s"Show errorForm on rejection $errorForm")
                 toResponse(errorForm)
               } else {
-                logger.info(s"Upload rejected. Error details: ${r.details}")
+                logger.warn(s"Upload rejected. Error details: ${r.details}")
                 Future.successful(Redirect(routes.NotXMLFileController.onPageLoad()))
               }
             case Some(Quarantined) =>

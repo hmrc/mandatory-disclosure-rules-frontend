@@ -48,7 +48,7 @@
     name = "file",
     id = "file-upload",
     classes = "hmrc-file-upload",
-    errorMessage = form("file").error.map(x => ErrorMessage(content = x.message)),
+    errorMessage = form("file-upload").error.map(x => ErrorMessage(content = x.message)),
     attributes = Map(
      "accept" -> ".xml,application/xml",
      "required" -> "required")
