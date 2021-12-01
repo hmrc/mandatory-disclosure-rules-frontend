@@ -18,7 +18,12 @@ package models
 
 import play.api.libs.json._
 
-case class ValidationErrors(errors: Seq[String], boolean: Option[Boolean])
+sealed trait Errors
+
+case class ValidationErrors(errors: Seq[String], boolean: Option[Boolean]) extends Errors
+
+case object InvalidXmlError extends Errors
+case class NonFatalErrors(e: String) extends Errors
 
 object ValidationErrors {
   implicit val format = Json.format[ValidationErrors]

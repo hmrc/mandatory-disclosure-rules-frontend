@@ -17,14 +17,14 @@
 package connectors
 
 import config.FrontendAppConfig
-import models.upscan.UpscanTimeoutException
-import models.{UploadSubmissionValidationFailure, UploadSubmissionValidationResult, UploadSubmissionValidationSuccess, ValidationErrors}
+import models.{Errors, InvalidXmlError, NonFatalErrors, UploadSubmissionValidationFailure, UploadSubmissionValidationResult, UploadSubmissionValidationSuccess}
 import org.slf4j.LoggerFactory
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.control.NonFatal
 
 class ValidationConnector @Inject() (http: HttpClient, config: FrontendAppConfig) {
 
@@ -32,7 +32,7 @@ class ValidationConnector @Inject() (http: HttpClient, config: FrontendAppConfig
 
   val url = s"${config.mdrUrl}/mandatory-disclosure-rules/validate-upload-submission"
 
-  def sendForValidation(upScanUrl: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[Either[ValidationErrors, Boolean]]] =
+  def sendForValidation(upScanUrl: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[Either[Errors, Boolean]]] =
     http
       .POSTString[HttpResponse](url, upScanUrl)
       .map {
@@ -48,11 +48,13 @@ class ValidationConnector @Inject() (http: HttpClient, config: FrontendAppConfig
           }
       }
       .recover {
-        case e: Throwable if e.getMessage contains "Invalid XML" =>
-          logger.warn(s"XML parsing failed. The XML parser in mandatory-disclosure-rules backend has thrown the exception: $e")
-          None
-        case e: Throwable =>
-          logger.warn(s"Remote service timed out. The XML parser in mandatory-disclosure-rules backend backend has thrown the exception: $e")
-          throw new UpscanTimeoutException
+        case NonFatal(e) =>
+          if (e.getMessage contains "Invalid XML") {
+            logger.warn(s"XML parsing failed. The XML parser in mandatory-disclosure-rules backend has thrown the exception: $e")
+            Some(Left(InvalidXmlError))
+          } else {
+            logger.warn(s"Remote service timed out. The XML parser in mandatory-disclosure-rules backend backend has thrown the exception: $e")
+            Some(Left(NonFatalErrors(e.getMessage)))
+          }
       }
 }

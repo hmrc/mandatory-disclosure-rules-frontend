@@ -20,8 +20,7 @@ import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, post, urlEqualTo}
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import generators.Generators
-import models.ValidationErrors
-import models.upscan.UpscanTimeoutException
+import models.{InvalidXmlError, NonFatalErrors, ValidationErrors}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.Application
@@ -72,12 +71,26 @@ class ValidationConnectorSpec extends SpecBase with WireMockHelper with Generato
       result.futureValue mustBe Some(Left(failurePayloadResult))
     }
 
-    "must throw an exception when validation returns a 400 (BAD_REQUEST) status" in {
+    "must return a InvalidXmlError when validation returns a Invalid XML in error message" in {
+      stubResponse(validationUrl, BAD_REQUEST, "Invalid XML")
+
+      val result = connector.sendForValidation("SomeUrl")
+
+      result.futureValue mustBe Some(
+        Left(InvalidXmlError)
+      )
+    }
+
+    "must return a NonFatalErrors when validation returns a 400 (BAD_REQUEST) status" in {
       stubResponse(validationUrl, BAD_REQUEST, "Some error")
 
       val result = connector.sendForValidation("SomeUrl")
 
-      whenReady(result.failed)(_ mustBe a[UpscanTimeoutException])
+      val message = s"POST of '${server.baseUrl() + validationUrl}' returned 400 (Bad Request). Response body 'Some error'"
+
+      result.futureValue mustBe Some(
+        Left(NonFatalErrors(message))
+      )
     }
   }
 

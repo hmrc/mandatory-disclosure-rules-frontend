@@ -27,7 +27,7 @@ import models._
 class Navigator @Inject() () {
 
   private val normalRoutes: Page => UserAnswers => Call = {
-    case InvalidXMLPage => ua => routes.InvalidXMLFileController.onPageLoad()
+    case InvalidXMLPage => _ => routes.InvalidXMLFileController.onPageLoad()
     case ValidXMLPage   => _ => routes.CheckYourAnswersController.onPageLoad()
     case _              => _ => routes.IndexController.onPageLoad()
   }

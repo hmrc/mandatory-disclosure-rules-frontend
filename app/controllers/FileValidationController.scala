@@ -18,8 +18,8 @@ package controllers
 
 import connectors.{UpscanConnector, ValidationConnector}
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import models.upscan.{UploadId, UploadSessionDetails, UploadedSuccessfully}
-import models.{NormalMode, UserAnswers, ValidationErrors}
+import models.upscan.{UploadSessionDetails, UploadedSuccessfully}
+import models.{Errors, InvalidXmlError, NormalMode, UserAnswers, ValidationErrors}
 import navigation.Navigator
 import pages._
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -29,6 +29,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Try
 
 class FileValidationController @Inject() (
   override val messagesApi: MessagesApi,
@@ -48,10 +49,10 @@ class FileValidationController @Inject() (
     implicit request =>
       {
         for {
-          uploadId       <- getUploadId(request.userAnswers)
+          uploadId       <- Future.fromTry(Try(request.userAnswers.get(UploadIDPage).getOrElse(throw new RuntimeException("Cannot find uploadId"))))
           uploadSessions <- upscanConnector.getUploadDetails(uploadId)
           (fileName, upScanUrl) = getDownloadUrl(uploadSessions)
-          validation: Option[Either[ValidationErrors, Boolean]] <- validationConnector.sendForValidation(upScanUrl)
+          validation: Option[Either[Errors, Boolean]] <- validationConnector.sendForValidation(upScanUrl)
         } yield validation match {
           case Some(Right(_)) =>
             for {
@@ -67,20 +68,17 @@ class FileValidationController @Inject() (
               _                        <- sessionRepository.set(updatedAnswersWithErrors)
             } yield Redirect(navigator.nextPage(InvalidXMLPage, NormalMode, updatedAnswers))
 
-          case _ =>
+          case Some(Left(InvalidXmlError)) =>
             for {
               updatedAnswers <- Future.fromTry(UserAnswers(request.userId).set(InvalidXMLPage, fileName))
               _              <- sessionRepository.set(updatedAnswers)
             } yield Redirect(navigator.nextPage(InvalidXMLPage, NormalMode, updatedAnswers))
+
+          case _ =>
+            Future.successful(Redirect(routes.ThereIsAProblemController.onPageLoad()))
         }
       }.flatten
   }
-
-  private def getUploadId(userAnswers: UserAnswers): Future[UploadId] =
-    userAnswers.get(UploadIDPage) match {
-      case Some(uploadId) => Future.successful(uploadId)
-      case None           => throw new RuntimeException("Cannot find uploadId")
-    }
 
   private def getDownloadUrl(uploadSessions: Option[UploadSessionDetails]) =
     uploadSessions match {
