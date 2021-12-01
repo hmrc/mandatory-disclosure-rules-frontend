@@ -32,7 +32,7 @@ class ValidationConnector @Inject() (http: HttpClient, config: FrontendAppConfig
 
   val url = s"${config.mdrUrl}/mandatory-disclosure-rules/validate-upload-submission"
 
-  def sendForValidation(upScanUrl: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[Either[Errors, Boolean]]] =
+  def sendForValidation(upScanUrl: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Either[Errors, Boolean]] =
     http
       .POSTString[HttpResponse](url, upScanUrl)
       .map {
@@ -41,9 +41,9 @@ class ValidationConnector @Inject() (http: HttpClient, config: FrontendAppConfig
             case OK =>
               response.json.as[UploadSubmissionValidationResult] match {
                 case x: UploadSubmissionValidationSuccess =>
-                  Some(Right(x.boolean))
+                  Right(x.boolean)
                 case x: UploadSubmissionValidationFailure =>
-                  Some(Left(x.validationErrors))
+                  Left(x.validationErrors)
               }
           }
       }
@@ -51,10 +51,10 @@ class ValidationConnector @Inject() (http: HttpClient, config: FrontendAppConfig
         case NonFatal(e) =>
           if (e.getMessage contains "Invalid XML") {
             logger.warn(s"XML parsing failed. The XML parser in mandatory-disclosure-rules backend has thrown the exception: $e")
-            Some(Left(InvalidXmlError))
+            Left(InvalidXmlError)
           } else {
             logger.warn(s"Remote service timed out. The XML parser in mandatory-disclosure-rules backend backend has thrown the exception: $e")
-            Some(Left(NonFatalErrors(e.getMessage)))
+            Left(NonFatalErrors(e.getMessage))
           }
       }
 }

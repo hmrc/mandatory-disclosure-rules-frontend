@@ -52,7 +52,7 @@ class ValidationConnectorSpec extends SpecBase with WireMockHelper with Generato
       stubResponse(validationUrl, OK, expectedBody)
 
       val result = connector.sendForValidation("SomeUrl")
-      result.futureValue mustBe Some(Right(true))
+      result.futureValue mustBe Right(true)
     }
 
     "must return a 200 and a Failure Object when failing validation" in {
@@ -68,7 +68,7 @@ class ValidationConnectorSpec extends SpecBase with WireMockHelper with Generato
       stubResponse(validationUrl, OK, expectedBody)
 
       val result = connector.sendForValidation("SomeUrl")
-      result.futureValue mustBe Some(Left(failurePayloadResult))
+      result.futureValue mustBe Left(failurePayloadResult)
     }
 
     "must return a InvalidXmlError when validation returns a Invalid XML in error message" in {
@@ -76,9 +76,7 @@ class ValidationConnectorSpec extends SpecBase with WireMockHelper with Generato
 
       val result = connector.sendForValidation("SomeUrl")
 
-      result.futureValue mustBe Some(
-        Left(InvalidXmlError)
-      )
+      result.futureValue mustBe Left(InvalidXmlError)
     }
 
     "must return a NonFatalErrors when validation returns a 400 (BAD_REQUEST) status" in {
@@ -88,9 +86,7 @@ class ValidationConnectorSpec extends SpecBase with WireMockHelper with Generato
 
       val message = s"POST of '${server.baseUrl() + validationUrl}' returned 400 (Bad Request). Response body 'Some error'"
 
-      result.futureValue mustBe Some(
-        Left(NonFatalErrors(message))
-      )
+      result.futureValue mustBe Left(NonFatalErrors(message))
     }
   }
 

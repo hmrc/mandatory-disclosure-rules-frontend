@@ -52,23 +52,23 @@ class FileValidationController @Inject() (
           uploadId       <- Future.fromTry(Try(request.userAnswers.get(UploadIDPage).getOrElse(throw new RuntimeException("Cannot find uploadId"))))
           uploadSessions <- upscanConnector.getUploadDetails(uploadId)
           (fileName, upScanUrl) = getDownloadUrl(uploadSessions)
-          validation: Option[Either[Errors, Boolean]] <- validationConnector.sendForValidation(upScanUrl)
+          validation: Either[Errors, Boolean] <- validationConnector.sendForValidation(upScanUrl)
         } yield validation match {
-          case Some(Right(_)) =>
+          case Right(_) =>
             for {
               updatedAnswers        <- Future.fromTry(request.userAnswers.set(ValidXMLPage, fileName))
               updatedAnswersWithURL <- Future.fromTry(updatedAnswers.set(URLPage, upScanUrl))
               _                     <- sessionRepository.set(updatedAnswersWithURL)
             } yield Redirect(navigator.nextPage(ValidXMLPage, NormalMode, updatedAnswers))
 
-          case Some(Left(ValidationErrors(errors, _))) =>
+          case Left(ValidationErrors(errors, _)) =>
             for {
               updatedAnswers           <- Future.fromTry(UserAnswers(request.userId).set(InvalidXMLPage, fileName))
               updatedAnswersWithErrors <- Future.fromTry(updatedAnswers.set(GenericErrorPage, errors))
               _                        <- sessionRepository.set(updatedAnswersWithErrors)
             } yield Redirect(navigator.nextPage(InvalidXMLPage, NormalMode, updatedAnswers))
 
-          case Some(Left(InvalidXmlError)) =>
+          case Left(InvalidXmlError) =>
             for {
               updatedAnswers <- Future.fromTry(UserAnswers(request.userId).set(InvalidXMLPage, fileName))
               _              <- sessionRepository.set(updatedAnswers)

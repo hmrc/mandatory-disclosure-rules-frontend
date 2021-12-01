@@ -70,7 +70,7 @@ class FileValidationControllerSpec extends SpecBase with BeforeAndAfterEach {
       val userAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
       val expectedData      = Json.obj("uploadID" -> UploadId("123"), "validXML" -> "afile", "url" -> downloadURL)
 
-      when(mockValidationConnector.sendForValidation(any())(any(), any())).thenReturn(Future.successful(Some(Right(true))))
+      when(mockValidationConnector.sendForValidation(any())(any(), any())).thenReturn(Future.successful(Right(true)))
       when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
       fakeUpscanConnector.setDetails(uploadDetails)
 
@@ -92,7 +92,7 @@ class FileValidationControllerSpec extends SpecBase with BeforeAndAfterEach {
 
       fakeUpscanConnector.setDetails(uploadDetails)
 
-      when(mockValidationConnector.sendForValidation(any())(any(), any())).thenReturn(Future.successful(Some(Left(ValidationErrors(errors, None)))))
+      when(mockValidationConnector.sendForValidation(any())(any(), any())).thenReturn(Future.successful(Left(ValidationErrors(errors, None))))
       when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
       val controller             = application.injector.instanceOf[FileValidationController]
@@ -113,7 +113,7 @@ class FileValidationControllerSpec extends SpecBase with BeforeAndAfterEach {
       fakeUpscanConnector.setDetails(uploadDetails)
       //noinspection ScalaStyle
 
-      when(mockValidationConnector.sendForValidation(any())(any(), any())).thenReturn(Future.successful(Some(Left(ValidationErrors(errors, None)))))
+      when(mockValidationConnector.sendForValidation(any())(any(), any())).thenReturn(Future.successful(Left(ValidationErrors(errors, None))))
       when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
       val controller             = application.injector.instanceOf[FileValidationController]
