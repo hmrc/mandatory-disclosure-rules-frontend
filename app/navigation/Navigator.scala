@@ -16,20 +16,25 @@
 
 package navigation
 
-import javax.inject.{Inject, Singleton}
-
-import play.api.mvc.Call
 import controllers.routes
-import pages._
 import models._
+import pages._
+import play.api.mvc.Call
+
+import javax.inject.{Inject, Singleton}
 
 @Singleton
 class Navigator @Inject() () {
 
   private val normalRoutes: Page => UserAnswers => Call = {
-    case InvalidXMLPage => _ => routes.InvalidXMLFileController.onPageLoad()
+    case InvalidXMLPage => ua => checkFileType(ua)
     case ValidXMLPage   => _ => routes.CheckYourAnswersController.onPageLoad()
     case _              => _ => routes.IndexController.onPageLoad()
+  }
+
+  private def checkFileType(ua: UserAnswers): Call = ua.get(InvalidXMLPage) match {
+    case Some(fileName) if fileName.toLowerCase.endsWith(".xml") => routes.InvalidXMLFileController.onPageLoad()
+    case _                                                       => routes.NotXMLFileController.onPageLoad()
   }
 
   private val checkRouteMap: Page => UserAnswers => Call = {

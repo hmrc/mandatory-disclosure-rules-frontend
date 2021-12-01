@@ -104,7 +104,7 @@ class UploadFileController @Inject() (
                 logger.debug(s"Show errorForm on rejection $errorForm")
                 toResponse(errorForm)
               } else {
-                logger.debug(s"Upload rejected. Error details: ${r.details}")
+                logger.info(s"Upload rejected. Error details: ${r.details}")
                 Future.successful(Redirect(routes.NotXMLFileController.onPageLoad()))
               }
             case Some(Quarantined) =>
