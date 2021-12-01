@@ -27,21 +27,21 @@
 
 @layout(pageTitle = titleNoForm(messages("uploadFile.title"))) {
 
+ <form action="@upscanInitiateResponse.postTarget" method="post" enctype="multipart/form-data" novalidate>
+
+  @errorSummary(form.errors)
+
  <h1 class="govuk-label-wrapper">
   <label class="govuk-label govuk-label--l" for="file-upload">
   @messages("uploadFile.heading")
   </label>
  </h1>
 
-  <form action="@upscanInitiateResponse.postTarget" method="post" enctype="multipart/form-data" novalidate>
-
   @for((key, value) <- upscanInitiateResponse.formFields){
    <input type="hidden" name="@key" value="@value" />
   }
 
   <div class="js-visible mt-3">
-
-  @errorSummary(form.errors)
 
   @govukFileUpload(
    FileUpload(
