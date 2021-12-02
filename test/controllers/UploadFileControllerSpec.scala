@@ -30,7 +30,7 @@ import play.api.Application
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{status, _}
-import views.html.{FileCheckView, JourneyRecoveryStartAgainView, UploadFileView}
+import views.html.{FileCheckView, JourneyRecoveryStartAgainView, NotXMLFileView, UploadFileView}
 
 import scala.concurrent.Future
 
@@ -89,17 +89,15 @@ class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
       }
 
       val fileCheckView  = application.injector.instanceOf[FileCheckView]
-      val uploadFileView = application.injector.instanceOf[UploadFileView]
+      val notXmlFileView = application.injector.instanceOf[NotXMLFileView]
       val errorView      = application.injector.instanceOf[JourneyRecoveryStartAgainView]
-
-      val form = app.injector.instanceOf[UploadFileFormProvider]
 
       verifyResult(InProgress, OK, fileCheckView()(request, messages(application)).toString())
       verifyResult(Quarantined)
       verifyResult(
         UploadRejected(ErrorDetails("REJECTED", "message")),
-        OK,
-        uploadFileView(form().withError("file", "uploadFile.error.file.invalid"), UpscanInitiateResponse(Reference("file-reference"), "target", Map.empty))(
+        SEE_OTHER,
+        notXmlFileView()(
           request,
           messages(application)
         ).toString()

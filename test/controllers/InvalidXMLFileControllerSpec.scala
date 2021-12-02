@@ -17,6 +17,7 @@
 package controllers
 
 import base.SpecBase
+import pages.InvalidXMLPage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.InvalidXMLFileView
@@ -27,7 +28,9 @@ class InvalidXMLFileControllerSpec extends SpecBase {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val userAnswers = emptyUserAnswers.set(InvalidXMLPage, "example.xml").success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, routes.InvalidXMLFileController.onPageLoad().url)

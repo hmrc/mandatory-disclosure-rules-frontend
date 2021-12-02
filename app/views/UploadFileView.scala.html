@@ -18,6 +18,7 @@
 
 @this(
         layout: templates.Layout,
+        errorSummary: components.ErrorSummary,
         govukFileUpload: GovukFileUpload,
         govukButton: GovukButton
 )
@@ -26,13 +27,15 @@
 
 @layout(pageTitle = titleNoForm(messages("uploadFile.title"))) {
 
+ <form action="@upscanInitiateResponse.postTarget" method="post" enctype="multipart/form-data" novalidate>
+
+  @errorSummary(form.errors)
+
  <h1 class="govuk-label-wrapper">
   <label class="govuk-label govuk-label--l" for="file-upload">
   @messages("uploadFile.heading")
   </label>
  </h1>
-
-  <form action="@upscanInitiateResponse.postTarget" method="post" enctype="multipart/form-data" novalidate>
 
   @for((key, value) <- upscanInitiateResponse.formFields){
    <input type="hidden" name="@key" value="@value" />
@@ -45,7 +48,7 @@
     name = "file",
     id = "file-upload",
     classes = "hmrc-file-upload",
-    errorMessage = form("file").error.map(x => ErrorMessage(content = x.message)),
+    errorMessage = form("file-upload").error.map(x => ErrorMessage(content = x.message)),
     attributes = Map(
      "accept" -> ".xml,application/xml",
      "required" -> "required")

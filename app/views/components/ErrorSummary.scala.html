@@ -14,18 +14,17 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.govukfrontend.views.html.components.implicits._
+
 @this(
-        layout: templates.Layout,
-        link: components.Link
+    govUkErrorSummary: GovukErrorSummary
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@(errors: Seq[FormError])(implicit messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("virusFileFound.title"))) {
-
-    <h1 class="govuk-heading-l">@messages("virusFileFound.heading")</h1>
-
-    <p class="govuk-body">@messages("virusFileFound.p1")</p>
-    <p class="govuk-body">@link(routes.UploadFileController.onPageLoad().url, "problemPage.uploadLink")</p>
-    <p class="govuk-body">@link("#", "problemPage.MDR.guidanceLink")</p>
+@if(errors.nonEmpty) {
+    @govUkErrorSummary(ErrorSummary(
+        errorList = errors.asTextErrorLinks,
+        title = Text(messages("error.summary.title"))
+    ))
 }

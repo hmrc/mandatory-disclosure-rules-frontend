@@ -17,27 +17,131 @@
 package controllers
 
 import base.SpecBase
+import connectors.{UpscanConnector, ValidationConnector}
+import helpers.FakeUpscanConnector
+import models.{UserAnswers, ValidationErrors}
+import models.upscan.{Reference, UploadId, UploadSessionDetails, UploadedSuccessfully}
+import org.bson.types.ObjectId
+import org.mockito.ArgumentCaptor
+import org.mockito.ArgumentMatchers.any
+import org.scalatest.BeforeAndAfterEach
+import pages.UploadIDPage
+import play.api.inject.bind
+import play.api.libs.json.Json
+import play.api.mvc.Result
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.FileValidationView
+import repositories.SessionRepository
 
-class FileValidationControllerSpec extends SpecBase {
+import scala.concurrent.{ExecutionContextExecutor, Future}
 
-  "FileValidation Controller" - {
+class FileValidationControllerSpec extends SpecBase with BeforeAndAfterEach {
 
-    "must return OK and the correct view for a GET" in {
+  val mockValidationConnector = mock[ValidationConnector]
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+  implicit val ec: ExecutionContextExecutor = scala.concurrent.ExecutionContext.global
 
-      running(application) {
-        val request = FakeRequest(GET, routes.FileValidationController.onPageLoad().url)
+  override def beforeEach: Unit =
+    reset(mockSessionRepository)
 
-        val result = route(application, request).value
+  val fakeUpscanConnector = app.injector.instanceOf[FakeUpscanConnector]
 
-        val view = application.injector.instanceOf[FileValidationView]
+  "FileValidationController" - {
+    val uploadId    = UploadId("123")
+    val userAnswers = UserAnswers(userAnswersId).set(UploadIDPage, uploadId).success.value
+    val application = applicationBuilder(userAnswers = Some(userAnswers))
+      .overrides(
+        bind[UpscanConnector].toInstance(fakeUpscanConnector),
+        bind[SessionRepository].toInstance(mockSessionRepository),
+        bind[ValidationConnector].toInstance(mockValidationConnector)
+      )
+      .build()
 
+    val downloadURL = "http://dummy-url.com"
+    val uploadDetails = UploadSessionDetails(
+      new ObjectId(),
+      UploadId("123"),
+      Reference("123"),
+      UploadedSuccessfully("afile", downloadURL)
+    )
+
+    "must redirect to Check your answers and present the correct view for a GET" in {
+
+      val userAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+      val expectedData      = Json.obj("uploadID" -> UploadId("123"), "validXML" -> "afile", "url" -> downloadURL)
+
+      when(mockValidationConnector.sendForValidation(any())(any(), any())).thenReturn(Future.successful(Right(true)))
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+      fakeUpscanConnector.setDetails(uploadDetails)
+
+      val request                = FakeRequest(GET, routes.FileValidationController.onPageLoad().url)
+      val result: Future[Result] = route(application, request).value
+
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result).value mustEqual routes.CheckYourAnswersController.onPageLoad().url
+
+      verify(mockSessionRepository, times(1)).set(userAnswersCaptor.capture())
+      userAnswersCaptor.getValue.data mustEqual expectedData
+    }
+
+    "must redirect to invalid XML page if XML validation fails" in {
+
+      val errors: Seq[String] = Seq("error")
+      val userAnswersCaptor   = ArgumentCaptor.forClass(classOf[UserAnswers])
+      val expectedData        = Json.obj("invalidXML" -> "afile", "errors" -> errors)
+
+      fakeUpscanConnector.setDetails(uploadDetails)
+
+      when(mockValidationConnector.sendForValidation(any())(any(), any())).thenReturn(Future.successful(Left(ValidationErrors(errors, None))))
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+
+      val controller             = application.injector.instanceOf[FileValidationController]
+      val result: Future[Result] = controller.onPageLoad()(FakeRequest("", ""))
+
+      status(result) mustBe SEE_OTHER
+      verify(mockSessionRepository, times(1)).set(userAnswersCaptor.capture())
+
+      userAnswersCaptor.getValue.data mustEqual expectedData
+    }
+
+    "must redirect to file error page if XML parser fails" in {
+
+      val errors: Seq[String] = Seq("error")
+      val userAnswersCaptor   = ArgumentCaptor.forClass(classOf[UserAnswers])
+      val expectedData        = Json.obj("invalidXML" -> "afile", "errors" -> errors)
+
+      fakeUpscanConnector.setDetails(uploadDetails)
+      //noinspection ScalaStyle
+
+      when(mockValidationConnector.sendForValidation(any())(any(), any())).thenReturn(Future.successful(Left(ValidationErrors(errors, None))))
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+
+      val controller             = application.injector.instanceOf[FileValidationController]
+      val result: Future[Result] = controller.onPageLoad()(FakeRequest("", ""))
+
+      status(result) mustBe SEE_OTHER
+      verify(mockSessionRepository, times(1)).set(userAnswersCaptor.capture())
+      userAnswersCaptor.getValue.data mustEqual expectedData
+    }
+
+    "must return an Exception when a valid UploadId cannot be found" in {
+
+      val controller             = application.injector.instanceOf[FileValidationController]
+      val result: Future[Result] = controller.onPageLoad()(FakeRequest("", ""))
+
+      a[RuntimeException] mustBe thrownBy(status(result))
+    }
+
+    "must return an Exception when meta data cannot be found" in {
+
+      fakeUpscanConnector.setDetails(uploadDetails)
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+
+      val controller             = application.injector.instanceOf[FileValidationController]
+      val result: Future[Result] = controller.onPageLoad()(FakeRequest("", ""))
+
+      a[RuntimeException] mustBe thrownBy {
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view()(request, messages(application)).toString
       }
     }
   }
