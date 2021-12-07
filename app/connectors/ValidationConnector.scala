@@ -30,7 +30,7 @@ class ValidationConnector @Inject() (http: HttpClient, config: FrontendAppConfig
 
   private val logger = LoggerFactory.getLogger(getClass)
 
-  val url = s"${config.mdrUrl}/mandatory-disclosure-rules/validate-upload-submission"
+  val url = s"${config.mdrUrl}/mandatory-disclosure-rules/validate-submission"
 
   def sendForValidation(upScanUrl: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Either[Errors, Boolean]] =
     http

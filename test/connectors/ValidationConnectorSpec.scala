@@ -39,7 +39,7 @@ class ValidationConnectorSpec extends SpecBase with WireMockHelper with Generato
     .build()
 
   lazy val connector: ValidationConnector = app.injector.instanceOf[ValidationConnector]
-  val validationUrl                       = "/mandatory-disclosure-rules/validate-upload-submission"
+  val validationUrl                       = "/mandatory-disclosure-rules/validate-submission"
 
   val failurePayloadResult: ValidationErrors = ValidationErrors(Seq("some error", "another error"), None)
 
