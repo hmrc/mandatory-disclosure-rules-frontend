@@ -20,7 +20,7 @@ import play.api.libs.json._
 
 sealed trait Errors
 
-case class ValidationErrors(errors: Seq[String], boolean: Option[Boolean]) extends Errors
+case class ValidationErrors(errors: Seq[GenericError], boolean: Option[Boolean]) extends Errors
 
 case object InvalidXmlError extends Errors
 case class NonFatalErrors(e: String) extends Errors
@@ -47,6 +47,19 @@ object UploadSubmissionValidationResult {
       case m @ UploadSubmissionValidationFailure(_) => UploadSubmissionValidationFailure.format.writes(m)
     }
   }
+}
+
+case class GenericError(lineNumber: Int, messageKey: String)
+
+object GenericError {
+
+  implicit def orderByLineNumber[A <: GenericError]: Ordering[A] =
+    Ordering.by(
+      ge => (ge.lineNumber, ge.messageKey)
+    )
+
+  implicit val format = Json.format[GenericError]
+
 }
 
 case class UploadSubmissionValidationSuccess(boolean: Boolean) extends UploadSubmissionValidationResult
