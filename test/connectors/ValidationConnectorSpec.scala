@@ -20,7 +20,7 @@ import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, post, urlEqualTo}
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import generators.Generators
-import models.{InvalidXmlError, NonFatalErrors, ValidationErrors}
+import models.{GenericError, InvalidXmlError, NonFatalErrors, ValidationErrors}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.Application
@@ -41,7 +41,7 @@ class ValidationConnectorSpec extends SpecBase with WireMockHelper with Generato
   lazy val connector: ValidationConnector = app.injector.instanceOf[ValidationConnector]
   val validationUrl                       = "/mandatory-disclosure-rules/validate-submission"
 
-  val failurePayloadResult: ValidationErrors = ValidationErrors(Seq("some error", "another error"), None)
+  val failurePayloadResult: ValidationErrors = ValidationErrors(Seq(GenericError(1, "some error"), GenericError(2, "another error")), None)
 
   "Validation Connector" - {
 
@@ -58,12 +58,18 @@ class ValidationConnectorSpec extends SpecBase with WireMockHelper with Generato
     "must return a 200 and a Failure Object when failing validation" in {
 
       val expectedBody = """
-                            |{ "validationErrors": {
-                            | "errors":[
-                            |     "some error",
-                            |     "another error"
-                            |  ]
-                            |}}""".stripMargin
+                               |{ "validationErrors": {
+                               | "errors":[
+                               |     {
+                               |         "lineNumber" : 1,
+                               |         "messageKey":"some error"
+                               |      },
+                               |      {
+                               |         "lineNumber" : 2,
+                               |         "messageKey":"another error"
+                               |      }
+                               |  ]
+                               |}}""".stripMargin
 
       stubResponse(validationUrl, OK, expectedBody)
 
