@@ -18,12 +18,23 @@ package models
 
 import play.api.libs.json._
 
+case class GenericError(lineNumber: Int, messageKey: String)
+
+object GenericError {
+
+  implicit def orderByLineNumber[A <: GenericError]: Ordering[A] =
+    Ordering.by(
+      ge => (ge.lineNumber, ge.messageKey)
+    )
+
+  implicit val format = Json.format[GenericError]
+}
+
 sealed trait Errors
-
-case class ValidationErrors(errors: Seq[GenericError], boolean: Option[Boolean]) extends Errors
-
 case object InvalidXmlError extends Errors
 case class NonFatalErrors(e: String) extends Errors
+
+case class ValidationErrors(errors: Seq[GenericError], boolean: Option[Boolean]) extends Errors
 
 object ValidationErrors {
   implicit val format = Json.format[ValidationErrors]
@@ -47,19 +58,6 @@ object UploadSubmissionValidationResult {
       case m @ UploadSubmissionValidationFailure(_) => UploadSubmissionValidationFailure.format.writes(m)
     }
   }
-}
-
-case class GenericError(lineNumber: Int, messageKey: String)
-
-object GenericError {
-
-  implicit def orderByLineNumber[A <: GenericError]: Ordering[A] =
-    Ordering.by(
-      ge => (ge.lineNumber, ge.messageKey)
-    )
-
-  implicit val format = Json.format[GenericError]
-
 }
 
 case class UploadSubmissionValidationSuccess(boolean: Boolean) extends UploadSubmissionValidationResult
