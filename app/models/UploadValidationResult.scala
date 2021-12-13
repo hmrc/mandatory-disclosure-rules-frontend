@@ -40,34 +40,34 @@ object ValidationErrors {
   implicit val format = Json.format[ValidationErrors]
 }
 
-sealed trait UploadSubmissionValidationResult
+sealed trait SubmissionValidationResult
 
-object UploadSubmissionValidationResult {
+object SubmissionValidationResult {
 
-  implicit val validationWrites = new Format[UploadSubmissionValidationResult] {
+  implicit val validationWrites = new Format[SubmissionValidationResult] {
 
-    override def reads(json: JsValue): JsResult[UploadSubmissionValidationResult] =
+    override def reads(json: JsValue): JsResult[SubmissionValidationResult] =
       json
-        .validate[UploadSubmissionValidationSuccess]
+        .validate[SubmissionValidationSuccess]
         .orElse(
-          json.validate[UploadSubmissionValidationFailure]
+          json.validate[SubmissionValidationFailure]
         )
 
-    override def writes(o: UploadSubmissionValidationResult): JsValue = o match {
-      case m @ UploadSubmissionValidationSuccess(_) => UploadSubmissionValidationSuccess.format.writes(m)
-      case m @ UploadSubmissionValidationFailure(_) => UploadSubmissionValidationFailure.format.writes(m)
+    override def writes(o: SubmissionValidationResult): JsValue = o match {
+      case m @ SubmissionValidationSuccess(_) => SubmissionValidationSuccess.format.writes(m)
+      case m @ SubmissionValidationFailure(_) => SubmissionValidationFailure.format.writes(m)
     }
   }
 }
 
-case class UploadSubmissionValidationSuccess(boolean: Boolean) extends UploadSubmissionValidationResult
+case class SubmissionValidationSuccess(boolean: Boolean) extends SubmissionValidationResult
 
-object UploadSubmissionValidationSuccess {
-  implicit val format: OFormat[UploadSubmissionValidationSuccess] = Json.format[UploadSubmissionValidationSuccess]
+object SubmissionValidationSuccess {
+  implicit val format: OFormat[SubmissionValidationSuccess] = Json.format[SubmissionValidationSuccess]
 }
 
-case class UploadSubmissionValidationFailure(validationErrors: ValidationErrors) extends UploadSubmissionValidationResult
+case class SubmissionValidationFailure(validationErrors: ValidationErrors) extends SubmissionValidationResult
 
-object UploadSubmissionValidationFailure {
-  implicit val format: OFormat[UploadSubmissionValidationFailure] = Json.format[UploadSubmissionValidationFailure]
+object SubmissionValidationFailure {
+  implicit val format: OFormat[SubmissionValidationFailure] = Json.format[SubmissionValidationFailure]
 }
