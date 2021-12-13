@@ -31,7 +31,7 @@ object GenericError {
 }
 
 sealed trait Errors
-case object InvalidXmlError extends Errors
+case class InvalidXmlError(saxException: String) extends Errors
 case class NonFatalErrors(e: String) extends Errors
 
 case class ValidationErrors(errors: Seq[GenericError], boolean: Option[Boolean]) extends Errors

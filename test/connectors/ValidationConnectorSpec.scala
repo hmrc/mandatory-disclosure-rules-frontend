@@ -82,7 +82,9 @@ class ValidationConnectorSpec extends SpecBase with WireMockHelper with Generato
 
       val result = connector.sendForValidation("SomeUrl")
 
-      result.futureValue mustBe Left(InvalidXmlError)
+      val message = s"POST of '${server.baseUrl() + validationUrl}' returned 400 (Bad Request). Response body 'Invalid XML'"
+
+      result.futureValue mustBe Left(InvalidXmlError(message))
     }
 
     "must return a NonFatalErrors when validation returns a 400 (BAD_REQUEST) status" in {
