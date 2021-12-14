@@ -16,9 +16,10 @@
 
 package pages
 
+import models.GenericError
 import play.api.libs.json.JsPath
 
-object GenericErrorPage extends QuestionPage[Seq[String]] {
+object GenericErrorPage extends QuestionPage[Seq[GenericError]] {
 
   override def path: JsPath = JsPath \ toString
 

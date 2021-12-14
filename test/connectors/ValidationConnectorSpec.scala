@@ -20,7 +20,7 @@ import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, post, urlEqualTo}
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import generators.Generators
-import models.{InvalidXmlError, NonFatalErrors, ValidationErrors}
+import models.{GenericError, InvalidXmlError, NonFatalErrors, ValidationErrors}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.Application
@@ -39,9 +39,9 @@ class ValidationConnectorSpec extends SpecBase with WireMockHelper with Generato
     .build()
 
   lazy val connector: ValidationConnector = app.injector.instanceOf[ValidationConnector]
-  val validationUrl                       = "/mandatory-disclosure-rules/validate-upload-submission"
+  val validationUrl                       = "/mandatory-disclosure-rules/validate-submission"
 
-  val failurePayloadResult: ValidationErrors = ValidationErrors(Seq("some error", "another error"), None)
+  val failurePayloadResult: ValidationErrors = ValidationErrors(Seq(GenericError(1, "some error"), GenericError(2, "another error")), None)
 
   "Validation Connector" - {
 
@@ -58,12 +58,18 @@ class ValidationConnectorSpec extends SpecBase with WireMockHelper with Generato
     "must return a 200 and a Failure Object when failing validation" in {
 
       val expectedBody = """
-                            |{ "validationErrors": {
-                            | "errors":[
-                            |     "some error",
-                            |     "another error"
-                            |  ]
-                            |}}""".stripMargin
+                               |{ "validationErrors": {
+                               | "errors":[
+                               |     {
+                               |         "lineNumber" : 1,
+                               |         "messageKey":"some error"
+                               |      },
+                               |      {
+                               |         "lineNumber" : 2,
+                               |         "messageKey":"another error"
+                               |      }
+                               |  ]
+                               |}}""".stripMargin
 
       stubResponse(validationUrl, OK, expectedBody)
 
@@ -76,7 +82,9 @@ class ValidationConnectorSpec extends SpecBase with WireMockHelper with Generato
 
       val result = connector.sendForValidation("SomeUrl")
 
-      result.futureValue mustBe Left(InvalidXmlError)
+      val message = s"POST of '${server.baseUrl() + validationUrl}' returned 400 (Bad Request). Response body 'Invalid XML'"
+
+      result.futureValue mustBe Left(InvalidXmlError(message))
     }
 
     "must return a NonFatalErrors when validation returns a 400 (BAD_REQUEST) status" in {
