@@ -49,7 +49,7 @@ class FrontendAppConfig @Inject() (configuration: Configuration, servicesConfig:
   val mdrUrl: String = servicesConfig.baseUrl("mandatory-disclosure-rules")
 
   private val exitSurveyBaseUrl: String = configuration.get[Service]("microservice.services.feedback-frontend").baseUrl
-  val exitSurveyUrl: String             = s"$exitSurveyBaseUrl/feedback/mandatory-disclosure-rules-frontend"
+  val exitSurveyUrl: String             = s"$exitSurveyBaseUrl/feedback/report-under-mandatory-disclosure-rules"
 
   val languageTranslationEnabled: Boolean =
     configuration.get[Boolean]("features.welsh-translation")
