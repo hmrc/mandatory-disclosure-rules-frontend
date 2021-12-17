@@ -39,7 +39,7 @@ class UpscanConnector @Inject() (configuration: FrontendAppConfig, httpClient: H
   def getUpscanFormData(implicit hc: HeaderCarrier): Future[UpscanInitiateResponse] = {
     val callbackUrl        = s"$backendUrl/callback"
     val successRedirectUrl = configuration.upscanRedirectBase + routes.UploadFileController.showResult().url
-    val errorRedirectUrl   = configuration.upscanRedirectBase + "/mandatory-disclosure-rules-frontend/report/error"
+    val errorRedirectUrl   = configuration.upscanRedirectBase + "/report-under-mandatory-disclosure-rules/report/error"
     val body               = UpscanInitiateRequest(callbackUrl, successRedirectUrl, errorRedirectUrl, None, Some(upscanMaxSize * 1048576), Some("text/xml"))
     httpClient.POST[UpscanInitiateRequest, PreparedUpload](upscanInitiateUrl, body, headers.toSeq).map {
       _.toUpscanInitiateResponse
