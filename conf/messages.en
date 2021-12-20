@@ -110,3 +110,11 @@ fileCheck.heading = We are checking your file
 
 fileValidation.title = fileValidation
 fileValidation.heading = fileValidation
+
+changeIndividualContactDetails.title = Your contact details
+changeIndividualContactDetails.heading = Your contact details
+changeIndividualContactDetails.landing-page.link = Back to report cross-border arrangements
+
+changeOrganisationContactDetails.title = Contact details at your organisation
+changeOrganisationContactDetails.heading = Contact details at your organisation
+changeOrganisationContactDetails.landing-page.link = Back to report cross-border arrangements
