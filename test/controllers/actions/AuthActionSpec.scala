@@ -25,6 +25,7 @@ import play.api.mvc.Results.Ok
 import play.api.mvc.{BodyParsers, Results}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import uk.gov.hmrc.auth.core.AffinityGroup.{Individual, Organisation}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{~, Retrieval}
@@ -109,7 +110,7 @@ class AuthActionSpec extends SpecBase {
 
       "must create an IdentifierRequest with a subscriptionId and allow the user to proceed" in {
 
-        type AuthRetrievals = Option[String] ~ Enrolments
+        type AuthRetrievals = Option[String] ~ Enrolments ~ Option[AffinityGroup]
 
         val application = applicationBuilder(userAnswers = None).build()
 
@@ -125,7 +126,7 @@ class AuthActionSpec extends SpecBase {
             delegatedAuthRule = None
           )
 
-          val retrieval: AuthRetrievals = Some("internalID") ~ Enrolments(Set(mdrEnrolment))
+          val retrieval: AuthRetrievals = Some("internalID") ~ Enrolments(Set(mdrEnrolment)) ~ Some(Organisation)
           when(mockAuthConnector.authorise[AuthRetrievals](any(), any())(any(), any())) thenReturn Future.successful(retrieval)
 
           val action = new AuthenticatedIdentifierAction(mockAuthConnector, appConfig, bodyParsers)
@@ -146,7 +147,7 @@ class AuthActionSpec extends SpecBase {
 
       "must redirect the user to register-for-exchange-of-information-frontend" in {
 
-        type AuthRetrievals = Option[String] ~ Enrolments
+        type AuthRetrievals = Option[String] ~ Enrolments ~ Option[AffinityGroup]
 
         val application = applicationBuilder(userAnswers = None).build()
 
@@ -162,7 +163,7 @@ class AuthActionSpec extends SpecBase {
             delegatedAuthRule = None
           )
 
-          val retrieval: AuthRetrievals = Some("internalID") ~ Enrolments(Set(mdrEnrolment))
+          val retrieval: AuthRetrievals = Some("internalID") ~ Enrolments(Set(mdrEnrolment)) ~ Some(Individual)
           when(mockAuthConnector.authorise[AuthRetrievals](any(), any())(any(), any())) thenReturn Future.successful(retrieval)
 
           val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, appConfig, bodyParsers)
@@ -179,7 +180,7 @@ class AuthActionSpec extends SpecBase {
 
       "must redirect the user to register-for-exchange-of-information-frontend" in {
 
-        type AuthRetrievals = Option[String] ~ Enrolments
+        type AuthRetrievals = Option[String] ~ Enrolments ~ Option[AffinityGroup]
 
         val application = applicationBuilder(userAnswers = None).build()
 
@@ -195,7 +196,7 @@ class AuthActionSpec extends SpecBase {
             delegatedAuthRule = None
           )
 
-          val retrieval: AuthRetrievals = Some("internalID") ~ Enrolments(Set(mdrEnrolment))
+          val retrieval: AuthRetrievals = Some("internalID") ~ Enrolments(Set(mdrEnrolment)) ~ Some(Individual)
           when(mockAuthConnector.authorise[AuthRetrievals](any(), any())(any(), any())) thenReturn Future.successful(retrieval)
 
           val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, appConfig, bodyParsers)
@@ -212,7 +213,7 @@ class AuthActionSpec extends SpecBase {
 
       "must redirect the user to the unauthorised page" in {
 
-        type AuthRetrievals = Option[String] ~ Enrolments
+        type AuthRetrievals = Option[String] ~ Enrolments ~ Option[AffinityGroup]
 
         val application = applicationBuilder(userAnswers = None).build()
 
@@ -228,7 +229,7 @@ class AuthActionSpec extends SpecBase {
             delegatedAuthRule = None
           )
 
-          val retrieval: AuthRetrievals = None ~ Enrolments(Set(mdrEnrolment))
+          val retrieval: AuthRetrievals = None ~ Enrolments(Set(mdrEnrolment)) ~ Some(Organisation)
           when(mockAuthConnector.authorise[AuthRetrievals](any(), any())(any(), any())) thenReturn Future.successful(retrieval)
 
           val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, appConfig, bodyParsers)

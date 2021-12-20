@@ -14,9 +14,24 @@
  * limitations under the License.
  */
 
-package models.requests
+package viewmodels
 
-import play.api.mvc.{Request, WrappedRequest}
-import uk.gov.hmrc.auth.core.AffinityGroup
+trait GenericAnswerRow {
+  def label: String
+  def answer: String
+  def answerIsMessageKey: Boolean
+  def changeUrl: String
+  def hiddenText: Option[String]
+  def labelArgs: Seq[String]
+  def hiddenTextArgs: Seq[String]
+}
 
-case class IdentifierRequest[A](request: Request[A], userId: String, subscriptionId: String, userType: AffinityGroup) extends WrappedRequest[A](request)
+case class AnswerRow(
+  label: String,
+  answer: String,
+  answerIsMessageKey: Boolean,
+  changeUrl: String,
+  hiddenText: Option[String] = None,
+  labelArgs: Seq[String] = Nil,
+  hiddenTextArgs: Seq[String] = Nil
+) extends GenericAnswerRow

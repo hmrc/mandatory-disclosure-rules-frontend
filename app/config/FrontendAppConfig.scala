@@ -40,6 +40,8 @@ class FrontendAppConfig @Inject() (configuration: Configuration, servicesConfig:
   val signOutUrl: String       = configuration.get[String]("urls.signOut")
   val registerUrl: String      = configuration.get[String]("urls.register")
 
+  lazy val homePageUrl: String = configuration.get[String]("urls.homepage")
+
   val upscanInitiateHost: String = servicesConfig.baseUrl("upscan")
   val upscanBucketHost: String   = servicesConfig.baseUrl("upscan")
   val upscanProtocol: String     = servicesConfig.getConfString("upscan.protocol", "https")

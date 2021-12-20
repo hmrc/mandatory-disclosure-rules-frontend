@@ -14,9 +14,15 @@
  * limitations under the License.
  */
 
-package models.requests
+package viewmodels
 
-import play.api.mvc.{Request, WrappedRequest}
-import uk.gov.hmrc.auth.core.AffinityGroup
+import pages.QuestionPage
 
-case class IdentifierRequest[A](request: Request[A], userId: String, subscriptionId: String, userType: AffinityGroup) extends WrappedRequest[A](request)
+case class CheckAnswerDataMapping(label: String,
+                                  userAnswerPage: QuestionPage[_],
+                                  answerIsMessageKey: Boolean,
+                                  changeUrl: String,
+                                  hiddenText: Option[String] = None,
+                                  labelArgs: Seq[String] = Nil,
+                                  hiddenTextArgs: Seq[String] = Nil
+)

@@ -16,33 +16,37 @@
 
 package controllers
 
-import com.google.inject.Inject
-import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import config.FrontendAppConfig
+import controllers.actions._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.CheckYourAnswersHelper
 import viewmodels.govuk.summarylist._
-import views.html.CheckYourAnswersView
+import views.html.ChangeOrganisationContactDetailsView
 
-class CheckYourAnswersController @Inject() (
+import javax.inject.Inject
+
+class ChangeOrganisationContactDetailsController @Inject() (
   override val messagesApi: MessagesApi,
+  frontendAppConfig: FrontendAppConfig,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
-  view: CheckYourAnswersView
+  view: ChangeOrganisationContactDetailsView
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData.apply andThen requireData) {
+  def onPageLoad: Action[AnyContent] = (identify andThen getData.apply andThen requireData) { //ToDo require data when available
     implicit request =>
-      val cya = CheckYourAnswersHelper(userAnswers = request.userAnswers)
+      val checkUserAnswersHelper = new CheckYourAnswersHelper(request.userAnswers)
+
       val list = SummaryListViewModel(
-        rows = Seq.empty
+        rows = checkUserAnswersHelper.buildRow().flatten
       )
 
-      Ok(view(list))
+      Ok(view(list, frontendAppConfig))
   }
 
 }

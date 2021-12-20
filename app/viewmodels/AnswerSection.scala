@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package models.requests
+package viewmodels
 
-import play.api.mvc.{Request, WrappedRequest}
-import uk.gov.hmrc.auth.core.AffinityGroup
+trait Section
 
-case class IdentifierRequest[A](request: Request[A], userId: String, subscriptionId: String, userType: AffinityGroup) extends WrappedRequest[A](request)
+case class AnswerSection(headingKey: Option[String], rows: Seq[GenericAnswerRow]) extends Section
