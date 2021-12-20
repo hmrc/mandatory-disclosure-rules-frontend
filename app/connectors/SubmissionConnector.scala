@@ -29,7 +29,7 @@ import uk.gov.hmrc.http.HttpReads.Implicits._
 
 class SubmissionConnector @Inject() (httpClient: HttpClient, config: FrontendAppConfig) extends Logging {
 
-  val submitUrl = s"${config.mdrUrl}/mandatory-disclosure-rules/submitXml"
+  val submitUrl = s"${config.mdrUrl}/mandatory-disclosure-rules/submit"
 
   def submitDocument(fileName: String, enrolmentID: String, xmlDocument: Elem)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] =
     httpClient.POSTString[HttpResponse](submitUrl, constructSubmission(fileName, enrolmentID, xmlDocument).toString(), headers)
