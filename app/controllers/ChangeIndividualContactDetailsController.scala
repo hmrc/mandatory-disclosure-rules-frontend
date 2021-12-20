@@ -36,7 +36,7 @@ class ChangeIndividualContactDetailsController @Inject() (
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData) {
+  def onPageLoad: Action[AnyContent] = (identify andThen getData()) { //ToDo require data when available
     implicit request =>
       Ok(view(frontendAppConfig))
   }
