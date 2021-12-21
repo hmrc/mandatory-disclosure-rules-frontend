@@ -17,24 +17,27 @@
 package controllers
 
 import controllers.actions.IdentifierAction
-
-import javax.inject.Inject
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.auth.core.AffinityGroup.{Individual, Organisation}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.IndexView
+
+import javax.inject.Inject
 
 class IndexController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   identify: IdentifierAction,
-  view: IndexView,
-  authConnector: AuthConnector
+  view: IndexView
 ) extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = identify {
     implicit request =>
-      Ok(view(request.subscriptionId))
+      val changeDetailsUrl = request.userType match {
+        case Individual   => controllers.routes.ChangeIndividualContactDetailsController.onPageLoad().url
+        case Organisation => controllers.routes.ChangeOrganisationContactDetailsController.onPageLoad().url
+      }
+      Ok(view(request.subscriptionId, changeDetailsUrl))
   }
 }

@@ -38,7 +38,10 @@ class IndexControllerSpec extends SpecBase {
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view("subscriptionId")(request, messages(application)).toString
+        contentAsString(result) mustEqual view("subscriptionId", controllers.routes.ChangeOrganisationContactDetailsController.onPageLoad().url)(
+          request,
+          messages(application)
+        ).toString
       }
     }
   }

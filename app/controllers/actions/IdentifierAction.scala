@@ -46,8 +46,8 @@ class AuthenticatedIdentifierAction @Inject() (
 
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
-    authorised().retrieve(Retrievals.internalId and Retrievals.allEnrolments) {
-      case Some(internalId) ~ enrolments => getSubscriptionId(request, enrolments, internalId, block)
+    authorised().retrieve(Retrievals.internalId and Retrievals.allEnrolments and Retrievals.affinityGroup) {
+      case Some(internalId) ~ enrolments ~ Some(affinity) => getSubscriptionId(request, enrolments, internalId, affinity, block)
       case _ =>
         logger.warn("Unable to retrieve internal id")
         throw AuthorisationException.fromString("Unable to retrieve internal Id")
@@ -62,6 +62,7 @@ class AuthenticatedIdentifierAction @Inject() (
   private def getSubscriptionId[A](request: Request[A],
                                    enrolments: Enrolments,
                                    internalId: String,
+                                   affinityGroup: AffinityGroup,
                                    block: IdentifierRequest[A] => Future[Result]
   ): Future[Result] = {
 
@@ -79,7 +80,7 @@ class AuthenticatedIdentifierAction @Inject() (
       Future.successful(Redirect(config.registerUrl))
     } {
       mdrId =>
-        block(IdentifierRequest(request, internalId, mdrId))
+        block(IdentifierRequest(request, internalId, mdrId, affinityGroup))
     }
   }
 }
