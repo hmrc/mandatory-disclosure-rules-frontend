@@ -17,16 +17,19 @@
 package controllers
 
 import controllers.actions.IdentifierAction
+
 import javax.inject.Inject
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.IndexView
 
 class IndexController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   identify: IdentifierAction,
-  view: IndexView
+  view: IndexView,
+  authConnector: AuthConnector
 ) extends FrontendBaseController
     with I18nSupport {
 
