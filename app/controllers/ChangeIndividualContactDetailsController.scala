@@ -38,7 +38,7 @@ class ChangeIndividualContactDetailsController @Inject() (
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData) { //ToDo require data when available
+  def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData) {
     implicit request =>
       val checkUserAnswersHelper = new CheckYourAnswersHelper(request.userAnswers)
 
