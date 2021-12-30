@@ -16,4 +16,18 @@
 
 package generators
 
-trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {}
+import org.scalacheck.Arbitrary
+import pages.ContactEmailPage
+import play.api.libs.json.{JsValue, Json}
+import org.scalacheck.Arbitrary.arbitrary
+
+trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
+
+  implicit lazy val arbitraryContactEmailUserAnswersEntry: Arbitrary[(ContactEmailPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[ContactEmailPage.type]
+        value <- arbitrary[String].suchThat(_.nonEmpty).map(Json.toJson(_))
+      } yield (page, value)
+    }
+}

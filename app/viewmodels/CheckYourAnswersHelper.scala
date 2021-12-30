@@ -17,7 +17,7 @@
 package viewmodels
 
 import controllers.routes
-import models.UserAnswers
+import models.{CheckMode, UserAnswers}
 import pages._
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
@@ -57,7 +57,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit
         key = "checkYourAnswers.name.checkYourAnswersLabel",
         value = ValueViewModel(HtmlFormat.escape(s"$x").toString),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.IndexController.onPageLoad().url)
+          ActionItemViewModel("site.change", routes.ContactEmailController.onPageLoad(CheckMode).url)
             .withAttribute(("id", "change-corrections"))
         )
       )

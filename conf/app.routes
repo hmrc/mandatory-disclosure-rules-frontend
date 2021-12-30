@@ -41,3 +41,13 @@ GET         /report/fileValidation                       controllers.FileValidat
 GET        /report/change-contact/individual/details                       controllers.ChangeIndividualContactDetailsController.onPageLoad()
 
 GET       /report/change-contact/organisation/details                       controllers.ChangeOrganisationContactDetailsController.onPageLoad()
+
+GET       /report/change-contact/individual/email                        controllers.ContactEmailController.onPageLoad(mode: Mode = NormalMode)
+POST      /report/change-contact/individual/email                        controllers.ContactEmailController.onSubmit(mode: Mode = NormalMode)
+GET       /report/change-contact/individual/change-email                 controllers.ContactEmailController.onPageLoad(mode: Mode = CheckMode)
+POST      /report/change-contact/individual/change-email                 controllers.ContactEmailController.onSubmit(mode: Mode = CheckMode)
+
+GET       /report/change-contact/organisation/email                        controllers.ContactEmailController.onPageLoad(mode: Mode = NormalMode)
+POST      /report/change-contact/organisation/email                        controllers.ContactEmailController.onSubmit(mode: Mode = NormalMode)
+GET       /report/change-contact/organisation/change-email                 controllers.ContactEmailController.onPageLoad(mode: Mode = CheckMode)
+POST      /report/change-contact/organisation/change-email                 controllers.ContactEmailController.onSubmit(mode: Mode = CheckMode)

@@ -122,3 +122,11 @@ changeOrganisationContactDetails.primary.heading = First Contact
 changeOrganisationContactDetails.secondary.heading = Second Contact
 
 changeOrganisationContactDetails.landing-page.link = Back to report cross-border arrangements
+
+contactEmail.title = What is your email address?
+contactEmail.heading = What is your email address?
+contactEmail.hint = We will use this to send confirmation of your reports or if we have any questions about them.
+contactEmail.checkYourAnswersLabel = contactEmail
+contactEmail.error.required = Enter contactEmail
+contactEmail.error.length = ContactEmail must be 100 characters or less
+contactEmail.change.hidden = ContactEmail

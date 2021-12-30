@@ -14,13 +14,19 @@
  * limitations under the License.
  */
 
-package models.requests
+package forms
 
-import play.api.mvc.{Request, WrappedRequest}
-import models.UserAnswers
-import uk.gov.hmrc.auth.core.AffinityGroup
+import javax.inject.Inject
+import forms.mappings.Mappings
+import play.api.data.Form
+import utils.RegExConstants
 
-case class OptionalDataRequest[A](request: Request[A], userId: String, userAnswers: Option[UserAnswers], userType: AffinityGroup, subscriptionId: String)
-    extends WrappedRequest[A](request)
+class ContactEmailFormProvider @Inject() extends Mappings with RegExConstants {
 
-case class DataRequest[A](request: Request[A], userId: String, userType: AffinityGroup, userAnswers: UserAnswers) extends WrappedRequest[A](request)
+  private val maxLength = 256
+
+  def apply(): Form[String] =
+    Form(
+      "value" -> validatedText("contactEmail.error.required", "contactEmail.error.invalid", "contactEmail.error.length", emailRegex, maxLength)
+    )
+}

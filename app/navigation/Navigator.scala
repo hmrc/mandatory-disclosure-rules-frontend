@@ -33,6 +33,7 @@ class Navigator @Inject() () {
   }
 
   private val checkRouteMap: Page => UserAnswers => Call = {
+    case ContactEmailPage => _ => routes.ChangeIndividualContactDetailsController.onPageLoad()
     case _ => _ => routes.CheckYourAnswersController.onPageLoad()
   }
 
