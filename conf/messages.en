@@ -11,6 +11,8 @@ site.startAgain = Start again
 site.signIn = Sign in
 site.govuk = GOV.UK
 
+no.phone = None
+
 date.day = Day
 date.month = Month
 date.year = Year
@@ -123,6 +125,8 @@ changeOrganisationContactDetails.secondary.heading = Second Contact
 
 changeOrganisationContactDetails.landing-page.link = Back to report cross-border arrangements
 
+hasSecondContact.checkYourAnswersLabel = Do you have a second contact?
+
 contactEmail.title = What is your email address?
 contactEmail.heading = What is your email address?
 contactEmail.hint = We will use this to send confirmation of your reports or if we have any questions about them.
@@ -130,3 +134,5 @@ contactEmail.checkYourAnswersLabel = Email address
 contactEmail.error.required = Enter your email address
 contactEmail.error.length = Email address must be 256 characters or less
 contactEmail.error.invalid = Enter your email address in the correct format, like name@example.com
+
+contactPhone.checkYourAnswersLabel = Telephone number

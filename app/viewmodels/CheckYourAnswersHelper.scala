@@ -63,22 +63,29 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
       )
   }
 
-  def contactPhonePage(): Option[SummaryListRow] = userAnswers.get(ContactPhonePage) map {
-    x =>
+  def contactPhonePage(): Option[SummaryListRow] = {
+    val summaryView = (value: String) =>
       SummaryListRowViewModel(
-        key = "checkYourAnswers.name.checkYourAnswersLabel",
-        value = ValueViewModel(HtmlFormat.escape(s"$x").toString),
+        key = "contactPhone.checkYourAnswersLabel",
+        value = ValueViewModel(HtmlFormat.escape(value).toString),
         actions = Seq(
           ActionItemViewModel("site.change", routes.IndexController.onPageLoad().url)
             .withAttribute(("id", "change-corrections"))
         )
       )
+
+    Some(
+      userAnswers.get(ContactPhonePage) match {
+        case Some(phone) if !phone.isEmpty => summaryView(phone)
+        case _                             => summaryView(messages("no.phone"))
+      }
+    )
   }
 
   def hasSecondContactPage(): Option[SummaryListRow] = {
     val summaryView = (yesNo: String) =>
       SummaryListRowViewModel(
-        key = "checkYourAnswers.hasSecondContact.checkYourAnswersLabel",
+        key = "hasSecondContact.checkYourAnswersLabel",
         value = ValueViewModel(HtmlFormat.escape(s"${messages(yesNo)}").toString),
         actions = Seq(
           ActionItemViewModel("site.change", routes.IndexController.onPageLoad().url)
