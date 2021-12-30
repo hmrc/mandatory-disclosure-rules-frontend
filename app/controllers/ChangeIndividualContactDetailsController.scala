@@ -18,6 +18,7 @@ package controllers
 
 import config.FrontendAppConfig
 import controllers.actions._
+import models.AffinityType
 
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -40,7 +41,7 @@ class ChangeIndividualContactDetailsController @Inject() (
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData) {
     implicit request =>
-      val checkUserAnswersHelper = new CheckYourAnswersHelper(request.userAnswers)
+      val checkUserAnswersHelper = CheckYourAnswersHelper(request.userAnswers)
 
       val primaryContactList = SummaryListViewModel(
         rows = checkUserAnswersHelper.buildRow()._1.flatten

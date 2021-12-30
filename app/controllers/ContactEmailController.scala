@@ -20,7 +20,7 @@ import controllers.actions._
 import forms.ContactEmailFormProvider
 
 import javax.inject.Inject
-import models.Mode
+import models.{AffinityType, Mode}
 import navigation.{ContactDetailsNavigator, Navigator}
 import pages.ContactEmailPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -47,27 +47,27 @@ class ContactEmailController @Inject() (
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData.apply() andThen requireData) {
+  def onPageLoad(mode: Mode, affinityType: AffinityType): Action[AnyContent] = (identify andThen getData.apply() andThen requireData) {
     implicit request =>
       val preparedForm = request.userAnswers.get(ContactEmailPage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode))
+      Ok(view(preparedForm, affinityType, mode))
   }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData.apply() andThen requireData).async {
+  def onSubmit(mode: Mode, affinityType: AffinityType): Action[AnyContent] = (identify andThen getData.apply() andThen requireData).async {
     implicit request =>
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, affinityType, mode))),
           value =>
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(ContactEmailPage, value))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(ContactEmailPage, mode, updatedAnswers))
+            } yield Redirect(navigator.nextPage(ContactEmailPage, affinityType, mode, updatedAnswers))
         )
   }
 }

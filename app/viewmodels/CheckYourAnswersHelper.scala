@@ -17,17 +17,17 @@
 package viewmodels
 
 import controllers.routes
-import models.{CheckMode, UserAnswers}
+import models.requests.DataRequest
+import models.{AffinityType, CheckMode, UserAnswers}
 import pages._
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
+import play.api.mvc.AnyContent
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
 
-class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit
-  messages: Messages
-) {
+class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityType)(implicit request: DataRequest[AnyContent], messages: Messages) {
 
   def pageToString[A](userAnswers: UserAnswers, page: QuestionPage[A])(implicit reads: Reads[A]): Option[String] =
     userAnswers.get(page) map {
@@ -54,10 +54,10 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit
   def contactEmailPage(): Option[SummaryListRow] = userAnswers.get(ContactEmailPage) map {
     x =>
       SummaryListRowViewModel(
-        key = "checkYourAnswers.name.checkYourAnswersLabel",
+        key = "contactEmail.checkYourAnswersLabel",
         value = ValueViewModel(HtmlFormat.escape(s"$x").toString),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.ContactEmailController.onPageLoad(CheckMode).url)
+          ActionItemViewModel("site.change", routes.ContactEmailController.onPageLoad(CheckMode, affinityType).url)
             .withAttribute(("id", "change-corrections"))
         )
       )
@@ -138,5 +138,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit
 }
 
 object CheckYourAnswersHelper {
-  def apply(userAnswers: UserAnswers)(implicit messages: Messages) = new CheckYourAnswersHelper(userAnswers)
+
+  def apply(userAnswers: UserAnswers)(implicit request: DataRequest[AnyContent], messages: Messages) =
+    new CheckYourAnswersHelper(userAnswers, AffinityType(request.userType))
 }
