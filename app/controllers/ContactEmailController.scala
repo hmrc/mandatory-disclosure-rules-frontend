@@ -32,15 +32,15 @@ import views.html.ContactEmailView
 import scala.concurrent.{ExecutionContext, Future}
 
 class ContactEmailController @Inject() (
-                                         override val messagesApi: MessagesApi,
-                                         sessionRepository: SessionRepository,
-                                         navigator: Navigator,
-                                         identify: IdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         formProvider: ContactEmailFormProvider,
-                                         val controllerComponents: MessagesControllerComponents,
-                                         view: ContactEmailView
+  override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
+  navigator: ContactDetailsNavigator,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  formProvider: ContactEmailFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: ContactEmailView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -49,7 +49,6 @@ class ContactEmailController @Inject() (
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData.apply() andThen requireData) {
     implicit request =>
-
       val preparedForm = request.userAnswers.get(ContactEmailPage) match {
         case None        => form
         case Some(value) => form.fill(value)

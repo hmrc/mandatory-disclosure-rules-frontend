@@ -25,17 +25,17 @@ import play.api.mvc.Call
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class ContactDetailsNavigator @Inject()()  {
+class ContactDetailsNavigator @Inject() () {
 
-  val normalRoutes: (Page, AffinityType) =>  UserAnswers => Call = {
-    case (ContactEmailPage, _)       =>  _ => routes.IndexController.onPageLoad() //TODO GOTO Telephone
-    case _                       => _ => routes.IndexController.onPageLoad()
+  val normalRoutes: (Page, AffinityType) => UserAnswers => Call = {
+    case (ContactEmailPage, _) => _ => routes.IndexController.onPageLoad() //TODO GOTO Telephone
+    case _                     => _ => routes.IndexController.onPageLoad()
   }
 
-  val checkRouteMap: (Page, AffinityType) =>  UserAnswers => Call = {
-    case (ContactEmailPage, Individual) =>  _ => routes.ChangeIndividualContactDetailsController.onPageLoad()
-    case (ContactEmailPage, Organisation) => _ => routes.ChangeIndividualContactDetailsController.onPageLoad()
-    case _                   =>  _ => routes.CheckYourAnswersController.onPageLoad()
+  val checkRouteMap: (Page, AffinityType) => UserAnswers => Call = {
+    case (ContactEmailPage, Individual)   => _ => routes.ChangeIndividualContactDetailsController.onPageLoad()
+    case (ContactEmailPage, Organisation) => _ => routes.ChangeOrganisationContactDetailsController.onPageLoad()
+    case _                                => _ => routes.CheckYourAnswersController.onPageLoad()
   }
 
   def nextPage(page: Page, affinityType: AffinityType, mode: Mode, userAnswers: UserAnswers): Call = mode match {
@@ -44,6 +44,5 @@ class ContactDetailsNavigator @Inject()()  {
     case CheckMode =>
       checkRouteMap(page, affinityType)(userAnswers)
   }
-
 
 }
