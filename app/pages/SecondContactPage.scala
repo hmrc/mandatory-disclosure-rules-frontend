@@ -14,9 +14,17 @@
  * limitations under the License.
  */
 
-package models.requests
+package pages
 
-import play.api.mvc.{Request, WrappedRequest}
-import uk.gov.hmrc.auth.core.AffinityGroup
+import models.UserAnswers
+import play.api.libs.json.JsPath
 
-case class IdentifierRequest[A](request: Request[A], userId: String, subscriptionId: String, userType: AffinityGroup) extends WrappedRequest[A](request)
+import scala.util.Try
+
+case object SecondContactPage extends QuestionPage[Boolean] {
+
+  override def path: JsPath = JsPath \ toString
+
+  override def toString: String = "secondContact"
+
+}

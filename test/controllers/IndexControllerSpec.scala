@@ -17,9 +17,17 @@
 package controllers
 
 import base.SpecBase
+import models.UserAnswers
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
+import services.SubscriptionService
 import views.html.IndexView
+import play.api.inject.bind
+import org.mockito.ArgumentMatchers.any
+import uk.gov.hmrc.http.HeaderCarrier
+
+import scala.concurrent.Future
 
 class IndexControllerSpec extends SpecBase {
 
@@ -27,7 +35,20 @@ class IndexControllerSpec extends SpecBase {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = None).build()
+      val mockSubscriptionService = mock[SubscriptionService]
+      val mockSessionRepository   = mock[SessionRepository]
+
+      val application = applicationBuilder(userAnswers = None)
+        .overrides(
+          bind[SubscriptionService].toInstance(mockSubscriptionService),
+          bind[SessionRepository].toInstance(mockSessionRepository)
+        )
+        .build()
+
+      val userAnswers = UserAnswers("id")
+      when(mockSubscriptionService.getContactDetails(any[UserAnswers]())(any[HeaderCarrier]()))
+        .thenReturn(Future.successful(Right(userAnswers)))
+      when(mockSessionRepository.set(any[UserAnswers]())).thenReturn(Future.successful(true))
 
       running(application) {
         val request = FakeRequest(GET, routes.IndexController.onPageLoad().url)
@@ -38,7 +59,34 @@ class IndexControllerSpec extends SpecBase {
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view("subscriptionId")(request, messages(application)).toString
+        contentAsString(result) mustEqual view("subscriptionId", controllers.routes.ChangeOrganisationContactDetailsController.onPageLoad().url)(
+          request,
+          messages(application)
+        ).toString
+      }
+    }
+    "must redirect to error page when an error occurs" in {
+
+      val mockSubscriptionService = mock[SubscriptionService]
+      val mockSessionRepository   = mock[SessionRepository]
+
+      val application = applicationBuilder(userAnswers = None)
+        .overrides(
+          bind[SubscriptionService].toInstance(mockSubscriptionService),
+          bind[SessionRepository].toInstance(mockSessionRepository)
+        )
+        .build()
+
+      when(mockSubscriptionService.getContactDetails(any[UserAnswers]())(any[HeaderCarrier]()))
+        .thenReturn(Future.successful(Left(new Exception("error"))))
+      when(mockSessionRepository.set(any[UserAnswers]())).thenReturn(Future.successful(true))
+
+      running(application) {
+        val request = FakeRequest(GET, routes.IndexController.onPageLoad().url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
       }
     }
   }

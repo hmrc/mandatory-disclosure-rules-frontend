@@ -104,4 +104,5 @@ object SecondaryContact {
     case SecondaryContact(Seq(contactInformationForOrg @ ContactInformationForOrganisation(_, _, _, _))) =>
       Json.toJsObject(contactInformationForOrg)
   }
+
 }
