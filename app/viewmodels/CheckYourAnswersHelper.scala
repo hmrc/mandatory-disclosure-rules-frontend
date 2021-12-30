@@ -18,7 +18,7 @@ package viewmodels
 
 import controllers.routes
 import models.UserAnswers
-import pages.{ContactEmailPage, ContactNamePage, ContactPhonePage, QuestionPage, SndContactEmailPage, SndContactNamePage, SndContactPhonePage}
+import pages._
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
 import play.twirl.api.HtmlFormat
@@ -35,7 +35,9 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit
     }
 
   def buildRow() =
-    Seq(contactNamePage(), contactEmailPage(), contactPhonePage(), secondaryContactNamePage(), secondaryContactEmailPage(), secondaryContactPhonePage())
+    (Seq(contactNamePage(), contactEmailPage(), contactPhonePage()),
+     Seq(hasSecondContactPage(), secondaryContactNamePage(), secondaryContactEmailPage(), secondaryContactPhonePage())
+    )
 
   def contactNamePage(): Option[SummaryListRow] = userAnswers.get(ContactNamePage) map {
     x =>
@@ -71,6 +73,30 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit
             .withAttribute(("id", "change-corrections"))
         )
       )
+  }
+
+  def hasSecondContactPage(): Option[SummaryListRow] = {
+    val summaryView = (yesNo: String) =>
+      SummaryListRowViewModel(
+        key = "checkYourAnswers.hasSecondContact.checkYourAnswersLabel",
+        value = ValueViewModel(HtmlFormat.escape(s"${messages(yesNo)}").toString),
+        actions = Seq(
+          ActionItemViewModel("site.change", routes.IndexController.onPageLoad().url)
+            .withAttribute(("id", "change-corrections"))
+        )
+      )
+    Some(userAnswers.get(SecondContactPage) match {
+      case Some(x) =>
+        val yesNo = if (x) "site.no" else "site.yes"
+        summaryView(yesNo)
+      case None =>
+        val yesNo = userAnswers.get(SndContactNamePage) match {
+          case Some(_) => "site.yes"
+          case _       => "site.no"
+        }
+        summaryView(yesNo)
+    })
+
   }
 
   def secondaryContactNamePage(): Option[SummaryListRow] = userAnswers.get(SndContactNamePage) map {
