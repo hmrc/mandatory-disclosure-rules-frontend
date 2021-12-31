@@ -17,30 +17,30 @@
 package controllers
 
 import controllers.actions._
-import forms.ContactPhoneFormProvider
+import forms.HaveTelephoneFormProvider
 
 import javax.inject.Inject
-import models.{AffinityType, Mode, Organisation, UserAnswers}
+import models.{AffinityType, Mode}
 import navigation.{ContactDetailsNavigator, Navigator}
-import pages.{ContactNamePage, ContactPhonePage}
+import pages.HaveTelephonePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.ContactPhoneView
+import views.html.HaveTelephoneView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ContactPhoneController @Inject() (
+class HaveTelephoneController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: ContactDetailsNavigator,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
-  formProvider: ContactPhoneFormProvider,
+  formProvider: HaveTelephoneFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: ContactPhoneView
+  view: HaveTelephoneView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
@@ -49,31 +49,25 @@ class ContactPhoneController @Inject() (
 
   def onPageLoad(mode: Mode, affinityType: AffinityType): Action[AnyContent] = (identify andThen getData() andThen requireData) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(ContactPhonePage) match {
+      val preparedForm = request.userAnswers.get(HaveTelephonePage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, affinityType, getContactName(request.userAnswers, affinityType), mode))
+      Ok(view(preparedForm, affinityType, mode))
   }
-
-  private def getContactName(userAnswers: UserAnswers, affinityType: AffinityType): String =
-    (userAnswers.get(ContactNamePage), affinityType) match {
-      case (Some(contactName), Organisation) => contactName
-      case _                                 => ""
-    }
 
   def onSubmit(mode: Mode, affinityType: AffinityType): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, affinityType, getContactName(request.userAnswers, affinityType), mode))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, affinityType, mode))),
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(ContactPhonePage, value))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(HaveTelephonePage, value))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(ContactPhonePage, affinityType, mode, updatedAnswers))
+            } yield Redirect(navigator.nextPage(HaveTelephonePage, affinityType, mode, updatedAnswers))
         )
   }
 }

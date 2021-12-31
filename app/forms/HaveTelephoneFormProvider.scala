@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-package generators
+package forms
 
-import org.scalacheck.Arbitrary
-import pages.{ContactEmailPage, ContactPhonePage, HaveTelephonePage}
+import javax.inject.Inject
 
-trait PageGenerators {
+import forms.mappings.Mappings
+import play.api.data.Form
 
-  implicit lazy val arbitraryHaveTelephonePage: Arbitrary[HaveTelephonePage.type] =
-    Arbitrary(HaveTelephonePage)
+class HaveTelephoneFormProvider @Inject() extends Mappings {
 
-  implicit lazy val arbitraryContactPhonePage: Arbitrary[ContactPhonePage.type] =
-    Arbitrary(ContactPhonePage)
-
-  implicit lazy val arbitraryContactEmailPage: Arbitrary[ContactEmailPage.type] =
-    Arbitrary(ContactEmailPage)
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("haveTelephone.error.required")
+    )
 }

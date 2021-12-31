@@ -136,9 +136,18 @@ contactEmail.error.length = Email address must be 256 characters or less
 contactEmail.error.invalid = Enter your email address in the correct format, like name@example.com
 
 contactPhone.checkYourAnswersLabel = Telephone number
-contactPhone.title = contactPhone
-contactPhone.heading = contactPhone
+contactPhone.title.organisation = What is their telephone number?
+contactPhone.title.individual = Can we contact you by telephone?
+contactPhone.heading.organisation = What is the telephone number for {0}?
+contactPhone.heading.individual = What is your telephone number?
 contactPhone.checkYourAnswersLabel = contactPhone
-contactPhone.error.required = Enter contactPhone
-contactPhone.error.length = ContactPhone must be 100 characters or less
+contactPhone.error.required = Enter a telephone number
+contactPhone.error.invalid = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
+contactPhone.error.length = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192
 contactPhone.change.hidden = ContactPhone
+
+haveTelephone.title = haveTelephone
+haveTelephone.heading = haveTelephone
+haveTelephone.checkYourAnswersLabel = haveTelephone
+haveTelephone.error.required = Select yes if haveTelephone
+haveTelephone.change.hidden = HaveTelephone

@@ -17,11 +17,19 @@
 package generators
 
 import org.scalacheck.Arbitrary
-import pages.{ContactEmailPage, ContactPhonePage}
+import pages.{ContactEmailPage, ContactPhonePage, HaveTelephonePage}
 import play.api.libs.json.{JsValue, Json}
 import org.scalacheck.Arbitrary.arbitrary
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
+
+  implicit lazy val arbitraryHaveTelephoneUserAnswersEntry: Arbitrary[(HaveTelephonePage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[HaveTelephonePage.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
 
   implicit lazy val arbitraryContactPhoneUserAnswersEntry: Arbitrary[(ContactPhonePage.type, JsValue)] =
     Arbitrary {

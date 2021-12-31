@@ -16,6 +16,8 @@
 
 package generators
 
+import org.checkerframework.common.value.qual.MinLen
+
 import java.time.{Instant, LocalDate, ZoneOffset}
 import org.scalacheck.Arbitrary._
 import org.scalacheck.Gen._
@@ -127,5 +129,18 @@ trait Generators extends UserAnswersGenerator with PageGenerators with ModelGene
   def validEmailAddressToLong(maxLength: Int): Gen[String] = validEmailAddress suchThat (_.length > maxLength)
 
   def validEmailAddressWithinLength(maxLength: Int): Gen[String] =
-    validEmailAddress retryUntil (_.length <= maxLength)
+    validEmailAddress retryUntil (_.length < maxLength)
+
+  def validPhoneNumber: Gen[String] = RegexpGen.from(digitsAndWhiteSpaceOnly)
+
+  def validPhoneNumberWithinLength(maxlength: Int): Gen[String] = RegexpGen.from(digitsAndWhiteSpaceOnly) retryUntil
+    (
+      phoneNumber => phoneNumber.length < maxlength && phoneNumber.matches("""\d""")
+    )
+
+  def validPhoneNumberTooLong(minLength: Int): Gen[String] = for {
+    maxLength <- (minLength * 2).max(100)
+    length    <- Gen.chooseNum(minLength + 1, maxLength)
+    chars     <- listOfN(length, arbitrary[Byte])
+  } yield chars.map(math.abs(_)).mkString
 }

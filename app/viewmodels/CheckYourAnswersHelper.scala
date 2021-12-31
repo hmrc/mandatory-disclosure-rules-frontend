@@ -21,7 +21,6 @@ import models.requests.DataRequest
 import models.{AffinityType, CheckMode, UserAnswers}
 import pages._
 import play.api.i18n.Messages
-import play.api.libs.json.Reads
 import play.api.mvc.AnyContent
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
@@ -64,7 +63,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
         key = "contactPhone.checkYourAnswersLabel",
         value = ValueViewModel(HtmlFormat.escape(value).toString),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.ContactPhoneController.onPageLoad(CheckMode, affinityType).url)
+          ActionItemViewModel("site.change", routes.HaveTelephoneController.onPageLoad(CheckMode, affinityType).url)
             .withAttribute(("id", "change-corrections"))
         )
       )

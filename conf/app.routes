@@ -52,3 +52,8 @@ GET        /report/change-contact/:affinityType/phone                       cont
 POST       /report/change-contact/:affinityType/phone                        controllers.ContactPhoneController.onSubmit(mode: Mode = NormalMode, affinityType: models.AffinityType)
 GET        /report/change-contact/:affinityType/change-phone                  controllers.ContactPhoneController.onPageLoad(mode: Mode = CheckMode, affinityType: models.AffinityType)
 POST       /report/change-contact/:affinityType/change-phone                 controllers.ContactPhoneController.onSubmit(mode: Mode = CheckMode, affinityType: models.AffinityType)
+
+GET         /report/change-contact/:affinityType/have-phone                        controllers.HaveTelephoneController.onPageLoad(mode: Mode = NormalMode, affinityType: models.AffinityType)
+POST       /report/change-contact/:affinityType/have-phone                        controllers.HaveTelephoneController.onSubmit(mode: Mode = NormalMode, affinityType: models.AffinityType)
+GET        /report/change-contact/:affinityType/change-have-phone                  controllers.HaveTelephoneController.onPageLoad(mode: Mode = CheckMode, affinityType: models.AffinityType)
+POST       /report/change-contact/:affinityType/change-have-phone                  controllers.HaveTelephoneController.onSubmit(mode: Mode = CheckMode, affinityType: models.AffinityType)

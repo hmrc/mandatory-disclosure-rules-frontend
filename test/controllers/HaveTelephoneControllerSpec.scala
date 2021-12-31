@@ -17,63 +17,63 @@
 package controllers
 
 import base.SpecBase
-import forms.ContactPhoneFormProvider
+import forms.HaveTelephoneFormProvider
 import models.{NormalMode, Organisation, UserAnswers}
 import navigation.{ContactDetailsNavigator, FakeContactDetailsNavigator}
 import org.mockito.ArgumentMatchers.any
 import org.scalatestplus.mockito.MockitoSugar
-import pages.ContactPhonePage
+import pages.HaveTelephonePage
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.ContactPhoneView
+import views.html.HaveTelephoneView
 
 import scala.concurrent.Future
 
-class ContactPhoneControllerSpec extends SpecBase with MockitoSugar {
+class HaveTelephoneControllerSpec extends SpecBase with MockitoSugar {
 
   override def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new ContactPhoneFormProvider()
+  val formProvider = new HaveTelephoneFormProvider()
   val form         = formProvider()
 
-  lazy val contactPhoneRoute = routes.ContactPhoneController.onPageLoad(NormalMode, Organisation).url
+  lazy val haveTelephoneRoute = routes.HaveTelephoneController.onPageLoad(NormalMode, Organisation).url
 
-  "ContactPhone Controller" - {
+  "HaveTelephone Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, contactPhoneRoute)
+        val request = FakeRequest(GET, haveTelephoneRoute)
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[ContactPhoneView]
+        val view = application.injector.instanceOf[HaveTelephoneView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, Organisation, "", NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, Organisation, NormalMode)(request, messages(application)).toString
       }
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(ContactPhonePage, "answer").success.value
+      val userAnswers = UserAnswers(userAnswersId).set(HaveTelephonePage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, contactPhoneRoute)
+        val request = FakeRequest(GET, haveTelephoneRoute)
 
-        val view = application.injector.instanceOf[ContactPhoneView]
+        val view = application.injector.instanceOf[HaveTelephoneView]
 
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill("answer"), Organisation, "", NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(true), Organisation, NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -91,8 +91,8 @@ class ContactPhoneControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
         val request =
-          FakeRequest(POST, contactPhoneRoute)
-            .withFormUrlEncodedBody(("value", "0928273"))
+          FakeRequest(POST, haveTelephoneRoute)
+            .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
 
@@ -107,48 +107,18 @@ class ContactPhoneControllerSpec extends SpecBase with MockitoSugar {
 
       running(application) {
         val request =
-          FakeRequest(POST, contactPhoneRoute)
+          FakeRequest(POST, haveTelephoneRoute)
             .withFormUrlEncodedBody(("value", ""))
 
         val boundForm = form.bind(Map("value" -> ""))
 
-        val view = application.injector.instanceOf[ContactPhoneView]
+        val view = application.injector.instanceOf[HaveTelephoneView]
 
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, Organisation, "", NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, Organisation, NormalMode)(request, messages(application)).toString
       }
     }
-
-//    "must redirect to Session Expired for a GET if no existing data is found" in {
-//
-//      val application = applicationBuilder(userAnswers = None).build()
-//
-//      running(application) {
-//        val request = FakeRequest(GET, contactPhoneRoute)
-//
-//        val result = route(application, request).value
-//
-//        status(result) mustEqual SEE_OTHER
-//        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
-//      }
-//    }
-//
-//    "must redirect to Session Expired for a POST if no existing data is found" in {
-//
-//      val application = applicationBuilder(userAnswers = None).build()
-//
-//      running(application) {
-//        val request =
-//          FakeRequest(POST, contactPhoneRoute)
-//            .withFormUrlEncodedBody(("value", "answer"))
-//
-//        val result = route(application, request).value
-//
-//        status(result) mustEqual SEE_OTHER
-//        redirectLocation(result).value mustEqual routes.JourneyRecoveryController.onPageLoad().url
-//      }
-//    }
   }
 }

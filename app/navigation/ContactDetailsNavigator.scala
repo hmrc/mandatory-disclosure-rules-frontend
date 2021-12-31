@@ -36,8 +36,15 @@ class ContactDetailsNavigator @Inject() () {
     case (ContactEmailPage, Organisation) => _ => routes.ChangeOrganisationContactDetailsController.onPageLoad()
     case (ContactPhonePage, Individual)   => _ => routes.ChangeIndividualContactDetailsController.onPageLoad()
     case (ContactPhonePage, Organisation) => _ => routes.ChangeOrganisationContactDetailsController.onPageLoad()
+    case (HaveTelephonePage, affinity)    => ua => haveTelephoneRoutes(CheckMode, affinity)(ua) //ToDo do we need to clean telephone on No
     case _                                => _ => routes.CheckYourAnswersController.onPageLoad()
   }
+
+  private def haveTelephoneRoutes(mode: Mode, affinityType: AffinityType)(ua: UserAnswers): Call =
+    ua.get(HaveTelephonePage) match {
+      case Some(hasPhone) if hasPhone => routes.ContactPhoneController.onPageLoad(CheckMode, affinityType)
+      case _                          => nextPage(ContactPhonePage, affinityType, mode, ua)
+    }
 
   def nextPage(page: Page, affinityType: AffinityType, mode: Mode, userAnswers: UserAnswers): Call = mode match {
     case NormalMode =>
