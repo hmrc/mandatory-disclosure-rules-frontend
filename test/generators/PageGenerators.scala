@@ -17,9 +17,12 @@
 package generators
 
 import org.scalacheck.Arbitrary
-import pages.ContactEmailPage
+import pages.{ContactEmailPage, ContactPhonePage}
 
 trait PageGenerators {
+
+  implicit lazy val arbitraryContactPhonePage: Arbitrary[ContactPhonePage.type] =
+    Arbitrary(ContactPhonePage)
 
   implicit lazy val arbitraryContactEmailPage: Arbitrary[ContactEmailPage.type] =
     Arbitrary(ContactEmailPage)

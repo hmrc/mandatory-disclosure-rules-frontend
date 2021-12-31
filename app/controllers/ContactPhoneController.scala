@@ -17,56 +17,56 @@
 package controllers
 
 import controllers.actions._
-import forms.ContactEmailFormProvider
-import models.{AffinityType, Mode}
-import navigation.ContactDetailsNavigator
-import pages.ContactEmailPage
+import forms.ContactPhoneFormProvider
+import javax.inject.Inject
+import models.Mode
+import navigation.Navigator
+import pages.ContactPhonePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.ContactEmailView
+import views.html.ContactPhoneView
 
-import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ContactEmailController @Inject() (
+class ContactPhoneController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  navigator: ContactDetailsNavigator,
+  navigator: Navigator,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
-  formProvider: ContactEmailFormProvider,
+  formProvider: ContactPhoneFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: ContactEmailView
+  view: ContactPhoneView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode, affinityType: AffinityType): Action[AnyContent] = (identify andThen getData.apply() andThen requireData) {
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData() andThen requireData) {
     implicit request =>
-      val preparedForm = request.userAnswers.get(ContactEmailPage) match {
+      val preparedForm = request.userAnswers.get(ContactPhonePage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, affinityType, mode))
+      Ok(view(preparedForm, mode))
   }
 
-  def onSubmit(mode: Mode, affinityType: AffinityType): Action[AnyContent] = (identify andThen getData.apply() andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, affinityType, mode))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
           value =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(ContactEmailPage, value))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(ContactPhonePage, value))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(ContactEmailPage, affinityType, mode, updatedAnswers))
+            } yield Redirect(navigator.nextPage(ContactPhonePage, mode, updatedAnswers))
         )
   }
 }

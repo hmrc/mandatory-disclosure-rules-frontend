@@ -17,11 +17,8 @@
 package controllers
 
 import base.SpecBase
-import config.FrontendAppConfig
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.ChangeIndividualContactDetailsView
-import viewmodels.govuk.summarylist._
 
 class ChangeIndividualContactDetailsControllerSpec extends SpecBase {
 
@@ -31,19 +28,12 @@ class ChangeIndividualContactDetailsControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
-
       running(application) {
         val request = FakeRequest(GET, routes.ChangeIndividualContactDetailsController.onPageLoad().url)
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[ChangeIndividualContactDetailsView]
-
-        val list = SummaryListViewModel(Seq.empty)
-
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(list, frontendAppConfig)(request, messages(application)).toString
       }
     }
   }

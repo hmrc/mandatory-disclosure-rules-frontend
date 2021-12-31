@@ -19,7 +19,6 @@ package navigation
 import controllers.routes
 import models.{AffinityType, _}
 import pages._
-import play.api.libs.json.Reads
 import play.api.mvc.Call
 
 import javax.inject.{Inject, Singleton}

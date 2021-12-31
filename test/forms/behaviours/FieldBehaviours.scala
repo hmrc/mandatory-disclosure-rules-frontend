@@ -29,6 +29,7 @@ trait FieldBehaviours extends FormSpec with ScalaCheckPropertyChecks with Genera
 
       forAll(validDataGenerator -> "validDataItem") {
         dataItem: String =>
+          println(s"****$dataItem=${dataItem.length}*****")
           val result = form.bind(Map(fieldName -> dataItem)).apply(fieldName)
           result.value.value mustBe dataItem
           result.errors mustBe empty

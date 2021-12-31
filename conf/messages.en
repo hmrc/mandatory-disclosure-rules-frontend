@@ -136,3 +136,9 @@ contactEmail.error.length = Email address must be 256 characters or less
 contactEmail.error.invalid = Enter your email address in the correct format, like name@example.com
 
 contactPhone.checkYourAnswersLabel = Telephone number
+contactPhone.title = contactPhone
+contactPhone.heading = contactPhone
+contactPhone.checkYourAnswersLabel = contactPhone
+contactPhone.error.required = Enter contactPhone
+contactPhone.error.length = ContactPhone must be 100 characters or less
+contactPhone.change.hidden = ContactPhone

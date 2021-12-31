@@ -47,3 +47,8 @@ POST      /report/change-contact/:affinityType/email                        cont
 GET       /report/change-contact/:affinityType/change-email                 controllers.ContactEmailController.onPageLoad(mode: Mode = CheckMode, affinityType: models.AffinityType)
 POST      /report/change-contact/:affinityType/change-email                 controllers.ContactEmailController.onSubmit(mode: Mode = CheckMode, affinityType: models.AffinityType)
 
+
+GET        /contactPhone                        controllers.ContactPhoneController.onPageLoad(mode: Mode = NormalMode)
+POST       /contactPhone                        controllers.ContactPhoneController.onSubmit(mode: Mode = NormalMode)
+GET        /changeContactPhone                  controllers.ContactPhoneController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeContactPhone                  controllers.ContactPhoneController.onSubmit(mode: Mode = CheckMode)

@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package navigation
+package forms
 
-import play.api.mvc.Call
-import pages._
-import models.{AffinityType, Mode, UserAnswers}
+import javax.inject.Inject
 
-class FakeNavigator(desiredRoute: Call) extends Navigator {
+import forms.mappings.Mappings
+import play.api.data.Form
 
-  override def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call =
-    desiredRoute
-}
+class ContactPhoneFormProvider @Inject() extends Mappings {
 
-class FakeContactDetailsNavigator(desiredRoute: Call) extends ContactDetailsNavigator {
-
-  override def nextPage(page: Page, affinityType: AffinityType, mode: Mode, userAnswers: UserAnswers): Call = desiredRoute
+  def apply(): Form[String] =
+    Form(
+      "value" -> text("contactPhone.error.required")
+        .verifying(maxLength(100, "contactPhone.error.length"))
+    )
 }
