@@ -34,6 +34,8 @@ class ContactDetailsNavigator @Inject() () {
   val checkRouteMap: (Page, AffinityType) => UserAnswers => Call = {
     case (ContactEmailPage, Individual)   => _ => routes.ChangeIndividualContactDetailsController.onPageLoad()
     case (ContactEmailPage, Organisation) => _ => routes.ChangeOrganisationContactDetailsController.onPageLoad()
+    case (ContactPhonePage, Individual)   => _ => routes.ChangeIndividualContactDetailsController.onPageLoad()
+    case (ContactPhonePage, Organisation) => _ => routes.ChangeOrganisationContactDetailsController.onPageLoad()
     case _                                => _ => routes.CheckYourAnswersController.onPageLoad()
   }
 

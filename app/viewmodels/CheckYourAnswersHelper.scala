@@ -29,11 +29,6 @@ import viewmodels.govuk.summarylist._
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityType)(implicit request: DataRequest[AnyContent], messages: Messages) {
 
-  def pageToString[A](userAnswers: UserAnswers, page: QuestionPage[A])(implicit reads: Reads[A]): Option[String] =
-    userAnswers.get(page) map {
-      value => value.toString
-    }
-
   def buildRow() =
     (Seq(contactNamePage(), contactEmailPage(), contactPhonePage()),
      Seq(hasSecondContactPage(), secondaryContactNamePage(), secondaryContactEmailPage(), secondaryContactPhonePage())
@@ -69,7 +64,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
         key = "contactPhone.checkYourAnswersLabel",
         value = ValueViewModel(HtmlFormat.escape(value).toString),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.IndexController.onPageLoad().url)
+          ActionItemViewModel("site.change", routes.ContactPhoneController.onPageLoad(CheckMode, affinityType).url)
             .withAttribute(("id", "change-corrections"))
         )
       )
