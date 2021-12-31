@@ -127,5 +127,5 @@ trait Generators extends UserAnswersGenerator with PageGenerators with ModelGene
   def validEmailAddressToLong(maxLength: Int): Gen[String] = validEmailAddress suchThat (_.length > maxLength)
 
   def validEmailAddressWithinLength(maxLength: Int): Gen[String] =
-    validEmailAddress suchThat (_.length <= maxLength)
+    validEmailAddress retryUntil (_.length <= maxLength)
 }
