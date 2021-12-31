@@ -55,7 +55,7 @@ class HaveTelephoneControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[HaveTelephoneView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, Organisation, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, Organisation, "", NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -73,7 +73,7 @@ class HaveTelephoneControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill(true), Organisation, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(true), Organisation, "", NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -117,7 +117,7 @@ class HaveTelephoneControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, Organisation, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, Organisation, "", NormalMode)(request, messages(application)).toString
       }
     }
   }

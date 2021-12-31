@@ -22,9 +22,9 @@
     govukButton: GovukButton
 )
 
-@(form: Form[_], affinityType: AffinityType, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], affinityType: AffinityType, contactName: String = "", mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages("haveTelephone.title"))) {
+@layout(pageTitle = title(form, messages(s"haveTelephone.title.$affinityType"))) {
 
     @formHelper(action = routes.HaveTelephoneController.onSubmit(mode, affinityType), 'autoComplete -> "off") {
 
@@ -35,8 +35,8 @@
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("haveTelephone.heading")).asPageHeading()
-            )
+                legend = LegendViewModel(messages(s"haveTelephone.heading.$affinityType", contactName)).asPageHeading()
+            ).withHint(HintViewModel(Text(messages("haveTelephone.hint"))))
         )
 
         @govukButton(

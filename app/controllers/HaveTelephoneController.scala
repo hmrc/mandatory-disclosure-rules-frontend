@@ -20,9 +20,9 @@ import controllers.actions._
 import forms.HaveTelephoneFormProvider
 
 import javax.inject.Inject
-import models.{AffinityType, Mode}
+import models.{AffinityType, Mode, Organisation, UserAnswers}
 import navigation.{ContactDetailsNavigator, Navigator}
-import pages.HaveTelephonePage
+import pages.{ContactNamePage, HaveTelephonePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -54,15 +54,21 @@ class HaveTelephoneController @Inject() (
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, affinityType, mode))
+      Ok(view(preparedForm, affinityType, getContactName(request.userAnswers, affinityType), mode))
   }
+
+  private def getContactName(userAnswers: UserAnswers, affinityType: AffinityType): String =
+    (userAnswers.get(ContactNamePage), affinityType) match {
+      case (Some(contactName), Organisation) => contactName
+      case _                                 => ""
+    }
 
   def onSubmit(mode: Mode, affinityType: AffinityType): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, affinityType, mode))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, affinityType, getContactName(request.userAnswers, affinityType), mode))),
           value =>
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(HaveTelephonePage, value))
