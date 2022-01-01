@@ -118,4 +118,7 @@ changeIndividualContactDetails.landing-page.link = Back to report cross-border a
 
 changeOrganisationContactDetails.title = Contact details at your organisation
 changeOrganisationContactDetails.heading = Contact details at your organisation
+changeOrganisationContactDetails.primary.heading = First Contact
+changeOrganisationContactDetails.secondary.heading = Second Contact
+
 changeOrganisationContactDetails.landing-page.link = Back to report cross-border arrangements

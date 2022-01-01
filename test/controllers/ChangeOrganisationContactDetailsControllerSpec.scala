@@ -31,19 +31,12 @@ class ChangeOrganisationContactDetailsControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val frontendAppConfig = app.injector.instanceOf[FrontendAppConfig]
-
       running(application) {
         val request = FakeRequest(GET, routes.ChangeOrganisationContactDetailsController.onPageLoad().url)
 
         val result = route(application, request).value
 
-        val list = SummaryListViewModel(Seq.empty)
-
-        val view = application.injector.instanceOf[ChangeOrganisationContactDetailsView]
-
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(list, frontendAppConfig)(request, messages(application)).toString
       }
     }
   }

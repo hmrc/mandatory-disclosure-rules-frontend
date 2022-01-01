@@ -42,10 +42,10 @@ class ChangeIndividualContactDetailsController @Inject() (
     implicit request =>
       val checkUserAnswersHelper = new CheckYourAnswersHelper(request.userAnswers)
 
-      val list = SummaryListViewModel(
-        rows = checkUserAnswersHelper.buildRow().flatten
+      val primaryContactList = SummaryListViewModel(
+        rows = checkUserAnswersHelper.buildRow()._1.flatten
       )
 
-      Ok(view(list, frontendAppConfig))
+      Ok(view(primaryContactList, frontendAppConfig))
   }
 }

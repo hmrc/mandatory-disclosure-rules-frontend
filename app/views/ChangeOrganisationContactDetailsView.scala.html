@@ -23,13 +23,19 @@
         govukButton: GovukButton
 )
 
-@(list: SummaryList, frontendAppConfig: FrontendAppConfig)(implicit request: Request[_], messages: Messages)
+@(primary: SummaryList, secondary: SummaryList, frontendAppConfig: FrontendAppConfig)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("changeOrganisationContactDetails.title"))) {
 
     <h1 class="govuk-heading-l">@messages("changeOrganisationContactDetails.heading")</h1>
 
-    @govukSummaryList(list)
+    <h2 class="govuk-heading-m">@messages("changeOrganisationContactDetails.primary.heading")</h2>
+
+    @govukSummaryList(primary)
+
+    <h2 class="govuk-heading-m">@messages("changeOrganisationContactDetails.secondary.heading")</h2>
+
+    @govukSummaryList(secondary)
 
      <p class="govuk-!-padding-top-5">
        <a class="govuk-link" href=@frontendAppConfig.homePageUrl>@messages("changeOrganisationContactDetails.landing-page.link")</a>
