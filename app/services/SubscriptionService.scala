@@ -23,17 +23,17 @@ import models.UserAnswers
 import models.subscription._
 import uk.gov.hmrc.http.HeaderCarrier
 
-import java.util.NoSuchElementException
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Failure, Try}
+import scala.util.Try
 
 class SubscriptionService @Inject() (subscriptionConnector: SubscriptionConnector)(implicit ec: ExecutionContext) {
 
   def getContactDetails(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Either[Throwable, UserAnswers]] =
     subscriptionConnector.readSubscription flatMap {
       case Some(details) => populateUserAnswers(details, userAnswers)
-      case None          => Future.successful(Left(new RuntimeException("error")))
+      case None =>
+        Future.successful(Left(ReadSubscriptionInfoMissing()))
     }
 
   private def populateUserAnswers(responseDetail: ResponseDetail, userAnswers: UserAnswers): Future[Either[Throwable, UserAnswers]] = {
@@ -68,7 +68,6 @@ class SubscriptionService @Inject() (subscriptionConnector: SubscriptionConnecto
           uaWithEmail     <- userAnswers.set(contactTypePage.contactEmailPage, contactInformationForIndividual.email)
           uaWithTelephone <- uaWithEmail.set(contactTypePage.contactTelephonePage, contactInformationForIndividual.phone.getOrElse(""))
         } yield uaWithTelephone
-      case _ => Failure(new NoSuchElementException("Does not contain Organisation details"))
     }
 
 }

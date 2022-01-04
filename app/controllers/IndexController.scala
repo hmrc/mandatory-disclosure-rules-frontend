@@ -29,6 +29,7 @@ import views.html.IndexView
 import javax.inject.Inject
 import cats.data.EitherT
 import cats.implicits._
+import play.api.{Logger, Logging}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -41,7 +42,8 @@ class IndexController @Inject() (
   subscriptionService: SubscriptionService,
   view: IndexView
 ) extends FrontendBaseController
-    with I18nSupport {
+    with I18nSupport
+    with Logging {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData.apply) async {
     implicit request =>
@@ -55,7 +57,9 @@ class IndexController @Inject() (
           _           <- EitherT.right[Throwable](sessionRepository.set(userAnswers))
         } yield Ok(view(request.subscriptionId, changeDetailsUrl))
       }.valueOr {
-        _ => Redirect(routes.ThereIsAProblemController.onPageLoad()) //TODO IS THIS RIGHT
+        error =>
+          logger.warn("There Is a Problem", error)
+          Redirect(routes.ThereIsAProblemController.onPageLoad())
       }
   }
 }
