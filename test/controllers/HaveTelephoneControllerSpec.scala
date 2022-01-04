@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import forms.HaveTelephoneFormProvider
-import models.{NormalMode, Organisation, UserAnswers}
+import models.{CheckMode, NormalMode, Organisation, UserAnswers}
 import navigation.{ContactDetailsNavigator, FakeContactDetailsNavigator}
 import org.mockito.ArgumentMatchers.any
 import org.scalatestplus.mockito.MockitoSugar
@@ -39,7 +39,7 @@ class HaveTelephoneControllerSpec extends SpecBase with MockitoSugar {
   val formProvider = new HaveTelephoneFormProvider()
   val form         = formProvider()
 
-  lazy val haveTelephoneRoute = routes.HaveTelephoneController.onPageLoad(NormalMode, Organisation).url
+  lazy val haveTelephoneRoute = routes.HaveTelephoneController.onPageLoad(Organisation).url
 
   "HaveTelephone Controller" - {
 
@@ -55,7 +55,6 @@ class HaveTelephoneControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[HaveTelephoneView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, Organisation, "", NormalMode)(request, messages(application)).toString
       }
     }
 

@@ -42,18 +42,11 @@ GET        /report/change-contact/individual/details                       contr
 
 GET       /report/change-contact/organisation/details                       controllers.ChangeOrganisationContactDetailsController.onPageLoad()
 
-GET       /report/change-contact/:affinityType/email                        controllers.ContactEmailController.onPageLoad(mode: Mode = NormalMode, affinityType: models.AffinityType)
-POST      /report/change-contact/:affinityType/email                        controllers.ContactEmailController.onSubmit(mode: Mode = NormalMode, affinityType: models.AffinityType)
-GET       /report/change-contact/:affinityType/change-email                 controllers.ContactEmailController.onPageLoad(mode: Mode = CheckMode, affinityType: models.AffinityType)
-POST      /report/change-contact/:affinityType/change-email                 controllers.ContactEmailController.onSubmit(mode: Mode = CheckMode, affinityType: models.AffinityType)
+GET       /report/change-contact/:affinityType/email                        controllers.ContactEmailController.onPageLoad(mode: Mode = CheckMode, affinityType: models.AffinityType)
+POST      /report/change-contact/:affinityType/email                        controllers.ContactEmailController.onSubmit(mode: Mode = CheckMode, affinityType: models.AffinityType)
 
+GET        /report/change-contact/:affinityType/phone                       controllers.ContactPhoneController.onPageLoad(mode: Mode = CheckMode, affinityType: models.AffinityType)
+POST       /report/change-contact/:affinityType/phone                        controllers.ContactPhoneController.onSubmit(mode: Mode = CheckMode, affinityType: models.AffinityType)
 
-GET        /report/change-contact/:affinityType/phone                       controllers.ContactPhoneController.onPageLoad(mode: Mode = NormalMode, affinityType: models.AffinityType)
-POST       /report/change-contact/:affinityType/phone                        controllers.ContactPhoneController.onSubmit(mode: Mode = NormalMode, affinityType: models.AffinityType)
-GET        /report/change-contact/:affinityType/change-phone                  controllers.ContactPhoneController.onPageLoad(mode: Mode = CheckMode, affinityType: models.AffinityType)
-POST       /report/change-contact/:affinityType/change-phone                 controllers.ContactPhoneController.onSubmit(mode: Mode = CheckMode, affinityType: models.AffinityType)
-
-GET         /report/change-contact/:affinityType/have-phone                        controllers.HaveTelephoneController.onPageLoad(mode: Mode = NormalMode, affinityType: models.AffinityType)
-POST       /report/change-contact/:affinityType/have-phone                        controllers.HaveTelephoneController.onSubmit(mode: Mode = NormalMode, affinityType: models.AffinityType)
-GET        /report/change-contact/:affinityType/change-have-phone                  controllers.HaveTelephoneController.onPageLoad(mode: Mode = CheckMode, affinityType: models.AffinityType)
-POST       /report/change-contact/:affinityType/change-have-phone                  controllers.HaveTelephoneController.onSubmit(mode: Mode = CheckMode, affinityType: models.AffinityType)
+GET         /report/change-contact/:affinityType/have-phone                        controllers.HaveTelephoneController.onPageLoad(mode: Mode = CheckMode, affinityType: models.AffinityType)
+POST       /report/change-contact/:affinityType/have-phone                        controllers.HaveTelephoneController.onSubmit(mode: Mode = CheckMode, affinityType: models.AffinityType)

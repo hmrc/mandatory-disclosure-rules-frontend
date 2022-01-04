@@ -30,7 +30,7 @@
 
 @layout(pageTitle = title(form, messages("contactEmail.title"))) {
 
-    @formHelper(action = routes.ContactEmailController.onSubmit(mode, affinityType)) {
+    @formHelper(action = routes.ContactEmailController.onSubmit(affinityType)) {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))

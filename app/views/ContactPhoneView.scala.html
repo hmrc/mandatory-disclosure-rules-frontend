@@ -28,7 +28,7 @@
 
 @layout(pageTitle = title(form, messages(s"contactPhone.title.$affinityType"))) {
 
-    @formHelper(action = routes.ContactPhoneController.onSubmit(mode, affinityType)) {
+    @formHelper(action = routes.ContactPhoneController.onSubmit(affinityType)) {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))

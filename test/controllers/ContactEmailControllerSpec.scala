@@ -41,7 +41,7 @@ class ContactEmailControllerSpec extends SpecBase {
   val organisation = AffinityType(Organisation)
   val individual   = AffinityType(Individual)
 
-  lazy val contactEmailRoute = routes.ContactEmailController.onPageLoad(NormalMode, organisation).url
+  lazy val contactEmailRoute = routes.ContactEmailController.onPageLoad(organisation).url
 
   "ContactEmail Controller" - {
 

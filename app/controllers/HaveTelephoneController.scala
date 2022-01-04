@@ -50,7 +50,7 @@ class HaveTelephoneController @Inject() (
   def onPageLoad(mode: Mode, affinityType: AffinityType): Action[AnyContent] = (identify andThen getData() andThen requireData) {
     implicit request =>
       val preparedForm = request.userAnswers.get(HaveTelephonePage) match {
-        case None        => form
+        case None        => form.fill(false)
         case Some(value) => form.fill(value)
       }
 

@@ -39,7 +39,7 @@ class ContactPhoneControllerSpec extends SpecBase with MockitoSugar {
   val formProvider = new ContactPhoneFormProvider()
   val form         = formProvider()
 
-  lazy val contactPhoneRoute = routes.ContactPhoneController.onPageLoad(NormalMode, Organisation).url
+  lazy val contactPhoneRoute = routes.ContactPhoneController.onPageLoad(Organisation).url
 
   "ContactPhone Controller" - {
 

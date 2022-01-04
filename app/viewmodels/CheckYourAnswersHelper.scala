@@ -51,7 +51,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
         key = "contactEmail.checkYourAnswersLabel",
         value = ValueViewModel(HtmlFormat.escape(s"$x").toString),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.ContactEmailController.onPageLoad(CheckMode, affinityType).url)
+          ActionItemViewModel("site.change", routes.ContactEmailController.onPageLoad(affinityType).url)
             .withAttribute(("id", "change-corrections"))
         )
       )
@@ -63,7 +63,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
         key = "contactPhone.checkYourAnswersLabel",
         value = ValueViewModel(HtmlFormat.escape(value).toString),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.HaveTelephoneController.onPageLoad(CheckMode, affinityType).url)
+          ActionItemViewModel("site.change", routes.HaveTelephoneController.onPageLoad(affinityType).url)
             .withAttribute(("id", "change-corrections"))
         )
       )

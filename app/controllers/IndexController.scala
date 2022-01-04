@@ -16,10 +16,13 @@
 
 package controllers
 
+import cats.data.EitherT
+import cats.implicits._
 import controllers.actions.{DataRetrievalAction, IdentifierAction}
 import models.UserAnswers
+import play.api.Logging
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import services.SubscriptionService
 import uk.gov.hmrc.auth.core.AffinityGroup.{Individual, Organisation}
@@ -27,12 +30,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.IndexView
 
 import javax.inject.Inject
-import cats.data.EitherT
-import cats.implicits._
-import play.api.{Logger, Logging}
-
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 class IndexController @Inject() (
   val controllerComponents: MessagesControllerComponents,
