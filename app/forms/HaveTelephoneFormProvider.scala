@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,8 @@
 package forms
 
 import javax.inject.Inject
-
 import forms.mappings.Mappings
+import models.AffinityType
 import play.api.data.Form
 
 class HaveTelephoneFormProvider @Inject() extends Mappings {
@@ -26,5 +26,10 @@ class HaveTelephoneFormProvider @Inject() extends Mappings {
   def apply(): Form[Boolean] =
     Form(
       "value" -> boolean("haveTelephone.error.required")
+    )
+
+  def apply(affinityType: AffinityType): Form[Boolean] =
+    Form(
+      "value" -> boolean(s"haveTelephone.error.required.$affinityType")
     )
 }
