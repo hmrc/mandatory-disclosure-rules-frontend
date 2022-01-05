@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,15 @@ package navigation
 
 import play.api.mvc.Call
 import pages._
-import models.{Mode, UserAnswers}
+import models.{AffinityType, Mode, UserAnswers}
 
 class FakeNavigator(desiredRoute: Call) extends Navigator {
 
   override def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call =
     desiredRoute
+}
+
+class FakeContactDetailsNavigator(desiredRoute: Call) extends ContactDetailsNavigator {
+
+  override def nextPage(page: Page, affinityType: AffinityType, mode: Mode, userAnswers: UserAnswers): Call = desiredRoute
 }

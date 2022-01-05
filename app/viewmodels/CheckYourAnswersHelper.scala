@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,22 +17,16 @@
 package viewmodels
 
 import controllers.routes
-import models.UserAnswers
+import models.requests.DataRequest
+import models.{AffinityType, CheckMode, UserAnswers}
 import pages._
 import play.api.i18n.Messages
-import play.api.libs.json.Reads
+import play.api.mvc.AnyContent
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
 
-class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit
-  messages: Messages
-) {
-
-  def pageToString[A](userAnswers: UserAnswers, page: QuestionPage[A])(implicit reads: Reads[A]): Option[String] =
-    userAnswers.get(page) map {
-      value => value.toString
-    }
+class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityType)(implicit request: DataRequest[AnyContent], messages: Messages) {
 
   def buildRow() =
     (Seq(contactNamePage(), contactEmailPage(), contactPhonePage()),
@@ -54,31 +48,38 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit
   def contactEmailPage(): Option[SummaryListRow] = userAnswers.get(ContactEmailPage) map {
     x =>
       SummaryListRowViewModel(
-        key = "checkYourAnswers.name.checkYourAnswersLabel",
+        key = "contactEmail.checkYourAnswersLabel",
         value = ValueViewModel(HtmlFormat.escape(s"$x").toString),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.IndexController.onPageLoad().url)
+          ActionItemViewModel("site.change", routes.ContactEmailController.onPageLoad(affinityType).url)
             .withAttribute(("id", "change-corrections"))
         )
       )
   }
 
-  def contactPhonePage(): Option[SummaryListRow] = userAnswers.get(ContactPhonePage) map {
-    x =>
+  def contactPhonePage(): Option[SummaryListRow] = {
+    val summaryView = (value: String) =>
       SummaryListRowViewModel(
-        key = "checkYourAnswers.name.checkYourAnswersLabel",
-        value = ValueViewModel(HtmlFormat.escape(s"$x").toString),
+        key = "contactPhone.checkYourAnswersLabel",
+        value = ValueViewModel(HtmlFormat.escape(value).toString),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.IndexController.onPageLoad().url)
+          ActionItemViewModel("site.change", routes.HaveTelephoneController.onPageLoad(affinityType).url)
             .withAttribute(("id", "change-corrections"))
         )
       )
+
+    Some(
+      userAnswers.get(ContactPhonePage) match {
+        case Some(phone) if !phone.isEmpty => summaryView(phone)
+        case _                             => summaryView(messages("no.phone"))
+      }
+    )
   }
 
   def hasSecondContactPage(): Option[SummaryListRow] = {
     val summaryView = (yesNo: String) =>
       SummaryListRowViewModel(
-        key = "checkYourAnswers.hasSecondContact.checkYourAnswersLabel",
+        key = "hasSecondContact.checkYourAnswersLabel",
         value = ValueViewModel(HtmlFormat.escape(s"${messages(yesNo)}").toString),
         actions = Seq(
           ActionItemViewModel("site.change", routes.IndexController.onPageLoad().url)
@@ -138,5 +139,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers)(implicit
 }
 
 object CheckYourAnswersHelper {
-  def apply(userAnswers: UserAnswers)(implicit messages: Messages) = new CheckYourAnswersHelper(userAnswers)
+
+  def apply(userAnswers: UserAnswers)(implicit request: DataRequest[AnyContent], messages: Messages) =
+    new CheckYourAnswersHelper(userAnswers, AffinityType(request.userType))
 }

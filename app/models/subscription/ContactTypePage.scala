@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,22 +23,27 @@ sealed trait ContactTypePage {
   def contactNamePage: QuestionPage[String]
   def contactEmailPage: QuestionPage[String]
   def contactTelephonePage: QuestionPage[String]
+  def haveTelephonePage: QuestionPage[Boolean]
 }
 
-case class PrimaryContactDetailsPages(contactNamePage: QuestionPage[String], contactEmailPage: QuestionPage[String], contactTelephonePage: QuestionPage[String])
-    extends ContactTypePage
+case class PrimaryContactDetailsPages(contactNamePage: QuestionPage[String],
+                                      contactEmailPage: QuestionPage[String],
+                                      contactTelephonePage: QuestionPage[String],
+                                      haveTelephonePage: QuestionPage[Boolean]
+) extends ContactTypePage
 
 case class SecondaryContactDetailsPages(contactNamePage: QuestionPage[String],
                                         contactEmailPage: QuestionPage[String],
-                                        contactTelephonePage: QuestionPage[String]
+                                        contactTelephonePage: QuestionPage[String],
+                                        haveTelephonePage: QuestionPage[Boolean]
 ) extends ContactTypePage
 
 object ContactTypePage {
 
   implicit val primaryContactDetailsPages: PrimaryContactDetailsPages =
-    PrimaryContactDetailsPages(ContactNamePage, ContactEmailPage, ContactPhonePage)
+    PrimaryContactDetailsPages(ContactNamePage, ContactEmailPage, ContactPhonePage, HaveTelephonePage)
 
   implicit val secondaryContactDetailsPages: SecondaryContactDetailsPages =
-    SecondaryContactDetailsPages(SndContactNamePage, SndContactEmailPage, SndContactPhonePage)
+    SecondaryContactDetailsPages(SndContactNamePage, SndContactEmailPage, SndContactPhonePage, HaveTelephonePage)
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,4 +49,10 @@ trait FieldBehaviours extends FormSpec with ScalaCheckPropertyChecks with Genera
       result.errors mustEqual Seq(requiredError)
     }
   }
+
+  def fieldWithInvalidData(form: Form[_], fieldName: String, invalidString: String, error: FormError): Unit =
+    "not bind invalid data" in {
+      val result = form.bind(Map(fieldName -> invalidString)).apply(fieldName)
+      result.errors mustEqual Seq(error)
+    }
 }

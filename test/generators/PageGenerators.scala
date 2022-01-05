@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,4 +16,17 @@
 
 package generators
 
-trait PageGenerators {}
+import org.scalacheck.Arbitrary
+import pages.{ContactEmailPage, ContactPhonePage, HaveTelephonePage}
+
+trait PageGenerators {
+
+  implicit lazy val arbitraryHaveTelephonePage: Arbitrary[HaveTelephonePage.type] =
+    Arbitrary(HaveTelephonePage)
+
+  implicit lazy val arbitraryContactPhonePage: Arbitrary[ContactPhonePage.type] =
+    Arbitrary(ContactPhonePage)
+
+  implicit lazy val arbitraryContactEmailPage: Arbitrary[ContactEmailPage.type] =
+    Arbitrary(ContactEmailPage)
+}

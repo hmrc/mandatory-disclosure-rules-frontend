@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,13 @@
 
 package controllers
 
+import cats.data.EitherT
+import cats.implicits._
 import controllers.actions.{DataRetrievalAction, IdentifierAction}
 import models.UserAnswers
+import play.api.Logging
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import services.SubscriptionService
 import uk.gov.hmrc.auth.core.AffinityGroup.{Individual, Organisation}
@@ -27,11 +30,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.IndexView
 
 import javax.inject.Inject
-import cats.data.EitherT
-import cats.implicits._
-
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
 class IndexController @Inject() (
   val controllerComponents: MessagesControllerComponents,
@@ -41,7 +40,8 @@ class IndexController @Inject() (
   subscriptionService: SubscriptionService,
   view: IndexView
 ) extends FrontendBaseController
-    with I18nSupport {
+    with I18nSupport
+    with Logging {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData.apply) async {
     implicit request =>
@@ -55,7 +55,9 @@ class IndexController @Inject() (
           _           <- EitherT.right[Throwable](sessionRepository.set(userAnswers))
         } yield Ok(view(request.subscriptionId, changeDetailsUrl))
       }.valueOr {
-        _ => Redirect(routes.ThereIsAProblemController.onPageLoad()) //TODO IS THIS RIGHT
+        error =>
+          logger.warn("There Is a Problem", error)
+          Redirect(routes.ThereIsAProblemController.onPageLoad())
       }
   }
 }

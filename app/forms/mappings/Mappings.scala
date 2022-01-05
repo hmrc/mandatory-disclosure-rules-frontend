@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,4 +49,13 @@ trait Mappings extends Formatters with Constraints {
                           args: Seq[String] = Seq.empty
   ): FieldMapping[LocalDate] =
     of(new LocalDateFormatter(invalidKey, allRequiredKey, twoRequiredKey, requiredKey, args))
+
+  protected def validatedText(requiredKey: String,
+                              invalidKey: String,
+                              lengthKey: String,
+                              regex: String,
+                              maxLength: Int,
+                              msgArg: String = ""
+  ): FieldMapping[String] =
+    of(validatedTextFormatter(requiredKey, invalidKey, lengthKey, regex, maxLength, msgArg))
 }

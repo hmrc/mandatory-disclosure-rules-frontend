@@ -11,6 +11,8 @@ site.startAgain = Start again
 site.signIn = Sign in
 site.govuk = GOV.UK
 
+no.phone = None
+
 date.day = Day
 date.month = Month
 date.year = Year
@@ -122,3 +124,33 @@ changeOrganisationContactDetails.primary.heading = First Contact
 changeOrganisationContactDetails.secondary.heading = Second Contact
 
 changeOrganisationContactDetails.landing-page.link = Back to report cross-border arrangements
+
+hasSecondContact.checkYourAnswersLabel = Do you have a second contact?
+
+contactEmail.title = What is your email address?
+contactEmail.heading = What is your email address?
+contactEmail.hint = We will use this to send confirmation of your reports or if we have any questions about them.
+contactEmail.checkYourAnswersLabel = Email address
+contactEmail.error.required = Enter your email address
+contactEmail.error.length = Email address must be 256 characters or less
+contactEmail.error.invalid = Enter your email address in the correct format, like name@example.com
+
+contactPhone.checkYourAnswersLabel = Telephone number
+contactPhone.title.organisation = What is their telephone number?
+contactPhone.title.individual = Can we contact you by telephone?
+contactPhone.heading.organisation = What is the telephone number for {0}?
+contactPhone.heading.individual = What is your telephone number?
+contactPhone.hint = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192.
+contactPhone.error.required = Enter a telephone number
+contactPhone.error.invalid = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192.
+contactPhone.error.length = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192.
+contactPhone.change.hidden = ContactPhone
+
+haveTelephone.title.organisation = Can we contact them by telephone?
+haveTelephone.title.individual = Can we contact you by telephone?
+haveTelephone.heading.organisation = Can we contact {0} by telephone?
+haveTelephone.heading.individual = Can we contact you by telephone?
+haveTelephone.checkYourAnswersLabel = Telephone number
+haveTelephone.hint = We will use this to keep in touch and if we have any questions about your reports.
+haveTelephone.error.required.individual = Select yes if we can contact you by telephone
+haveTelephone.error.required.organisation = Select yes if they can be contacted by telephone

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,4 +23,4 @@ import uk.gov.hmrc.auth.core.AffinityGroup
 case class OptionalDataRequest[A](request: Request[A], userId: String, userAnswers: Option[UserAnswers], userType: AffinityGroup, subscriptionId: String)
     extends WrappedRequest[A](request)
 
-case class DataRequest[A](request: Request[A], userId: String, userAnswers: UserAnswers) extends WrappedRequest[A](request)
+case class DataRequest[A](request: Request[A], userId: String, userType: AffinityGroup, userAnswers: UserAnswers) extends WrappedRequest[A](request)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,20 @@
 
 package generators
 
-import java.time.{Instant, LocalDate, ZoneOffset}
+import org.checkerframework.common.value.qual.MinLen
 
+import java.time.{Instant, LocalDate, ZoneOffset}
 import org.scalacheck.Arbitrary._
 import org.scalacheck.Gen._
 import org.scalacheck.{Gen, Shrink}
+import org.scalatest.prop.Configuration.MaxDiscardedFactor
+import utils.RegExConstants
+import wolfendale.scalacheck.regexp.RegexpGen
 
-trait Generators extends UserAnswersGenerator with PageGenerators with ModelGenerators with UserAnswersEntryGenerators {
+trait Generators extends UserAnswersGenerator with PageGenerators with ModelGenerators with UserAnswersEntryGenerators with RegExConstants {
 
   implicit val dontShrink: Shrink[String] = Shrink.shrinkAny
+  MaxDiscardedFactor(10000)
 
   def genIntersperseString(gen: Gen[String], value: String, frequencyV: Int = 1, frequencyN: Int = 10): Gen[String] = {
 
@@ -118,4 +123,24 @@ trait Generators extends UserAnswersGenerator with PageGenerators with ModelGene
         Instant.ofEpochMilli(millis).atOffset(ZoneOffset.UTC).toLocalDate
     }
   }
+
+  def validEmailAddress: Gen[String] = RegexpGen.from(emailRegex)
+
+  def validEmailAddressToLong(maxLength: Int): Gen[String] = validEmailAddress suchThat (_.length > maxLength)
+
+  def validEmailAddressWithinLength(maxLength: Int): Gen[String] =
+    validEmailAddress retryUntil (_.length < maxLength)
+
+  def validPhoneNumber: Gen[String] = RegexpGen.from(digitsAndWhiteSpaceOnly)
+
+  def validPhoneNumberWithinLength(maxlength: Int): Gen[String] = RegexpGen.from(digitsAndWhiteSpaceOnly) retryUntil
+    (
+      phoneNumber => phoneNumber.length < maxlength && phoneNumber.matches("""\d""")
+    )
+
+  def validPhoneNumberTooLong(minLength: Int): Gen[String] = for {
+    maxLength <- (minLength * 2).max(100)
+    length    <- Gen.chooseNum(minLength + 1, maxLength)
+    chars     <- listOfN(length, arbitrary[Byte])
+  } yield chars.map(math.abs(_)).mkString
 }

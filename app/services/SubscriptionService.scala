@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,17 +23,17 @@ import models.UserAnswers
 import models.subscription._
 import uk.gov.hmrc.http.HeaderCarrier
 
-import java.util.NoSuchElementException
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Failure, Try}
+import scala.util.Try
 
 class SubscriptionService @Inject() (subscriptionConnector: SubscriptionConnector)(implicit ec: ExecutionContext) {
 
   def getContactDetails(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Either[Throwable, UserAnswers]] =
     subscriptionConnector.readSubscription flatMap {
       case Some(details) => populateUserAnswers(details, userAnswers)
-      case None          => Future.successful(Left(new RuntimeException("error")))
+      case None =>
+        Future.successful(Left(ReadSubscriptionInfoMissing()))
     }
 
   private def populateUserAnswers(responseDetail: ResponseDetail, userAnswers: UserAnswers): Future[Either[Throwable, UserAnswers]] = {
@@ -59,16 +59,17 @@ class SubscriptionService @Inject() (subscriptionConnector: SubscriptionConnecto
     contactInformation.head match {
       case contactInformationForOrganisation: ContactInformationForOrganisation =>
         for {
-          uaWithContactName <- userAnswers.set(contactTypePage.contactNamePage, contactInformationForOrganisation.organisation.organisationName)
-          uaWithEmail       <- uaWithContactName.set(contactTypePage.contactEmailPage, contactInformationForOrganisation.email)
-          uaWithTelephone   <- uaWithEmail.set(contactTypePage.contactTelephonePage, contactInformationForOrganisation.phone.getOrElse(""))
-        } yield uaWithTelephone
+          uaWithContactName   <- userAnswers.set(contactTypePage.contactNamePage, contactInformationForOrganisation.organisation.organisationName)
+          uaWithEmail         <- uaWithContactName.set(contactTypePage.contactEmailPage, contactInformationForOrganisation.email)
+          uaWithTelephone     <- uaWithEmail.set(contactTypePage.contactTelephonePage, contactInformationForOrganisation.phone.getOrElse(""))
+          uaWithHaveTelephone <- uaWithTelephone.set(contactTypePage.haveTelephonePage, contactInformationForOrganisation.phone.exists(_.nonEmpty))
+        } yield uaWithHaveTelephone
       case contactInformationForIndividual: ContactInformationForIndividual =>
         for {
-          uaWithEmail     <- userAnswers.set(contactTypePage.contactEmailPage, contactInformationForIndividual.email)
-          uaWithTelephone <- uaWithEmail.set(contactTypePage.contactTelephonePage, contactInformationForIndividual.phone.getOrElse(""))
-        } yield uaWithTelephone
-      case _ => Failure(new NoSuchElementException("Does not contain Organisation details"))
+          uaWithEmail         <- userAnswers.set(contactTypePage.contactEmailPage, contactInformationForIndividual.email)
+          uaWithTelephone     <- uaWithEmail.set(contactTypePage.contactTelephonePage, contactInformationForIndividual.phone.getOrElse(""))
+          uaWithHaveTelephone <- uaWithTelephone.set(contactTypePage.haveTelephonePage, contactInformationForIndividual.phone.exists(_.nonEmpty))
+        } yield uaWithHaveTelephone
     }
 
 }

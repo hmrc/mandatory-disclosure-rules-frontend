@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,26 @@ package forms.behaviours
 import play.api.data.{Form, FormError}
 
 trait StringFieldBehaviours extends FieldBehaviours {
+
+  def fieldWithMaxLengthEmail(form: Form[_], fieldName: String, maxLength: Int, lengthError: FormError): Unit =
+    s"must not bind strings longer than $maxLength characters" in {
+
+      forAll(validEmailAddressToLong(maxLength) -> "longString") {
+        string =>
+          val result = form.bind(Map(fieldName -> string)).apply(fieldName)
+          result.errors mustEqual Seq(lengthError)
+      }
+    }
+
+  def fieldWithMaxLengthPhoneNumber(form: Form[_], fieldName: String, maxLength: Int, lengthError: FormError): Unit =
+    s"must not bind strings longer than $maxLength characters" in {
+
+      forAll(validPhoneNumberTooLong(maxLength) -> "longString") {
+        string =>
+          val result = form.bind(Map(fieldName -> string)).apply(fieldName)
+          result.errors mustEqual Seq(lengthError)
+      }
+    }
 
   def fieldWithMaxLength(form: Form[_], fieldName: String, maxLength: Int, lengthError: FormError): Unit =
     s"not bind strings longer than $maxLength characters" in {

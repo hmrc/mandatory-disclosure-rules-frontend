@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,4 +16,34 @@
 
 package generators
 
-trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {}
+import org.scalacheck.Arbitrary
+import pages.{ContactEmailPage, ContactPhonePage, HaveTelephonePage}
+import play.api.libs.json.{JsValue, Json}
+import org.scalacheck.Arbitrary.arbitrary
+
+trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
+
+  implicit lazy val arbitraryHaveTelephoneUserAnswersEntry: Arbitrary[(HaveTelephonePage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[HaveTelephonePage.type]
+        value <- arbitrary[Boolean].map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryContactPhoneUserAnswersEntry: Arbitrary[(ContactPhonePage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[ContactPhonePage.type]
+        value <- arbitrary[String].suchThat(_.nonEmpty).map(Json.toJson(_))
+      } yield (page, value)
+    }
+
+  implicit lazy val arbitraryContactEmailUserAnswersEntry: Arbitrary[(ContactEmailPage.type, JsValue)] =
+    Arbitrary {
+      for {
+        page  <- arbitrary[ContactEmailPage.type]
+        value <- arbitrary[String].suchThat(_.nonEmpty).map(Json.toJson(_))
+      } yield (page, value)
+    }
+}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package controllers
 
 import config.FrontendAppConfig
 import controllers.actions._
+import models.AffinityType
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -40,7 +41,7 @@ class ChangeOrganisationContactDetailsController @Inject() (
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData.apply andThen requireData) {
     implicit request =>
-      val checkUserAnswersHelper = new CheckYourAnswersHelper(request.userAnswers)
+      val checkUserAnswersHelper = CheckYourAnswersHelper(request.userAnswers)
 
       val primaryContactList = SummaryListViewModel(
         rows = checkUserAnswersHelper.buildRow()._1.flatten
