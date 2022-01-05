@@ -42,6 +42,7 @@ class ContactEmailControllerSpec extends SpecBase {
   val individual   = AffinityType(Individual)
 
   lazy val contactEmailRoute = routes.ContactEmailController.onPageLoad(organisation).url
+  lazy val havePhonelRoute   = routes.HaveTelephoneController.onPageLoad(organisation).url
 
   "ContactEmail Controller" - {
 
@@ -99,7 +100,7 @@ class ContactEmailControllerSpec extends SpecBase {
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual onwardRoute.url
+        redirectLocation(result).value mustEqual havePhonelRoute
       }
     }
 

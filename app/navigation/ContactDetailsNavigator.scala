@@ -40,16 +40,22 @@ class ContactDetailsNavigator @Inject() () {
     case _                                => _ => routes.CheckYourAnswersController.onPageLoad()
   }
 
-  private def haveTelephoneRoutes(mode: Mode, affinityType: AffinityType)(ua: UserAnswers): Call =
+  private def haveTelephoneRoutes(mode: Mode, affinityType: AffinityType)(ua: UserAnswers): Call = {
+    println(s"***$affinityType****${ua.get(HaveTelephonePage)}*****")
+
     ua.get(HaveTelephonePage) match {
-      case Some(hasPhone) if hasPhone => routes.ContactPhoneController.onPageLoad(affinityType)
-      case _                          => nextPage(ContactPhonePage, affinityType, mode, ua)
+      case Some(hasPhone) if hasPhone =>
+        routes.ContactPhoneController.onPageLoad(affinityType)
+      case _ =>
+        nextPage(ContactPhonePage, affinityType, mode, ua)
     }
+  }
 
   def nextPage(page: Page, affinityType: AffinityType, mode: Mode, userAnswers: UserAnswers): Call = mode match {
     case NormalMode =>
       normalRoutes(page, affinityType)(userAnswers)
     case CheckMode =>
+      println(s"***$affinityType****$page*****")
       checkRouteMap(page, affinityType)(userAnswers)
   }
 

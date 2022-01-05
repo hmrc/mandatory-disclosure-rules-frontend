@@ -18,9 +18,9 @@ package controllers
 
 import controllers.actions._
 import forms.ContactEmailFormProvider
-import models.{AffinityType, Mode}
+import models.{AffinityType, Mode, Organisation, UserAnswers}
 import navigation.ContactDetailsNavigator
-import pages.ContactEmailPage
+import pages.{ContactEmailPage, ContactNamePage, ContactPhonePage, HaveTelephonePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -66,7 +66,8 @@ class ContactEmailController @Inject() (
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(ContactEmailPage, value))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(ContactEmailPage, affinityType, mode, updatedAnswers))
+            } yield Redirect(routes.HaveTelephoneController.onPageLoad(affinityType))
         )
   }
+
 }
