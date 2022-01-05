@@ -22,7 +22,7 @@ import forms.HaveTelephoneFormProvider
 import javax.inject.Inject
 import models.{AffinityType, Mode, Organisation, UserAnswers}
 import navigation.{ContactDetailsNavigator, Navigator}
-import pages.{ContactNamePage, HaveTelephonePage}
+import pages.{ContactNamePage, ContactPhonePage, HaveTelephonePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -69,11 +69,12 @@ class HaveTelephoneController @Inject() (
         .bindFromRequest()
         .fold(
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, affinityType, getContactName(request.userAnswers, affinityType), mode))),
-          value =>
+          hasTelephone =>
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(HaveTelephonePage, value))
-              _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(HaveTelephonePage, affinityType, mode, updatedAnswers))
+              updatedAnswers     <- Future.fromTry(request.userAnswers.set(HaveTelephonePage, hasTelephone))
+              uaWithContactPhone <- if (!hasTelephone) Future.fromTry(updatedAnswers.set(ContactPhonePage, "")) else Future.successful(updatedAnswers)
+              _                  <- sessionRepository.set(uaWithContactPhone)
+            } yield Redirect(navigator.nextPage(HaveTelephonePage, affinityType, mode, uaWithContactPhone))
         )
   }
 }

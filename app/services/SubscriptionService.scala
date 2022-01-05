@@ -59,15 +59,17 @@ class SubscriptionService @Inject() (subscriptionConnector: SubscriptionConnecto
     contactInformation.head match {
       case contactInformationForOrganisation: ContactInformationForOrganisation =>
         for {
-          uaWithContactName <- userAnswers.set(contactTypePage.contactNamePage, contactInformationForOrganisation.organisation.organisationName)
-          uaWithEmail       <- uaWithContactName.set(contactTypePage.contactEmailPage, contactInformationForOrganisation.email)
-          uaWithTelephone   <- uaWithEmail.set(contactTypePage.contactTelephonePage, contactInformationForOrganisation.phone.getOrElse(""))
-        } yield uaWithTelephone
+          uaWithContactName   <- userAnswers.set(contactTypePage.contactNamePage, contactInformationForOrganisation.organisation.organisationName)
+          uaWithEmail         <- uaWithContactName.set(contactTypePage.contactEmailPage, contactInformationForOrganisation.email)
+          uaWithTelephone     <- uaWithEmail.set(contactTypePage.contactTelephonePage, contactInformationForOrganisation.phone.getOrElse(""))
+          uaWithHaveTelephone <- uaWithTelephone.set(contactTypePage.haveTelephonePage, contactInformationForOrganisation.phone.exists(_.nonEmpty))
+        } yield uaWithHaveTelephone
       case contactInformationForIndividual: ContactInformationForIndividual =>
         for {
-          uaWithEmail     <- userAnswers.set(contactTypePage.contactEmailPage, contactInformationForIndividual.email)
-          uaWithTelephone <- uaWithEmail.set(contactTypePage.contactTelephonePage, contactInformationForIndividual.phone.getOrElse(""))
-        } yield uaWithTelephone
+          uaWithEmail         <- userAnswers.set(contactTypePage.contactEmailPage, contactInformationForIndividual.email)
+          uaWithTelephone     <- uaWithEmail.set(contactTypePage.contactTelephonePage, contactInformationForIndividual.phone.getOrElse(""))
+          uaWithHaveTelephone <- uaWithTelephone.set(contactTypePage.haveTelephonePage, contactInformationForIndividual.phone.exists(_.nonEmpty))
+        } yield uaWithHaveTelephone
     }
 
 }
