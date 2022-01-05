@@ -40,7 +40,8 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
         value = ValueViewModel(HtmlFormat.escape(s"$x").toString),
         actions = Seq(
           ActionItemViewModel("site.change", routes.IndexController.onPageLoad().url)
-            .withAttribute(("id", "change-corrections"))
+            .withAttribute(("id", "contact-name"))
+            .withVisuallyHiddenText(" contact name")
         )
       )
   }
@@ -52,7 +53,8 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
         value = ValueViewModel(HtmlFormat.escape(s"$x").toString),
         actions = Seq(
           ActionItemViewModel("site.change", routes.ContactEmailController.onPageLoad(affinityType).url)
-            .withAttribute(("id", "change-corrections"))
+            .withAttribute(("id", "contact-email"))
+            .withVisuallyHiddenText(" email address")
         )
       )
   }
@@ -64,7 +66,8 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
         value = ValueViewModel(HtmlFormat.escape(value).toString),
         actions = Seq(
           ActionItemViewModel("site.change", routes.HaveTelephoneController.onPageLoad(affinityType).url)
-            .withAttribute(("id", "change-corrections"))
+            .withAttribute(("id", "contact-phone"))
+            .withVisuallyHiddenText(" telephone number")
         )
       )
 
@@ -83,7 +86,8 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
         value = ValueViewModel(HtmlFormat.escape(s"${messages(yesNo)}").toString),
         actions = Seq(
           ActionItemViewModel("site.change", routes.IndexController.onPageLoad().url)
-            .withAttribute(("id", "change-corrections"))
+            .withAttribute(("id", "second-contact"))
+            .withVisuallyHiddenText(" if you have a second contact")
         )
       )
     Some(userAnswers.get(SecondContactPage) match {
@@ -107,7 +111,8 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
         value = ValueViewModel(HtmlFormat.escape(s"$x").toString),
         actions = Seq(
           ActionItemViewModel("site.change", routes.IndexController.onPageLoad().url)
-            .withAttribute(("id", "change-corrections"))
+            .withAttribute(("id", "snd-contact-name"))
+            .withVisuallyHiddenText(" second contact name")
         )
       )
   }
@@ -119,7 +124,8 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
         value = ValueViewModel(HtmlFormat.escape(s"$x").toString),
         actions = Seq(
           ActionItemViewModel("site.change", routes.IndexController.onPageLoad().url)
-            .withAttribute(("id", "change-corrections"))
+            .withAttribute(("id", "snd-contact-email"))
+            .withVisuallyHiddenText(" second contact email address")
         )
       )
   }
@@ -131,7 +137,8 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
         value = ValueViewModel(HtmlFormat.escape(s"$x").toString),
         actions = Seq(
           ActionItemViewModel("site.change", routes.IndexController.onPageLoad().url)
-            .withAttribute(("id", "change-corrections"))
+            .withAttribute(("id", "snd-contact-phone"))
+            .withVisuallyHiddenText(" second contact telephone number")
         )
       )
   }
