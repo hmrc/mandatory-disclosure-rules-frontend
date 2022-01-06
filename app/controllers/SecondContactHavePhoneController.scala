@@ -18,22 +18,22 @@ package controllers
 
 import controllers.actions._
 import forms.SecondContactHavePhoneFormProvider
-import javax.inject.Inject
-import models.Mode
-import navigation.Navigator
-import pages.SecondContactHavePhonePage
+import models.{AffinityType, Mode, UserAnswers}
+import navigation.ContactDetailsNavigator
+import pages.{SecondContactHavePhonePage, SecondContactNamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.SecondContactHavePhoneView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class SecondContactHavePhoneController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  navigator: Navigator,
+  navigator: ContactDetailsNavigator,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
@@ -53,20 +53,26 @@ class SecondContactHavePhoneController @Inject() (
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode))
+      Ok(view(preparedForm, getSecondContactName(request.userAnswers), mode))
   }
+
+  private def getSecondContactName(userAnswers: UserAnswers): String =
+    (userAnswers.get(SecondContactNamePage)) match {
+      case Some(contactName) => contactName
+      case _                 => ""
+    }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, getSecondContactName(request.userAnswers), mode))),
           value =>
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(SecondContactHavePhonePage, value))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(SecondContactHavePhonePage, mode, updatedAnswers))
+            } yield Redirect(navigator.nextPage(SecondContactHavePhonePage, AffinityType(request.userType), mode, updatedAnswers))
         )
   }
 }

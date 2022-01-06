@@ -85,12 +85,12 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
         key = "hasSecondContact.checkYourAnswersLabel",
         value = ValueViewModel(HtmlFormat.escape(s"${messages(yesNo)}").toString),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.IndexController.onPageLoad().url)
+          ActionItemViewModel("site.change", routes.HaveSecondContactController.onPageLoad(CheckMode).url)
             .withAttribute(("id", "second-contact"))
             .withVisuallyHiddenText(" if you have a second contact")
         )
       )
-    Some(userAnswers.get(SecondContactPage) match {
+    Some(userAnswers.get(HaveSecondContactPage) match {
       case Some(x) =>
         val yesNo = if (x) "site.no" else "site.yes"
         summaryView(yesNo)
@@ -107,10 +107,10 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
   def secondaryContactNamePage(): Option[SummaryListRow] = userAnswers.get(SecondContactNamePage) map {
     x =>
       SummaryListRowViewModel(
-        key = "checkYourAnswers.name.checkYourAnswersLabel",
+        key = "secondContactName.checkYourAnswersLabel",
         value = ValueViewModel(HtmlFormat.escape(s"$x").toString),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.IndexController.onPageLoad().url)
+          ActionItemViewModel("site.change", routes.SecondContactNameController.onPageLoad(CheckMode).url)
             .withAttribute(("id", "snd-contact-name"))
             .withVisuallyHiddenText(" second contact name")
         )
@@ -120,29 +120,39 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
   def secondaryContactEmailPage(): Option[SummaryListRow] = userAnswers.get(SecondContactEmailPage) map {
     x =>
       SummaryListRowViewModel(
-        key = "checkYourAnswers.name.checkYourAnswersLabel",
+        key = "secondContactEmail.checkYourAnswersLabel",
         value = ValueViewModel(HtmlFormat.escape(s"$x").toString),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.IndexController.onPageLoad().url)
+          ActionItemViewModel("site.change", routes.SecondContactEmailController.onPageLoad(CheckMode).url)
             .withAttribute(("id", "snd-contact-email"))
             .withVisuallyHiddenText(" second contact email address")
         )
       )
   }
 
-  def secondaryContactPhonePage(): Option[SummaryListRow] = userAnswers.get(SecondContactPhonePage) map {
-    x =>
+  def secondaryContactPhonePage(): Option[SummaryListRow] = {
+    val summaryView = (value: String) =>
       SummaryListRowViewModel(
-        key = "checkYourAnswers.name.checkYourAnswersLabel",
-        value = ValueViewModel(HtmlFormat.escape(s"$x").toString),
+        key = "secondContactPhone.checkYourAnswersLabel",
+        value = ValueViewModel(HtmlFormat.escape(value).toString),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.IndexController.onPageLoad().url)
+          ActionItemViewModel("site.change", routes.SecondContactHavePhoneController.onPageLoad(CheckMode).url)
             .withAttribute(("id", "snd-contact-phone"))
             .withVisuallyHiddenText(" second contact telephone number")
         )
       )
-  }
 
+    userAnswers.get(HaveSecondContactPage) match {
+      case Some(true) =>
+        Some(
+          userAnswers.get(SecondContactPhonePage) match {
+            case Some(phone) if !phone.isEmpty => summaryView(phone)
+            case _                             => summaryView(messages("no.phone"))
+          }
+        )
+      case _ => None
+    }
+  }
 }
 
 object CheckYourAnswersHelper {

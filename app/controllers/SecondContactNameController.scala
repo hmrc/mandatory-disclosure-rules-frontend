@@ -18,9 +18,8 @@ package controllers
 
 import controllers.actions._
 import forms.SecondContactNameFormProvider
-import javax.inject.Inject
-import models.Mode
-import navigation.Navigator
+import models.{AffinityType, Mode}
+import navigation.ContactDetailsNavigator
 import pages.SecondContactNamePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -28,12 +27,13 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.SecondContactNameView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class SecondContactNameController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
-  navigator: Navigator,
+  navigator: ContactDetailsNavigator,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
@@ -66,7 +66,7 @@ class SecondContactNameController @Inject() (
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(SecondContactNamePage, value))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(SecondContactNamePage, mode, updatedAnswers))
+            } yield Redirect(navigator.nextPage(SecondContactNamePage, AffinityType(request.userType), mode, updatedAnswers))
         )
   }
 }
