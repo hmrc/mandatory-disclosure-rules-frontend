@@ -125,8 +125,6 @@ changeOrganisationContactDetails.secondary.heading = Second Contact
 
 changeOrganisationContactDetails.landing-page.link = Back to report cross-border arrangements
 
-hasSecondContact.checkYourAnswersLabel = Do you have a second contact?
-
 contactEmail.title = What is your email address?
 contactEmail.heading = What is your email address?
 contactEmail.hint = We will use this to send confirmation of your reports or if we have any questions about them.

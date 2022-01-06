@@ -82,7 +82,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
   def hasSecondContactPage(): Option[SummaryListRow] = {
     val summaryView = (yesNo: String) =>
       SummaryListRowViewModel(
-        key = "hasSecondContact.checkYourAnswersLabel",
+        key = "haveSecondContact.checkYourAnswersLabel",
         value = ValueViewModel(HtmlFormat.escape(s"${messages(yesNo)}").toString),
         actions = Seq(
           ActionItemViewModel("site.change", routes.HaveSecondContactController.onPageLoad(CheckMode).url)

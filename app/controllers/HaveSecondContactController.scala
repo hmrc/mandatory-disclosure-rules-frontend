@@ -20,7 +20,7 @@ import controllers.actions._
 import forms.HaveSecondContactFormProvider
 import models.{AffinityType, Mode, Organisation, UserAnswers}
 import navigation.ContactDetailsNavigator
-import pages.{ContactNamePage, HaveSecondContactPage}
+import pages.{ContactNamePage, HaveSecondContactPage, SecondContactNamePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -49,8 +49,12 @@ class HaveSecondContactController @Inject() (
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData() andThen requireData) {
     implicit request =>
       val preparedForm = request.userAnswers.get(HaveSecondContactPage) match {
-        case None        => form
         case Some(value) => form.fill(value)
+        case None =>
+          request.userAnswers.get(SecondContactNamePage) match {
+            case Some(_) => form.fill(true)
+            case _       => form.fill(false)
+          }
       }
 
       Ok(view(preparedForm, getContactName(request.userAnswers), mode))
