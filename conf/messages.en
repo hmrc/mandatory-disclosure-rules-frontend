@@ -154,3 +154,36 @@ haveTelephone.checkYourAnswersLabel = Telephone number
 haveTelephone.hint = We will use this to keep in touch and if we have any questions about your reports.
 haveTelephone.error.required.individual = Select yes if we can contact you by telephone
 haveTelephone.error.required.organisation = Select yes if they can be contacted by telephone
+
+haveSecondContact.title = haveSecondContact
+haveSecondContact.heading = haveSecondContact
+haveSecondContact.checkYourAnswersLabel = haveSecondContact
+haveSecondContact.error.required = Select yes if haveSecondContact
+haveSecondContact.change.hidden = HaveSecondContact
+
+secondContactEmail.title = secondContactEmail
+secondContactEmail.heading = secondContactEmail
+secondContactEmail.checkYourAnswersLabel = secondContactEmail
+secondContactEmail.error.required = Enter secondContactEmail
+secondContactEmail.error.length = SecondContactEmail must be 100 characters or less
+secondContactEmail.change.hidden = SecondContactEmail
+
+secondContactHavePhone.title = secondContactHavePhone
+secondContactHavePhone.heading = secondContactHavePhone
+secondContactHavePhone.checkYourAnswersLabel = secondContactHavePhone
+secondContactHavePhone.error.required = Select yes if secondContactHavePhone
+secondContactHavePhone.change.hidden = SecondContactHavePhone
+
+secondContactName.title = secondContactName
+secondContactName.heading = secondContactName
+secondContactName.checkYourAnswersLabel = secondContactName
+secondContactName.error.required = Enter secondContactName
+secondContactName.error.length = SecondContactName must be 100 characters or less
+secondContactName.change.hidden = SecondContactName
+
+secondContactPhone.title = secondContactPhone
+secondContactPhone.heading = secondContactPhone
+secondContactPhone.checkYourAnswersLabel = secondContactPhone
+secondContactPhone.error.required = Enter secondContactPhone
+secondContactPhone.error.length = SecondContactPhone must be 100 characters or less
+secondContactPhone.change.hidden = SecondContactPhone

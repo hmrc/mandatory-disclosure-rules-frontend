@@ -14,18 +14,25 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import pages.behaviours.PageBehaviours
+import javax.inject.Inject
+import forms.mappings.Mappings
+import play.api.data.Form
+import utils.RegExConstants
 
-class SndContactPhonePageSpec extends PageBehaviours {
+class SecondContactEmailFormProvider @Inject() extends Mappings with RegExConstants {
 
-  "SndContactPhonePage" - {
+  private val maxLength = 256
 
-    beRetrievable[String](SndContactPhonePage)
-
-    beSettable[String](SndContactPhonePage)
-
-    beRemovable[String](SndContactPhonePage)
-  }
+  def apply(): Form[String] =
+    Form(
+      "value" -> validatedText(
+        "secondContactEmail.error.required",
+        "secondContactEmail.error.invalid",
+        "secondContactEmail.error.length",
+        emailRegex,
+        maxLength
+      )
+    )
 }

@@ -14,12 +14,18 @@
  * limitations under the License.
  */
 
-package utils
+package pages
 
-trait RegExConstants {
+import pages.behaviours.PageBehaviours
 
-  final val emailRegex = "^(?:[a-zA-Z0-9!#$%&*+\\/=?^_`{|}~-]+(?:\\.[a-zA-Z0-9!#$%&*+\\/=?^_`{|}~-]+)*)" +
-    "@(?:[a-zA-Z0-9!#$%&*+\\/=?^_`{|}~-]+(?:\\.[a-zA-Z0-9!#$%&*+\\/=?^_`{|}~-]+)*)$"
-  final val digitsAndWhiteSpaceOnly = """^\+?[\d\s]+$"""
-  final val orgNameRegex            = """^[a-zA-Z0-9 &`\-\'\\\^]*$"""
+class SecondContactHavePhonePageSpec extends PageBehaviours {
+
+  "SecondContactHavePhonePage" - {
+
+    beRetrievable[Boolean](SecondContactHavePhonePage)
+
+    beSettable[Boolean](SecondContactHavePhonePage)
+
+    beRemovable[Boolean](SecondContactHavePhonePage)
+  }
 }

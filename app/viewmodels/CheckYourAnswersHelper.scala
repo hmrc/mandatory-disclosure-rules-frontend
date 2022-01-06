@@ -95,7 +95,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
         val yesNo = if (x) "site.no" else "site.yes"
         summaryView(yesNo)
       case None =>
-        val yesNo = userAnswers.get(SndContactNamePage) match {
+        val yesNo = userAnswers.get(SecondContactNamePage) match {
           case Some(_) => "site.yes"
           case _       => "site.no"
         }
@@ -104,7 +104,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
 
   }
 
-  def secondaryContactNamePage(): Option[SummaryListRow] = userAnswers.get(SndContactNamePage) map {
+  def secondaryContactNamePage(): Option[SummaryListRow] = userAnswers.get(SecondContactNamePage) map {
     x =>
       SummaryListRowViewModel(
         key = "checkYourAnswers.name.checkYourAnswersLabel",
@@ -117,7 +117,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
       )
   }
 
-  def secondaryContactEmailPage(): Option[SummaryListRow] = userAnswers.get(SndContactEmailPage) map {
+  def secondaryContactEmailPage(): Option[SummaryListRow] = userAnswers.get(SecondContactEmailPage) map {
     x =>
       SummaryListRowViewModel(
         key = "checkYourAnswers.name.checkYourAnswersLabel",
@@ -130,7 +130,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
       )
   }
 
-  def secondaryContactPhonePage(): Option[SummaryListRow] = userAnswers.get(SndContactPhonePage) map {
+  def secondaryContactPhonePage(): Option[SummaryListRow] = userAnswers.get(SecondContactPhonePage) map {
     x =>
       SummaryListRowViewModel(
         key = "checkYourAnswers.name.checkYourAnswersLabel",

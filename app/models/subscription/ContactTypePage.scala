@@ -44,6 +44,6 @@ object ContactTypePage {
     PrimaryContactDetailsPages(ContactNamePage, ContactEmailPage, ContactPhonePage, HaveTelephonePage)
 
   implicit val secondaryContactDetailsPages: SecondaryContactDetailsPages =
-    SecondaryContactDetailsPages(SndContactNamePage, SndContactEmailPage, SndContactPhonePage, HaveTelephonePage)
+    SecondaryContactDetailsPages(SecondContactNamePage, SecondContactEmailPage, SecondContactPhonePage, HaveTelephonePage)
 
 }

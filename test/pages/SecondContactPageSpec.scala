@@ -39,22 +39,22 @@ class SecondContactPageSpec extends PageBehaviours {
               .set(SecondContactPage, true)
               .success
               .value
-              .set(SndContactNamePage, "name")
+              .set(SecondContactNamePage, "name")
               .success
               .value
-              .set(SndContactEmailPage, "test@gmail.com")
+              .set(SecondContactEmailPage, "test@gmail.com")
               .success
               .value
-              .set(SndContactPhonePage, "112233445566")
+              .set(SecondContactPhonePage, "112233445566")
               .success
               .value
               .set(SecondContactPage, false)
               .success
               .value
 
-            result.get(SndContactNamePage) must not be defined
-            result.get(SndContactEmailPage) must not be defined
-            result.get(SndContactPhonePage) must not be defined
+            result.get(SecondContactNamePage) must not be defined
+            result.get(SecondContactEmailPage) must not be defined
+            result.get(SecondContactPhonePage) must not be defined
         }
       }
 
@@ -63,22 +63,22 @@ class SecondContactPageSpec extends PageBehaviours {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
             val result = userAnswers
-              .set(SndContactNamePage, "name")
+              .set(SecondContactNamePage, "name")
               .success
               .value
-              .set(SndContactEmailPage, "test@gmail.com")
+              .set(SecondContactEmailPage, "test@gmail.com")
               .success
               .value
-              .set(SndContactPhonePage, "112233445566")
+              .set(SecondContactPhonePage, "112233445566")
               .success
               .value
               .set(SecondContactPage, true)
               .success
               .value
 
-            result.get(SndContactNamePage) mustBe defined
-            result.get(SndContactEmailPage) mustBe defined
-            result.get(SndContactPhonePage) mustBe defined
+            result.get(SecondContactNamePage) mustBe defined
+            result.get(SecondContactEmailPage) mustBe defined
+            result.get(SecondContactPhonePage) mustBe defined
         }
       }
     }

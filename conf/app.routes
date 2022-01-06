@@ -50,3 +50,28 @@ POST       /report/change-contact/:affinityType/phone                        con
 
 GET         /report/change-contact/:affinityType/have-phone                        controllers.HaveTelephoneController.onPageLoad(mode: Mode = CheckMode, affinityType: models.AffinityType)
 POST       /report/change-contact/:affinityType/have-phone                        controllers.HaveTelephoneController.onSubmit(mode: Mode = CheckMode, affinityType: models.AffinityType)
+
+GET        /haveSecondContact                        controllers.HaveSecondContactController.onPageLoad(mode: Mode = NormalMode)
+POST       /haveSecondContact                        controllers.HaveSecondContactController.onSubmit(mode: Mode = NormalMode)
+GET        /changeHaveSecondContact                  controllers.HaveSecondContactController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeHaveSecondContact                  controllers.HaveSecondContactController.onSubmit(mode: Mode = CheckMode)
+
+GET        /secondContactEmail                        controllers.SecondContactEmailController.onPageLoad(mode: Mode = NormalMode)
+POST       /secondContactEmail                        controllers.SecondContactEmailController.onSubmit(mode: Mode = NormalMode)
+GET        /changeSecondContactEmail                  controllers.SecondContactEmailController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeSecondContactEmail                  controllers.SecondContactEmailController.onSubmit(mode: Mode = CheckMode)
+
+GET        /secondContactHavePhone                        controllers.SecondContactHavePhoneController.onPageLoad(mode: Mode = NormalMode)
+POST       /secondContactHavePhone                        controllers.SecondContactHavePhoneController.onSubmit(mode: Mode = NormalMode)
+GET        /changeSecondContactHavePhone                  controllers.SecondContactHavePhoneController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeSecondContactHavePhone                  controllers.SecondContactHavePhoneController.onSubmit(mode: Mode = CheckMode)
+
+GET        /secondContactName                        controllers.SecondContactNameController.onPageLoad(mode: Mode = NormalMode)
+POST       /secondContactName                        controllers.SecondContactNameController.onSubmit(mode: Mode = NormalMode)
+GET        /changeSecondContactName                  controllers.SecondContactNameController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeSecondContactName                  controllers.SecondContactNameController.onSubmit(mode: Mode = CheckMode)
+
+GET        /secondContactPhone                        controllers.SecondContactPhoneController.onPageLoad(mode: Mode = NormalMode)
+POST       /secondContactPhone                        controllers.SecondContactPhoneController.onSubmit(mode: Mode = NormalMode)
+GET        /changeSecondContactPhone                  controllers.SecondContactPhoneController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeSecondContactPhone                  controllers.SecondContactPhoneController.onSubmit(mode: Mode = CheckMode)
