@@ -76,7 +76,7 @@ class SubscriptionServiceSpec extends SpecBase {
 
         val result = service.getContactDetails(emptyUserAnswers)
 
-        val ua = result.futureValue.right.get
+        val ua = result.futureValue.value
 
         ua.get(ContactNamePage) mustBe Some("acme")
         ua.get(ContactEmailPage) mustBe Some("test@test.com")
@@ -109,7 +109,7 @@ class SubscriptionServiceSpec extends SpecBase {
 
         val result = service.getContactDetails(emptyUserAnswers)
 
-        val ua = result.futureValue.right.get
+        val ua = result.futureValue.value
 
         ua.get(ContactEmailPage) mustBe Some("test@test.com")
         ua.get(ContactPhonePage) mustBe Some("99999")

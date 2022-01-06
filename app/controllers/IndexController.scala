@@ -31,6 +31,7 @@ import views.html.IndexView
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class IndexController @Inject() (
   val controllerComponents: MessagesControllerComponents,
@@ -49,15 +50,15 @@ class IndexController @Inject() (
         case Individual   => controllers.routes.ChangeIndividualContactDetailsController.onPageLoad().url
         case Organisation => controllers.routes.ChangeOrganisationContactDetailsController.onPageLoad().url
       }
-      {
-        for {
-          userAnswers <- EitherT(subscriptionService.getContactDetails(UserAnswers(request.userId)))
-          _           <- EitherT.right[Throwable](sessionRepository.set(userAnswers))
-        } yield Ok(view(request.subscriptionId, changeDetailsUrl))
-      }.valueOr {
-        error =>
-          logger.warn("There Is a Problem", error)
-          Redirect(routes.ThereIsAProblemController.onPageLoad())
+
+      subscriptionService.getContactDetails(UserAnswers(request.userId)) flatMap {
+        case Some(userAnswers) =>
+          sessionRepository.set(userAnswers) map {
+            _ =>
+              Ok(view(request.subscriptionId, changeDetailsUrl))
+          }
+        case _ =>
+          Future.successful(Redirect(routes.ThereIsAProblemController.onPageLoad()))
       }
   }
 }
