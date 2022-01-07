@@ -18,7 +18,7 @@ package viewmodels
 
 import controllers.routes
 import models.requests.DataRequest
-import models.{AffinityType, CheckMode, UserAnswers}
+import models.{AffinityType, UserAnswers}
 import pages._
 import play.api.i18n.Messages
 import play.api.mvc.AnyContent
@@ -85,14 +85,14 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
         key = "haveSecondContact.checkYourAnswersLabel",
         value = ValueViewModel(HtmlFormat.escape(s"${messages(yesNo)}").toString),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.HaveSecondContactController.onPageLoad(CheckMode).url)
+          ActionItemViewModel("site.change", routes.HaveSecondContactController.onPageLoad().url)
             .withAttribute(("id", "second-contact"))
             .withVisuallyHiddenText(" if you have a second contact")
         )
       )
     Some(userAnswers.get(HaveSecondContactPage) match {
       case Some(x) =>
-        val yesNo = if (x) "site.no" else "site.yes"
+        val yesNo = if (x) "site.yes" else "site.no"
         summaryView(yesNo)
       case None =>
         val yesNo = userAnswers.get(SecondContactNamePage) match {
@@ -110,7 +110,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
         key = "secondContactName.checkYourAnswersLabel",
         value = ValueViewModel(HtmlFormat.escape(s"$x").toString),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.SecondContactNameController.onPageLoad(CheckMode).url)
+          ActionItemViewModel("site.change", routes.SecondContactNameController.onPageLoad().url)
             .withAttribute(("id", "snd-contact-name"))
             .withVisuallyHiddenText(" second contact name")
         )
@@ -123,7 +123,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
         key = "secondContactEmail.checkYourAnswersLabel",
         value = ValueViewModel(HtmlFormat.escape(s"$x").toString),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.SecondContactEmailController.onPageLoad(CheckMode).url)
+          ActionItemViewModel("site.change", routes.SecondContactEmailController.onPageLoad().url)
             .withAttribute(("id", "snd-contact-email"))
             .withVisuallyHiddenText(" second contact email address")
         )
@@ -136,7 +136,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
         key = "secondContactPhone.checkYourAnswersLabel",
         value = ValueViewModel(HtmlFormat.escape(value).toString),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.SecondContactHavePhoneController.onPageLoad(CheckMode).url)
+          ActionItemViewModel("site.change", routes.SecondContactHavePhoneController.onPageLoad().url)
             .withAttribute(("id", "snd-contact-phone"))
             .withVisuallyHiddenText(" second contact telephone number")
         )

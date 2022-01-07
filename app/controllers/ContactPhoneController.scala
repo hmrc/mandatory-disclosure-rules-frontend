@@ -18,17 +18,16 @@ package controllers
 
 import controllers.actions._
 import forms.ContactPhoneFormProvider
-
-import javax.inject.Inject
 import models.{AffinityType, Mode, Organisation, UserAnswers}
-import navigation.{ContactDetailsNavigator, Navigator}
-import pages.{ContactNamePage, ContactPhonePage, HaveTelephonePage}
+import navigation.ContactDetailsNavigator
+import pages.{ContactNamePage, ContactPhonePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.ContactPhoneView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class ContactPhoneController @Inject() (

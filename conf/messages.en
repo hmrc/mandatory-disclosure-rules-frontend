@@ -153,12 +153,14 @@ haveTelephone.hint = We will use this to keep in touch and if we have any questi
 haveTelephone.error.required.individual = Select yes if we can contact you by telephone
 haveTelephone.error.required.organisation = Select yes if they can be contacted by telephone
 
+default.firstContact.name = your first contact
+default.secondContact.name = your second contact
+
 haveSecondContact.title = Is there someone else we can contact if your first contact is not available?
 haveSecondContact.heading = Is there someone else we can contact if {0} is not available?
 haveSecondContact.hint = This can be a team mailbox or another contact.
 haveSecondContact.checkYourAnswersLabel = Do you have a second contact?
 haveSecondContact.error.required = Select yes if there is someone else we can contact
-haveSecondContact.change.hidden = Change if you have a second contact
 
 secondContactEmail.title = What is their email address?
 secondContactEmail.heading = What is the email address for {0}?
@@ -167,14 +169,11 @@ secondContactEmail.checkYourAnswersLabel = Second contact email address
 secondContactEmail.error.required = Enter an email address
 secondContactEmail.error.length = Email address must be 256 characters or less
 secondContactEmail.error.invalid = Enter an email address in the correct format, like name@example.com
-secondContactEmail.change.hidden = Change second contact email address
 
 secondContactHavePhone.title = Can we contact them by telephone?
 secondContactHavePhone.heading = Can we contact {0} by telephone?
-secondConHavePhone.hint = We will use this to keep in touch and if we have any questions about your reports.
-secondContactHavePhone.checkYourAnswersLabel = Can we contact them by telephone?
+secondContactHavePhone.hint = We will use this to keep in touch and if we have any questions about your reports.
 secondContactHavePhone.error.required = Select yes if they can be contacted by telephone
-secondContactHavePhone.change.hidden = Change if we contact them by telephone
 
 secondContactName.title = What is the name of the individual or team we should contact?
 secondContactName.heading = What is the name of the individual or team we should contact?
@@ -183,7 +182,6 @@ secondContactName.checkYourAnswersLabel = Second contact name
 secondContactName.error.required = Enter the name of the individual or team we should contact
 secondContactName.error.invalid = Name of the individual or team must only include letters a to z, numbers 0 to 9, apostrophes, grave accents, ampersands, hyphens, backslashes, carets and spaces
 secondContactName.error.length = Contact name must be 35 characters or less
-secondContactName.change.hidden = Change second contact name
 
 secondContactPhone.title = What is their telephone number?
 secondContactPhone.heading = What is the telephone number for {0}?
@@ -192,4 +190,3 @@ secondContactPhone.checkYourAnswersLabel = Second contact telephone number
 secondContactPhone.error.required = Enter a telephone number
 secondContactPhone.error.invalid = Enter a telephone number in the correct format
 secondContactPhone.error.length = Contact phone must be 17 characters or less
-secondContactPhone.change.hidden = Change second contact telephone number

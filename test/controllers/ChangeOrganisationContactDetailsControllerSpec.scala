@@ -17,11 +17,8 @@
 package controllers
 
 import base.SpecBase
-import config.FrontendAppConfig
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.ChangeOrganisationContactDetailsView
-import viewmodels.govuk.summarylist._
 
 class ChangeOrganisationContactDetailsControllerSpec extends SpecBase {
 

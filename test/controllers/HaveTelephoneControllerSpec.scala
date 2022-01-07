@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import forms.HaveTelephoneFormProvider
-import models.{CheckMode, NormalMode, Organisation, UserAnswers}
+import models.{NormalMode, Organisation, UserAnswers}
 import navigation.{ContactDetailsNavigator, FakeContactDetailsNavigator}
 import org.mockito.ArgumentMatchers.any
 import org.scalatestplus.mockito.MockitoSugar

@@ -42,17 +42,17 @@ class ContactDetailsNavigator @Inject() () {
         yesNoPage(
           ua,
           HaveSecondContactPage,
-          routes.SecondContactNameController.onPageLoad(CheckMode),
+          routes.SecondContactNameController.onPageLoad(),
           routes.ChangeOrganisationContactDetailsController.onPageLoad()
         )
-    case (SecondContactNamePage, Organisation)  => _ => routes.SecondContactEmailController.onPageLoad(CheckMode)
-    case (SecondContactEmailPage, Organisation) => _ => routes.SecondContactHavePhoneController.onPageLoad(CheckMode)
+    case (SecondContactNamePage, Organisation)  => _ => routes.SecondContactEmailController.onPageLoad()
+    case (SecondContactEmailPage, Organisation) => _ => routes.SecondContactHavePhoneController.onPageLoad()
     case (SecondContactHavePhonePage, Organisation) =>
       ua =>
         yesNoPage(
           ua,
           SecondContactHavePhonePage,
-          routes.SecondContactPhoneController.onPageLoad(CheckMode),
+          routes.SecondContactPhoneController.onPageLoad(),
           routes.ChangeOrganisationContactDetailsController.onPageLoad()
         )
     case (SecondContactPhonePage, Organisation) => _ => routes.ChangeOrganisationContactDetailsController.onPageLoad()

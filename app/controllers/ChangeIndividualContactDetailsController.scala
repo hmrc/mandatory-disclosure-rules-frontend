@@ -18,15 +18,14 @@ package controllers
 
 import config.FrontendAppConfig
 import controllers.actions._
-import models.AffinityType
-
-import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.CheckYourAnswersHelper
-import views.html.ChangeIndividualContactDetailsView
 import viewmodels.govuk.summarylist._
+import views.html.ChangeIndividualContactDetailsView
+
+import javax.inject.Inject
 
 class ChangeIndividualContactDetailsController @Inject() (
   override val messagesApi: MessagesApi,

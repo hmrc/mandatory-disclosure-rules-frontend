@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import forms.SecondContactEmailFormProvider
-import models.{NormalMode, UserAnswers}
+import models.UserAnswers
 import navigation.{ContactDetailsNavigator, FakeContactDetailsNavigator}
 import org.mockito.ArgumentMatchers.any
 import org.scalatestplus.mockito.MockitoSugar
@@ -41,7 +41,7 @@ class SecondContactEmailControllerSpec extends SpecBase with MockitoSugar {
 
   private val name = "Second Contact Name"
 
-  lazy val secondContactEmailRoute = routes.SecondContactEmailController.onPageLoad(NormalMode).url
+  lazy val secondContactEmailRoute = routes.SecondContactEmailController.onPageLoad().url
 
   "SecondContactEmail Controller" - {
 
@@ -59,7 +59,7 @@ class SecondContactEmailControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[SecondContactEmailView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, name, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, name)(request, messages(application)).toString
       }
     }
 
@@ -83,7 +83,7 @@ class SecondContactEmailControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill("answer"), name, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill("answer"), name)(request, messages(application)).toString
       }
     }
 
@@ -131,7 +131,7 @@ class SecondContactEmailControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, name, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, name)(request, messages(application)).toString
       }
     }
 

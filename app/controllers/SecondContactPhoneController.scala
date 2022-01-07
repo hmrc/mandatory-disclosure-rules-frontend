@@ -18,10 +18,10 @@ package controllers
 
 import controllers.actions._
 import forms.SecondContactPhoneFormProvider
-import models.{AffinityType, Mode, UserAnswers}
+import models.{AffinityType, CheckMode, UserAnswers}
 import navigation.ContactDetailsNavigator
 import pages.{SecondContactNamePage, SecondContactPhonePage}
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -46,33 +46,33 @@ class SecondContactPhoneController @Inject() (
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData() andThen requireData) {
+  def onPageLoad(): Action[AnyContent] = (identify andThen getData() andThen requireData) {
     implicit request =>
       val preparedForm = request.userAnswers.get(SecondContactPhonePage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, getSecondContactName(request.userAnswers), mode))
+      Ok(view(preparedForm, getSecondContactName(request.userAnswers)))
   }
 
-  private def getSecondContactName(userAnswers: UserAnswers): String =
+  private def getSecondContactName(userAnswers: UserAnswers)(implicit messages: Messages): String =
     (userAnswers.get(SecondContactNamePage)) match {
       case Some(contactName) => contactName
-      case _                 => ""
+      case _                 => messages("default.secondContact.name")
     }
 
-  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
+  def onSubmit(): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, getSecondContactName(request.userAnswers), mode))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, getSecondContactName(request.userAnswers)))),
           value =>
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(SecondContactPhonePage, value))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(SecondContactPhonePage, AffinityType(request.userType), mode, updatedAnswers))
+            } yield Redirect(navigator.nextPage(SecondContactPhonePage, AffinityType(request.userType), CheckMode, updatedAnswers))
         )
   }
 }
