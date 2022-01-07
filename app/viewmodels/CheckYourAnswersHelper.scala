@@ -41,7 +41,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
         actions = Seq(
           ActionItemViewModel("site.change", routes.IndexController.onPageLoad().url)
             .withAttribute(("id", "contact-name"))
-            .withVisuallyHiddenText(" contact name")
+            .withVisuallyHiddenText(messages("contactName.change.hidden"))
         )
       )
   }
@@ -54,7 +54,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
         actions = Seq(
           ActionItemViewModel("site.change", routes.ContactEmailController.onPageLoad(affinityType).url)
             .withAttribute(("id", "contact-email"))
-            .withVisuallyHiddenText(" email address")
+            .withVisuallyHiddenText(messages("contactEmail.change.hidden"))
         )
       )
   }
@@ -67,7 +67,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
         actions = Seq(
           ActionItemViewModel("site.change", routes.HaveTelephoneController.onPageLoad(affinityType).url)
             .withAttribute(("id", "contact-phone"))
-            .withVisuallyHiddenText(" telephone number")
+            .withVisuallyHiddenText(messages("contactPhone.change.hidden"))
         )
       )
 
@@ -87,7 +87,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
         actions = Seq(
           ActionItemViewModel("site.change", routes.HaveSecondContactController.onPageLoad().url)
             .withAttribute(("id", "second-contact"))
-            .withVisuallyHiddenText(" if you have a second contact")
+            .withVisuallyHiddenText(messages("haveSecondContact.change.hidden"))
         )
       )
     Some(userAnswers.get(HaveSecondContactPage) match {
@@ -112,7 +112,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
         actions = Seq(
           ActionItemViewModel("site.change", routes.SecondContactNameController.onPageLoad().url)
             .withAttribute(("id", "snd-contact-name"))
-            .withVisuallyHiddenText(" second contact name")
+            .withVisuallyHiddenText(messages("secondContactName.change.hidden"))
         )
       )
   }
@@ -125,7 +125,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
         actions = Seq(
           ActionItemViewModel("site.change", routes.SecondContactEmailController.onPageLoad().url)
             .withAttribute(("id", "snd-contact-email"))
-            .withVisuallyHiddenText(" second contact email address")
+            .withVisuallyHiddenText(messages("secondContactEmail.change.hidden"))
         )
       )
   }
@@ -138,7 +138,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
         actions = Seq(
           ActionItemViewModel("site.change", routes.SecondContactHavePhoneController.onPageLoad().url)
             .withAttribute(("id", "snd-contact-phone"))
-            .withVisuallyHiddenText(" second contact telephone number")
+            .withVisuallyHiddenText(messages("secondContactPhone.change.hidden"))
         )
       )
 
