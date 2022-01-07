@@ -48,7 +48,7 @@ class SubscriptionServiceSpec extends SpecBase {
             |"subscriptionID": "111111111",
             |"tradingName": "",
             |"isGBUser": true,
-            |"primaryContact": [
+            |"primaryContact":
             |{
             |"email": "test@test.com",
             |"phone": "99999",
@@ -56,9 +56,8 @@ class SubscriptionServiceSpec extends SpecBase {
             |"organisation": {
             |"organisationName": "acme"
             |}
-            |}
-            |],
-            |"secondaryContact": [
+            |},
+            |"secondaryContact":
             |{
             |"email": "test@test.com",
             |"phone": "99999",
@@ -67,7 +66,6 @@ class SubscriptionServiceSpec extends SpecBase {
             |"organisationName": "wer"
             |}
             |}
-            |]
             |}""".stripMargin
 
         val responseDetail = Json.parse(responseDetailString).as[ResponseDetail]
@@ -76,7 +74,7 @@ class SubscriptionServiceSpec extends SpecBase {
 
         val result = service.getContactDetails(emptyUserAnswers)
 
-        val ua = result.futureValue.right.get
+        val ua = result.futureValue.value
 
         ua.get(ContactNamePage) mustBe Some("acme")
         ua.get(ContactEmailPage) mustBe Some("test@test.com")
@@ -90,7 +88,7 @@ class SubscriptionServiceSpec extends SpecBase {
             |"subscriptionID": "111111111",
             |"tradingName": "",
             |"isGBUser": true,
-            |"primaryContact": [
+            |"primaryContact":
             |{
             |"email": "test@test.com",
             |"phone": "99999",
@@ -100,7 +98,7 @@ class SubscriptionServiceSpec extends SpecBase {
             |"lastName" : "lname"
             |}
             |}
-            |]
+            |
             |}""".stripMargin
 
         val responseDetail = Json.parse(responseDetailString).as[ResponseDetail]
@@ -109,7 +107,7 @@ class SubscriptionServiceSpec extends SpecBase {
 
         val result = service.getContactDetails(emptyUserAnswers)
 
-        val ua = result.futureValue.right.get
+        val ua = result.futureValue.value
 
         ua.get(ContactEmailPage) mustBe Some("test@test.com")
         ua.get(ContactPhonePage) mustBe Some("99999")

@@ -16,8 +16,6 @@
 
 package services
 
-import cats.data.EitherT
-import cats.implicits._
 import connectors.SubscriptionConnector
 import models.UserAnswers
 import models.subscription._
@@ -29,47 +27,40 @@ import scala.util.Try
 
 class SubscriptionService @Inject() (subscriptionConnector: SubscriptionConnector)(implicit ec: ExecutionContext) {
 
-  def getContactDetails(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Either[Throwable, UserAnswers]] =
-    subscriptionConnector.readSubscription flatMap {
-      case Some(details) => populateUserAnswers(details, userAnswers)
-      case None =>
-        Future.successful(Left(ReadSubscriptionInfoMissing()))
+  def getContactDetails(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Option[UserAnswers]] =
+    subscriptionConnector.readSubscription map {
+      responseOpt =>
+        responseOpt.flatMap {
+          responseDetail =>
+            populateUserAnswers(responseDetail, userAnswers)
+        }
     }
 
-  private def populateUserAnswers(responseDetail: ResponseDetail, userAnswers: UserAnswers): Future[Either[Throwable, UserAnswers]] = {
-    for {
-      uaWithPrimaryContact <- EitherT.right[Throwable](
-        Future.fromTry(populateContactInfo[PrimaryContactDetailsPages](userAnswers, responseDetail.primaryContact.contactInformation))
-      )
-      userAnswers <- EitherT.right[Throwable](
-        Future.fromTry(
-          responseDetail.secondaryContact
-            .map {
-              sc => populateContactInfo[SecondaryContactDetailsPages](uaWithPrimaryContact, sc.contactInformation)
-            }
-            .getOrElse(Try(uaWithPrimaryContact))
-        )
-      )
-    } yield userAnswers
-  }.value
+  private def populateUserAnswers(responseDetail: ResponseDetail, userAnswers: UserAnswers): Option[UserAnswers] =
+    populateContactInfo[PrimaryContactDetailsPages](userAnswers, responseDetail.primaryContact) map {
+      uaWithPrimaryContact =>
+        responseDetail.secondaryContact
+          .flatMap {
+            sc => populateContactInfo[SecondaryContactDetailsPages](uaWithPrimaryContact, sc)
+          }
+          .getOrElse(uaWithPrimaryContact)
+    }
 
-  private def populateContactInfo[T <: ContactTypePage](userAnswers: UserAnswers, contactInformation: Seq[ContactInformation])(implicit
+  private def populateContactInfo[T <: ContactTypePage](userAnswers: UserAnswers, contactInformation: ContactInformation)(implicit
     contactTypePage: T
-  ): Try[UserAnswers] =
-    contactInformation.head match {
-      case contactInformationForOrganisation: ContactInformationForOrganisation =>
-        for {
-          uaWithContactName   <- userAnswers.set(contactTypePage.contactNamePage, contactInformationForOrganisation.organisation.organisationName)
-          uaWithEmail         <- uaWithContactName.set(contactTypePage.contactEmailPage, contactInformationForOrganisation.email)
-          uaWithTelephone     <- uaWithEmail.set(contactTypePage.contactTelephonePage, contactInformationForOrganisation.phone.getOrElse(""))
-          uaWithHaveTelephone <- uaWithTelephone.set(contactTypePage.haveTelephonePage, contactInformationForOrganisation.phone.exists(_.nonEmpty))
-        } yield uaWithHaveTelephone
-      case contactInformationForIndividual: ContactInformationForIndividual =>
-        for {
-          uaWithEmail         <- userAnswers.set(contactTypePage.contactEmailPage, contactInformationForIndividual.email)
-          uaWithTelephone     <- uaWithEmail.set(contactTypePage.contactTelephonePage, contactInformationForIndividual.phone.getOrElse(""))
-          uaWithHaveTelephone <- uaWithTelephone.set(contactTypePage.haveTelephonePage, contactInformationForIndividual.phone.exists(_.nonEmpty))
-        } yield uaWithHaveTelephone
+  ): Option[UserAnswers] = {
+
+    def updateOrgName(userAnswers: UserAnswers): Try[UserAnswers] = contactInformation.contactType match {
+      case organisationDetails: OrganisationDetails => userAnswers.set(contactTypePage.contactNamePage, organisationDetails.organisationName)
+      case _                                        => Try(userAnswers)
     }
 
+    (for {
+      uaWithEmail         <- userAnswers.set(contactTypePage.contactEmailPage, contactInformation.email)
+      uaWithTelephone     <- uaWithEmail.set(contactTypePage.contactTelephonePage, contactInformation.phone.getOrElse(""))
+      uaWithHaveTelephone <- uaWithTelephone.set(contactTypePage.haveTelephonePage, contactInformation.phone.exists(_.nonEmpty))
+      updatedAnswers      <- updateOrgName(uaWithHaveTelephone)
+    } yield updatedAnswers).toOption
+
+  }
 }

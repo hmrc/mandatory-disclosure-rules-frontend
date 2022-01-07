@@ -18,7 +18,7 @@ package viewmodels
 
 import controllers.routes
 import models.requests.DataRequest
-import models.{AffinityType, CheckMode, UserAnswers}
+import models.{AffinityType, UserAnswers}
 import pages._
 import play.api.i18n.Messages
 import play.api.mvc.AnyContent

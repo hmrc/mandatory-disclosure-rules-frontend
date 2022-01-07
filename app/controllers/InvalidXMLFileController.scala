@@ -19,13 +19,12 @@ package controllers
 import controllers.actions._
 import handlers.ErrorHandler
 import pages.InvalidXMLPage
-
-import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.InvalidXMLFileView
 
+import javax.inject.Inject
 import scala.concurrent.Future
 
 class InvalidXMLFileController @Inject() (
