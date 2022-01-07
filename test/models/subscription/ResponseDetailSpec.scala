@@ -39,49 +39,7 @@ class ResponseDetailSpec extends AnyFreeSpec with Matchers {
           |   "subscriptionID": "yu789428932",
           |   "tradingName": "Tools for Traders",
           |   "isGBUser": true,
-          |   "primaryContact": [
-          |    {
-          |     "email": "Tim@toolsfortraders.com",
-          |     "phone": "078803423883",
-          |     "mobile": "078803423883",
-          |     "individual": {
-          |      "lastName": "Taylor",
-          |      "firstName": "Tim"
-          |     }
-          |    }
-          |   ],
-          |   "secondaryContact": [
-          |    {
-          |     "email": "contact@toolsfortraders.com",
-          |     "organisation": {
-          |      "organisationName": "Tools for Traders Limited"
-          |     }
-          |    }
-          |    ]
-          |    }
-          |""".stripMargin
-
-      Json.parse(json).as[ResponseDetail] mustBe expectedResponseDetails
-
-    }
-
-    "must read single primary contact even if json returns multiple" in {
-
-      val expectedResult = ResponseDetail(
-        "yu789428932",
-        Some("Tools for Traders"),
-        true,
-        ContactInformation(IndividualDetails("Tim", None, "Taylor"), "Tim@toolsfortraders.com", Some("078803423883"), Some("078803423883")),
-        None
-      )
-
-      val json: String =
-        """
-          |   {
-          |   "subscriptionID": "yu789428932",
-          |   "tradingName": "Tools for Traders",
-          |   "isGBUser": true,
-          |   "primaryContact": [
+          |   "primaryContact":
           |    {
           |     "email": "Tim@toolsfortraders.com",
           |     "phone": "078803423883",
@@ -91,21 +49,19 @@ class ResponseDetailSpec extends AnyFreeSpec with Matchers {
           |      "firstName": "Tim"
           |     }
           |    },
+          |   "secondaryContact":
           |    {
-          |     "email": "Tim@toolsfortraders.com",
-          |     "phone": "078803423883",
-          |     "mobile": "078803423883",
-          |     "individual": {
-          |      "lastName": "Taylor",
-          |      "firstName": "Tim"
+          |     "email": "contact@toolsfortraders.com",
+          |     "organisation": {
+          |      "organisationName": "Tools for Traders Limited"
           |     }
           |    }
-          |   ]
           |    }
           |""".stripMargin
 
-      Json.parse(json).as[ResponseDetail] mustBe expectedResult
+      Json.parse(json).as[ResponseDetail] mustBe expectedResponseDetails
 
     }
+
   }
 }

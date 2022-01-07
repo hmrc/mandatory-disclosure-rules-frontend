@@ -16,8 +16,6 @@
 
 package controllers
 
-import cats.data.EitherT
-import cats.implicits._
 import controllers.actions.{DataRetrievalAction, IdentifierAction}
 import models.UserAnswers
 import play.api.Logging

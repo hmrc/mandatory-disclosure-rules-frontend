@@ -18,9 +18,9 @@ package controllers
 
 import controllers.actions._
 import forms.ContactEmailFormProvider
-import models.{AffinityType, Mode, Organisation, UserAnswers}
+import models.{AffinityType, Mode}
 import navigation.ContactDetailsNavigator
-import pages.{ContactEmailPage, ContactNamePage, ContactPhonePage, HaveTelephonePage}
+import pages.ContactEmailPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository

@@ -17,7 +17,7 @@
 package models.subscription
 
 import play.api.Logger
-import play.api.libs.json.{__, Reads}
+import play.api.libs.json.{Json, Reads}
 
 case class ResponseDetail(subscriptionID: String,
                           tradingName: Option[String],
@@ -30,20 +30,6 @@ object ResponseDetail {
 
   val logger = Logger.apply(getClass)
 
-  implicit lazy val reads: Reads[ResponseDetail] = {
-    import play.api.libs.functional.syntax._
+  implicit lazy val reads: Reads[ResponseDetail] = Json.reads[ResponseDetail]
 
-    (
-      (__ \ "subscriptionID").read[String] and
-        (__ \ "tradingName").readNullable[String] and
-        (__ \ "isGBUser").read[Boolean] and
-        (__ \ "primaryContact").read[Seq[ContactInformation]] and
-        (__ \ "secondaryContact").readNullable[Seq[ContactInformation]]
-    ) {
-      (subscriptionID, tradingName, isGBUser, primaryContact, secondaryContact) =>
-        logger.info(s"ResponseDetail: received ${primaryContact.size} primary contacts and ${secondaryContact.getOrElse(0)} secondaryContacts")
-
-        ResponseDetail(subscriptionID, tradingName, isGBUser, primaryContact.head, secondaryContact.map(_.head))
-    }
-  }
 }
