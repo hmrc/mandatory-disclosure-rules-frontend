@@ -47,7 +47,7 @@ class SubscriptionConnectorSpec extends SpecBase with WireMockHelper with Genera
       |"subscriptionID": "111111111",
       |"tradingName": "",
       |"isGBUser": true,
-      |"primaryContact": [
+      |"primaryContact":
       |{
       |"email": "",
       |"phone": "",
@@ -56,16 +56,14 @@ class SubscriptionConnectorSpec extends SpecBase with WireMockHelper with Genera
       |"lastName": "Last",
       |"firstName": "First"
       |}
-      |}
-      |],
-      |"secondaryContact": [
+      |},
+      |"secondaryContact":
       |{
       |"email": "",
       |"organisation": {
       |"organisationName": ""
       |}
       |}
-      |]
       |}""".stripMargin
 
   val responseDetail = Json.parse(responseDetailString).as[ResponseDetail]

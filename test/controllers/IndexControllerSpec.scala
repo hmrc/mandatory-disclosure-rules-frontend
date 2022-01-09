@@ -47,7 +47,7 @@ class IndexControllerSpec extends SpecBase {
 
       val userAnswers = UserAnswers("id")
       when(mockSubscriptionService.getContactDetails(any[UserAnswers]())(any[HeaderCarrier]()))
-        .thenReturn(Future.successful(Right(userAnswers)))
+        .thenReturn(Future.successful(Some(userAnswers)))
       when(mockSessionRepository.set(any[UserAnswers]())).thenReturn(Future.successful(true))
 
       running(application) {
@@ -78,7 +78,7 @@ class IndexControllerSpec extends SpecBase {
         .build()
 
       when(mockSubscriptionService.getContactDetails(any[UserAnswers]())(any[HeaderCarrier]()))
-        .thenReturn(Future.successful(Left(new Exception("error"))))
+        .thenReturn(Future.successful(None))
       when(mockSessionRepository.set(any[UserAnswers]())).thenReturn(Future.successful(true))
 
       running(application) {

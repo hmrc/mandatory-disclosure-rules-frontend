@@ -16,15 +16,20 @@
 
 package models.subscription
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.Logger
+import play.api.libs.json.{Json, Reads}
 
 case class ResponseDetail(subscriptionID: String,
                           tradingName: Option[String],
                           isGBUser: Boolean,
-                          primaryContact: PrimaryContact,
-                          secondaryContact: Option[SecondaryContact]
+                          primaryContact: ContactInformation,
+                          secondaryContact: Option[ContactInformation]
 )
 
 object ResponseDetail {
-  implicit val format: OFormat[ResponseDetail] = Json.format[ResponseDetail]
+
+  val logger = Logger.apply(getClass)
+
+  implicit lazy val reads: Reads[ResponseDetail] = Json.reads[ResponseDetail]
+
 }
