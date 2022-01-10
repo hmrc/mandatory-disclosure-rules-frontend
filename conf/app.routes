@@ -38,15 +38,30 @@ GET         /report/problem/invalid-xml-file             controllers.InvalidXMLF
 
 GET         /report/fileValidation                       controllers.FileValidationController.onPageLoad()
 
-GET        /report/change-contact/individual/details                       controllers.ChangeIndividualContactDetailsController.onPageLoad()
+GET         /report/change-contact/individual/details                         controllers.ChangeIndividualContactDetailsController.onPageLoad()
 
-GET       /report/change-contact/organisation/details                       controllers.ChangeOrganisationContactDetailsController.onPageLoad()
+GET         /report/change-contact/organisation/details                       controllers.ChangeOrganisationContactDetailsController.onPageLoad()
 
-GET       /report/change-contact/:affinityType/email                        controllers.ContactEmailController.onPageLoad(mode: Mode = CheckMode, affinityType: models.AffinityType)
-POST      /report/change-contact/:affinityType/email                        controllers.ContactEmailController.onSubmit(mode: Mode = CheckMode, affinityType: models.AffinityType)
+GET         /report/change-contact/:affinityType/email                        controllers.ContactEmailController.onPageLoad(mode: Mode = CheckMode, affinityType: models.AffinityType)
+POST        /report/change-contact/:affinityType/email                        controllers.ContactEmailController.onSubmit(mode: Mode = CheckMode, affinityType: models.AffinityType)
 
-GET        /report/change-contact/:affinityType/phone                       controllers.ContactPhoneController.onPageLoad(mode: Mode = CheckMode, affinityType: models.AffinityType)
-POST       /report/change-contact/:affinityType/phone                        controllers.ContactPhoneController.onSubmit(mode: Mode = CheckMode, affinityType: models.AffinityType)
+GET         /report/change-contact/:affinityType/phone                        controllers.ContactPhoneController.onPageLoad(mode: Mode = CheckMode, affinityType: models.AffinityType)
+POST        /report/change-contact/:affinityType/phone                        controllers.ContactPhoneController.onSubmit(mode: Mode = CheckMode, affinityType: models.AffinityType)
 
-GET         /report/change-contact/:affinityType/have-phone                        controllers.HaveTelephoneController.onPageLoad(mode: Mode = CheckMode, affinityType: models.AffinityType)
-POST       /report/change-contact/:affinityType/have-phone                        controllers.HaveTelephoneController.onSubmit(mode: Mode = CheckMode, affinityType: models.AffinityType)
+GET         /report/change-contact/:affinityType/have-phone                   controllers.HaveTelephoneController.onPageLoad(mode: Mode = CheckMode, affinityType: models.AffinityType)
+POST        /report/change-contact/:affinityType/have-phone                   controllers.HaveTelephoneController.onSubmit(mode: Mode = CheckMode, affinityType: models.AffinityType)
+
+GET         /report/change-contact/organisation/have-second-contact           controllers.HaveSecondContactController.onPageLoad()
+POST        /report/change-contact/organisation/have-second-contact           controllers.HaveSecondContactController.onSubmit()
+
+GET         /report/change-contact/organisation/second-contact-email          controllers.SecondContactEmailController.onPageLoad()
+POST        /report/change-contact/organisation/second-contact-email          controllers.SecondContactEmailController.onSubmit()
+
+GET         /report/change-contact/organisation/second-contact-have-phone     controllers.SecondContactHavePhoneController.onPageLoad()
+POST        /report/change-contact/organisation/second-contact-have-phone     controllers.SecondContactHavePhoneController.onSubmit()
+
+GET         /report/change-contact/organisation/second-contact-name           controllers.SecondContactNameController.onPageLoad()
+POST        /report/change-contact/organisation/second-contact-name           controllers.SecondContactNameController.onSubmit()
+
+GET         /report/change-contact/organisation/second-contact-phone          controllers.SecondContactPhoneController.onPageLoad()
+POST        /report/change-contact/organisation/second-contact-phone          controllers.SecondContactPhoneController.onSubmit()

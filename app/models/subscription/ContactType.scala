@@ -18,6 +18,8 @@ package models.subscription
 
 import play.api.libs.json.{__, Reads}
 
+import scala.language.implicitConversions
+
 sealed trait ContactType
 
 object ContactType {

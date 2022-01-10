@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import pages.behaviours.PageBehaviours
+import javax.inject.Inject
 
-class SndContactEmailPageSpec extends PageBehaviours {
+import forms.mappings.Mappings
+import play.api.data.Form
 
-  "SndContactEmailPage" - {
+class HaveSecondContactFormProvider @Inject() extends Mappings {
 
-    beRetrievable[String](SndContactEmailPage)
-
-    beSettable[String](SndContactEmailPage)
-
-    beRemovable[String](SndContactEmailPage)
-  }
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("haveSecondContact.error.required")
+    )
 }

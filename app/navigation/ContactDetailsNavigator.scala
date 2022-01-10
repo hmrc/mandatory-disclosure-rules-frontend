@@ -37,7 +37,26 @@ class ContactDetailsNavigator @Inject() () {
     case (ContactPhonePage, Individual)   => _ => routes.ChangeIndividualContactDetailsController.onPageLoad()
     case (ContactPhonePage, Organisation) => _ => routes.ChangeOrganisationContactDetailsController.onPageLoad()
     case (HaveTelephonePage, affinity)    => ua => haveTelephoneRoutes(CheckMode, affinity)(ua) //ToDo do we need to clean telephone on No
-    case _                                => _ => routes.CheckYourAnswersController.onPageLoad()
+    case (HaveSecondContactPage, Organisation) =>
+      ua =>
+        yesNoPage(
+          ua,
+          HaveSecondContactPage,
+          routes.SecondContactNameController.onPageLoad(),
+          routes.ChangeOrganisationContactDetailsController.onPageLoad()
+        )
+    case (SecondContactNamePage, Organisation)  => _ => routes.SecondContactEmailController.onPageLoad()
+    case (SecondContactEmailPage, Organisation) => _ => routes.SecondContactHavePhoneController.onPageLoad()
+    case (SecondContactHavePhonePage, Organisation) =>
+      ua =>
+        yesNoPage(
+          ua,
+          SecondContactHavePhonePage,
+          routes.SecondContactPhoneController.onPageLoad(),
+          routes.ChangeOrganisationContactDetailsController.onPageLoad()
+        )
+    case (SecondContactPhonePage, Organisation) => _ => routes.ChangeOrganisationContactDetailsController.onPageLoad()
+    case _                                      => _ => routes.CheckYourAnswersController.onPageLoad()
   }
 
   private def haveTelephoneRoutes(mode: Mode, affinityType: AffinityType)(ua: UserAnswers): Call = {
@@ -50,6 +69,11 @@ class ContactDetailsNavigator @Inject() () {
         nextPage(ContactPhonePage, affinityType, mode, ua)
     }
   }
+
+  def yesNoPage(ua: UserAnswers, fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call): Call =
+    ua.get(fromPage)
+      .map(if (_) yesCall else noCall)
+      .getOrElse(routes.ThereIsAProblemController.onPageLoad())
 
   def nextPage(page: Page, affinityType: AffinityType, mode: Mode, userAnswers: UserAnswers): Call = mode match {
     case NormalMode =>

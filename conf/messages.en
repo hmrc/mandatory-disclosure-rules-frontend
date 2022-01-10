@@ -125,7 +125,7 @@ changeOrganisationContactDetails.secondary.heading = Second contact
 
 changeOrganisationContactDetails.landing-page.link = Back to report cross-border arrangements
 
-hasSecondContact.checkYourAnswersLabel = Do you have a second contact?
+contactName.change.hidden = " contact name"
 
 contactEmail.title = What is your email address?
 contactEmail.heading = What is your email address?
@@ -134,6 +134,7 @@ contactEmail.checkYourAnswersLabel = Email address
 contactEmail.error.required = Enter your email address
 contactEmail.error.length = Email address must be 256 characters or less
 contactEmail.error.invalid = Enter your email address in the correct format, like name@example.com
+contactEmail.change.hidden = email address
 
 contactPhone.checkYourAnswersLabel = Telephone number
 contactPhone.title.organisation = What is their telephone number?
@@ -142,9 +143,9 @@ contactPhone.heading.organisation = What is the telephone number for {0}?
 contactPhone.heading.individual = What is your telephone number?
 contactPhone.hint = Enter a telephone number, like&nbsp;01632&nbsp;960&nbsp;001, 07700&nbsp;900&nbsp;982 or +44&nbsp;808&nbsp;157&nbsp;0192.
 contactPhone.error.required = Enter a telephone number
-contactPhone.error.invalid = Enter a telephone number in the correct format
-contactPhone.error.length = Enter a telephone number in the correct format
-contactPhone.change.hidden = ContactPhone
+contactPhone.error.invalid = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192.
+contactPhone.error.length = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 0808 157 0192.
+contactPhone.change.hidden = telephone number
 
 haveTelephone.title.organisation = Can we contact them by telephone?
 haveTelephone.title.individual = Can we contact you by telephone?
@@ -154,3 +155,45 @@ haveTelephone.checkYourAnswersLabel = Telephone number
 haveTelephone.hint = We will use this to keep in touch and if we have any questions about your reports.
 haveTelephone.error.required.individual = Select yes if we can contact you by telephone
 haveTelephone.error.required.organisation = Select yes if they can be contacted by telephone
+
+default.firstContact.name = your first contact
+default.secondContact.name = your second contact
+
+haveSecondContact.title = Is there someone else we can contact if your first contact is not available?
+haveSecondContact.heading = Is there someone else we can contact if {0} is not available?
+haveSecondContact.hint = This can be a team mailbox or another contact.
+haveSecondContact.checkYourAnswersLabel = Do you have a second contact?
+haveSecondContact.error.required = Select yes if there is someone else we can contact
+haveSecondContact.change.hidden = if you have a second contact
+
+secondContactEmail.title = What is their email address?
+secondContactEmail.heading = What is the email address for {0}?
+secondContactEmail.hint = We will use this to send confirmation of your reports and if we have any questions about them.
+secondContactEmail.checkYourAnswersLabel = Second contact email address
+secondContactEmail.error.required = Enter an email address
+secondContactEmail.error.length = Email address must be 256 characters or less
+secondContactEmail.error.invalid = Enter an email address in the correct format, like name@example.com
+secondContactEmail.change.hidden = second contact email address
+
+secondContactHavePhone.title = Can we contact them by telephone?
+secondContactHavePhone.heading = Can we contact {0} by telephone?
+secondContactHavePhone.hint = We will use this to keep in touch and if we have any questions about your reports.
+secondContactHavePhone.error.required = Select yes if they can be contacted by telephone
+
+secondContactName.title = What is the name of the individual or team we should contact?
+secondContactName.heading = What is the name of the individual or team we should contact?
+secondContactName.hint = For example, ‘Tax team’ or ‘Ashley Smith’.
+secondContactName.checkYourAnswersLabel = Second contact name
+secondContactName.error.required = Enter the name of the individual or team we should contact
+secondContactName.error.invalid = Name of the individual or team must only include letters a to z, numbers 0 to 9, apostrophes, grave accents, ampersands, hyphens, backslashes, carets and spaces
+secondContactName.error.length = Contact name must be 35 characters or less
+secondContactName.change.hidden = second contact name
+
+secondContactPhone.title = What is their telephone number?
+secondContactPhone.heading = What is the telephone number for {0}?
+secondContactPhone.hint = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 808 157 0192.
+secondContactPhone.checkYourAnswersLabel = Second contact telephone number
+secondContactPhone.error.required = Enter a telephone number
+secondContactPhone.error.invalid = Enter a telephone number in the correct format
+secondContactPhone.error.length = Contact phone must be 17 characters or less
+secondContactPhone.change.hidden = second contact telephone number
