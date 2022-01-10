@@ -48,23 +48,15 @@ class SubscriptionConnector @Inject() (val config: FrontendAppConfig, val http: 
       }
   }
 
-  def updateSubscription()(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[ResponseDetail]] = {
+  def updateSubscription()(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Int] = {
 
-    val url = s"${config.mdrUrl}/mandatory-disclosure-rules/subscription/read-subscription"
+    val url = s"${config.mdrUrl}/mandatory-disclosure-rules/subscription/update-subscription"
     http
       .POSTString(url, "")
       .map {
-        case responseMessage if is2xx(responseMessage.status) =>
-          responseMessage.json
-            .asOpt[ResponseDetail]
-        case otherStatus =>
-          logger.warn(s"Status $otherStatus has been thrown when display subscription was called")
-          None
-      }
-      .recover {
-        case e: Exception =>
-          logger.warn(s"S${e.getMessage} has been thrown when display subscription was called")
-          None
+        responseMessage =>
+          logger.warn(s"Status ${responseMessage.status} has been received when update subscription was called")
+          responseMessage.status
       }
   }
 
