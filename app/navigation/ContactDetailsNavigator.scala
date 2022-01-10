@@ -37,6 +37,7 @@ class ContactDetailsNavigator @Inject() () {
     case (ContactPhonePage, Individual)   => _ => routes.ChangeIndividualContactDetailsController.onPageLoad()
     case (ContactPhonePage, Organisation) => _ => routes.ChangeOrganisationContactDetailsController.onPageLoad()
     case (HaveTelephonePage, affinity)    => ua => haveTelephoneRoutes(CheckMode, affinity)(ua) //ToDo do we need to clean telephone on No
+    case (ContactNamePage, affinity)      => _ => routes.ContactEmailController.onPageLoad(affinity)
     case (HaveSecondContactPage, Organisation) =>
       ua =>
         yesNoPage(
