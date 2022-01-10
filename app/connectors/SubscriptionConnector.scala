@@ -32,7 +32,7 @@ class SubscriptionConnector @Inject() (val config: FrontendAppConfig, val http: 
 
     val url = s"${config.mdrUrl}/mandatory-disclosure-rules/subscription/read-subscription"
     http
-      .POSTString(url, "")
+      .POSTEmpty(url)
       .map {
         case responseMessage if is2xx(responseMessage.status) =>
           responseMessage.json
