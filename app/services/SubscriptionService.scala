@@ -19,6 +19,7 @@ package services
 import connectors.SubscriptionConnector
 import models.UserAnswers
 import models.subscription._
+import pages.HaveSecondContactPage
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.Inject
@@ -37,16 +38,16 @@ class SubscriptionService @Inject() (subscriptionConnector: SubscriptionConnecto
     }
 
   private def populateUserAnswers(responseDetail: ResponseDetail, userAnswers: UserAnswers): Option[UserAnswers] =
-    populateContactInfo[PrimaryContactDetailsPages](userAnswers, responseDetail.primaryContact) map {
+    populateContactInfo[PrimaryContactDetailsPages](userAnswers, responseDetail.primaryContact, isSecondaryContact = false) map {
       uaWithPrimaryContact =>
         responseDetail.secondaryContact
           .flatMap {
-            sc => populateContactInfo[SecondaryContactDetailsPages](uaWithPrimaryContact, sc)
+            sc => populateContactInfo[SecondaryContactDetailsPages](uaWithPrimaryContact, sc, isSecondaryContact = true)
           }
           .getOrElse(uaWithPrimaryContact)
     }
 
-  private def populateContactInfo[T <: ContactTypePage](userAnswers: UserAnswers, contactInformation: ContactInformation)(implicit
+  private def populateContactInfo[T <: ContactTypePage](userAnswers: UserAnswers, contactInformation: ContactInformation, isSecondaryContact: Boolean)(implicit
     contactTypePage: T
   ): Option[UserAnswers] = {
 
@@ -56,7 +57,8 @@ class SubscriptionService @Inject() (subscriptionConnector: SubscriptionConnecto
     }
 
     (for {
-      uaWithEmail         <- userAnswers.set(contactTypePage.contactEmailPage, contactInformation.email)
+      uaWithSecondContact <- userAnswers.set(HaveSecondContactPage, isSecondaryContact)
+      uaWithEmail         <- uaWithSecondContact.set(contactTypePage.contactEmailPage, contactInformation.email)
       uaWithTelephone     <- uaWithEmail.set(contactTypePage.contactTelephonePage, contactInformation.phone.getOrElse(""))
       uaWithHaveTelephone <- uaWithTelephone.set(contactTypePage.haveTelephonePage, contactInformation.phone.exists(_.nonEmpty))
       updatedAnswers      <- updateOrgName(uaWithHaveTelephone)
