@@ -20,15 +20,7 @@ import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import play.api.libs.json.{JsValue, Json}
 
-class UpdateSubscriptionForMDRRequestSpec extends AnyFreeSpec with Matchers {
-
-  val requestCommon: RequestCommonForUpdate = RequestCommonForUpdate(
-    regime = "MDR",
-    receiptDate = "2020-09-23T16:12:11Z",
-    acknowledgementReference = "AB123c",
-    originatingSystem = "MDTP",
-    requestParameters = None
-  )
+class RequestDetailForUpdateSpec extends AnyFreeSpec with Matchers {
 
   val requestDetails: RequestDetailForUpdate = RequestDetailForUpdate(
     IDType = "SAFE",
@@ -39,26 +31,16 @@ class UpdateSubscriptionForMDRRequestSpec extends AnyFreeSpec with Matchers {
     secondaryContact = Some(ContactInformation(OrganisationDetails("orgName"), "test@email.com", Some("+4411223344"), None))
   )
 
-  val updateSubscriptionRequest: UpdateSubscriptionForMDRRequest = UpdateSubscriptionForMDRRequest(UpdateSubscriptionDetails(requestCommon, requestDetails))
-
-  "UpdateSubscriptionForMDRRequest" - {
+  "RequestDetail" - {
     "serialise to json" in {
 
       val expectedJson: JsValue = Json.parse("""
           |{
-          |  "updateSubscriptionForMDRRequest": {
-          |    "requestCommon": {
-          |      "regime": "MDR",
-          |      "receiptDate": "2020-09-23T16:12:11Z",
-          |      "acknowledgementReference": "AB123c",
-          |      "originatingSystem": "MDTP"
-          |    },
-          |    "requestDetail": {
           |      "IDType": "SAFE",
           |      "IDNumber": "IDNumber",
           |      "tradingName": "Trading Name",
           |      "isGBUser": true,
-          |      "primaryContact": [
+          |      "primaryContact":
           |        {
           |          "individual": {
           |             "lastName": "lastName",
@@ -67,9 +49,8 @@ class UpdateSubscriptionForMDRRequestSpec extends AnyFreeSpec with Matchers {
           |         },
           |          "email": "test@email.com",
           |          "phone": "+4411223344"
-          |        }
-          |      ],
-          |      "secondaryContact": [
+          |        },
+          |      "secondaryContact":
           |        {
           |          "organisation": {
           |            "organisationName": "orgName"
@@ -77,13 +58,10 @@ class UpdateSubscriptionForMDRRequestSpec extends AnyFreeSpec with Matchers {
           |          "email": "test@email.com",
           |          "phone": "+4411223344"
           |        }
-          |      ]
-          |    }
-          |  }
           |}
           |""".stripMargin)
 
-      Json.toJson(updateSubscriptionRequest) mustBe expectedJson
+      Json.toJson(requestDetails) mustBe expectedJson
     }
   }
 }
