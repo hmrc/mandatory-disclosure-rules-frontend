@@ -52,8 +52,6 @@ class HaveTelephoneControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[HaveTelephoneView]
-
         status(result) mustEqual OK
       }
     }

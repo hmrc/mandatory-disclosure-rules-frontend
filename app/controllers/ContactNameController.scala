@@ -21,7 +21,7 @@ import forms.ContactNameFormProvider
 
 import javax.inject.Inject
 import models.{AffinityType, Mode}
-import navigation.{ContactDetailsNavigator, Navigator}
+import navigation.ContactDetailsNavigator
 import pages.ContactNamePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

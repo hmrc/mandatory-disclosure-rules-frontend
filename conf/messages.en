@@ -127,13 +127,15 @@ changeOrganisationContactDetails.landing-page.link = Back to report cross-border
 
 contactName.change.hidden = " contact name"
 
-contactEmail.title = What is your email address?
-contactEmail.heading = What is your email address?
+contactEmail.title.individual = What is your email address?
+contactEmail.title.organisation = What is their email address?
+contactEmail.heading.individual = What is your email address?
+contactEmail.heading.organisation = What is the email address for {0}?
 contactEmail.hint = We will use this to send confirmation of your reports or if we have any questions about them.
 contactEmail.checkYourAnswersLabel = Email address
-contactEmail.error.required = Enter your email address
+contactEmail.error.required = Enter an email address
 contactEmail.error.length = Email address must be 256 characters or less
-contactEmail.error.invalid = Enter your email address in the correct format, like name@example.com
+contactEmail.error.invalid = Enter an email address in the correct format, like name@example.com
 contactEmail.change.hidden = email address
 
 contactPhone.checkYourAnswersLabel = Telephone number
