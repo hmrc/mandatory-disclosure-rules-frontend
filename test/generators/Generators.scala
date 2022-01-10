@@ -16,15 +16,14 @@
 
 package generators
 
-import org.checkerframework.common.value.qual.MinLen
-
-import java.time.{Instant, LocalDate, ZoneOffset}
 import org.scalacheck.Arbitrary._
 import org.scalacheck.Gen._
 import org.scalacheck.{Gen, Shrink}
 import org.scalatest.prop.Configuration.MaxDiscardedFactor
 import utils.RegExConstants
 import wolfendale.scalacheck.regexp.RegexpGen
+
+import java.time.{Instant, LocalDate, ZoneOffset}
 
 trait Generators extends UserAnswersGenerator with PageGenerators with ModelGenerators with UserAnswersEntryGenerators with RegExConstants {
 

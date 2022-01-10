@@ -17,11 +17,11 @@
 package connectors
 
 import config.FrontendAppConfig
-import models.subscription.ResponseDetail
+import models.subscription.{RequestDetailForUpdate, ResponseDetail}
 import play.api.Logging
 import uk.gov.hmrc.http.HttpReads.Implicits.readRaw
 import uk.gov.hmrc.http.HttpReads.is2xx
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -48,11 +48,11 @@ class SubscriptionConnector @Inject() (val config: FrontendAppConfig, val http: 
       }
   }
 
-  def updateSubscription()(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Int] = {
+  def updateSubscription(requestDetail: RequestDetailForUpdate)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Int] = {
 
     val url = s"${config.mdrUrl}/mandatory-disclosure-rules/subscription/update-subscription"
     http
-      .POSTString(url, "")
+      .POST[RequestDetailForUpdate, HttpResponse](url, requestDetail)
       .map {
         responseMessage =>
           logger.warn(s"Status ${responseMessage.status} has been received when update subscription was called")

@@ -18,9 +18,9 @@ package connectors
 
 import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, post, urlEqualTo}
-import generators.Generators
-import models.subscription.ResponseDetail
-import org.scalacheck.Gen
+import generators.{Generators, ModelGenerators}
+import models.subscription.{RequestDetailForUpdate, ResponseDetail}
+import org.scalacheck.{Arbitrary, Gen}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.Application
@@ -31,7 +31,7 @@ import utils.WireMockHelper
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class SubscriptionConnectorSpec extends SpecBase with WireMockHelper with Generators with ScalaCheckPropertyChecks with ScalaFutures {
+class SubscriptionConnectorSpec extends SpecBase with WireMockHelper with Generators with ScalaCheckPropertyChecks with ScalaFutures with ModelGenerators {
 
   override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(
@@ -108,6 +108,7 @@ class SubscriptionConnectorSpec extends SpecBase with WireMockHelper with Genera
 
     "updateSubscription" - {
       "must return status 200 when updateSubscription is successful" in {
+        val requestDetails = Arbitrary.arbitrary[RequestDetailForUpdate].sample.value
 
         server.stubFor(
           post(urlEqualTo(updateSubscriptionUrl))
@@ -117,13 +118,15 @@ class SubscriptionConnectorSpec extends SpecBase with WireMockHelper with Genera
             )
         )
 
-        whenReady(connector.updateSubscription()) {
+        whenReady(connector.updateSubscription(requestDetails)) {
           result =>
             result mustBe OK
         }
       }
 
       "must return a error status code when updateSubscription fails with Error" in {
+        val requestDetails = Arbitrary.arbitrary[RequestDetailForUpdate].sample.value
+
         val errorCode = errorCodes.sample.value
         server.stubFor(
           post(urlEqualTo(updateSubscriptionUrl))
@@ -133,7 +136,7 @@ class SubscriptionConnectorSpec extends SpecBase with WireMockHelper with Genera
             )
         )
 
-        whenReady(connector.updateSubscription()) {
+        whenReady(connector.updateSubscription(requestDetails)) {
           result =>
             result mustBe errorCode
         }
