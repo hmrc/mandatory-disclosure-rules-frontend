@@ -19,6 +19,8 @@ package models.subscription
 import play.api.libs.functional.syntax.unlift
 import play.api.libs.json._
 
+import scala.language.implicitConversions
+
 sealed trait ContactType
 
 object ContactType {

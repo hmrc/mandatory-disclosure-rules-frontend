@@ -14,12 +14,32 @@
  * limitations under the License.
  */
 
-package utils
+package forms
 
-trait RegExConstants {
+import forms.behaviours.BooleanFieldBehaviours
+import play.api.data.FormError
 
-  final val emailRegex = "^(?:[a-zA-Z0-9!#$%&*+\\/=?^_`{|}~-]+(?:\\.[a-zA-Z0-9!#$%&*+\\/=?^_`{|}~-]+)*)" +
-    "@(?:[a-zA-Z0-9!#$%&*+\\/=?^_`{|}~-]+(?:\\.[a-zA-Z0-9!#$%&*+\\/=?^_`{|}~-]+)*)$"
-  final val digitsAndWhiteSpaceOnly = """^\+?[\d\s]+$"""
-  final val orgNameRegex            = """^[a-zA-Z0-9 &`\-\'\\\^]*$"""
+class HaveSecondContactFormProviderSpec extends BooleanFieldBehaviours {
+
+  val requiredKey = "haveSecondContact.error.required"
+  val invalidKey  = "error.boolean"
+
+  val form = new HaveSecondContactFormProvider()()
+
+  ".value" - {
+
+    val fieldName = "value"
+
+    behave like booleanField(
+      form,
+      fieldName,
+      invalidError = FormError(fieldName, invalidKey)
+    )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
+  }
 }

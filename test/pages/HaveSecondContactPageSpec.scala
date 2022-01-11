@@ -20,41 +20,41 @@ import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
-class SecondContactPageSpec extends PageBehaviours {
+class HaveSecondContactPageSpec extends PageBehaviours {
 
-  "SecondContactPage" - {
+  "HaveSecondContactPage" - {
 
-    beRetrievable[Boolean](SecondContactPage)
+    beRetrievable[Boolean](HaveSecondContactPage)
 
-    beSettable[Boolean](SecondContactPage)
+    beSettable[Boolean](HaveSecondContactPage)
 
-    beRemovable[Boolean](SecondContactPage)
+    beRemovable[Boolean](HaveSecondContactPage)
 
-    "cleanup" ignore {
+    "cleanup" - {
 
       "must remove SecondContactPages when there is a change of the answer from 'Yes' to 'No'" in {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
             val result = userAnswers
-              .set(SecondContactPage, true)
+              .set(HaveSecondContactPage, true)
               .success
               .value
-              .set(SndContactNamePage, "name")
+              .set(SecondContactNamePage, "name")
               .success
               .value
-              .set(SndContactEmailPage, "test@gmail.com")
+              .set(SecondContactEmailPage, "test@gmail.com")
               .success
               .value
-              .set(SndContactPhonePage, "112233445566")
+              .set(SecondContactPhonePage, "112233445566")
               .success
               .value
-              .set(SecondContactPage, false)
+              .set(HaveSecondContactPage, false)
               .success
               .value
 
-            result.get(SndContactNamePage) must not be defined
-            result.get(SndContactEmailPage) must not be defined
-            result.get(SndContactPhonePage) must not be defined
+            result.get(SecondContactNamePage) must not be defined
+            result.get(SecondContactEmailPage) must not be defined
+            result.get(SecondContactPhonePage) must not be defined
         }
       }
 
@@ -63,22 +63,22 @@ class SecondContactPageSpec extends PageBehaviours {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
             val result = userAnswers
-              .set(SndContactNamePage, "name")
+              .set(SecondContactNamePage, "name")
               .success
               .value
-              .set(SndContactEmailPage, "test@gmail.com")
+              .set(SecondContactEmailPage, "test@gmail.com")
               .success
               .value
-              .set(SndContactPhonePage, "112233445566")
+              .set(SecondContactPhonePage, "112233445566")
               .success
               .value
-              .set(SecondContactPage, true)
+              .set(HaveSecondContactPage, true)
               .success
               .value
 
-            result.get(SndContactNamePage) mustBe defined
-            result.get(SndContactEmailPage) mustBe defined
-            result.get(SndContactPhonePage) mustBe defined
+            result.get(SecondContactNamePage) mustBe defined
+            result.get(SecondContactEmailPage) mustBe defined
+            result.get(SecondContactPhonePage) mustBe defined
         }
       }
     }

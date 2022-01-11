@@ -14,12 +14,25 @@
  * limitations under the License.
  */
 
-package utils
+package forms
 
-trait RegExConstants {
+import javax.inject.Inject
+import forms.mappings.Mappings
+import play.api.data.Form
+import utils.RegExConstants
 
-  final val emailRegex = "^(?:[a-zA-Z0-9!#$%&*+\\/=?^_`{|}~-]+(?:\\.[a-zA-Z0-9!#$%&*+\\/=?^_`{|}~-]+)*)" +
-    "@(?:[a-zA-Z0-9!#$%&*+\\/=?^_`{|}~-]+(?:\\.[a-zA-Z0-9!#$%&*+\\/=?^_`{|}~-]+)*)$"
-  final val digitsAndWhiteSpaceOnly = """^\+?[\d\s]+$"""
-  final val orgNameRegex            = """^[a-zA-Z0-9 &`\-\'\\\^]*$"""
+class SecondContactPhoneFormProvider @Inject() extends Mappings with RegExConstants {
+
+  val maxlength = 24
+
+  def apply(): Form[String] =
+    Form(
+      "value" -> validatedText(
+        "secondContactPhone.error.required",
+        "secondContactPhone.error.invalid",
+        "secondContactPhone.error.length",
+        digitsAndWhiteSpaceOnly,
+        maxlength
+      )
+    )
 }
