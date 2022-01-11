@@ -28,10 +28,11 @@ import viewmodels.govuk.summarylist._
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityType)(implicit request: DataRequest[AnyContent], messages: Messages) {
 
-  def buildRow() =
-    (Seq(contactNamePage(), contactEmailPage(), contactPhonePage()),
-     Seq(hasSecondContactPage(), secondaryContactNamePage(), secondaryContactEmailPage(), secondaryContactPhonePage())
-    )
+  def getPrimaryContactDetails: Seq[SummaryListRow] =
+    Seq(contactNamePage(), contactEmailPage(), contactPhonePage()).flatten
+
+  def getSecondaryContactDetails: Seq[SummaryListRow] =
+    Seq(hasSecondContactPage(), secondaryContactNamePage(), secondaryContactEmailPage(), secondaryContactPhonePage()).flatten
 
   def contactNamePage(): Option[SummaryListRow] = userAnswers.get(ContactNamePage) map {
     x =>

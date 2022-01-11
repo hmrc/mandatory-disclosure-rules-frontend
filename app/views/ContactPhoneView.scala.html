@@ -38,8 +38,7 @@
             InputViewModel(
                 field = form("value"),
                 label = LabelViewModel(messages(s"contactPhone.heading.$affinityType", contactName)).asPageHeading()
-            ).withHint(HintViewModel(Text(messages("contactPhone.hint"))))
-            .withWidth(Full)
+            ).withHint(HintViewModel(HtmlContent(messages("contactPhone.hint"))))
         )
 
         @govukButton(
