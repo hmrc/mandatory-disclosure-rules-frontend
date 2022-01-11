@@ -14,12 +14,23 @@
  * limitations under the License.
  */
 
-package utils
+package pages
 
-trait RegExConstants {
+import models.UserAnswers
+import play.api.libs.json.JsPath
 
-  final val emailRegex = "^(?:[a-zA-Z0-9!#$%&*+\\/=?^_`{|}~-]+(?:\\.[a-zA-Z0-9!#$%&*+\\/=?^_`{|}~-]+)*)" +
-    "@(?:[a-zA-Z0-9!#$%&*+\\/=?^_`{|}~-]+(?:\\.[a-zA-Z0-9!#$%&*+\\/=?^_`{|}~-]+)*)$"
-  final val digitsAndWhiteSpaceOnly = """^\+?[\d\s]+$"""
-  final val orgNameRegex            = """^[a-zA-Z0-9 &`\-\'\\\^]*$"""
+import scala.util.Try
+
+case object SecondContactHavePhonePage extends QuestionPage[Boolean] {
+
+  override def path: JsPath = JsPath \ toString
+
+  override def toString: String = "secondContactHavePhone"
+
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
+    value match {
+      case Some(false) => userAnswers.remove(SecondContactPhonePage)
+      case _           => super.cleanup(value, userAnswers)
+    }
+
 }
