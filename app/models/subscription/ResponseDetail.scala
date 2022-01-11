@@ -16,7 +16,6 @@
 
 package models.subscription
 
-import play.api.Logger
 import play.api.libs.json.{Json, Reads}
 
 case class ResponseDetail(subscriptionID: String,
@@ -28,8 +27,5 @@ case class ResponseDetail(subscriptionID: String,
 
 object ResponseDetail {
 
-  val logger = Logger.apply(getClass)
-
   implicit lazy val reads: Reads[ResponseDetail] = Json.reads[ResponseDetail]
-
 }
