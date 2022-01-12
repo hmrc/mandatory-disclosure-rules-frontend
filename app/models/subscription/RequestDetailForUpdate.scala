@@ -31,7 +31,7 @@ case class RequestDetailForUpdate(IDType: String,
 object RequestDetailForUpdate {
   implicit lazy val writes: Writes[RequestDetailForUpdate] = Json.writes[RequestDetailForUpdate]
 
-  def createRequestDetails(responseDetail: ResponseDetail, userAnswers: UserAnswers): Option[RequestDetailForUpdate] = {
+  def convertToRequestDetails(responseDetail: ResponseDetail, userAnswers: UserAnswers): Option[RequestDetailForUpdate] = {
     val primaryContact =
       getContactInformation[PrimaryContactDetailsPages](responseDetail.primaryContact.contactType, responseDetail.primaryContact.mobile, userAnswers)
 

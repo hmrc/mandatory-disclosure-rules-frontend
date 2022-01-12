@@ -20,13 +20,14 @@ import connectors.SubscriptionConnector
 import models.UserAnswers
 import models.subscription._
 import pages.HaveSecondContactPage
+import play.api.{Logger, Logging}
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 
-class SubscriptionService @Inject() (subscriptionConnector: SubscriptionConnector)(implicit ec: ExecutionContext) {
+class SubscriptionService @Inject() (subscriptionConnector: SubscriptionConnector)(implicit ec: ExecutionContext) extends Logging {
 
   def getContactDetails(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Option[UserAnswers]] =
     subscriptionConnector.readSubscription map {
@@ -35,6 +36,20 @@ class SubscriptionService @Inject() (subscriptionConnector: SubscriptionConnecto
           responseDetail =>
             populateUserAnswers(responseDetail, userAnswers)
         }
+    }
+
+  def updateContactDetails(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Boolean] =
+    subscriptionConnector.readSubscription flatMap {
+      case Some(responseDetails) =>
+        RequestDetailForUpdate.convertToRequestDetails(responseDetails, userAnswers) match {
+          case Some(requestDetails) => subscriptionConnector.updateSubscription(requestDetails)
+          case _ =>
+            logger.info("failed to convert userAnswers to RequestDetailForUpdate")
+            Future.successful(false)
+        }
+      case _ =>
+        logger.info("readSubscription call failed to fetch the data")
+        Future.successful(false)
     }
 
   private def populateUserAnswers(responseDetail: ResponseDetail, userAnswers: UserAnswers): Option[UserAnswers] =
@@ -65,4 +80,5 @@ class SubscriptionService @Inject() (subscriptionConnector: SubscriptionConnecto
     } yield updatedAnswers).toOption
 
   }
+
 }

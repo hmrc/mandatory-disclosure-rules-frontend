@@ -102,7 +102,7 @@ class RequestDetailForUpdateSpec extends AnyFreeSpec with Matchers with TryValue
           .success
           .value
 
-        RequestDetailForUpdate.createRequestDetails(responseDetail, userAnswers).value mustBe requestDetails
+        RequestDetailForUpdate.convertToRequestDetails(responseDetail, userAnswers).value mustBe requestDetails
 
       }
 
@@ -119,7 +119,7 @@ class RequestDetailForUpdateSpec extends AnyFreeSpec with Matchers with TryValue
           .success
           .value
 
-        RequestDetailForUpdate.createRequestDetails(responseDetail, userAnswers) mustBe None
+        RequestDetailForUpdate.convertToRequestDetails(responseDetail, userAnswers) mustBe None
 
       }
 
@@ -162,7 +162,7 @@ class RequestDetailForUpdateSpec extends AnyFreeSpec with Matchers with TryValue
           .success
           .value
 
-        RequestDetailForUpdate.createRequestDetails(updatedResponseDetail, userAnswers).value mustBe expectedRequestDetails
+        RequestDetailForUpdate.convertToRequestDetails(updatedResponseDetail, userAnswers).value mustBe expectedRequestDetails
 
       }
 

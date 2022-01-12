@@ -120,7 +120,7 @@ class SubscriptionConnectorSpec extends SpecBase with WireMockHelper with Genera
 
         whenReady(connector.updateSubscription(requestDetails)) {
           result =>
-            result mustBe OK
+            result mustBe true
         }
       }
 
@@ -138,7 +138,7 @@ class SubscriptionConnectorSpec extends SpecBase with WireMockHelper with Genera
 
         whenReady(connector.updateSubscription(requestDetails)) {
           result =>
-            result mustBe errorCode
+            result mustBe false
         }
       }
     }
