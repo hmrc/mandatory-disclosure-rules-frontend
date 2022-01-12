@@ -16,16 +16,16 @@
 
 package models.subscription
 
-import play.api.libs.json.{Json, Reads}
+import play.api.libs.json._
 
-case class ResponseDetail(subscriptionID: String,
-                          tradingName: Option[String],
-                          isGBUser: Boolean,
-                          primaryContact: ContactInformation,
-                          secondaryContact: Option[ContactInformation]
+case class RequestDetailForUpdate(IDType: String,
+                                  IDNumber: String,
+                                  tradingName: Option[String],
+                                  isGBUser: Boolean,
+                                  primaryContact: ContactInformation,
+                                  secondaryContact: Option[ContactInformation]
 )
 
-object ResponseDetail {
-
-  implicit lazy val reads: Reads[ResponseDetail] = Json.reads[ResponseDetail]
+object RequestDetailForUpdate {
+  implicit lazy val writes: Writes[RequestDetailForUpdate] = Json.writes[RequestDetailForUpdate]
 }

@@ -18,8 +18,9 @@ package connectors
 
 import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, post, urlEqualTo}
-import generators.Generators
-import models.subscription.ResponseDetail
+import generators.{Generators, ModelGenerators}
+import models.subscription.{RequestDetailForUpdate, ResponseDetail}
+import org.scalacheck.{Arbitrary, Gen}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.Application
@@ -30,7 +31,7 @@ import utils.WireMockHelper
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class SubscriptionConnectorSpec extends SpecBase with WireMockHelper with Generators with ScalaCheckPropertyChecks with ScalaFutures {
+class SubscriptionConnectorSpec extends SpecBase with WireMockHelper with Generators with ScalaCheckPropertyChecks with ScalaFutures with ModelGenerators {
 
   override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(
@@ -39,7 +40,9 @@ class SubscriptionConnectorSpec extends SpecBase with WireMockHelper with Genera
     .build()
 
   lazy val connector: SubscriptionConnector = app.injector.instanceOf[SubscriptionConnector]
-  val submitUrl                             = "/mandatory-disclosure-rules/subscription/read-subscription"
+  private val readSubscriptionUrl           = "/mandatory-disclosure-rules/subscription/read-subscription"
+  private val updateSubscriptionUrl         = "/mandatory-disclosure-rules/subscription/update-subscription"
+  private val errorCodes: Gen[Int]          = Gen.oneOf(400, 403, 404, 405, 409, 500, 503)
 
   val responseDetailString: String =
     """
@@ -66,42 +69,79 @@ class SubscriptionConnectorSpec extends SpecBase with WireMockHelper with Genera
       |}
       |}""".stripMargin
 
-  val responseDetail = Json.parse(responseDetailString).as[ResponseDetail]
+  val responseDetail: ResponseDetail = Json.parse(responseDetailString).as[ResponseDetail]
 
   "SubmissionConnector" - {
+    "readSubscription" - {
+      "must return a ResponseDetails when readSubscription is successful" in {
 
-    "must return a ResponseDetails when readSubscription is successful" in {
+        server.stubFor(
+          post(urlEqualTo(readSubscriptionUrl))
+            .willReturn(
+              aResponse()
+                .withStatus(OK)
+                .withBody(responseDetailString)
+            )
+        )
 
-      server.stubFor(
-        post(urlEqualTo(submitUrl))
-          .willReturn(
-            aResponse()
-              .withStatus(OK)
-              .withBody(responseDetailString)
-          )
-      )
+        whenReady(connector.readSubscription()) {
+          result =>
+            result mustBe Some(responseDetail)
+        }
+      }
 
-      whenReady(connector.readSubscription()) {
-        result =>
-          result mustBe Some(responseDetail)
+      "must return a None when readSubscription  fails with InternalServerError" in {
+        server.stubFor(
+          post(urlEqualTo(readSubscriptionUrl))
+            .willReturn(
+              aResponse()
+                .withStatus(INTERNAL_SERVER_ERROR)
+            )
+        )
+
+        whenReady(connector.readSubscription()) {
+          result =>
+            result mustBe None
+        }
       }
     }
 
-    "must return a None when readSubscription  fails with InternalServerError" in {
-      server.stubFor(
-        post(urlEqualTo(submitUrl))
-          .willReturn(
-            aResponse()
-              .withStatus(INTERNAL_SERVER_ERROR)
-          )
-      )
+    "updateSubscription" - {
+      "must return status 200 when updateSubscription is successful" in {
+        val requestDetails = Arbitrary.arbitrary[RequestDetailForUpdate].sample.value
 
-      whenReady(connector.readSubscription()) {
-        result =>
-          result mustBe None
+        server.stubFor(
+          post(urlEqualTo(updateSubscriptionUrl))
+            .willReturn(
+              aResponse()
+                .withStatus(OK)
+            )
+        )
+
+        whenReady(connector.updateSubscription(requestDetails)) {
+          result =>
+            result mustBe OK
+        }
+      }
+
+      "must return a error status code when updateSubscription fails with Error" in {
+        val requestDetails = Arbitrary.arbitrary[RequestDetailForUpdate].sample.value
+
+        val errorCode = errorCodes.sample.value
+        server.stubFor(
+          post(urlEqualTo(updateSubscriptionUrl))
+            .willReturn(
+              aResponse()
+                .withStatus(errorCode)
+            )
+        )
+
+        whenReady(connector.updateSubscription(requestDetails)) {
+          result =>
+            result mustBe errorCode
+        }
       }
     }
-
   }
 
 }

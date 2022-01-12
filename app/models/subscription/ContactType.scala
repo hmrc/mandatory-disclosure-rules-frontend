@@ -16,7 +16,8 @@
 
 package models.subscription
 
-import play.api.libs.json.{__, Reads}
+import play.api.libs.functional.syntax.unlift
+import play.api.libs.json._
 
 import scala.language.implicitConversions
 
@@ -37,6 +38,11 @@ object ContactType {
     OrganisationDetails.reads or
       IndividualDetails.reads
   }
+
+  implicit val writes: Writes[ContactType] = Writes[ContactType] {
+    case o: OrganisationDetails => Json.toJson(o)
+    case i: IndividualDetails   => Json.toJson(i)
+  }
 }
 
 case class OrganisationDetails(organisationName: String) extends ContactType
@@ -47,6 +53,9 @@ object OrganisationDetails {
     import play.api.libs.functional.syntax._
     (__ \ "organisation" \ "organisationName").read[String] fmap OrganisationDetails.apply
   }
+
+  implicit val writes: Writes[OrganisationDetails] =
+    (__ \ "organisation" \ "organisationName").write[String] contramap unlift(OrganisationDetails.unapply)
 }
 
 case class IndividualDetails(firstName: String, middleName: Option[String], lastName: String) extends ContactType
@@ -60,6 +69,11 @@ object IndividualDetails {
         (__ \ "individual" \ "middleName").readNullable[String] and
         (__ \ "individual" \ "lastName").read[String]
     )(IndividualDetails.apply _)
+
+  implicit val writes: OWrites[IndividualDetails] =
+    ((__ \ "individual" \ "firstName").write[String] and
+      (__ \ "individual" \ "middleName").writeNullable[String] and
+      (__ \ "individual" \ "lastName").write[String])(unlift(IndividualDetails.unapply))
 }
 
 case class ContactInformation(contactType: ContactType, email: String, phone: Option[String], mobile: Option[String])
@@ -74,6 +88,16 @@ object ContactInformation {
         (__ \ "phone").readNullable[String] and
         (__ \ "mobile").readNullable[String]
     )(ContactInformation.apply _)
+  }
+
+  implicit lazy val writes: OWrites[ContactInformation] = {
+    import play.api.libs.functional.syntax._
+    (
+      __.write[ContactType] and
+        (__ \ "email").write[String] and
+        (__ \ "phone").writeNullable[String] and
+        (__ \ "mobile").writeNullable[String]
+    )(unlift(ContactInformation.unapply))
   }
 
 }
