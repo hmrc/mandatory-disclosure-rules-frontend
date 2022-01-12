@@ -79,7 +79,6 @@ class ContactDetailsNavigator @Inject() () {
     case NormalMode =>
       normalRoutes(page, affinityType)(userAnswers)
     case CheckMode =>
-      println(s"***$affinityType****$page*****")
       checkRouteMap(page, affinityType)(userAnswers)
   }
 

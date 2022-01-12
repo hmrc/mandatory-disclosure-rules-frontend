@@ -60,4 +60,14 @@ trait ModelGenerators {
     } yield RequestDetailForUpdate(idType, idNumber, tradingName, isGBUser, primaryContact, secondaryContact)
   }
 
+  implicit val arbitraryResponseDetail: Arbitrary[ResponseDetail] = Arbitrary {
+    for {
+      subscriptionID   <- arbitrary[String]
+      tradingName      <- Gen.option(arbitrary[String])
+      isGBUser         <- arbitrary[Boolean]
+      primaryContact   <- arbitrary[ContactInformation]
+      secondaryContact <- Gen.option(arbitrary[ContactInformation])
+    } yield ResponseDetail(subscriptionID, tradingName, isGBUser, primaryContact, secondaryContact)
+  }
+
 }
