@@ -36,6 +36,9 @@ class FakeUpscanConnector @Inject() (configuration: FrontendAppConfig, httpClien
   def setDetails(uploadDetails: UploadSessionDetails): Unit =
     detailsBuffer = Some(uploadDetails)
 
+  def resetDetails(): Unit =
+    detailsBuffer = None
+
   override def getUpscanFormData(implicit hc: HeaderCarrier): Future[UpscanInitiateResponse] =
     Future.successful(
       UpscanInitiateResponse(

@@ -20,7 +20,7 @@ import base.SpecBase
 import pages.InvalidXMLPage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.InvalidXMLFileView
+import views.html.{InvalidXMLFileView, ThereIsAProblemView}
 
 class InvalidXMLFileControllerSpec extends SpecBase {
 
@@ -42,6 +42,23 @@ class InvalidXMLFileControllerSpec extends SpecBase {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual view("example.xml")(request, messages(application)).toString
+      }
+    }
+
+    "must return INTERNAL_SERVER_ERROR and the correct view when InvalidXMLPage does not exist" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, routes.InvalidXMLFileController.onPageLoad().url)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[ThereIsAProblemView]
+
+        status(result) mustEqual INTERNAL_SERVER_ERROR
+
+        contentAsString(result) mustEqual view()(request, messages(application)).toString
       }
     }
   }

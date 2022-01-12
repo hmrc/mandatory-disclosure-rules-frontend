@@ -124,25 +124,30 @@ class FileValidationControllerSpec extends SpecBase with BeforeAndAfterEach {
       userAnswersCaptor.getValue.data mustEqual expectedData
     }
 
-    "must return an Exception when a valid UploadId cannot be found" in {
+    "must return an INTERNAL_SERVER_ERROR when a valid UploadId cannot be found" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[UpscanConnector].toInstance(fakeUpscanConnector),
+          bind[SessionRepository].toInstance(mockSessionRepository),
+          bind[ValidationConnector].toInstance(mockValidationConnector)
+        )
+        .build()
 
       val controller             = application.injector.instanceOf[FileValidationController]
       val result: Future[Result] = controller.onPageLoad()(FakeRequest("", ""))
 
-      a[RuntimeException] mustBe thrownBy(status(result))
+      status(result) mustBe INTERNAL_SERVER_ERROR
     }
 
-    "must return an Exception when meta data cannot be found" in {
+    "must return an INTERNAL_SERVER_ERROR when meta data cannot be found" in {
 
-      fakeUpscanConnector.setDetails(uploadDetails)
-      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+      fakeUpscanConnector.resetDetails()
 
       val controller             = application.injector.instanceOf[FileValidationController]
       val result: Future[Result] = controller.onPageLoad()(FakeRequest("", ""))
 
-      a[RuntimeException] mustBe thrownBy {
-        status(result) mustEqual OK
-      }
+      status(result) mustBe INTERNAL_SERVER_ERROR
     }
   }
 }
