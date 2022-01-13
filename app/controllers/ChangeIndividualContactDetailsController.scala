@@ -20,12 +20,14 @@ import config.FrontendAppConfig
 import controllers.actions._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import services.SubscriptionService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.CheckYourAnswersHelper
 import viewmodels.govuk.summarylist._
-import views.html.ChangeIndividualContactDetailsView
+import views.html.{ChangeIndividualContactDetailsView, ThereIsAProblemView}
 
 import javax.inject.Inject
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class ChangeIndividualContactDetailsController @Inject() (
   override val messagesApi: MessagesApi,
@@ -33,8 +35,10 @@ class ChangeIndividualContactDetailsController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
+  subscriptionService: SubscriptionService,
   val controllerComponents: MessagesControllerComponents,
-  view: ChangeIndividualContactDetailsView
+  view: ChangeIndividualContactDetailsView,
+  errorView: ThereIsAProblemView
 ) extends FrontendBaseController
     with I18nSupport {
 
@@ -46,6 +50,16 @@ class ChangeIndividualContactDetailsController @Inject() (
         rows = checkUserAnswersHelper.getPrimaryContactDetails
       )
 
+      val hasChanged = subscriptionService.hasResponseDetailsDataChanged(request.userAnswers)
+
       Ok(view(primaryContactList, frontendAppConfig))
+  }
+
+  def onSubmit: Action[AnyContent] = (identify andThen getData() andThen requireData).async {
+    implicit request =>
+      subscriptionService.updateContactDetails(request.userAnswers) map {
+        case true  => NotImplemented
+        case false => InternalServerError(errorView())
+      }
   }
 }

@@ -18,9 +18,10 @@ package services
 
 import connectors.SubscriptionConnector
 import models.UserAnswers
+import models.subscription.RequestDetailForUpdate.getContactInformation
 import models.subscription._
-import pages.HaveSecondContactPage
-import play.api.{Logger, Logging}
+import pages.{HaveSecondContactPage, SecondContactNamePage}
+import play.api.Logging
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.Inject
@@ -51,6 +52,33 @@ class SubscriptionService @Inject() (subscriptionConnector: SubscriptionConnecto
         logger.info("readSubscription call failed to fetch the data")
         Future.successful(false)
     }
+
+  def hasResponseDetailsDataChanged(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Option[Boolean]] =
+    subscriptionConnector.readSubscription map {
+      case Some(responseDetails) =>
+        val secondContact: Option[ContactInformation] = populateResponseDetails[PrimaryContactDetailsPages](userAnswers, responseDetails.primaryContact)
+
+        for {
+          primaryContact <- populateResponseDetails[PrimaryContactDetailsPages](userAnswers, responseDetails.primaryContact)
+        } yield responseDetails.copy(primaryContact = primaryContact, secondaryContact = secondContact).equals(responseDetails)
+
+      case _ => None
+    }
+
+  private def populateResponseDetails[T <: ContactTypePage](userAnswers: UserAnswers, contactInformation: ContactInformation)(implicit
+    contactTypePage: T
+  ): Option[ContactInformation] = {
+
+    val contactType: ContactType = userAnswers.get(contactTypePage.contactNamePage) match {
+      case Some(orgName) => OrganisationDetails(orgName)
+      case _             => contactInformation.contactType
+    }
+
+    for {
+      email <- userAnswers.get(contactTypePage.contactEmailPage)
+    } yield ContactInformation(contactType, email, userAnswers.get(contactTypePage.contactTelephonePage), contactInformation.mobile)
+
+  }
 
   private def populateUserAnswers(responseDetail: ResponseDetail, userAnswers: UserAnswers): Option[UserAnswers] =
     populateContactInfo[PrimaryContactDetailsPages](userAnswers, responseDetail.primaryContact, isSecondaryContact = false) map {
