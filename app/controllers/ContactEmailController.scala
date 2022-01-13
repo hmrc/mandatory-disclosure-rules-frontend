@@ -21,7 +21,7 @@ import forms.ContactEmailFormProvider
 import models.{AffinityType, Mode, Organisation, UserAnswers}
 import navigation.ContactDetailsNavigator
 import pages.{ContactEmailPage, ContactNamePage}
-import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -56,10 +56,10 @@ class ContactEmailController @Inject() (
       Ok(view(preparedForm, affinityType, getContactName(request.userAnswers, affinityType), mode))
   }
 
-  private def getContactName(userAnswers: UserAnswers, affinityType: AffinityType): String =
+  private def getContactName(userAnswers: UserAnswers, affinityType: AffinityType)(implicit messages: Messages): String =
     (userAnswers.get(ContactNamePage), affinityType) match {
       case (Some(contactName), Organisation) => contactName
-      case _                                 => ""
+      case _                                 => messages("default.firstContact.name")
     }
 
   def onSubmit(mode: Mode, affinityType: AffinityType): Action[AnyContent] = (identify andThen getData.apply() andThen requireData).async {
