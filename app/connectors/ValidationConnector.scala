@@ -18,7 +18,7 @@ package connectors
 
 import config.FrontendAppConfig
 import models.{Errors, InvalidXmlError, NonFatalErrors, SubmissionValidationFailure, SubmissionValidationResult, SubmissionValidationSuccess}
-import org.slf4j.LoggerFactory
+import play.api.Logging
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 
@@ -26,9 +26,7 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.control.NonFatal
 
-class ValidationConnector @Inject() (http: HttpClient, config: FrontendAppConfig) {
-
-  private val logger = LoggerFactory.getLogger(getClass)
+class ValidationConnector @Inject() (http: HttpClient, config: FrontendAppConfig) extends Logging {
 
   val url = s"${config.mdrUrl}/mandatory-disclosure-rules/validate-submission"
 

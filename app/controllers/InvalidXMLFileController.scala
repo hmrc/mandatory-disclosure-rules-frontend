@@ -17,12 +17,12 @@
 package controllers
 
 import controllers.actions._
-import handlers.ErrorHandler
 import pages.InvalidXMLPage
+import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.InvalidXMLFileView
+import views.html.{InvalidXMLFileView, ThereIsAProblemView}
 
 import javax.inject.Inject
 import scala.concurrent.Future
@@ -32,18 +32,21 @@ class InvalidXMLFileController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
-  errorHandler: ErrorHandler,
   val controllerComponents: MessagesControllerComponents,
-  view: InvalidXMLFileView
+  view: InvalidXMLFileView,
+  errorView: ThereIsAProblemView
 ) extends FrontendBaseController
-    with I18nSupport {
+    with I18nSupport
+    with Logging {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
       request.userAnswers.get(InvalidXMLPage) match {
         case Some(fileName) =>
           Future.successful(Ok(view(fileName)))
-        case None => errorHandler.onServerError(request, throw new RuntimeException("File name missing for file error page"))
+        case None =>
+          logger.error("File name missing for file error page")
+          Future.successful(InternalServerError(errorView()))
       }
   }
 }
