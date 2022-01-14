@@ -19,7 +19,7 @@ package services
 import base.SpecBase
 import connectors.SubscriptionConnector
 import generators.ModelGenerators
-import models.subscription.ResponseDetail
+import models.subscription.{ContactInformation, IndividualDetails, OrganisationDetails, ResponseDetail}
 import org.mockito.ArgumentMatchers.any
 import org.scalacheck.Arbitrary
 import pages._
@@ -168,6 +168,181 @@ class SubscriptionServiceSpec extends SpecBase with ModelGenerators {
 
         service.updateContactDetails(emptyUserAnswers).futureValue mustBe false
 
+      }
+    }
+
+    "hasResponseDetailDataChanged" - {
+      "return false when ReadSubscription data is not changed for individual flow" in {
+        val responseDetail = ResponseDetail(
+          subscriptionID = "111111111",
+          tradingName = Some("name"),
+          isGBUser = true,
+          primaryContact = ContactInformation(IndividualDetails("fname", None, "lname"), "test@test.com", Some("+4411223344"), Some("4411223344")),
+          secondaryContact = None
+        )
+
+        val userAnswers = emptyUserAnswers
+          .set(ContactEmailPage, "test@test.com")
+          .success
+          .value
+          .set(HaveTelephonePage, true)
+          .success
+          .value
+          .set(ContactPhonePage, "+4411223344")
+          .success
+          .value
+
+        when(mockSubscriptionConnector.readSubscription()(any[HeaderCarrier](), any[ExecutionContext]())).thenReturn(Future.successful(Some(responseDetail)))
+
+        val result = service.isContactInformationUpdated(userAnswers = userAnswers)
+        result.futureValue mustBe Some(false)
+      }
+
+      "return true when ReadSubscription data is changed for individual flow" in {
+        val responseDetail = ResponseDetail(
+          subscriptionID = "111111111",
+          tradingName = Some("name"),
+          isGBUser = true,
+          primaryContact = ContactInformation(IndividualDetails("fname", None, "lname"), "test@test.com", Some("+4411223344"), Some("4411223344")),
+          secondaryContact = None
+        )
+
+        val userAnswers = emptyUserAnswers
+          .set(ContactEmailPage, "changetest@test.com")
+          .success
+          .value
+          .set(HaveTelephonePage, true)
+          .success
+          .value
+          .set(ContactPhonePage, "+4411223344")
+          .success
+          .value
+
+        when(mockSubscriptionConnector.readSubscription()(any[HeaderCarrier](), any[ExecutionContext]())).thenReturn(Future.successful(Some(responseDetail)))
+
+        val result = service.isContactInformationUpdated(userAnswers = userAnswers)
+        result.futureValue mustBe Some(true)
+      }
+
+      "return false when ReadSubscription data is not changed for organisation flow" in {
+        val responseDetail = ResponseDetail(
+          subscriptionID = "111111111",
+          tradingName = Some("name"),
+          isGBUser = true,
+          primaryContact = ContactInformation(OrganisationDetails("orgName"), "test@test.com", Some("+4411223344"), Some("4411223344")),
+          secondaryContact = None
+        )
+
+        val userAnswers = emptyUserAnswers
+          .set(ContactNamePage, "orgName")
+          .success
+          .value
+          .set(ContactEmailPage, "test@test.com")
+          .success
+          .value
+          .set(HaveTelephonePage, true)
+          .success
+          .value
+          .set(ContactPhonePage, "+4411223344")
+          .success
+          .value
+
+        when(mockSubscriptionConnector.readSubscription()(any[HeaderCarrier](), any[ExecutionContext]())).thenReturn(Future.successful(Some(responseDetail)))
+
+        val result = service.isContactInformationUpdated(userAnswers = userAnswers)
+        result.futureValue mustBe Some(false)
+      }
+
+      "return true when ReadSubscription data secondaryContact is None and user updated the secondary contact for organisation flow" in {
+        val responseDetail = ResponseDetail(
+          subscriptionID = "111111111",
+          tradingName = Some("name"),
+          isGBUser = true,
+          primaryContact = ContactInformation(OrganisationDetails("orgName"), "test@test.com", Some("+4411223344"), Some("4411223344")),
+          secondaryContact = None
+        )
+
+        val userAnswers = emptyUserAnswers
+          .set(ContactNamePage, "orgName")
+          .success
+          .value
+          .set(ContactEmailPage, "test@test.com")
+          .success
+          .value
+          .set(HaveTelephonePage, true)
+          .success
+          .value
+          .set(ContactPhonePage, "+4411223344")
+          .success
+          .value
+          .set(HaveSecondContactPage, true)
+          .success
+          .value
+          .set(SecondContactNamePage, "SecOrgName")
+          .success
+          .value
+          .set(SecondContactEmailPage, "test1@email.com")
+          .success
+          .value
+          .set(SecondContactHavePhonePage, true)
+          .success
+          .value
+          .set(SecondContactPhonePage, "+3311211212")
+          .success
+          .value
+
+        when(mockSubscriptionConnector.readSubscription()(any[HeaderCarrier](), any[ExecutionContext]())).thenReturn(Future.successful(Some(responseDetail)))
+
+        val result = service.isContactInformationUpdated(userAnswers = userAnswers)
+        result.futureValue mustBe Some(true)
+      }
+
+      "return true when ReadSubscription data is changed for organisation flow" in {
+        val responseDetail = ResponseDetail(
+          subscriptionID = "111111111",
+          tradingName = Some("name"),
+          isGBUser = true,
+          primaryContact = ContactInformation(OrganisationDetails("orgName"), "test@test.com", Some("+4411223344"), Some("4411223344")),
+          secondaryContact = None
+        )
+
+        val userAnswers = emptyUserAnswers
+          .set(ContactNamePage, "orgName")
+          .success
+          .value
+          .set(ContactEmailPage, "changetest@test.com")
+          .success
+          .value
+          .set(HaveTelephonePage, true)
+          .success
+          .value
+          .set(ContactPhonePage, "+4411223344")
+          .success
+          .value
+
+        when(mockSubscriptionConnector.readSubscription()(any[HeaderCarrier](), any[ExecutionContext]())).thenReturn(Future.successful(Some(responseDetail)))
+
+        val result = service.isContactInformationUpdated(userAnswers = userAnswers)
+        result.futureValue mustBe Some(true)
+      }
+
+      "return None when ReadSubscription fails to return the details" in {
+
+        val userAnswers = emptyUserAnswers
+          .set(ContactEmailPage, "changetest@test.com")
+          .success
+          .value
+          .set(HaveTelephonePage, true)
+          .success
+          .value
+          .set(ContactPhonePage, "+4411223344")
+          .success
+          .value
+
+        when(mockSubscriptionConnector.readSubscription()(any[HeaderCarrier](), any[ExecutionContext]())).thenReturn(Future.successful(None))
+
+        val result = service.isContactInformationUpdated(userAnswers = userAnswers)
+        result.futureValue mustBe None
       }
     }
   }

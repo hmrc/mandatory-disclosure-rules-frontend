@@ -64,7 +64,6 @@ object RequestDetailForUpdate {
       val phoneNumber = if (haveTelephoneNumber) userAnswers.get(contactTypePage.contactTelephonePage) else None
       ContactInformation(contactTypeInfo, email, phoneNumber, mobile)
     }
-
   }
 
 }

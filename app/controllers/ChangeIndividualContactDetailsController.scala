@@ -42,7 +42,7 @@ class ChangeIndividualContactDetailsController @Inject() (
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData) {
+  def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
       val checkUserAnswersHelper = CheckYourAnswersHelper(request.userAnswers)
 
@@ -50,9 +50,10 @@ class ChangeIndividualContactDetailsController @Inject() (
         rows = checkUserAnswersHelper.getPrimaryContactDetails
       )
 
-      val hasChanged = subscriptionService.hasResponseDetailsDataChanged(request.userAnswers)
-
-      Ok(view(primaryContactList, frontendAppConfig))
+      subscriptionService.isContactInformationUpdated(request.userAnswers) map {
+        case Some(hasChanged) => Ok(view(primaryContactList, frontendAppConfig, hasChanged))
+        case _                => InternalServerError(errorView())
+      }
   }
 
   def onSubmit: Action[AnyContent] = (identify andThen getData() andThen requireData).async {

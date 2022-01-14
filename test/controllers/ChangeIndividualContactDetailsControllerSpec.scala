@@ -18,6 +18,8 @@ package controllers
 
 import base.SpecBase
 import models.UserAnswers
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import org.mockito.ArgumentMatchers.any
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -38,9 +40,15 @@ class ChangeIndividualContactDetailsControllerSpec extends SpecBase {
 
   "ChangeIndividualContactDetails Controller" - {
 
-    "must return OK and the correct view for a GET" in {
+    "must return OK and the correct view for a GET and show 'confirm and send' button on updating contact details" in {
+      when(mockSubscriptionService.isContactInformationUpdated(any[UserAnswers]())(any[HeaderCarrier]()))
+        .thenReturn(Future.successful(Some(true)))
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[SubscriptionService].toInstance(mockSubscriptionService)
+        )
+        .build()
 
       running(application) {
         val request = FakeRequest(GET, routes.ChangeIndividualContactDetailsController.onPageLoad().url)
@@ -48,6 +56,47 @@ class ChangeIndividualContactDetailsControllerSpec extends SpecBase {
         val result = route(application, request).value
 
         status(result) mustEqual OK
+        val doc = Jsoup.parse(contentAsString(result))
+        doc.getElementById("submit").text().trim() mustBe "Confirm and send"
+      }
+    }
+
+    "must return OK and the correct view for a GET" in {
+      when(mockSubscriptionService.isContactInformationUpdated(any[UserAnswers]())(any[HeaderCarrier]()))
+        .thenReturn(Future.successful(Some(false)))
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[SubscriptionService].toInstance(mockSubscriptionService)
+        )
+        .build()
+
+      running(application) {
+        val request = FakeRequest(GET, routes.ChangeIndividualContactDetailsController.onPageLoad().url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual OK
+        contentAsString(result) must not contain "Confirm and send"
+      }
+    }
+
+    "must return Internal server error on failing to read subscription details" in {
+      when(mockSubscriptionService.isContactInformationUpdated(any[UserAnswers]())(any[HeaderCarrier]()))
+        .thenReturn(Future.successful(None))
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[SubscriptionService].toInstance(mockSubscriptionService)
+        )
+        .build()
+
+      running(application) {
+        val request = FakeRequest(GET, routes.ChangeIndividualContactDetailsController.onPageLoad().url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual INTERNAL_SERVER_ERROR
       }
     }
 

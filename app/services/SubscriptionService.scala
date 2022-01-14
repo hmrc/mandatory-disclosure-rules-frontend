@@ -18,7 +18,6 @@ package services
 
 import connectors.SubscriptionConnector
 import models.UserAnswers
-import models.subscription.RequestDetailForUpdate.getContactInformation
 import models.subscription._
 import pages.{HaveSecondContactPage, SecondContactNamePage}
 import play.api.Logging
@@ -45,38 +44,52 @@ class SubscriptionService @Inject() (subscriptionConnector: SubscriptionConnecto
         RequestDetailForUpdate.convertToRequestDetails(responseDetails, userAnswers) match {
           case Some(requestDetails) => subscriptionConnector.updateSubscription(requestDetails)
           case _ =>
-            logger.info("failed to convert userAnswers to RequestDetailForUpdate")
+            logger.info("updateContactDetails:failed to convert userAnswers to RequestDetailForUpdate")
             Future.successful(false)
         }
       case _ =>
-        logger.info("readSubscription call failed to fetch the data")
+        logger.info("updateContactDetails:readSubscription call failed to fetch the data")
         Future.successful(false)
     }
 
-  def hasResponseDetailsDataChanged(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Option[Boolean]] =
+  def isContactInformationUpdated(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Option[Boolean]] =
     subscriptionConnector.readSubscription map {
-      case Some(responseDetails) =>
-        val secondContact: Option[ContactInformation] = populateResponseDetails[PrimaryContactDetailsPages](userAnswers, responseDetails.primaryContact)
+      case Some(responseDetail) =>
+        val secondaryContact = (userAnswers.get(HaveSecondContactPage), responseDetail.secondaryContact, userAnswers.get(SecondContactNamePage)) match {
+          case (Some(true), _, Some(orgName)) => populateResponseDetails[SecondaryContactDetailsPages](userAnswers, OrganisationDetails(orgName), None)
+          case (Some(true), Some(contactInformation), _) =>
+            populateResponseDetails[SecondaryContactDetailsPages](userAnswers, contactInformation.contactType, contactInformation.mobile)
+          case _ => None
+        }
 
         for {
-          primaryContact <- populateResponseDetails[PrimaryContactDetailsPages](userAnswers, responseDetails.primaryContact)
-        } yield responseDetails.copy(primaryContact = primaryContact, secondaryContact = secondContact).equals(responseDetails)
+          primaryContact <- populateResponseDetails[PrimaryContactDetailsPages](userAnswers,
+                                                                                responseDetail.primaryContact.contactType,
+                                                                                responseDetail.primaryContact.mobile
+          )
+        } yield !responseDetail.copy(primaryContact = primaryContact, secondaryContact = secondaryContact).equals(responseDetail)
 
-      case _ => None
+      case _ =>
+        logger.info("isContactInformationUpdated:readSubscription call failed to fetch the data")
+        None
     }
 
-  private def populateResponseDetails[T <: ContactTypePage](userAnswers: UserAnswers, contactInformation: ContactInformation)(implicit
+  private def populateResponseDetails[T <: ContactTypePage](userAnswers: UserAnswers, contactType: ContactType, mobile: Option[String])(implicit
     contactTypePage: T
   ): Option[ContactInformation] = {
 
-    val contactType: ContactType = userAnswers.get(contactTypePage.contactNamePage) match {
+    val updatedContactType: ContactType = userAnswers.get(contactTypePage.contactNamePage) match {
       case Some(orgName) => OrganisationDetails(orgName)
-      case _             => contactInformation.contactType
+      case _             => contactType
     }
 
     for {
-      email <- userAnswers.get(contactTypePage.contactEmailPage)
-    } yield ContactInformation(contactType, email, userAnswers.get(contactTypePage.contactTelephonePage), contactInformation.mobile)
+      email               <- userAnswers.get(contactTypePage.contactEmailPage)
+      haveTelephoneNumber <- userAnswers.get(contactTypePage.haveTelephonePage)
+    } yield {
+      val contactTelephone = if (haveTelephoneNumber) userAnswers.get(contactTypePage.contactTelephonePage) else None
+      ContactInformation(updatedContactType, email, contactTelephone, mobile)
+    }
 
   }
 
