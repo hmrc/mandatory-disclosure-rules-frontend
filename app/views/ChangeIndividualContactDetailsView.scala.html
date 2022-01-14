@@ -31,10 +31,11 @@
 
         @govukSummaryList(list)
 
-        <h2 class="govuk-heading-m govuk-!-padding-top-5">@messages("changeContactDetails.nowSendContactDetails")</h2>
 
-        <p class="govuk-body">@messages("changeContactDetails.confirmingInformation")</p>
         @if(hasChanged) {
+            <h2 class="govuk-heading-m govuk-!-padding-top-5">@messages("changeContactDetails.nowSendContactDetails")</h2>
+
+            <p class="govuk-body">@messages("changeContactDetails.confirmingInformation")</p>
             @govukButton(
                 ButtonViewModel(Text(messages("site.confirmAndSend"))).withAttribute( "id" -> "submit")
             )

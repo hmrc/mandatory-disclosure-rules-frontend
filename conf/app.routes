@@ -42,6 +42,7 @@ GET         /report/change-contact/individual/details    controllers.ChangeIndiv
 POST        /report/change-contact/individual/details   controllers.ChangeIndividualContactDetailsController.onSubmit()
 
 GET         /report/change-contact/organisation/details                       controllers.ChangeOrganisationContactDetailsController.onPageLoad()
+POST         /report/change-contact/organisation/details                       controllers.ChangeOrganisationContactDetailsController.onSubmit()
 
 GET         /report/change-contact/:affinityType/email                        controllers.ContactEmailController.onPageLoad(mode: Mode = CheckMode, affinityType: models.AffinityType)
 POST        /report/change-contact/:affinityType/email                        controllers.ContactEmailController.onSubmit(mode: Mode = CheckMode, affinityType: models.AffinityType)
