@@ -14,8 +14,6 @@
  * limitations under the License.
  *@
 
-@import uk.gov.hmrc.govukfrontend.views.html.components._
-@import viewmodels._
 @import viewmodels.InputWidth._
 
 @this(
@@ -26,11 +24,11 @@
     govukButton: GovukButton
 )
 
-@(form: Form[_], affinityType: AffinityType, contactName: String, mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages(s"contactEmail.title.$affinityType"))) {
+@layout(pageTitle = title(form, messages("contactName.title"))) {
 
-    @formHelper(action = routes.ContactEmailController.onSubmit(affinityType)) {
+    @formHelper(action = routes.ContactNameController.onSubmit()) {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
@@ -39,13 +37,13 @@
         @govukInput(
             InputViewModel(
                 field = form("value"),
-                label = LabelViewModel(Text(messages(s"contactEmail.heading.$affinityType", contactName))).asPageHeading()
-            ).withHint(HintViewModel(Text(messages("contactEmail.hint"))))
-            .withWidth(Full)
+                label = LabelViewModel(messages("contactName.heading")).asPageHeading()
+            ).withHint(HintViewModel(Text(messages("contactName.hint"))))
+            .withWidth(ThreeQuarters)
         )
 
         @govukButton(
-            ButtonViewModel(Text(messages("site.continue"))).withAttribute( "id" -> "submit")
+            ButtonViewModel(messages("site.continue")).withAttribute("id", "submit")
         )
     }
 }

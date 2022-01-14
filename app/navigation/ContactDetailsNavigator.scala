@@ -32,11 +32,11 @@ class ContactDetailsNavigator @Inject() () {
   }
 
   val checkRouteMap: (Page, AffinityType) => UserAnswers => Call = {
-    case (ContactEmailPage, Individual)   => _ => routes.ChangeIndividualContactDetailsController.onPageLoad()
-    case (ContactEmailPage, Organisation) => _ => routes.ChangeOrganisationContactDetailsController.onPageLoad()
     case (ContactPhonePage, Individual)   => _ => routes.ChangeIndividualContactDetailsController.onPageLoad()
     case (ContactPhonePage, Organisation) => _ => routes.ChangeOrganisationContactDetailsController.onPageLoad()
     case (HaveTelephonePage, affinity)    => ua => haveTelephoneRoutes(CheckMode, affinity)(ua) //ToDo do we need to clean telephone on No
+    case (ContactNamePage, affinity)      => _ => routes.ContactEmailController.onPageLoad(affinity)
+    case (ContactEmailPage, affinity)     => _ => routes.HaveTelephoneController.onPageLoad(affinity)
     case (HaveSecondContactPage, Organisation) =>
       ua =>
         yesNoPage(
@@ -59,16 +59,13 @@ class ContactDetailsNavigator @Inject() () {
     case _                                      => _ => routes.CheckYourAnswersController.onPageLoad()
   }
 
-  private def haveTelephoneRoutes(mode: Mode, affinityType: AffinityType)(ua: UserAnswers): Call = {
-    println(s"***$affinityType****${ua.get(HaveTelephonePage)}*****")
-
+  private def haveTelephoneRoutes(mode: Mode, affinityType: AffinityType)(ua: UserAnswers): Call =
     ua.get(HaveTelephonePage) match {
       case Some(hasPhone) if hasPhone =>
         routes.ContactPhoneController.onPageLoad(affinityType)
       case _ =>
         nextPage(ContactPhonePage, affinityType, mode, ua)
     }
-  }
 
   def yesNoPage(ua: UserAnswers, fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call): Call =
     ua.get(fromPage)
@@ -79,7 +76,6 @@ class ContactDetailsNavigator @Inject() () {
     case NormalMode =>
       normalRoutes(page, affinityType)(userAnswers)
     case CheckMode =>
-      println(s"***$affinityType****$page*****")
       checkRouteMap(page, affinityType)(userAnswers)
   }
 

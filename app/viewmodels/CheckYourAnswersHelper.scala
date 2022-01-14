@@ -37,10 +37,10 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
   def contactNamePage(): Option[SummaryListRow] = userAnswers.get(ContactNamePage) map {
     x =>
       SummaryListRowViewModel(
-        key = "checkYourAnswers.name.checkYourAnswersLabel",
+        key = "contactName.checkYourAnswersLabel",
         value = ValueViewModel(HtmlFormat.escape(s"$x").toString),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.IndexController.onPageLoad().url)
+          ActionItemViewModel("site.change", routes.ContactNameController.onPageLoad().url)
             .withAttribute(("id", "contact-name"))
             .withVisuallyHiddenText(messages("contactName.change.hidden"))
         )

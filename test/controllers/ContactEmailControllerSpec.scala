@@ -21,7 +21,7 @@ import forms.ContactEmailFormProvider
 import models.{AffinityType, NormalMode, UserAnswers}
 import navigation.{ContactDetailsNavigator, FakeContactDetailsNavigator}
 import org.mockito.ArgumentMatchers.any
-import pages.ContactEmailPage
+import pages.{ContactEmailPage, ContactNamePage}
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -40,6 +40,7 @@ class ContactEmailControllerSpec extends SpecBase {
   val form         = formProvider()
   val organisation = AffinityType(Organisation)
   val individual   = AffinityType(Individual)
+  val name         = "name"
 
   lazy val contactEmailRoute = routes.ContactEmailController.onPageLoad(organisation).url
   lazy val havePhonelRoute   = routes.HaveTelephoneController.onPageLoad(organisation).url
@@ -48,7 +49,12 @@ class ContactEmailControllerSpec extends SpecBase {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val userAnswers: UserAnswers = UserAnswers(userAnswersId)
+        .set(ContactNamePage, name)
+        .success
+        .value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
         val request = FakeRequest(GET, contactEmailRoute)
@@ -58,13 +64,19 @@ class ContactEmailControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[ContactEmailView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, organisation, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, organisation, name, NormalMode)(request, messages(application)).toString
       }
     }
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(ContactEmailPage, "answer").success.value
+      val userAnswers = UserAnswers(userAnswersId)
+        .set(ContactNamePage, name)
+        .success
+        .value
+        .set(ContactEmailPage, "answer")
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -76,7 +88,7 @@ class ContactEmailControllerSpec extends SpecBase {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill("answer"), organisation, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill("answer"), organisation, name, NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -100,13 +112,18 @@ class ContactEmailControllerSpec extends SpecBase {
         val result = route(application, request).value
 
         status(result) mustEqual SEE_OTHER
-        redirectLocation(result).value mustEqual havePhonelRoute
+        redirectLocation(result).value mustEqual onwardRoute.url
       }
     }
 
     "must return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val userAnswers: UserAnswers = UserAnswers(userAnswersId)
+        .set(ContactNamePage, name)
+        .success
+        .value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
         val request =
@@ -120,7 +137,7 @@ class ContactEmailControllerSpec extends SpecBase {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, organisation, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, organisation, name, NormalMode)(request, messages(application)).toString
       }
     }
 
