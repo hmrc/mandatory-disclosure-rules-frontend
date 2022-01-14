@@ -130,13 +130,15 @@ changeOrganisationContactDetails.landing-page.link = Back to report cross-border
 
 contactName.change.hidden = " contact name"
 
-contactEmail.title = What is your email address?
-contactEmail.heading = What is your email address?
+contactEmail.title.individual = What is your email address?
+contactEmail.title.organisation = What is their email address?
+contactEmail.heading.individual = What is your email address?
+contactEmail.heading.organisation = What is the email address for {0}?
 contactEmail.hint = We will use this to send confirmation of your reports or if we have any questions about them.
 contactEmail.checkYourAnswersLabel = Email address
-contactEmail.error.required = Enter your email address
+contactEmail.error.required = Enter an email address
 contactEmail.error.length = Email address must be 256 characters or less
-contactEmail.error.invalid = Enter your email address in the correct format, like name@example.com
+contactEmail.error.invalid = Enter an email address in the correct format, like name@example.com
 contactEmail.change.hidden = email address
 
 contactPhone.checkYourAnswersLabel = Telephone number
@@ -200,3 +202,12 @@ secondContactPhone.error.required = Enter a telephone number
 secondContactPhone.error.invalid = Enter a telephone number in the correct format
 secondContactPhone.error.length = Contact phone must be 17 characters or less
 secondContactPhone.change.hidden = second contact telephone number
+
+contactName.title = Who can we contact if we have questions about your reports?
+contactName.heading = Who can we contact if we have questions about your reports?
+contactName.hint = For example, ‘Tax team’ or ‘Ashley Smith’.
+contactName.checkYourAnswersLabel = Contact name
+contactName.error.required = Enter the name of the individual or team we should contact
+contactName.error.invalid = Name of the individual or team must only include letters a to z, numbers 0 to 9, apostrophes, grave accents, ampersands, hyphens, backslashes, carets and spaces
+contactName.error.length = Contact name must be 35 characters or less
+contactName.change.hidden = Contact name
