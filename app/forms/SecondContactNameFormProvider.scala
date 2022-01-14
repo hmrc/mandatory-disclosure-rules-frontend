@@ -16,10 +16,11 @@
 
 package forms
 
-import javax.inject.Inject
 import forms.mappings.Mappings
 import play.api.data.Form
 import utils.RegExConstants
+
+import javax.inject.Inject
 
 class SecondContactNameFormProvider @Inject() extends Mappings with RegExConstants {
 

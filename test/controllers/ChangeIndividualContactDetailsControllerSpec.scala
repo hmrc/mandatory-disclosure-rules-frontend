@@ -19,7 +19,6 @@ package controllers
 import base.SpecBase
 import models.UserAnswers
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
 import org.mockito.ArgumentMatchers.any
 import play.api.inject.bind
 import play.api.test.FakeRequest

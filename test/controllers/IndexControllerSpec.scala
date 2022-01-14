@@ -18,14 +18,14 @@ package controllers
 
 import base.SpecBase
 import models.UserAnswers
+import org.mockito.ArgumentMatchers.any
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
 import services.SubscriptionService
-import views.html.IndexView
-import play.api.inject.bind
-import org.mockito.ArgumentMatchers.any
 import uk.gov.hmrc.http.HeaderCarrier
+import views.html.IndexView
 
 import scala.concurrent.Future
 

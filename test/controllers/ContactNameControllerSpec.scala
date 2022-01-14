@@ -19,9 +19,8 @@ package controllers
 import base.SpecBase
 import forms.ContactNameFormProvider
 import models.{NormalMode, UserAnswers}
-import navigation.{ContactDetailsNavigator, FakeContactDetailsNavigator, FakeNavigator, Navigator}
+import navigation.{ContactDetailsNavigator, FakeContactDetailsNavigator}
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.ContactNamePage
 import play.api.inject.bind

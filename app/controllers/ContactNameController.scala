@@ -18,8 +18,6 @@ package controllers
 
 import controllers.actions._
 import forms.ContactNameFormProvider
-
-import javax.inject.Inject
 import models.{AffinityType, Mode}
 import navigation.ContactDetailsNavigator
 import pages.ContactNamePage
@@ -29,6 +27,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.ContactNameView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class ContactNameController @Inject() (

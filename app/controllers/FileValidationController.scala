@@ -20,7 +20,7 @@ import connectors.{UpscanConnector, ValidationConnector}
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import models.requests.DataRequest
 import models.upscan.{UploadSessionDetails, UploadedSuccessfully}
-import models.{Errors, InvalidXmlError, NormalMode, UserAnswers, ValidationErrors}
+import models.{InvalidXmlError, NormalMode, UserAnswers, ValidationErrors}
 import navigation.Navigator
 import pages._
 import play.api.Logging
@@ -32,7 +32,6 @@ import views.html.ThereIsAProblemView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.Try
 
 class FileValidationController @Inject() (
   override val messagesApi: MessagesApi,

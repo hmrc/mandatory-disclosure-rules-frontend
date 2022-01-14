@@ -19,8 +19,8 @@ package controllers
 import base.SpecBase
 import connectors.{UpscanConnector, ValidationConnector}
 import helpers.FakeUpscanConnector
-import models.{GenericError, UserAnswers, ValidationErrors}
 import models.upscan.{Reference, UploadId, UploadSessionDetails, UploadedSuccessfully}
+import models.{GenericError, UserAnswers, ValidationErrors}
 import org.bson.types.ObjectId
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any

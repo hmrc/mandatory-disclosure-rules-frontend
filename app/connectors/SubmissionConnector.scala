@@ -19,13 +19,13 @@ package connectors
 import config.FrontendAppConfig
 import play.api.Logging
 import play.api.http.HeaderNames
+import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.transform.{RewriteRule, RuleTransformer}
 import scala.xml.{Elem, Node, NodeSeq}
-import uk.gov.hmrc.http.HttpReads.Implicits._
 
 class SubmissionConnector @Inject() (httpClient: HttpClient, config: FrontendAppConfig) extends Logging {
 
