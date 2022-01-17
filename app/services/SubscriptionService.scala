@@ -19,14 +19,15 @@ package services
 import connectors.SubscriptionConnector
 import models.UserAnswers
 import models.subscription._
-import pages.HaveSecondContactPage
+import pages.{HaveSecondContactPage, SecondContactNamePage}
+import play.api.Logging
 import uk.gov.hmrc.http.HeaderCarrier
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 
-class SubscriptionService @Inject() (subscriptionConnector: SubscriptionConnector)(implicit ec: ExecutionContext) {
+class SubscriptionService @Inject() (subscriptionConnector: SubscriptionConnector)(implicit ec: ExecutionContext) extends Logging {
 
   def getContactDetails(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Option[UserAnswers]] =
     subscriptionConnector.readSubscription map {
@@ -36,6 +37,61 @@ class SubscriptionService @Inject() (subscriptionConnector: SubscriptionConnecto
             populateUserAnswers(responseDetail, userAnswers)
         }
     }
+
+  def updateContactDetails(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Boolean] =
+    subscriptionConnector.readSubscription flatMap {
+      case Some(responseDetails) =>
+        RequestDetailForUpdate.convertToRequestDetails(responseDetails, userAnswers) match {
+          case Some(requestDetails) => subscriptionConnector.updateSubscription(requestDetails)
+          case _ =>
+            logger.info("updateContactDetails:failed to convert userAnswers to RequestDetailForUpdate")
+            Future.successful(false)
+        }
+      case _ =>
+        logger.info("updateContactDetails:readSubscription call failed to fetch the data")
+        Future.successful(false)
+    }
+
+  def isContactInformationUpdated(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Option[Boolean]] =
+    subscriptionConnector.readSubscription map {
+      case Some(responseDetail) =>
+        val secondaryContact = (userAnswers.get(HaveSecondContactPage), responseDetail.secondaryContact, userAnswers.get(SecondContactNamePage)) match {
+          case (Some(true), _, Some(orgName)) => populateResponseDetails[SecondaryContactDetailsPages](userAnswers, OrganisationDetails(orgName), None)
+          case (Some(true), Some(contactInformation), _) =>
+            populateResponseDetails[SecondaryContactDetailsPages](userAnswers, contactInformation.contactType, contactInformation.mobile)
+          case _ => None
+        }
+
+        for {
+          primaryContact <- populateResponseDetails[PrimaryContactDetailsPages](userAnswers,
+                                                                                responseDetail.primaryContact.contactType,
+                                                                                responseDetail.primaryContact.mobile
+          )
+        } yield !responseDetail.copy(primaryContact = primaryContact, secondaryContact = secondaryContact).equals(responseDetail)
+
+      case _ =>
+        logger.info("isContactInformationUpdated:readSubscription call failed to fetch the data")
+        None
+    }
+
+  private def populateResponseDetails[T <: ContactTypePage](userAnswers: UserAnswers, contactType: ContactType, mobile: Option[String])(implicit
+    contactTypePage: T
+  ): Option[ContactInformation] = {
+
+    val updatedContactType: ContactType = userAnswers.get(contactTypePage.contactNamePage) match {
+      case Some(orgName) => OrganisationDetails(orgName)
+      case _             => contactType
+    }
+
+    for {
+      email               <- userAnswers.get(contactTypePage.contactEmailPage)
+      haveTelephoneNumber <- userAnswers.get(contactTypePage.haveTelephonePage)
+    } yield {
+      val contactTelephone = if (haveTelephoneNumber) userAnswers.get(contactTypePage.contactTelephonePage) else None
+      ContactInformation(updatedContactType, email, contactTelephone, mobile)
+    }
+
+  }
 
   private def populateUserAnswers(responseDetail: ResponseDetail, userAnswers: UserAnswers): Option[UserAnswers] =
     populateContactInfo[PrimaryContactDetailsPages](userAnswers, responseDetail.primaryContact, isSecondaryContact = false) map {
@@ -65,4 +121,5 @@ class SubscriptionService @Inject() (subscriptionConnector: SubscriptionConnecto
     } yield updatedAnswers).toOption
 
   }
+
 }

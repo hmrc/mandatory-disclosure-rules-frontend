@@ -18,19 +18,32 @@
 
 @this(
         layout: templates.Layout,
+        formHelper: FormWithCSRF,
         govukSummaryList: GovukSummaryList,
         govukButton: GovukButton
 )
 
-@(list: SummaryList, frontendAppConfig: FrontendAppConfig)(implicit request: Request[_], messages: Messages)
+@(list: SummaryList, frontendAppConfig: FrontendAppConfig, hasChanged: Boolean)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("changeIndividualContactDetails.title"))) {
+    @formHelper(action = routes.ChangeIndividualContactDetailsController.onSubmit()) {
+        <h1 class="govuk-heading-l">@messages("changeIndividualContactDetails.heading")</h1>
 
-    <h1 class="govuk-heading-l">@messages("changeIndividualContactDetails.heading")</h1>
+        @govukSummaryList(list)
 
-    @govukSummaryList(list)
+
+        @if(hasChanged) {
+            <h2 class="govuk-heading-m govuk-!-padding-top-5">@messages("changeContactDetails.nowSendContactDetails")</h2>
+
+            <p class="govuk-body">@messages("changeContactDetails.confirmingInformation")</p>
+            @govukButton(
+                ButtonViewModel(Text(messages("site.confirmAndSend"))).withAttribute( "id" -> "submit")
+            )
+        }
+    }
 
     <p class="govuk-!-padding-top-5 govuk-body">
         <a class="govuk-link" href=@frontendAppConfig.homePageUrl>@messages("changeIndividualContactDetails.landing-page.link")</a>
     </p>
+
 }

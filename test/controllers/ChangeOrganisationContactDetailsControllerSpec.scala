@@ -17,24 +17,135 @@
 package controllers
 
 import base.SpecBase
+import models.UserAnswers
+import org.jsoup.Jsoup
+import org.mockito.ArgumentMatchers.any
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.SubscriptionService
+import uk.gov.hmrc.http.HeaderCarrier
+
+import scala.concurrent.Future
 
 class ChangeOrganisationContactDetailsControllerSpec extends SpecBase {
 
+  val mockSubscriptionService: SubscriptionService = mock[SubscriptionService]
+
+  override def beforeEach: Unit = {
+    reset(mockSubscriptionService)
+    super.beforeEach
+  }
+
   "ChangeOrganisationContactDetails Controller" - {
 
-    "must return OK and the correct view for a GET" in {
+    "onPageLoad" - {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      "must return OK and the correct view for a GET and show 'confirm and send' button on updating contact details" in {
 
-      running(application) {
-        val request = FakeRequest(GET, routes.ChangeOrganisationContactDetailsController.onPageLoad().url)
+        when(mockSubscriptionService.isContactInformationUpdated(any[UserAnswers]())(any[HeaderCarrier]()))
+          .thenReturn(Future.successful(Some(true)))
 
-        val result = route(application, request).value
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(
+            bind[SubscriptionService].toInstance(mockSubscriptionService)
+          )
+          .build()
 
-        status(result) mustEqual OK
+        running(application) {
+          val request = FakeRequest(GET, routes.ChangeOrganisationContactDetailsController.onPageLoad().url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual OK
+          val doc = Jsoup.parse(contentAsString(result))
+          doc.getElementsContainingText("Confirm and send").isEmpty mustBe false
+        }
       }
+
+      "must return OK and the correct view for a GET and hide 'confirm and send' button on not updating contact details" in {
+
+        when(mockSubscriptionService.isContactInformationUpdated(any[UserAnswers]())(any[HeaderCarrier]()))
+          .thenReturn(Future.successful(Some(false)))
+
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(
+            bind[SubscriptionService].toInstance(mockSubscriptionService)
+          )
+          .build()
+
+        running(application) {
+          val request = FakeRequest(GET, routes.ChangeOrganisationContactDetailsController.onPageLoad().url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual OK
+          val doc = Jsoup.parse(contentAsString(result))
+          doc.getElementsContainingText("Confirm and send").isEmpty mustBe true
+        }
+      }
+
+      "must load 'Internal server error' page on failing to read subscription details" in {
+
+        when(mockSubscriptionService.isContactInformationUpdated(any[UserAnswers]())(any[HeaderCarrier]()))
+          .thenReturn(Future.successful(None))
+
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(
+            bind[SubscriptionService].toInstance(mockSubscriptionService)
+          )
+          .build()
+
+        running(application) {
+          val request = FakeRequest(GET, routes.ChangeOrganisationContactDetailsController.onPageLoad().url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual INTERNAL_SERVER_ERROR
+        }
+      }
+    }
+
+    "onSubmit" - {
+
+      "redirect to confirmation page on updating ContactDetails" in {
+        when(mockSubscriptionService.updateContactDetails(any[UserAnswers]())(any[HeaderCarrier]()))
+          .thenReturn(Future.successful(true))
+
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(
+            bind[SubscriptionService].toInstance(mockSubscriptionService)
+          )
+          .build()
+
+        running(application) {
+          val request = FakeRequest(POST, routes.ChangeOrganisationContactDetailsController.onSubmit().url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual NOT_IMPLEMENTED
+        }
+      }
+
+      "load 'technical difficulties' page on failing to update ContactDetails" in {
+        when(mockSubscriptionService.updateContactDetails(any[UserAnswers]())(any[HeaderCarrier]()))
+          .thenReturn(Future.successful(false))
+
+        val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(
+            bind[SubscriptionService].toInstance(mockSubscriptionService)
+          )
+          .build()
+
+        running(application) {
+          val request = FakeRequest(POST, routes.ChangeOrganisationContactDetailsController.onSubmit().url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual INTERNAL_SERVER_ERROR
+        }
+      }
+
     }
   }
 }

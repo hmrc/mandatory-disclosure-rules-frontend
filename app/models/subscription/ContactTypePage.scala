@@ -16,7 +16,6 @@
 
 package models.subscription
 
-import pages.QuestionPage
 import pages._
 
 sealed trait ContactTypePage {

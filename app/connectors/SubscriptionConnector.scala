@@ -48,7 +48,7 @@ class SubscriptionConnector @Inject() (val config: FrontendAppConfig, val http: 
       }
   }
 
-  def updateSubscription(requestDetail: RequestDetailForUpdate)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Int] = {
+  def updateSubscription(requestDetail: RequestDetailForUpdate)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] = {
 
     val url = s"${config.mdrUrl}/mandatory-disclosure-rules/subscription/update-subscription"
     http
@@ -56,7 +56,7 @@ class SubscriptionConnector @Inject() (val config: FrontendAppConfig, val http: 
       .map {
         responseMessage =>
           logger.warn(s"Status ${responseMessage.status} has been received when update subscription was called")
-          responseMessage.status
+          is2xx(responseMessage.status)
       }
   }
 

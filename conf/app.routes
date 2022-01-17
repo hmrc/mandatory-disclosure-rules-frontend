@@ -38,9 +38,11 @@ GET         /report/problem/invalid-xml-file             controllers.InvalidXMLF
 
 GET         /report/fileValidation                       controllers.FileValidationController.onPageLoad()
 
-GET         /report/change-contact/individual/details                         controllers.ChangeIndividualContactDetailsController.onPageLoad()
+GET         /report/change-contact/individual/details    controllers.ChangeIndividualContactDetailsController.onPageLoad()
+POST        /report/change-contact/individual/details   controllers.ChangeIndividualContactDetailsController.onSubmit()
 
 GET         /report/change-contact/organisation/details                       controllers.ChangeOrganisationContactDetailsController.onPageLoad()
+POST         /report/change-contact/organisation/details                       controllers.ChangeOrganisationContactDetailsController.onSubmit()
 
 GET         /report/change-contact/:affinityType/email                        controllers.ContactEmailController.onPageLoad(mode: Mode = CheckMode, affinityType: models.AffinityType)
 POST        /report/change-contact/:affinityType/email                        controllers.ContactEmailController.onSubmit(mode: Mode = CheckMode, affinityType: models.AffinityType)

@@ -20,12 +20,14 @@ import config.FrontendAppConfig
 import controllers.actions._
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import services.SubscriptionService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.CheckYourAnswersHelper
 import viewmodels.govuk.summarylist._
-import views.html.ChangeIndividualContactDetailsView
+import views.html.{ChangeIndividualContactDetailsView, ThereIsAProblemView}
 
 import javax.inject.Inject
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class ChangeIndividualContactDetailsController @Inject() (
   override val messagesApi: MessagesApi,
@@ -33,12 +35,14 @@ class ChangeIndividualContactDetailsController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
+  subscriptionService: SubscriptionService,
   val controllerComponents: MessagesControllerComponents,
-  view: ChangeIndividualContactDetailsView
+  view: ChangeIndividualContactDetailsView,
+  errorView: ThereIsAProblemView
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData) {
+  def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
       val checkUserAnswersHelper = CheckYourAnswersHelper(request.userAnswers)
 
@@ -46,6 +50,17 @@ class ChangeIndividualContactDetailsController @Inject() (
         rows = checkUserAnswersHelper.getPrimaryContactDetails
       )
 
-      Ok(view(primaryContactList, frontendAppConfig))
+      subscriptionService.isContactInformationUpdated(request.userAnswers) map {
+        case Some(hasChanged) => Ok(view(primaryContactList, frontendAppConfig, hasChanged))
+        case _                => InternalServerError(errorView())
+      }
+  }
+
+  def onSubmit: Action[AnyContent] = (identify andThen getData() andThen requireData).async {
+    implicit request =>
+      subscriptionService.updateContactDetails(request.userAnswers) map {
+        case true  => NotImplemented("Not yet implemented, it will be implemented by the ticket DAC6-1363") //TODO DAC6-1363
+        case false => InternalServerError(errorView())
+      }
   }
 }

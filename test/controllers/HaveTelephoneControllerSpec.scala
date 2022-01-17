@@ -107,10 +107,6 @@ class HaveTelephoneControllerSpec extends SpecBase with MockitoSugar {
           FakeRequest(POST, haveTelephoneRoute)
             .withFormUrlEncodedBody(("value", ""))
 
-        val boundForm = form.bind(Map("value" -> ""))
-
-        val view = application.injector.instanceOf[HaveTelephoneView]
-
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
