@@ -63,7 +63,7 @@ class ChangeOrganisationContactDetailsController @Inject() (
   def onSubmit: Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
       subscriptionService.updateContactDetails(request.userAnswers) map {
-        case true  => NotImplemented("Not yet implemented, it will be implemented by the ticket DAC6-1363") //TODO replace with confirmation page DAC6-1363
+        case true  => Redirect(routes.DetailsUpdatedController.onPageLoad())
         case false => InternalServerError(errorView())
       }
   }

@@ -71,3 +71,5 @@ POST        /report/change-contact/organisation/second-contact-name           co
 GET         /report/change-contact/organisation/second-contact-phone          controllers.SecondContactPhoneController.onPageLoad()
 POST        /report/change-contact/organisation/second-contact-phone          controllers.SecondContactPhoneController.onSubmit()
 
+
+GET         /report/change-contact/details-updated                            controllers.DetailsUpdatedController.onPageLoad()
