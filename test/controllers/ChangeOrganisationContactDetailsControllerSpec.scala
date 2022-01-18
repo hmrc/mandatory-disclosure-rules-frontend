@@ -123,7 +123,8 @@ class ChangeOrganisationContactDetailsControllerSpec extends SpecBase {
 
           val result = route(application, request).value
 
-          status(result) mustEqual NOT_IMPLEMENTED
+          status(result) mustEqual SEE_OTHER
+          redirectLocation(result).value mustEqual routes.DetailsUpdatedController.onPageLoad().url
         }
       }
 

@@ -63,7 +63,7 @@ pageNotFound.p3 = Check you have entered the correct details.
 thereIsAProblem.title = Sorry, there is a problem with the service
 thereIsAProblem.heading = Sorry, there is a problem with the service
 thereIsAProblem.paragraph.1 = Try again later.
-thereIsAProblem.paragraph.2 = Your file upload has been unsuccessful. We have not saved your answers. If you need to contact someone about your MDR reporting, you can email
+thereIsAProblem.paragraph.2 = We have not saved any file you uploaded or any answers you entered. If you need to contact someone about your MDR reporting, you can email
 thereIsAProblem.emailAddress = enquiries.aeoi@hmrc.gov.uk
 
 journeyRecovery.continue.title = Sorry, there is a problem with the service
@@ -211,3 +211,8 @@ contactName.error.required = Enter the name of the individual or team we should 
 contactName.error.invalid = Name of the individual or team must only include letters a to z, numbers 0 to 9, apostrophes, grave accents, ampersands, hyphens, backslashes, carets and spaces
 contactName.error.length = Contact name must be 35 characters or less
 contactName.change.hidden = Contact name
+
+detailsUpdated.title = Contact details updated
+detailsUpdated.heading = Contact details updated
+detailsUpdated.p1 = We will use your new details if we need to contact you.
+detailsUpdated.link = Back to report cross-border arrangements
