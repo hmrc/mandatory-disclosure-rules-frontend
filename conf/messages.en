@@ -63,7 +63,7 @@ pageNotFound.p3 = Check you have entered the correct details.
 thereIsAProblem.title = Sorry, there is a problem with the service
 thereIsAProblem.heading = Sorry, there is a problem with the service
 thereIsAProblem.paragraph.1 = Try again later.
-thereIsAProblem.paragraph.2 = Your file upload has been unsuccessful. We have not saved your answers. If you need to contact someone about your MDR reporting, you can email
+thereIsAProblem.paragraph.2 = We have not saved any file you uploaded or any answers you entered. If you need to contact someone about your MDR reporting, you can email
 thereIsAProblem.emailAddress = enquiries.aeoi@hmrc.gov.uk
 
 journeyRecovery.continue.title = Sorry, there is a problem with the service
