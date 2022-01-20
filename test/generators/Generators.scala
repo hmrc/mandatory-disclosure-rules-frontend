@@ -140,7 +140,7 @@ trait Generators extends UserAnswersGenerator with PageGenerators with ModelGene
 
   def validPhoneNumberWithinLength(maxlength: Int): Gen[String] = RegexpGen.from(phoneRegex) retryUntil
     (
-      phoneNumber => phoneNumber.length < maxlength && phoneNumber.matches("""^[A-Z0-9 )/(\-*#+]*$""")
+      phoneNumber => phoneNumber.length < maxlength
     )
 
   def validPhoneNumberTooLong(minLength: Int): Gen[String] = for {
