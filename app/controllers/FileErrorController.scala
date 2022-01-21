@@ -17,45 +17,36 @@
 package controllers
 
 import controllers.actions._
-import models.GenericError
-import pages.{GenericErrorPage, InvalidXMLPage}
-import play.api.i18n.{I18nSupport, Messages, MessagesApi}
+import pages.InvalidXMLPage
+import play.api.Logging
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.govukfrontend.views.Aliases.Text
-import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.InvalidXMLFileView
+import views.html.{FileErrorView, ThereIsAProblemView}
 
 import javax.inject.Inject
+import scala.concurrent.Future
 
-class InvalidXMLFileController @Inject() (
+class FileErrorController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
-  view: InvalidXMLFileView
+  view: FileErrorView,
+  errorView: ThereIsAProblemView
 ) extends FrontendBaseController
-    with I18nSupport {
+    with I18nSupport
+    with Logging {
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData() andThen requireData) {
+  def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
-      (request.userAnswers.get(GenericErrorPage), request.userAnswers.get(InvalidXMLPage)) match {
-        case (Some(errors), Some(fileName)) =>
-          val xmlErrors = for {
-            error <- errors.sorted
-          } yield error
-          Ok(view(fileName, generateTable(xmlErrors)))
+      request.userAnswers.get(InvalidXMLPage) match {
+        case Some(fileName) =>
+          Future.successful(Ok(view(fileName)))
+        case None =>
+          logger.error("File name missing for file error page")
+          Future.successful(InternalServerError(errorView()))
       }
-
   }
-
-  private def generateTable(error: Seq[GenericError])(implicit messages: Messages): Seq[Seq[TableRow]] =
-    error.map {
-      er =>
-        Seq(
-          TableRow(content = Text(er.lineNumber.toString)),
-          TableRow(content = Text(messages(er.message.messageKey, er.message.args)))
-        )
-    }
 }

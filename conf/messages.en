@@ -216,3 +216,19 @@ detailsUpdated.title = Contact details updated
 detailsUpdated.heading = Contact details updated
 detailsUpdated.p1 = We will use your new details if we need to contact you.
 detailsUpdated.link = Back to report cross-border arrangements
+
+fileError.title = There is a problem with your file
+fileError.heading = There is a problem with your file
+fileError.p1 = We cannot accept the file {0} because it does not meet the MDR data requirements.
+fileError.subheading1 = What you can do next
+fileError.bullet1 = Print or save this page
+fileError.bullet2 = View the errors on this page
+fileError.bullet3 = Correct the errors using the {0}
+fileError.bullet3.link = MDR technical guidance for XML files (opens in new tab)
+fileError.bullet4 = Upload your corrected file
+fileError.p2 = Be aware there could further problems with submitting your XML file because we have not checked it against business rules.
+fileError.subheading2 = Errors
+fileError.tableHeading1 = Line
+fileError.tableHeading2 = Error
+
+
