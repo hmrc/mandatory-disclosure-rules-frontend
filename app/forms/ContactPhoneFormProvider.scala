@@ -32,7 +32,7 @@ class ContactPhoneFormProvider @Inject() extends Mappings with RegExConstants {
         "contactPhone.error.required",
         "contactPhone.error.invalid",
         "contactPhone.error.length",
-        digitsAndWhiteSpaceOnly,
+        phoneRegex,
         maxlength
       )
     )
