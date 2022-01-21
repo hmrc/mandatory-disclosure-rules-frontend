@@ -76,6 +76,7 @@ class FileValidationController @Inject() (
                           } yield Redirect(navigator.nextPage(ValidXMLPage, NormalMode, updatedAnswers))
 
                         case Left(ValidationErrors(errors, _)) =>
+                          println(s"\n\n\n\n\n\n$errors")
                           for {
                             updatedAnswers           <- Future.fromTry(UserAnswers(request.userId).set(InvalidXMLPage, fileName))
                             updatedAnswersWithErrors <- Future.fromTry(updatedAnswers.set(GenericErrorPage, errors))
@@ -83,12 +84,14 @@ class FileValidationController @Inject() (
                           } yield Redirect(navigator.nextPage(InvalidXMLPage, NormalMode, updatedAnswers))
 
                         case Left(InvalidXmlError(_)) =>
+                          println(s"\n\n\n\n\n\nINVALID")
                           for {
                             updatedAnswers <- Future.fromTry(UserAnswers(request.userId).set(InvalidXMLPage, fileName))
                             _              <- sessionRepository.set(updatedAnswers)
                           } yield Redirect(navigator.nextPage(InvalidXMLPage, NormalMode, updatedAnswers))
 
-                        case _ =>
+                        case e =>
+                          println(s"ERRRROR\n\n\n\n\n\n$e")
                           Future.successful(InternalServerError(errorView()))
                       }
                   }

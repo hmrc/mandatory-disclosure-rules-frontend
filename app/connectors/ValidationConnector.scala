@@ -17,7 +17,7 @@
 package connectors
 
 import config.FrontendAppConfig
-import models.{Errors, InvalidXmlError, NonFatalErrors, SubmissionValidationFailure, SubmissionValidationResult, SubmissionValidationSuccess}
+import models.{Errors, InvalidXmlError, NonFatalErrors, SubmissionValidationFailure, SubmissionValidationResult, SubmissionValidationSuccess, ValidationErrors}
 import play.api.Logging
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
@@ -37,6 +37,7 @@ class ValidationConnector @Inject() (http: HttpClient, config: FrontendAppConfig
         response =>
           response.status match {
             case OK =>
+              println(s"\n\n\n${response.json}")
               response.json.as[SubmissionValidationResult] match {
                 case x: SubmissionValidationSuccess =>
                   Right(x.boolean)

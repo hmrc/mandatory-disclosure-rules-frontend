@@ -55,7 +55,7 @@ class InvalidXMLFileController @Inject() (
       er =>
         Seq(
           TableRow(content = Text(er.lineNumber.toString)),
-          TableRow(content = Text(messages(er.message.messageKey, er.message.args)))
+          TableRow(content = Text(messages(er.message.messageKey, er.message.args: _*)))
         )
     }
 }
