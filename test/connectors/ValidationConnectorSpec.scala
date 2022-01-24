@@ -20,7 +20,7 @@ import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, post, urlEqualTo}
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import generators.Generators
-import models.{GenericError, InvalidXmlError, NonFatalErrors, ValidationErrors}
+import models.{GenericError, InvalidXmlError, Message, NonFatalErrors, ValidationErrors}
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.Application
@@ -41,7 +41,7 @@ class ValidationConnectorSpec extends SpecBase with WireMockHelper with Generato
   lazy val connector: ValidationConnector = app.injector.instanceOf[ValidationConnector]
   val validationUrl                       = "/mandatory-disclosure-rules/validate-submission"
 
-  val failurePayloadResult: ValidationErrors = ValidationErrors(Seq(GenericError(1, "some error"), GenericError(2, "another error")), None)
+  val failurePayloadResult: ValidationErrors = ValidationErrors(Seq(GenericError(1, Message("some error")), GenericError(2, Message("another error"))), None)
 
   "Validation Connector" - {
 
@@ -62,11 +62,17 @@ class ValidationConnectorSpec extends SpecBase with WireMockHelper with Generato
                                | "errors":[
                                |     {
                                |         "lineNumber" : 1,
-                               |         "messageKey":"some error"
+                               |         "message": {
+                               |            "messageKey": "some error",
+                               |            "args": []
+                               |         }
                                |      },
                                |      {
                                |         "lineNumber" : 2,
-                               |         "messageKey":"another error"
+                               |         "message": {
+                               |            "messageKey":"another error",
+                               |             "args": []
+                               |         }
                                |      }
                                |  ]
                                |}}""".stripMargin

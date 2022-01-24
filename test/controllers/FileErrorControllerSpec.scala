@@ -33,7 +33,7 @@ class FileErrorControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, routes.InvalidXMLFileController.onPageLoad().url)
+        val request = FakeRequest(GET, routes.FileErrorController.onPageLoad().url)
 
         val result = route(application, request).value
 
@@ -50,7 +50,7 @@ class FileErrorControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       running(application) {
-        val request = FakeRequest(GET, routes.InvalidXMLFileController.onPageLoad().url)
+        val request = FakeRequest(GET, routes.FileErrorController.onPageLoad().url)
 
         val result = route(application, request).value
 

@@ -20,7 +20,7 @@ import base.SpecBase
 import connectors.{UpscanConnector, ValidationConnector}
 import helpers.FakeUpscanConnector
 import models.upscan.{Reference, UploadId, UploadSessionDetails, UploadedSuccessfully}
-import models.{GenericError, UserAnswers, ValidationErrors}
+import models.{GenericError, Message, UserAnswers, ValidationErrors}
 import org.bson.types.ObjectId
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -86,7 +86,7 @@ class FileValidationControllerSpec extends SpecBase with BeforeAndAfterEach {
 
     "must redirect to invalid XML page if XML validation fails" in {
 
-      val errors: Seq[GenericError] = Seq(GenericError(1, "error"))
+      val errors: Seq[GenericError] = Seq(GenericError(1, Message("error")))
       val userAnswersCaptor         = ArgumentCaptor.forClass(classOf[UserAnswers])
       val expectedData              = Json.obj("invalidXML" -> "afile", "errors" -> errors)
 
@@ -106,7 +106,7 @@ class FileValidationControllerSpec extends SpecBase with BeforeAndAfterEach {
 
     "must redirect to file error page if XML parser fails" in {
 
-      val errors: Seq[GenericError] = Seq(GenericError(1, "error"))
+      val errors: Seq[GenericError] = Seq(GenericError(1, Message("error")))
       val userAnswersCaptor         = ArgumentCaptor.forClass(classOf[UserAnswers])
       val expectedData              = Json.obj("invalidXML" -> "afile", "errors" -> errors)
 
