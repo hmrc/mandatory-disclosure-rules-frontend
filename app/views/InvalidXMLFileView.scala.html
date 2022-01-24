@@ -32,10 +32,10 @@
     <h2 class="govuk-heading-m">@messages("fileError.subheading1")</h2>
 
     <ol class="govuk-list govuk-list--bullet" style="padding-left:20px;list-style-type:disc">
-        <li>@messages("fileError.bullet1")</li>
+        <li><a class="govuk-link" href="#" onclick="window.print();return false;">@messages("fileError.bullet1")</a></li>
         <li>@messages("fileError.bullet2")</li>
-        <li>@Html(messages("fileError.bullet3", link("#", "fileError.bullet3.link")))</li>
-        <li>@messages("fileError.bullet4")</li>
+        <li>@Html(messages("fileError.bullet3", link("#", "fileError.bullet3.link", openInNewWindow = true)))</li>
+        <li>@link(routes.UploadFileController.onPageLoad().url, "fileError.bullet4")</li>
     </ol>
 
     <p class="govuk-body">@messages("fileError.p2")</p>

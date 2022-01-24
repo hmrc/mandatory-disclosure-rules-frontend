@@ -37,7 +37,6 @@ class ValidationConnector @Inject() (http: HttpClient, config: FrontendAppConfig
         response =>
           response.status match {
             case OK =>
-              println(s"\n\n\n${response.json}")
               response.json.as[SubmissionValidationResult] match {
                 case x: SubmissionValidationSuccess =>
                   Right(x.boolean)

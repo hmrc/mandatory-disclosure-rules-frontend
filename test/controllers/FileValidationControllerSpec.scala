@@ -20,7 +20,7 @@ import base.SpecBase
 import connectors.{UpscanConnector, ValidationConnector}
 import helpers.FakeUpscanConnector
 import models.upscan.{Reference, UploadId, UploadSessionDetails, UploadedSuccessfully}
-import models.{GenericError, Message, UserAnswers, ValidationErrors}
+import models.{GenericError, InvalidXmlError, Message, UserAnswers, ValidationErrors}
 import org.bson.types.ObjectId
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -106,14 +106,13 @@ class FileValidationControllerSpec extends SpecBase with BeforeAndAfterEach {
 
     "must redirect to file error page if XML parser fails" in {
 
-      val errors: Seq[GenericError] = Seq(GenericError(1, Message("error")))
-      val userAnswersCaptor         = ArgumentCaptor.forClass(classOf[UserAnswers])
-      val expectedData              = Json.obj("invalidXML" -> "afile", "errors" -> errors)
+      val userAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+      val expectedData      = Json.obj("invalidXML" -> "afile")
 
       fakeUpscanConnector.setDetails(uploadDetails)
       //noinspection ScalaStyle
 
-      when(mockValidationConnector.sendForValidation(any())(any(), any())).thenReturn(Future.successful(Left(ValidationErrors(errors, None))))
+      when(mockValidationConnector.sendForValidation(any())(any(), any())).thenReturn(Future.successful(Left(InvalidXmlError("sax exception"))))
       when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
 
       val controller             = application.injector.instanceOf[FileValidationController]
@@ -121,6 +120,7 @@ class FileValidationControllerSpec extends SpecBase with BeforeAndAfterEach {
 
       status(result) mustBe SEE_OTHER
       verify(mockSessionRepository, times(1)).set(userAnswersCaptor.capture())
+      redirectLocation(result) mustBe Some(routes.FileErrorController.onPageLoad().url)
       userAnswersCaptor.getValue.data mustEqual expectedData
     }
 
