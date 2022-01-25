@@ -19,10 +19,11 @@
 @(rows: Seq[Seq[TableRow]], head: Option[Seq[HeadCell]] = None, caption: Option[String] = None)(implicit messages: Messages)
 
 @govukTable(Table(
-rows = rows,
-head = head,
-caption = caption,
-firstCellIsHeader = true
+ caption = caption,
+ captionClasses = "govuk-heading-m",
+ head = head,
+ rows = rows,
+ firstCellIsHeader = false
 ))
 
 @{

@@ -31,7 +31,7 @@
 
     <h2 class="govuk-heading-m">@messages("fileError.subheading1")</h2>
 
-    <ol class="govuk-list govuk-list--bullet" style="padding-left:20px;list-style-type:disc">
+    <ol class="govuk-list govuk-list--number" >
         <li><a class="govuk-link" href="#" onclick="window.print();return false;">@messages("fileError.bullet1")</a></li>
         <li>@messages("fileError.bullet2")</li>
         <li>@Html(messages("fileError.bullet3", link("#", "fileError.bullet3.link", openInNewWindow = true)))</li>
@@ -40,9 +40,9 @@
 
     <p class="govuk-body">@messages("fileError.p2")</p>
 
-    <h2 class="govuk-heading-m">@messages("fileError.subheading2")</h2>
 
     @table(
+        caption = Some(messages("fileError.tableCaption")),
         rows = errorRows,
         head = Some(
             Seq(HeadCell(Text(messages("fileError.tableHeading1"))), HeadCell(Text(messages("fileError.tableHeading2"))))

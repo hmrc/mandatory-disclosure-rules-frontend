@@ -225,10 +225,9 @@ fileError.bullet3 = Correct the errors using the {0}
 fileError.bullet3.link = MDR technical guidance for XML files (opens in new tab)
 fileError.bullet4 = Upload your corrected file
 fileError.p2 = Be aware there could further problems with submitting your XML file because we have not checked it against business rules.
-fileError.subheading2 = Errors
+fileError.tableCaption = Errors
 fileError.tableHeading1 = Line
 fileError.tableHeading2 = Error
-
 
 xml.defaultMessage = There is a problem with this line number
 xml.enter.an.element = Enter an {0}
