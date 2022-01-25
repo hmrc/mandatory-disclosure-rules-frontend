@@ -40,7 +40,7 @@
 
     <p class="govuk-body">@messages("fileError.p2")</p>
 
-
+    <div class="govuk-!-padding-top-3">
     @table(
         caption = Some(messages("fileError.tableCaption")),
         rows = errorRows,
@@ -48,4 +48,5 @@
             Seq(HeadCell(Text(messages("fileError.tableHeading1"))), HeadCell(Text(messages("fileError.tableHeading2"))))
         )
     )
+    </div>
 }
