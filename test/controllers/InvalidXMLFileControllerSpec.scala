@@ -32,7 +32,7 @@ class InvalidXMLFileControllerSpec extends SpecBase {
 
   private val errorRows = Seq(
     Seq(
-      TableRow(content = Text("1")),
+      TableRow(content = Text("1"), classes = "govuk-table__cell--numeric"),
       TableRow(content = Text(error))
     )
   )
