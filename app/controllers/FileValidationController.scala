@@ -88,7 +88,7 @@ class FileValidationController @Inject() (
                             _              <- sessionRepository.set(updatedAnswers)
                           } yield Redirect(routes.FileErrorController.onPageLoad())
 
-                        case e =>
+                        case _ =>
                           Future.successful(InternalServerError(errorView()))
                       }
                   }
