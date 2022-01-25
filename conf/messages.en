@@ -128,8 +128,6 @@ changeContactDetails.nowSendContactDetails = Now send your new contact details
 changeContactDetails.confirmingInformation = By sending these details, you are confirming that the information is correct and complete to the best of your knowledge.
 changeOrganisationContactDetails.landing-page.link = Back to report cross-border arrangements
 
-contactName.change.hidden = " contact name"
-
 contactEmail.title.individual = What is your email address?
 contactEmail.title.organisation = What is their email address?
 contactEmail.heading.individual = What is your email address?
@@ -210,9 +208,36 @@ contactName.checkYourAnswersLabel = Contact name
 contactName.error.required = Enter the name of the individual or team we should contact if we have any questions about your reports
 contactName.error.invalid = Name must only include letters a to z, apostrophes, grave accents, ampersands, hyphens, backslashes, carets and spaces
 contactName.error.length = Name must be 35 characters or less
-contactName.change.hidden = Contact name
+contactName.change.hidden = contact name
 
 detailsUpdated.title = Contact details updated
 detailsUpdated.heading = Contact details updated
 detailsUpdated.p1 = We will use your new details if we need to contact you.
 detailsUpdated.link = Back to report cross-border arrangements
+
+fileError.title = There is a problem with your file
+fileError.heading = There is a problem with your file
+fileError.p1 = We cannot accept the file {0} because it does not meet the MDR data requirements.
+fileError.subheading1 = What you can do next
+fileError.bullet1 = Print or save this page
+fileError.bullet2 = View the errors on this page
+fileError.bullet3 = Correct the errors using the {0}
+fileError.bullet3.link = MDR technical guidance for XML files (opens in new tab)
+fileError.bullet4 = Upload your corrected file
+fileError.p2 = Be aware there could further problems with submitting your XML file because we have not checked it against business rules.
+fileError.subheading2 = Errors
+fileError.tableHeading1 = Line
+fileError.tableHeading2 = Error
+
+
+xml.defaultMessage = There is a problem with this line number
+xml.enter.an.element = Enter an {0}
+xml.enter.a.element = Enter a {0}
+xml.must.be.boolean = {0} must be true or false
+xml.not.ISO.code = {0} is not one of the ISO country codes
+xml.not.ISO.code.concernedMS = ConcernedMS is not one of the ISO EU Member State country codes
+xml.not.allowed.value = {0} is not one of the allowed values
+xml.not.allowed.length = {0} must be {1} characters or less
+xml.must.not.include.pence = {0} must not include pence, like 123 or 156
+xml.date.format = Enter a {0} in the format YYYY-MM-DD
+xml.enter.line = Enter a line for {0}

@@ -18,16 +18,22 @@ package models
 
 import play.api.libs.json._
 
-case class GenericError(lineNumber: Int, messageKey: String)
+case class GenericError(lineNumber: Int, message: Message)
 
 object GenericError {
 
   implicit def orderByLineNumber[A <: GenericError]: Ordering[A] =
     Ordering.by(
-      ge => (ge.lineNumber, ge.messageKey)
+      ge => (ge.lineNumber, ge.message.messageKey)
     )
 
   implicit val format = Json.format[GenericError]
+}
+
+case class Message(messageKey: String, args: Seq[String] = Seq.empty)
+
+object Message {
+  implicit val messageFormat: OFormat[Message] = Json.format[Message]
 }
 
 sealed trait Errors

@@ -34,15 +34,17 @@ GET         /report/problem/not-xml-file                 controllers.NotXMLFileC
 
 GET         /report/problem/virus-file-found             controllers.VirusFileFoundController.onPageLoad()
 
-GET         /report/problem/invalid-xml-file             controllers.InvalidXMLFileController.onPageLoad()
+GET         /report/problem/data-errors                  controllers.InvalidXMLFileController.onPageLoad()
 
-GET         /report/fileValidation                       controllers.FileValidationController.onPageLoad()
+GET         /report/problem/invalid-xml-file             controllers.FileErrorController.onPageLoad()
+
+GET         /report/file-validation                      controllers.FileValidationController.onPageLoad()
 
 GET         /report/change-contact/individual/details    controllers.ChangeIndividualContactDetailsController.onPageLoad()
-POST        /report/change-contact/individual/details   controllers.ChangeIndividualContactDetailsController.onSubmit()
+POST        /report/change-contact/individual/details    controllers.ChangeIndividualContactDetailsController.onSubmit()
 
 GET         /report/change-contact/organisation/details                       controllers.ChangeOrganisationContactDetailsController.onPageLoad()
-POST         /report/change-contact/organisation/details                       controllers.ChangeOrganisationContactDetailsController.onSubmit()
+POST        /report/change-contact/organisation/details                       controllers.ChangeOrganisationContactDetailsController.onSubmit()
 
 GET         /report/change-contact/:affinityType/email                        controllers.ContactEmailController.onPageLoad(mode: Mode = CheckMode, affinityType: models.AffinityType)
 POST        /report/change-contact/:affinityType/email                        controllers.ContactEmailController.onSubmit(mode: Mode = CheckMode, affinityType: models.AffinityType)

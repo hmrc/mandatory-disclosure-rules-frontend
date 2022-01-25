@@ -17,18 +17,37 @@
 package controllers
 
 import base.SpecBase
-import pages.InvalidXMLPage
+import models.{GenericError, Message}
+import pages.{GenericErrorPage, InvalidXMLPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.{InvalidXMLFileView, ThereIsAProblemView}
+import uk.gov.hmrc.govukfrontend.views.Aliases.Text
+import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
+import views.html.InvalidXMLFileView
 
 class InvalidXMLFileControllerSpec extends SpecBase {
+
+  private val fileName = "fileName"
+  private val error    = "Some Error"
+
+  private val errorRows = Seq(
+    Seq(
+      TableRow(content = Text("1")),
+      TableRow(content = Text(error))
+    )
+  )
 
   "InvalidXMLFile Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val userAnswers = emptyUserAnswers.set(InvalidXMLPage, "example.xml").success.value
+      val userAnswers = emptyUserAnswers
+        .set(GenericErrorPage, Seq(GenericError(1, Message(error))))
+        .success
+        .value
+        .set(InvalidXMLPage, fileName)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -40,25 +59,7 @@ class InvalidXMLFileControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[InvalidXMLFileView]
 
         status(result) mustEqual OK
-
-        contentAsString(result) mustEqual view("example.xml")(request, messages(application)).toString
-      }
-    }
-
-    "must return INTERNAL_SERVER_ERROR and the correct view when InvalidXMLPage does not exist" in {
-
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
-
-      running(application) {
-        val request = FakeRequest(GET, routes.InvalidXMLFileController.onPageLoad().url)
-
-        val result = route(application, request).value
-
-        val view = application.injector.instanceOf[ThereIsAProblemView]
-
-        status(result) mustEqual INTERNAL_SERVER_ERROR
-
-        contentAsString(result) mustEqual view()(request, messages(application)).toString
+        contentAsString(result) mustEqual view(fileName, errorRows)(request, messages(application)).toString
       }
     }
   }

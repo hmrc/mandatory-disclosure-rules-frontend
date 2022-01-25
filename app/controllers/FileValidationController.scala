@@ -86,7 +86,7 @@ class FileValidationController @Inject() (
                           for {
                             updatedAnswers <- Future.fromTry(UserAnswers(request.userId).set(InvalidXMLPage, fileName))
                             _              <- sessionRepository.set(updatedAnswers)
-                          } yield Redirect(navigator.nextPage(InvalidXMLPage, NormalMode, updatedAnswers))
+                          } yield Redirect(routes.FileErrorController.onPageLoad())
 
                         case _ =>
                           Future.successful(InternalServerError(errorView()))
