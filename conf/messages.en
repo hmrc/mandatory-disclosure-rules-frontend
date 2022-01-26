@@ -232,6 +232,7 @@ fileError.tableHeading2 = Error
 xml.defaultMessage = There is a problem with this line number
 xml.add.an.element = Add an {0}
 xml.add.a.element = Add a {0}
+xml.add.element = Add {0}
 xml.must.be.boolean = {0} must be true or false
 xml.not.ISO.code = {0} is not one of the ISO country codes
 xml.not.ISO.code.concernedMS = ConcernedMS is not one of the ISO EU Member State country codes
