@@ -242,3 +242,5 @@ xml.must.not.include.pence = {0} must not include pence, like 123 or 156
 xml.date.format = Enter a {0} in the format YYYY-MM-DD
 xml.add.line = Add a line for {0}
 xml.empty.tag = {0} is missing one or more fields, including {1}
+xml.add.line.messageType = Add a {0} that must always be MDR
+xml.add.one.or.more.elements = Add one or more {0}
