@@ -241,4 +241,4 @@ xml.not.allowed.length = {0} must be {1} characters or less
 xml.must.not.include.pence = {0} must not include pence, like 123 or 156
 xml.date.format = Enter a {0} in the format YYYY-MM-DD
 xml.add.line = Add a line for {0}
-xml.empty.tag = {0} must not be empty
+xml.empty.tag = {0} is missing one or more fields, including {1}
