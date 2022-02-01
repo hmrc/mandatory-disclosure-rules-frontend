@@ -24,7 +24,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.InvalidXMLFileView
+import views.html.{InvalidXMLFileView, ThereIsAProblemView}
 
 import javax.inject.Inject
 
@@ -34,7 +34,8 @@ class InvalidXMLFileController @Inject() (
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
-  view: InvalidXMLFileView
+  view: InvalidXMLFileView,
+  errorView: ThereIsAProblemView
 ) extends FrontendBaseController
     with I18nSupport {
 
@@ -46,6 +47,8 @@ class InvalidXMLFileController @Inject() (
             error <- errors.sorted
           } yield error
           Ok(view(fileName, generateTable(xmlErrors)))
+        case _ =>
+          InternalServerError(errorView())
       }
 
   }
@@ -54,8 +57,8 @@ class InvalidXMLFileController @Inject() (
     error.map {
       er =>
         Seq(
-          TableRow(content = Text(er.lineNumber.toString), classes = "govuk-table__cell--numeric"),
-          TableRow(content = Text(messages(er.message.messageKey, er.message.args: _*)))
+          TableRow(content = Text(er.lineNumber.toString), classes = "govuk-table__cell--numeric", attributes = Map("id" -> "lineNumber")),
+          TableRow(content = Text(messages(er.message.messageKey, er.message.args: _*)), attributes = Map("id" -> "errorMessage"))
         )
     }
 }
