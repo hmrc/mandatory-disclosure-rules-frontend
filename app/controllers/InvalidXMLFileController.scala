@@ -57,8 +57,8 @@ class InvalidXMLFileController @Inject() (
     error.map {
       er =>
         Seq(
-          TableRow(content = Text(er.lineNumber.toString), classes = "govuk-table__cell--numeric", attributes = Map("id" -> "lineNumber")),
-          TableRow(content = Text(messages(er.message.messageKey, er.message.args: _*)), attributes = Map("id" -> "errorMessage"))
+          TableRow(content = Text(er.lineNumber.toString), classes = "govuk-table__cell--numeric", attributes = Map("id" -> s"lineNumber_${er.lineNumber}")),
+          TableRow(content = Text(messages(er.message.messageKey, er.message.args: _*)), attributes = Map("id" -> s"errorMessage_${er.lineNumber}"))
         )
     }
 }

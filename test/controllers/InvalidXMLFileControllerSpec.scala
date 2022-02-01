@@ -32,8 +32,8 @@ class InvalidXMLFileControllerSpec extends SpecBase {
 
   private val errorRows = Seq(
     Seq(
-      TableRow(content = Text("1"), classes = "govuk-table__cell--numeric", attributes = Map("id" -> "lineNumber")),
-      TableRow(content = Text(error), attributes = Map("id" -> "errorMessage"))
+      TableRow(content = Text("1"), classes = "govuk-table__cell--numeric", attributes = Map("id" -> "lineNumber_1")),
+      TableRow(content = Text(error), attributes = Map("id" -> "errorMessage_1"))
     )
   )
 
