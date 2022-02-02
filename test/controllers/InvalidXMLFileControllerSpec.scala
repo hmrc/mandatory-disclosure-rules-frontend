@@ -32,8 +32,8 @@ class InvalidXMLFileControllerSpec extends SpecBase {
 
   private val errorRows = Seq(
     Seq(
-      TableRow(content = Text("1"), classes = "govuk-table__cell--numeric"),
-      TableRow(content = Text(error))
+      TableRow(content = Text("1"), classes = "govuk-table__cell--numeric", attributes = Map("id" -> "lineNumber_1")),
+      TableRow(content = Text(error), attributes = Map("id" -> "errorMessage_1"))
     )
   )
 
@@ -60,6 +60,19 @@ class InvalidXMLFileControllerSpec extends SpecBase {
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(fileName, errorRows)(request, messages(application)).toString
+      }
+    }
+
+    "must return Internal server error on failing to read error details from userAnswers" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, routes.InvalidXMLFileController.onPageLoad().url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual INTERNAL_SERVER_ERROR
       }
     }
   }
