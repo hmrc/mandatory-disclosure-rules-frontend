@@ -146,7 +146,7 @@ contactPhone.heading.organisation = What is the telephone number for {0}?
 contactPhone.heading.individual = What is your telephone number?
 contactPhone.hint = Enter a telephone number, like&nbsp;01632&nbsp;960&nbsp;001, 07700&nbsp;900&nbsp;982 or +44&nbsp;808&nbsp;157&nbsp;0192.
 contactPhone.error.required = Enter a telephone number
-contactPhone.error.invalid = Enter a telephone number in the correct format
+contactPhone.error.invalid = Enter a real telephone number
 contactPhone.error.length = Telephone number must be 24 characters or less
 contactPhone.change.hidden = telephone number
 
@@ -197,7 +197,7 @@ secondContactPhone.heading = What is the telephone number for {0}?
 secondContactPhone.hint = Enter a telephone number, like 01632 960 001, 07700 900 982 or +44 808 157 0192.
 secondContactPhone.checkYourAnswersLabel = Second contact telephone number
 secondContactPhone.error.required = Enter a telephone number
-secondContactPhone.error.invalid = Enter a telephone number in the correct format
+secondContactPhone.error.invalid = Enter real a telephone number
 secondContactPhone.error.length = Telephone number must be 24 characters or less
 secondContactPhone.change.hidden = second contact telephone number
 
