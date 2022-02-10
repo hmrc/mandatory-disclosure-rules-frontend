@@ -25,16 +25,12 @@ case object Pending extends FileStatus
 case class Rejected(error: FileError) extends FileStatus
 case object Accepted extends FileStatus
 
-object Rejected {
-  implicit def format: OFormat[Rejected] = Json.format[Rejected]
-}
-
 object FileStatus {
 
   implicit val format: OFormat[FileStatus] = {
     implicit def accepted: OFormat[Accepted.type] = Json.format[Accepted.type]
     implicit def pend: OFormat[Pending.type]      = Json.format[Pending.type]
-
+    implicit def rejected: OFormat[Rejected]      = Json.format[Rejected]
     Json.format[FileStatus]
   }
 }
