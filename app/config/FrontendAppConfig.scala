@@ -50,6 +50,9 @@ class FrontendAppConfig @Inject() (configuration: Configuration, servicesConfig:
 
   val mdrUrl: String = servicesConfig.baseUrl("mandatory-disclosure-rules")
 
+  //TODO must remove stub config on completing the BE tickets DAC6-1465 and DAC6-1466
+  val mdrStubsUrl: String = servicesConfig.baseUrl("mandatory-disclosure-rules-stub")
+
   private val exitSurveyBaseUrl: String = configuration.get[Service]("microservice.services.feedback-frontend").baseUrl
   val exitSurveyUrl: String             = s"$exitSurveyBaseUrl/feedback/mandatory-disclosure-rules-frontend"
 

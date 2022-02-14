@@ -34,8 +34,7 @@ class SubscriptionServiceSpec extends SpecBase with ModelGenerators {
 
   val mockSubscriptionConnector: SubscriptionConnector = mock[SubscriptionConnector]
 
-  override def guiceApplicationBuilder(): GuiceApplicationBuilder = super
-    .guiceApplicationBuilder()
+  override def guiceApplicationBuilder(): GuiceApplicationBuilder = new GuiceApplicationBuilder()
     .overrides(
       bind[SubscriptionConnector].toInstance(mockSubscriptionConnector)
     )
