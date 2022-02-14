@@ -1,0 +1,29 @@
+@this(
+        layout: templates.Layout,
+        govukButton: GovukButton
+)
+
+@()(implicit request: Request[_], messages: Messages)
+
+@layout(pageTitle = titleNoForm(messages("fileStatus.title"))) {
+
+    <h1 class="govuk-heading-l">@messages("fileStatus.heading")</h1>
+
+    <p>@messages("fileStatus.p1")</p>
+    <p>@messages("fileStatus.p2")</p>
+    <p>@messages("fileStatus.p3")</p>
+
+    govUk
+
+    <table class="govuk-table">
+        <caption class="govuk-table__caption govuk-table__caption--m">@messages("fileStatus.fileStatus")</caption>
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header app-custom-class govuk-!-width-one-half">@messages("fileStatus.file")</th>
+                    <th scope="col" class="govuk-table__header app-custom-class govuk-!-width-one-quarter">@messages("fileStatus.sent")</th>
+                    <th scope="col" class="govuk-table__header app-custom-class">@messages("fileStatus.fileStatus")</th>
+                    <th scope="col" class="govuk-table__header app-custom-class">@messages("fileStatus.nextSteps")</th>
+                </tr>
+            </thead>
+    </table>
+}
