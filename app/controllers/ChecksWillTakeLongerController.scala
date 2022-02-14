@@ -16,12 +16,11 @@
 
 package controllers
 
-import connectors.SubscriptionConnector
 import controllers.actions._
-import pages.{ContactEmailPage, SecondContactEmailPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.ContactEmailHelper.getContactEmails
 import views.html.{ChecksWillTakeLongerView, ThereIsAProblemView}
 
 import javax.inject.Inject
@@ -41,14 +40,11 @@ class ChecksWillTakeLongerController @Inject() (
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData) {
     implicit request =>
-      request.userAnswers.get(ContactEmailPage) match {
-        case Some(firstContactEmail) =>
-          val firstContact: String          = firstContactEmail
-          val secondContact: Option[String] = request.userAnswers.get(SecondContactEmailPage)
-
-          Ok(view(firstContact, secondContact))
-        case _ =>
-          InternalServerError(errorView())
+      getContactEmails.fold {
+        InternalServerError(errorView())
+      } {
+        emails =>
+          Ok(view(emails.firstContactEmail, emails.secondContactEmail))
       }
   }
 }
