@@ -16,21 +16,15 @@
 
 package connectors
 
-import base.SpecBase
-import com.github.tomakehurst.wiremock.client.WireMock
-import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, post, urlEqualTo}
 import models.upscan._
 import org.bson.types.ObjectId
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Application
 import play.api.http.Status.{BAD_REQUEST, OK, SERVICE_UNAVAILABLE}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.UpstreamErrorResponse
-import utils.WireMockHelper
 
-class UpscanConnectorSpec extends SpecBase with GuiceOneAppPerSuite with WireMockHelper with ScalaFutures {
+class UpscanConnectorSpec extends Connector {
 
   override def fakeApplication(): Application = new GuiceApplicationBuilder()
     .configure(
@@ -46,14 +40,8 @@ class UpscanConnectorSpec extends SpecBase with GuiceOneAppPerSuite with WireMoc
     "should return an UpscanInitiateResponse" - {
       "when upscan returns a valid successful response" in {
         val body = PreparedUpload(Reference("Reference"), UploadForm("downloadUrl", Map("formKey" -> "formValue")))
-        server.stubFor(
-          post(urlEqualTo(connector.upscanInitiatePath))
-            .willReturn(
-              aResponse()
-                .withStatus(OK)
-                .withBody(Json.toJson(body).toString())
-            )
-        )
+
+        stubPostResponse(connector.upscanInitiatePath, OK, Json.toJson(body).toString())
 
         whenReady(connector.getUpscanFormData) {
           result =>
@@ -65,13 +53,7 @@ class UpscanConnectorSpec extends SpecBase with GuiceOneAppPerSuite with WireMoc
 
     "throw an exception" - {
       "when upscan returns a 4xx response" in {
-        server.stubFor(
-          post(urlEqualTo(connector.upscanInitiatePath))
-            .willReturn(
-              aResponse()
-                .withStatus(BAD_REQUEST)
-            )
-        )
+        stubPostResponse(connector.upscanInitiatePath, BAD_REQUEST)
 
         val result = connector.getUpscanFormData
 
@@ -84,13 +66,7 @@ class UpscanConnectorSpec extends SpecBase with GuiceOneAppPerSuite with WireMoc
       }
 
       "when upscan returns 5xx response" in {
-        server.stubFor(
-          post(urlEqualTo(connector.upscanInitiatePath))
-            .willReturn(
-              aResponse()
-                .withStatus(SERVICE_UNAVAILABLE)
-            )
-        )
+        stubPostResponse(connector.upscanInitiatePath, SERVICE_UNAVAILABLE)
 
         val result = connector.getUpscanFormData
         whenReady(result.failed) {
@@ -111,15 +87,8 @@ class UpscanConnectorSpec extends SpecBase with GuiceOneAppPerSuite with WireMoc
                                         reference = Reference("Reference"),
                                         status = UploadedSuccessfully("name", "downloadUrl")
         )
-        server.stubFor(
-          WireMock
-            .get(urlEqualTo("/mandatory-disclosure-rules/upscan/details/12345"))
-            .willReturn(
-              aResponse()
-                .withStatus(OK)
-                .withBody(Json.toJson(body).toString())
-            )
-        )
+
+        stubGetResponse("/mandatory-disclosure-rules/upscan/details/12345", OK, Json.toJson(body).toString())
 
         whenReady(connector.getUploadDetails(UploadId("12345"))) {
           result =>
@@ -131,16 +100,7 @@ class UpscanConnectorSpec extends SpecBase with GuiceOneAppPerSuite with WireMoc
 
     "should return None" - {
       "when an invalid response is returned" in {
-
-        server.stubFor(
-          WireMock
-            .get(urlEqualTo("/mandatory-disclosure-rules/upscan/details/12345"))
-            .willReturn(
-              aResponse()
-                .withStatus(OK)
-                .withBody(Json.obj().toString())
-            )
-        )
+        stubGetResponse("/mandatory-disclosure-rules/upscan/details/12345", OK, Json.obj().toString())
 
         whenReady(connector.getUploadDetails(UploadId("12345"))) {
           result =>
@@ -162,15 +122,7 @@ class UpscanConnectorSpec extends SpecBase with GuiceOneAppPerSuite with WireMoc
             | }
             |""".stripMargin
 
-        server.stubFor(
-          WireMock
-            .get(urlEqualTo("/mandatory-disclosure-rules/upscan/status/12345"))
-            .willReturn(
-              aResponse()
-                .withStatus(OK)
-                .withBody(body)
-            )
-        )
+        stubGetResponse("/mandatory-disclosure-rules/upscan/status/12345", OK, body)
 
         whenReady(connector.getUploadStatus(UploadId("12345"))) {
           result =>
@@ -186,15 +138,7 @@ class UpscanConnectorSpec extends SpecBase with GuiceOneAppPerSuite with WireMoc
             | }
             |""".stripMargin
 
-        server.stubFor(
-          WireMock
-            .get(urlEqualTo("/mandatory-disclosure-rules/upscan/status/12345"))
-            .willReturn(
-              aResponse()
-                .withStatus(OK)
-                .withBody(body)
-            )
-        )
+        stubGetResponse("/mandatory-disclosure-rules/upscan/status/12345", OK, body)
 
         whenReady(connector.getUploadStatus(UploadId("12345"))) {
           result =>
@@ -210,15 +154,7 @@ class UpscanConnectorSpec extends SpecBase with GuiceOneAppPerSuite with WireMoc
             | }
             |""".stripMargin
 
-        server.stubFor(
-          WireMock
-            .get(urlEqualTo("/mandatory-disclosure-rules/upscan/status/12345"))
-            .willReturn(
-              aResponse()
-                .withStatus(OK)
-                .withBody(body)
-            )
-        )
+        stubGetResponse("/mandatory-disclosure-rules/upscan/status/12345", OK, body)
 
         whenReady(connector.getUploadStatus(UploadId("12345"))) {
           result =>
@@ -234,15 +170,7 @@ class UpscanConnectorSpec extends SpecBase with GuiceOneAppPerSuite with WireMoc
             | }
             |""".stripMargin
 
-        server.stubFor(
-          WireMock
-            .get(urlEqualTo("/mandatory-disclosure-rules/upscan/status/12345"))
-            .willReturn(
-              aResponse()
-                .withStatus(OK)
-                .withBody(body)
-            )
-        )
+        stubGetResponse("/mandatory-disclosure-rules/upscan/status/12345", OK, body)
 
         whenReady(connector.getUploadStatus(UploadId("12345"))) {
           result =>
@@ -258,15 +186,7 @@ class UpscanConnectorSpec extends SpecBase with GuiceOneAppPerSuite with WireMoc
             | }
             |""".stripMargin
 
-        server.stubFor(
-          WireMock
-            .get(urlEqualTo("/mandatory-disclosure-rules/upscan/status/12345"))
-            .willReturn(
-              aResponse()
-                .withStatus(OK)
-                .withBody(body)
-            )
-        )
+        stubGetResponse("/mandatory-disclosure-rules/upscan/status/12345", OK, body)
 
         whenReady(connector.getUploadStatus(UploadId("12345"))) {
           result =>
@@ -277,16 +197,7 @@ class UpscanConnectorSpec extends SpecBase with GuiceOneAppPerSuite with WireMoc
 
     "should return None" - {
       "when an invalid response is returned" in {
-
-        server.stubFor(
-          WireMock
-            .get(urlEqualTo("/mandatory-disclosure-rules/upscan/status/12345"))
-            .willReturn(
-              aResponse()
-                .withStatus(OK)
-                .withBody(Json.obj().toString())
-            )
-        )
+        stubGetResponse("/mandatory-disclosure-rules/upscan/status/12345", OK, Json.obj().toString())
 
         whenReady(connector.getUploadStatus(UploadId("12345"))) {
           result =>

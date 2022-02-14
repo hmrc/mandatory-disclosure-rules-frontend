@@ -16,22 +16,17 @@
 
 package connectors
 
-import base.SpecBase
-import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, post, urlEqualTo}
-import generators.{Generators, ModelGenerators}
+import generators.ModelGenerators
 import models.subscription.{RequestDetailForUpdate, ResponseDetail}
-import org.scalacheck.{Arbitrary, Gen}
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import org.scalacheck.Arbitrary
 import play.api.Application
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, OK}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
-import utils.WireMockHelper
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class SubscriptionConnectorSpec extends SpecBase with WireMockHelper with Generators with ScalaCheckPropertyChecks with ScalaFutures with ModelGenerators {
+class SubscriptionConnectorSpec extends Connector with ModelGenerators {
 
   override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(
@@ -42,7 +37,6 @@ class SubscriptionConnectorSpec extends SpecBase with WireMockHelper with Genera
   lazy val connector: SubscriptionConnector = app.injector.instanceOf[SubscriptionConnector]
   private val readSubscriptionUrl           = "/mandatory-disclosure-rules/subscription/read-subscription"
   private val updateSubscriptionUrl         = "/mandatory-disclosure-rules/subscription/update-subscription"
-  private val errorCodes: Gen[Int]          = Gen.oneOf(400, 403, 404, 405, 409, 500, 503)
 
   val responseDetailString: String =
     """
@@ -74,15 +68,7 @@ class SubscriptionConnectorSpec extends SpecBase with WireMockHelper with Genera
   "SubmissionConnector" - {
     "readSubscription" - {
       "must return a ResponseDetails when readSubscription is successful" in {
-
-        server.stubFor(
-          post(urlEqualTo(readSubscriptionUrl))
-            .willReturn(
-              aResponse()
-                .withStatus(OK)
-                .withBody(responseDetailString)
-            )
-        )
+        stubPostResponse(readSubscriptionUrl, OK, responseDetailString)
 
         whenReady(connector.readSubscription()) {
           result =>
@@ -91,13 +77,7 @@ class SubscriptionConnectorSpec extends SpecBase with WireMockHelper with Genera
       }
 
       "must return a None when readSubscription  fails with InternalServerError" in {
-        server.stubFor(
-          post(urlEqualTo(readSubscriptionUrl))
-            .willReturn(
-              aResponse()
-                .withStatus(INTERNAL_SERVER_ERROR)
-            )
-        )
+        stubPostResponse(readSubscriptionUrl, INTERNAL_SERVER_ERROR)
 
         whenReady(connector.readSubscription()) {
           result =>
@@ -109,14 +89,7 @@ class SubscriptionConnectorSpec extends SpecBase with WireMockHelper with Genera
     "updateSubscription" - {
       "must return status 200 when updateSubscription is successful" in {
         val requestDetails = Arbitrary.arbitrary[RequestDetailForUpdate].sample.value
-
-        server.stubFor(
-          post(urlEqualTo(updateSubscriptionUrl))
-            .willReturn(
-              aResponse()
-                .withStatus(OK)
-            )
-        )
+        stubPostResponse(updateSubscriptionUrl, OK)
 
         whenReady(connector.updateSubscription(requestDetails)) {
           result =>
@@ -128,13 +101,7 @@ class SubscriptionConnectorSpec extends SpecBase with WireMockHelper with Genera
         val requestDetails = Arbitrary.arbitrary[RequestDetailForUpdate].sample.value
 
         val errorCode = errorCodes.sample.value
-        server.stubFor(
-          post(urlEqualTo(updateSubscriptionUrl))
-            .willReturn(
-              aResponse()
-                .withStatus(errorCode)
-            )
-        )
+        stubPostResponse(updateSubscriptionUrl, errorCode)
 
         whenReady(connector.updateSubscription(requestDetails)) {
           result =>

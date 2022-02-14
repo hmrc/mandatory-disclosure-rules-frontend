@@ -16,19 +16,13 @@
 
 package connectors
 
-import base.SpecBase
-import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, post, urlEqualTo}
-import generators.Generators
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.Application
 import play.api.http.Status.{BAD_REQUEST, INTERNAL_SERVER_ERROR, OK}
 import play.api.inject.guice.GuiceApplicationBuilder
-import utils.WireMockHelper
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class SubmissionConnectorSpec extends SpecBase with WireMockHelper with Generators with ScalaCheckPropertyChecks with ScalaFutures {
+class SubmissionConnectorSpec extends Connector {
 
   override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(
@@ -43,13 +37,7 @@ class SubmissionConnectorSpec extends SpecBase with WireMockHelper with Generato
 
     "must return a 200 on successful submission of xml" in {
 
-      server.stubFor(
-        post(urlEqualTo(submitUrl))
-          .willReturn(
-            aResponse()
-              .withStatus(OK)
-          )
-      )
+      stubPostResponse(submitUrl, OK)
 
       val xml = <test></test>
       whenReady(connector.submitDocument("test-file.xml", "enrolmentID", xml)) {
@@ -59,14 +47,7 @@ class SubmissionConnectorSpec extends SpecBase with WireMockHelper with Generato
     }
 
     "must return a 400 when submission of xml fails with BadRequest" in {
-
-      server.stubFor(
-        post(urlEqualTo(submitUrl))
-          .willReturn(
-            aResponse()
-              .withStatus(BAD_REQUEST)
-          )
-      )
+      stubPostResponse(submitUrl, BAD_REQUEST)
 
       val xml = <test-bad></test-bad>
       whenReady(connector.submitDocument("test-bad-file.xml", "enrolmentID", xml)) {
@@ -76,14 +57,7 @@ class SubmissionConnectorSpec extends SpecBase with WireMockHelper with Generato
     }
 
     "must return a 500 when submission of xml fails with InternalServer Error" in {
-
-      server.stubFor(
-        post(urlEqualTo(submitUrl))
-          .willReturn(
-            aResponse()
-              .withStatus(INTERNAL_SERVER_ERROR)
-          )
-      )
+      stubPostResponse(submitUrl, INTERNAL_SERVER_ERROR)
 
       val xml = <test-error></test-error>
       whenReady(connector.submitDocument("test-file.xml", "enrolmentID", xml)) {

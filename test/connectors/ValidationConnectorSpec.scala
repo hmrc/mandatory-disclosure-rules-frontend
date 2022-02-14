@@ -16,21 +16,14 @@
 
 package connectors
 
-import base.SpecBase
-import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, post, urlEqualTo}
-import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import generators.Generators
 import models.{GenericError, InvalidXmlError, Message, NonFatalErrors, ValidationErrors}
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.Application
 import play.api.http.Status.{BAD_REQUEST, OK}
 import play.api.inject.guice.GuiceApplicationBuilder
-import utils.WireMockHelper
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class ValidationConnectorSpec extends SpecBase with WireMockHelper with Generators with ScalaCheckPropertyChecks with ScalaFutures {
+class ValidationConnectorSpec extends Connector {
 
   override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(
@@ -49,7 +42,7 @@ class ValidationConnectorSpec extends SpecBase with WireMockHelper with Generato
 
       val expectedBody = """{"boolean": true}"""
 
-      stubResponse(validationUrl, OK, expectedBody)
+      stubPostResponse(validationUrl, OK, expectedBody)
 
       val result = connector.sendForValidation("SomeUrl")
       result.futureValue mustBe Right(true)
@@ -77,14 +70,14 @@ class ValidationConnectorSpec extends SpecBase with WireMockHelper with Generato
                                |  ]
                                |}}""".stripMargin
 
-      stubResponse(validationUrl, OK, expectedBody)
+      stubPostResponse(validationUrl, OK, expectedBody)
 
       val result = connector.sendForValidation("SomeUrl")
       result.futureValue mustBe Left(failurePayloadResult)
     }
 
     "must return a InvalidXmlError when validation returns a Invalid XML in error message" in {
-      stubResponse(validationUrl, BAD_REQUEST, "Invalid XML")
+      stubPostResponse(validationUrl, BAD_REQUEST, "Invalid XML")
 
       val result = connector.sendForValidation("SomeUrl")
 
@@ -94,7 +87,7 @@ class ValidationConnectorSpec extends SpecBase with WireMockHelper with Generato
     }
 
     "must return a NonFatalErrors when validation returns a 400 (BAD_REQUEST) status" in {
-      stubResponse(validationUrl, BAD_REQUEST, "Some error")
+      stubPostResponse(validationUrl, BAD_REQUEST, "Some error")
 
       val result = connector.sendForValidation("SomeUrl")
 
@@ -104,13 +97,4 @@ class ValidationConnectorSpec extends SpecBase with WireMockHelper with Generato
     }
   }
 
-  private def stubResponse(expectedUrl: String, expectedStatus: Int, expectedBody: String): StubMapping =
-    server.stubFor(
-      post(urlEqualTo(expectedUrl))
-        .willReturn(
-          aResponse()
-            .withStatus(expectedStatus)
-            .withBody(expectedBody)
-        )
-    )
 }
