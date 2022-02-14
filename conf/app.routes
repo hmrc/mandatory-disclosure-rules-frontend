@@ -75,3 +75,5 @@ POST        /report/change-contact/organisation/second-contact-phone          co
 
 
 GET         /report/change-contact/details-updated                            controllers.DetailsUpdatedController.onPageLoad()
+
+GET         /report/checks-will-take-longer                                   controllers.ChecksWillTakeLongerController.onPageLoad()
