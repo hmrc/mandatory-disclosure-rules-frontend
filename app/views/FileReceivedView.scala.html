@@ -17,19 +17,29 @@
 @this(
         layout: templates.Layout,
         govukInsetText: GovukInsetText,
-        govukButton: GovukButton
+        govukButton: GovukButton,
+        govukPanel: GovukPanel,
+        link: components.Link
 )
 
-@(messageRefId: String, timeSubmitted: String, dateSubmitted: String)(implicit request: Request[_], messages: Messages)
+@(messageRefId: String, timeSubmitted: String, dateSubmitted: String, firstContactEmail: String, secondContactEmail:Option[String])(implicit request: Request[_], messages: Messages)
+
+@secondContactMessage = {
+    @if(secondContactEmail.isDefined){@messages("fileReceived.p2.5", secondContactEmail.get)}
+}
 
 @layout(pageTitle = titleNoForm(messages("fileReceived.title"))) {
 
-    <h1 class="govuk-heading-l">@messages("fileReceived.heading", timeSubmitted, dateSubmitted)</h1>
+    @govukPanel(Panel(
+        title = Text(messages("fileReceived.altText")),
+        content = Text(messages("fileReceived.heading", timeSubmitted, dateSubmitted)))
+    )
 
     <p class="govuk-body">@messages("fileReceived.p1")</p>
     @govukInsetText(InsetText(
     content = messageRefId))
     <p class="govuk-body">@messages("fileReceived.subheading")</p>
-    <p class="govuk-body">@messages("fileReceived.p2")</p>
+    <p class="govuk-body">@messages("fileReceived.p2", firstContactEmail, secondContactMessage)</p>
     <p class="govuk-body">@messages("fileReceived.p3")</p>
+    <p class="govuk-body">@link(routes.IndexController.onPageLoad.url, "fileReceived.back")</p>
 }

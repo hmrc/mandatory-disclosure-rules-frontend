@@ -29,6 +29,8 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.{FileReceivedView, ThereIsAProblemView}
 import uk.gov.hmrc.play.language.LanguageUtils
+import utils.ContactEmailHelper
+import utils.ContactEmailHelper.getContactEmails
 
 import java.time.format.DateTimeFormatter
 import scala.xml.{XML => FileXML}
@@ -78,7 +80,12 @@ class FileReceivedController @Inject() (
                             val messageRefId          = (xml \\ "MessageSpec" \ "MessageRefId").text
                             val time                  = s"${details.submitted.getHour}:${details.submitted.getMinute}"
                             val date                  = languageUtils.Dates.formatDate(details.submitted.toLocalDate)
-                            Ok(view(messageRefId, time, date))
+                            getContactEmails.fold {
+                              InternalServerError(errorView())
+                            } {
+                              emails =>
+                                Ok(view(messageRefId, time, date, emails.firstContactEmail, emails.secondContactEmail))
+                            }
                         }
                     }
                 }
