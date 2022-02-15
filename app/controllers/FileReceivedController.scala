@@ -16,24 +16,18 @@
 
 package controllers
 
-import connectors.{HandleXMLFileConnector, UpscanConnector}
+import connectors.HandleXMLFileConnector
 import controllers.actions._
-import models.requests.DataRequest
-import models.upscan.{UploadSessionDetails, UploadedSuccessfully}
-import pages.UploadIDPage
+import pages.MessageSpecDataPage
 import play.api.Logging
-
-import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.{FileReceivedView, ThereIsAProblemView}
 import uk.gov.hmrc.play.language.LanguageUtils
-import utils.ContactEmailHelper
 import utils.ContactEmailHelper.getContactEmails
+import views.html.{FileReceivedView, ThereIsAProblemView}
 
-import java.time.format.DateTimeFormatter
-import scala.xml.{XML => FileXML}
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class FileReceivedController @Inject() (
@@ -45,7 +39,6 @@ class FileReceivedController @Inject() (
   view: FileReceivedView,
   errorView: ThereIsAProblemView,
   handleXMLFileConnector: HandleXMLFileConnector,
-  upscanConnector: UpscanConnector,
   languageUtils: LanguageUtils
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
@@ -62,44 +55,23 @@ class FileReceivedController @Inject() (
           } {
             details =>
               request.userAnswers
-                .get(UploadIDPage)
+                .get(MessageSpecDataPage)
                 .fold {
-                  logger.error("Cannot find uploadId")
+                  logger.error("Cannot find message spec data")
                   Future.successful(InternalServerError(errorView()))
                 } {
-                  uploadId =>
-                    upscanConnector.getUploadDetails(uploadId) map {
-                      uploadSessions =>
-                        getDownloadUrl(uploadSessions).fold {
-                          logger.error("File not uploaded successfully")
-                          (InternalServerError(errorView()))
-                        } {
-                          downloadDetails =>
-                            val (fileName, upScanUrl) = downloadDetails
-                            val xml                   = FileXML.load(upScanUrl)
-                            val messageRefId          = (xml \\ "MessageSpec" \ "MessageRefId").text
-                            val time                  = s"${details.submitted.getHour}:${details.submitted.getMinute}"
-                            val date                  = languageUtils.Dates.formatDate(details.submitted.toLocalDate)
-                            getContactEmails.fold {
-                              InternalServerError(errorView())
-                            } {
-                              emails =>
-                                Ok(view(messageRefId, time, date, emails.firstContactEmail, emails.secondContactEmail))
-                            }
-                        }
+                  messageSpecData =>
+                    val messageRefId = messageSpecData.messageRefId
+                    val time         = s"${details.submitted.getHour}:${details.submitted.getMinute}"
+                    val date         = languageUtils.Dates.formatDate(details.submitted.toLocalDate)
+                    getContactEmails.fold {
+                      Future.successful(InternalServerError(errorView()))
+                    } {
+                      emails =>
+                        Future.successful(Ok(view(messageRefId, time, date, emails.firstContactEmail, emails.secondContactEmail)))
                     }
                 }
           }
       }
   }
-
-  private def getDownloadUrl(uploadSessions: Option[UploadSessionDetails])(implicit request: DataRequest[_]): Option[(String, String)] =
-    uploadSessions match {
-      case Some(uploadDetails) =>
-        uploadDetails.status match {
-          case UploadedSuccessfully(name, downloadUrl) => Some(name, downloadUrl)
-          case _                                       => None
-        }
-      case _ => None
-    }
 }
