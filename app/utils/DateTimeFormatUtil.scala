@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,28 +12,19 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import uk.gov.hmrc.govukfrontend.views.viewmodels.table.Table
+package utils
 
-@this(
-        layout: templates.Layout,
-        govukButton: GovukButton,
-        govukTable: GovukTable
-)
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
-@(table: Table)(implicit request: Request[_], messages: Messages)
+object DateTimeFormatUtil {
 
-@layout(pageTitle = titleNoForm(messages("fileStatus.title"))) {
+  val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
+  val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("h:mma")
 
-    <div class="govuk-grid-row">
-        <h1 class="govuk-heading-l">@messages("fileStatus.heading")</h1>
+  def dateFormatted(dateTime: LocalDateTime): String =
+    s"${dateTime.toLocalDate.format(dateFormatter)} ${dateTime.toLocalTime.format(timeFormatter).toLowerCase}"
 
-        <p class="govuk-body">@messages("fileStatus.p1")</p>
-        <p>@messages("fileStatus.p2")</p>
-        <p>@messages("fileStatus.p3")</p>
-
-        @govukTable(table)
-
-    </div>
 }

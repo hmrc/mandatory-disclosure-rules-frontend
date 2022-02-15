@@ -20,7 +20,6 @@ import models.{FileDetails, FileError, Pending, Rejected}
 import play.api.Application
 import play.api.http.Status.OK
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.Json
 
 import java.time.LocalDateTime
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -70,7 +69,7 @@ class HandleXMLFileConnectorSpec extends Connector {
           )
         )
 
-        stubPostResponse(allFilesUrls, OK, allFiles)
+        stubGetResponse(allFilesUrls, OK, allFiles)
 
         val result = connector.getAllFileDetails(mdrId)
 
@@ -79,7 +78,7 @@ class HandleXMLFileConnectorSpec extends Connector {
 
       "must return 'None' when getAllFileDetails is successful but response json is invalid" in {
 
-        stubPostResponse(allFilesUrls, OK)
+        stubGetResponse(allFilesUrls, OK)
 
         val result = connector.getAllFileDetails(mdrId)
 
@@ -89,7 +88,7 @@ class HandleXMLFileConnectorSpec extends Connector {
       "must return 'None' when getAllFileDetails fails with Error" in {
 
         val errorCode = errorCodes.sample.value
-        stubPostResponse(allFilesUrls, errorCode)
+        stubGetResponse(allFilesUrls, errorCode)
 
         val result = connector.getAllFileDetails(mdrId)
 

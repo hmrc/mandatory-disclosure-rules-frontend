@@ -132,7 +132,7 @@ class AuthActionSpec extends SpecBase {
           val action = new AuthenticatedIdentifierAction(mockAuthConnector, appConfig, bodyParsers)
           val controller = action {
             request =>
-              val value = request.subscriptionId
+              val value = request.mdrId
               Ok(value)
           }
           val result = controller()(FakeRequest())
