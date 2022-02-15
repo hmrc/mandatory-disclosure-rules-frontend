@@ -33,9 +33,9 @@ class FakeDataRetrievalAction(dataToReturn: Option[UserAnswers] = None) extends 
   override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] =
     dataToReturn match {
       case None =>
-        Future(OptionalDataRequest(request.request, request.userId, None, request.userType, request.mdrId))
+        Future(OptionalDataRequest(request.request, request.userId, None, request.userType, request.subscriptionId))
       case Some(userAnswers) =>
-        Future(OptionalDataRequest(request.request, request.userId, Some(userAnswers), request.userType, request.mdrId))
+        Future(OptionalDataRequest(request.request, request.userId, Some(userAnswers), request.userType, request.subscriptionId))
     }
 
   implicit override protected val executionContext: ExecutionContext =
