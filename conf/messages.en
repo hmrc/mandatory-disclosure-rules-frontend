@@ -251,3 +251,12 @@ xml.add.one.or.more.elements = Add one or more {0}
 xml.not.valid.percentage = {0} must be a whole number between 0 and 100
 xml.optional.field.empty = If provided, {0} must have a value
 xml.addressFix.error = AddressFix must be placed before AddressFree
+
+fileReceived.heading = File received at {0} on {1}
+fileReceived.title = File received
+fileReceived.p1 = We received your file with the follow messageRefId:
+fileReceived.p2 = We have sent a confirmation email to {0}
+fileReceived.p2.5 = and {0}
+fileReceived.p3 = If we have any questions about your report we will contact you
+fileReceived.subheading = What happens next?
+

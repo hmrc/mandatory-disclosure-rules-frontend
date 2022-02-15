@@ -40,4 +40,16 @@ class HandleXMLFileConnector @Inject() (httpClient: HttpClient, config: Frontend
     }
 
   }
+
+  def getFileDetails(conversationId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[FileDetails]] = {
+    val url = s"${config.mdrStubsUrl}/mdr/file/$conversationId"
+    httpClient.GET(url).map {
+      case responseMessage if is2xx(responseMessage.status) =>
+        responseMessage.json
+          .asOpt[FileDetails]
+      case _ =>
+        logger.warn("HandleXMLFileConnector: Failed to get FileDetails")
+        None
+    }
+  }
 }
