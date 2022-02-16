@@ -27,8 +27,9 @@ import uk.gov.hmrc.play.language.LanguageUtils
 import utils.ContactEmailHelper.getContactEmails
 import views.html.{FileReceivedView, ThereIsAProblemView}
 
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class FileReceivedController @Inject() (
   override val messagesApi: MessagesApi,
@@ -47,28 +48,31 @@ class FileReceivedController @Inject() (
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
-      handleXMLFileConnector.getFileDetails("conversationId3") flatMap {
+      val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+      val dateFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
+
+      handleXMLFileConnector.getFileDetails("conversationId3") map {
         fileDetails =>
           fileDetails.fold {
             logger.error("Cannot find file details")
-            Future.successful(InternalServerError(errorView()))
+            InternalServerError(errorView())
           } {
             details =>
               request.userAnswers
                 .get(MessageSpecDataPage)
                 .fold {
                   logger.error("Cannot find message spec data")
-                  Future.successful(InternalServerError(errorView()))
+                  InternalServerError(errorView())
                 } {
                   messageSpecData =>
                     val messageRefId = messageSpecData.messageRefId
-                    val time         = s"${details.submitted.getHour}:${details.submitted.getMinute}"
-                    val date         = languageUtils.Dates.formatDate(details.submitted.toLocalDate)
+                    val time         = details.submitted.format(timeFormatter)
+                    val date         = details.submitted.format(dateFormatter)
                     getContactEmails.fold {
-                      Future.successful(InternalServerError(errorView()))
+                      InternalServerError(errorView())
                     } {
                       emails =>
-                        Future.successful(Ok(view(messageRefId, time, date, emails.firstContactEmail, emails.secondContactEmail)))
+                        Ok(view(messageRefId, time, date, emails.firstContactEmail, emails.secondContactEmail))
                     }
                 }
           }
