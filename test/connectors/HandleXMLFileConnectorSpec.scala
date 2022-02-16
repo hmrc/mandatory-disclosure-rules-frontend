@@ -16,11 +16,10 @@
 
 package connectors
 
-import models.{FileDetails, FileError, Pending, Rejected}
+import models.{Accepted, FileDetails, FileError, Pending, Rejected}
 import play.api.Application
 import play.api.http.Status.OK
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.Json
 
 import java.time.LocalDateTime
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -34,8 +33,13 @@ class HandleXMLFileConnectorSpec extends Connector {
     .build()
 
   lazy val connector: HandleXMLFileConnector = app.injector.instanceOf[HandleXMLFileConnector]
-  private val allFilesUrls                   = s"/mdr/all-files/$mdrId"
-  private val allFiles: String               = """
+
+  private val conversationId = "conversationId3"
+
+  private val allFilesUrls = s"/mdr/all-files/$mdrId"
+  private val fileUrl      = s"/mdr/file/$conversationId"
+
+  private val allFiles: String = """
       |[
       |  {
       |    "name": "test1.xml",
@@ -57,6 +61,16 @@ class HandleXMLFileConnectorSpec extends Connector {
       |    "conversationId": "conversationId2"
       |  }
       |]""".stripMargin
+
+  private val file: String = """
+     |  {
+     |    "name": "test3.xml",
+     |    "submitted": "2022-02-10T15:35:37.636",
+     |    "status": {
+     |      "_type": "models.Accepted"
+     |    },
+     |    "conversationId": "conversationId3"
+     |  }""".stripMargin
 
   "HandleXMLFileConnector" - {
 
@@ -92,6 +106,41 @@ class HandleXMLFileConnectorSpec extends Connector {
         stubPostResponse(allFilesUrls, errorCode)
 
         val result = connector.getAllFileDetails(mdrId)
+
+        result.futureValue mustBe None
+
+      }
+    }
+
+    "getFileDetails" - {
+
+      "must return 'file details' when getFileDetails is successful" in {
+        val expectedResult = Some(
+          FileDetails("test3.xml", LocalDateTime.parse("2022-02-10T15:35:37.636"), Accepted, "conversationId3")
+        )
+
+        stubGetResponse(fileUrl, OK, file)
+
+        val result = connector.getFileDetails(conversationId)
+
+        result.futureValue mustBe expectedResult
+      }
+
+      "must return 'None' when getFileDetails is successful but response json is invalid" in {
+
+        stubPostResponse(fileUrl, OK)
+
+        val result = connector.getFileDetails(mdrId)
+
+        result.futureValue mustBe None
+      }
+
+      "must return 'None' when getFileDetails fails with Error" in {
+
+        val errorCode = errorCodes.sample.value
+        stubPostResponse(fileUrl, errorCode)
+
+        val result = connector.getFileDetails(conversationId)
 
         result.futureValue mustBe None
 

@@ -16,7 +16,7 @@
 
 package connectors
 
-import models.{GenericError, InvalidXmlError, Message, NonFatalErrors, ValidationErrors}
+import models.{GenericError, InvalidXmlError, MDR401, Message, MessageSpecData, NonFatalErrors, ValidationErrors}
 import play.api.Application
 import play.api.http.Status.{BAD_REQUEST, OK}
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -40,12 +40,18 @@ class ValidationConnectorSpec extends Connector {
 
     "must return a 200 and a Success Object when passing validation" in {
 
-      val expectedBody = """{"boolean": true}"""
+      val expectedBody =
+        """{"messageSpecData": {
+          |   "messageRefId": "someId",
+          |   "messageTypeIndic": {
+          |     "_type":"MDR401"
+          |   }
+          |}}""".stripMargin
 
       stubPostResponse(validationUrl, OK, expectedBody)
 
       val result = connector.sendForValidation("SomeUrl")
-      result.futureValue mustBe Right(true)
+      result.futureValue mustBe Right(MessageSpecData("someId", MDR401))
     }
 
     "must return a 200 and a Failure Object when failing validation" in {
