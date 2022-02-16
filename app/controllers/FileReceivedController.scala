@@ -48,29 +48,16 @@ class FileReceivedController @Inject() (
     implicit request =>
       handleXMLFileConnector.getFileDetails(conversationId) map {
         fileDetails =>
-          fileDetails.fold {
-            logger.error("Cannot find file details")
-            InternalServerError(errorView())
-          } {
-            details =>
-              request.userAnswers
-                .get(MessageSpecDataPage)
-                .fold {
-                  logger.error("Cannot find message spec data")
-                  InternalServerError(errorView())
-                } {
-                  messageSpecData =>
-                    val messageRefId = messageSpecData.messageRefId
-                    val time         = details.submitted.format(timeFormatter).toLowerCase
-                    val date         = details.submitted.format(dateFormatter)
-                    getContactEmails.fold {
-                      InternalServerError(errorView())
-                    } {
-                      emails =>
-                        Ok(view(messageRefId, time, date, emails.firstContactEmail, emails.secondContactEmail))
-                    }
-                }
-          }
+          (for {
+            data    <- request.userAnswers.get(MessageSpecDataPage)
+            emails  <- getContactEmails
+            details <- fileDetails
+          } yield {
+            val time = details.submitted.format(timeFormatter).toLowerCase
+            val date = details.submitted.format(dateFormatter)
+
+            Ok(view(data.messageRefId, time, date, emails.firstContactEmail, emails.secondContactEmail))
+          }).getOrElse(InternalServerError(errorView()))
       }
   }
 }

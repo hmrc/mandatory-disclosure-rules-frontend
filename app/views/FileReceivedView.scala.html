@@ -14,12 +14,15 @@
  * limitations under the License.
  *@
 
+@import config.FrontendAppConfig
+
 @this(
         layout: templates.Layout,
         govukInsetText: GovukInsetText,
-        govukButton: GovukButton,
+        link: components.Link,
         govukPanel: GovukPanel,
-        link: components.Link
+        govukButton: GovukButton,
+        appConfig: FrontendAppConfig
 )
 
 @(messageRefId: String, timeSubmitted: String, dateSubmitted: String, firstContactEmail: String, secondContactEmail:Option[String])(implicit request: Request[_], messages: Messages)
@@ -43,6 +46,6 @@
     <p class="govuk-body">@messages("fileReceived.p3")</p>
     <div class="govuk-!-padding-top-5">
         <p class="govuk-body">@link(routes.IndexController.onPageLoad.url, "fileReceived.back")</p>
-        <p class="govuk-body">@link("#", "fileReceived.thoughts")</p>
+        <p class="govuk-body">@link(appConfig.feedbackUrl, "fileReceived.thoughts")</p>
     </div>
 }
