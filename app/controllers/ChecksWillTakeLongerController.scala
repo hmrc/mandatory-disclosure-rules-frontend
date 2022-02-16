@@ -24,7 +24,6 @@ import utils.ContactEmailHelper.getContactEmails
 import views.html.{ChecksWillTakeLongerView, ThereIsAProblemView}
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext
 
 class ChecksWillTakeLongerController @Inject() (
   override val messagesApi: MessagesApi,
@@ -34,8 +33,7 @@ class ChecksWillTakeLongerController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: ChecksWillTakeLongerView,
   errorView: ThereIsAProblemView
-)(implicit ec: ExecutionContext)
-    extends FrontendBaseController
+) extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData) {

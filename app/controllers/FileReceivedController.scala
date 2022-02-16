@@ -24,10 +24,9 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.ContactEmailHelper.getContactEmails
-import views.html.{FileReceivedView, ThereIsAProblemView}
 import utils.DateTimeFormatUtil._
+import views.html.{FileReceivedView, ThereIsAProblemView}
 
-import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
