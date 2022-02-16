@@ -16,7 +16,7 @@
 
 package models
 
-import play.api.libs.json.{Json, OFormat}
+import play.api.libs.json._
 
 import java.time.LocalDateTime
 
@@ -26,16 +26,23 @@ case object Pending extends FileStatus
 case object Accepted extends FileStatus
 
 case class Rejected(error: FileError) extends FileStatus {
-  override def toString: String = "Rejected"
+  override def toString: String            = "Rejected"
+  implicit def rejected: OFormat[Rejected] = Json.format[Rejected]
 }
 
 object FileStatus {
+  implicit def rejected: OFormat[Rejected] = Json.format[Rejected]
 
-  implicit val format: OFormat[FileStatus] = {
-    implicit def accepted: OFormat[Accepted.type] = Json.format[Accepted.type]
-    implicit def pend: OFormat[Pending.type]      = Json.format[Pending.type]
-    implicit def rejected: OFormat[Rejected]      = Json.format[Rejected]
-    Json.format[FileStatus]
+  implicit val writes: Writes[FileStatus] = Writes[FileStatus] {
+    case Pending     => JsString("Pending")
+    case Accepted    => JsString("Accepted")
+    case rejected: Rejected => Json.toJson(rejected)
+  }
+
+  implicit val reads: Reads[FileStatus] = Reads[FileStatus] {
+    case JsString("Pending")  => JsSuccess(Pending)
+    case JsString("Accepted") => JsSuccess(Accepted)
+    case rejected             => JsSuccess(rejected.as[Rejected])
   }
 }
 
@@ -45,7 +52,7 @@ object FileError {
   implicit val format: OFormat[FileError] = Json.format[FileError]
 }
 
-case class FileDetails(name: String, submitted: LocalDateTime, status: FileStatus, conversationId: String)
+case class FileDetails(name: String, submitted: LocalDateTime, lastUpdated: LocalDateTime, status: FileStatus, _id: String)
 
 object FileDetails {
   implicit val format: OFormat[FileDetails] = Json.format[FileDetails]

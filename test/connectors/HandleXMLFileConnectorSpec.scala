@@ -39,21 +39,21 @@ class HandleXMLFileConnectorSpec extends Connector {
       |  {
       |    "name": "test1.xml",
       |    "submitted": "2022-02-10T15:35:37.636",
-      |    "status": {
-      |      "_type": "models.Pending"
-      |    },
-      |    "conversationId": "conversationId1"
+      |    "lastUpdated": "2022-02-10T15:35:37.636",
+      |    "status": "Pending",
+      |    "_id": "conversationId1"
       |  },
       |  {
       |    "name": "test2.xml",
       |    "submitted": "2022-02-10T15:35:37.636",
+      |    "lastUpdated": "2022-02-10T15:45:37.636",
       |    "status": {
       |      "error": {
       |        "detail": "error"
       |      },
       |      "_type": "models.Rejected"
       |    },
-      |    "conversationId": "conversationId2"
+      |    "_id": "conversationId2"
       |  }
       |]""".stripMargin
 
@@ -64,8 +64,19 @@ class HandleXMLFileConnectorSpec extends Connector {
       "must return 'all file details' when getAllFileDetails is successful" in {
         val expectedResult = Some(
           Seq(
-            FileDetails("test1.xml", LocalDateTime.parse("2022-02-10T15:35:37.636"), Pending, "conversationId1"),
-            FileDetails("test2.xml", LocalDateTime.parse("2022-02-10T15:35:37.636"), Rejected(FileError("error")), "conversationId2")
+            FileDetails("test1.xml",
+                        LocalDateTime.parse("2022-02-10T15:35:37.636"),
+                        LocalDateTime.parse("2022-02-10T15:35:37.636"),
+                        Pending,
+                        "conversationId1"
+            ),
+            FileDetails(
+              "test2.xml",
+              LocalDateTime.parse("2022-02-10T15:35:37.636"),
+              LocalDateTime.parse("2022-02-10T15:45:37.636"),
+              Rejected(FileError("error")),
+              "conversationId2"
+            )
           )
         )
 

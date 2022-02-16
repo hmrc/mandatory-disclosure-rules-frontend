@@ -26,12 +26,12 @@ class FileDetailsSpec extends SpecBase {
   "FileDetails" - {
     "Serialise to Json" in {
 
-      val sentTime = LocalDateTime.now
+      val date = LocalDateTime.now
 
       val error          = FileError("error")
-      val fileDetail1    = FileDetails("test1.xml", sentTime, Pending, "XGD11111")
-      val fileDetail2    = FileDetails("test2.xml", sentTime, Rejected(error), "XGD11111")
-      val fileDetail3    = FileDetails("test3.xml", sentTime, Accepted, "XGD11111")
+      val fileDetail1    = FileDetails("test1.xml", date, date, Pending, "XGD11111")
+      val fileDetail2    = FileDetails("test2.xml", date, date.plusSeconds(11), Rejected(error), "XGD11111")
+      val fileDetail3    = FileDetails("test3.xml", date, date.plusSeconds(25), Accepted, "XGD11111")
       val expectedResult = Seq(fileDetail1, fileDetail2, fileDetail3)
 
       val json = Json.toJson(Seq(fileDetail1, fileDetail2, fileDetail3))
