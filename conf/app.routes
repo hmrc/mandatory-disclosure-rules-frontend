@@ -76,8 +76,8 @@ POST        /report/change-contact/organisation/second-contact-phone          co
 
 GET         /report/change-contact/details-updated                            controllers.DetailsUpdatedController.onPageLoad()
 
-GET         /report/file-received                                             controllers.FileReceivedController.onPageLoad()
+GET         /report/file-received/:conversationId                             controllers.FileReceivedController.onPageLoad(conversationId)
 
 GET         /report/checks-will-take-longer                                   controllers.ChecksWillTakeLongerController.onPageLoad()
 
-GET        /fileStatus                       controllers.FileStatusController.onPageLoad()
+GET         /report/file-status                                               controllers.FileStatusController.onPageLoad()

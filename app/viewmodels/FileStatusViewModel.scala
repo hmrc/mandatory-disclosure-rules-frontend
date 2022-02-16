@@ -16,6 +16,7 @@
 
 package viewmodels
 
+import controllers.routes
 import models.{Accepted, FileDetails, FileStatus, Pending, Rejected}
 import models.FileDetails._
 import play.api.i18n.Messages
@@ -32,10 +33,10 @@ object FileStatusViewModel {
     HtmlContent(s"<strong class='govuk-tag govuk-tag--$cssClass'>$status</strong>")
   }
 
-  private def buildTableRow(fileStatus: FileStatus)(implicit messages: Messages): TableRow = {
+  private def buildTableRow(fileStatus: FileStatus, conversationId: String)(implicit messages: Messages): TableRow = {
     val action = fileStatus match {
       case Pending     => ""
-      case Accepted    => s"<a href=''>${Messages("fileStatus.accepted")}</a>"
+      case Accepted    => s"<a href='${routes.FileReceivedController.onPageLoad(conversationId).url}'>${Messages("fileStatus.accepted")}</a>"
       case Rejected(_) => s"<a href=''>${Messages("fileStatus.rejected")}</a>"
     }
 
@@ -50,7 +51,7 @@ object FileStatusViewModel {
           TableRow(Text(fileDetails.name)),
           TableRow(Text(DateTimeFormatUtil.dateFormatted(fileDetails.submitted))),
           TableRow(htmlStatus(fileDetails.status)),
-          buildTableRow(fileDetails.status)
+          buildTableRow(fileDetails.status, fileDetails.conversationId)
         )
     }
 

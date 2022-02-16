@@ -38,8 +38,9 @@ class FileReceivedControllerSpec extends SpecBase {
     "must return OK and the correct view for a GET" in {
 
       val messageRefId       = "messageRefId"
+      val conversationId     = "conversationId"
       val msd                = MessageSpecData(messageRefId, MDR401)
-      val time               = "10:30"
+      val time               = "10:30am"
       val date               = "1 January 2022"
       val firstContactEmail  = "first@email.com"
       val secondContactEmail = "second@email.com"
@@ -62,10 +63,10 @@ class FileReceivedControllerSpec extends SpecBase {
         .build()
 
       when(mockHandleXMLFileConnector.getFileDetails(any())(any(), any()))
-        .thenReturn(Future.successful(Some(FileDetails("name", LocalDateTime.parse("2022-01-01T10:30:00.000"), Accepted, "conversationId"))))
+        .thenReturn(Future.successful(Some(FileDetails("name", LocalDateTime.parse("2022-01-01T10:30:00.000"), Accepted, conversationId))))
 
       running(application) {
-        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoad().url)
+        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoad(conversationId).url)
 
         val result = route(application, request).value
 

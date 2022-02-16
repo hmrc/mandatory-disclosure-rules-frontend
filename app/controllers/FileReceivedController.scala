@@ -23,9 +23,9 @@ import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import uk.gov.hmrc.play.language.LanguageUtils
 import utils.ContactEmailHelper.getContactEmails
 import views.html.{FileReceivedView, ThereIsAProblemView}
+import utils.DateTimeFormatUtil._
 
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
@@ -39,19 +39,15 @@ class FileReceivedController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: FileReceivedView,
   errorView: ThereIsAProblemView,
-  handleXMLFileConnector: HandleXMLFileConnector,
-  languageUtils: LanguageUtils
+  handleXMLFileConnector: HandleXMLFileConnector
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with Logging {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData).async {
+  def onPageLoad(conversationId: String): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
-      val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
-      val dateFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
-
-      handleXMLFileConnector.getFileDetails("conversationId3") map {
+      handleXMLFileConnector.getFileDetails(conversationId) map {
         fileDetails =>
           fileDetails.fold {
             logger.error("Cannot find file details")
@@ -66,7 +62,7 @@ class FileReceivedController @Inject() (
                 } {
                   messageSpecData =>
                     val messageRefId = messageSpecData.messageRefId
-                    val time         = details.submitted.format(timeFormatter)
+                    val time         = details.submitted.format(timeFormatter).toLowerCase
                     val date         = details.submitted.format(dateFormatter)
                     getContactEmails.fold {
                       InternalServerError(errorView())
