@@ -46,6 +46,6 @@
     <p class="govuk-body">@messages("fileReceived.p3")</p>
     <div class="govuk-!-padding-top-5">
         <p class="govuk-body">@link(routes.IndexController.onPageLoad.url, "fileReceived.back")</p>
-        <p class="govuk-body">@link(appConfig.feedbackUrl, "fileReceived.thoughts")</p>
+        <p class="govuk-body">@link(appConfig.feedbackUrl, "fileReceived.thoughts", openInNewWindow = true)</p>
     </div>
 }
