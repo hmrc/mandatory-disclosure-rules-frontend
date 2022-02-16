@@ -20,7 +20,7 @@ import connectors.UpscanConnector
 import controllers.actions._
 import forms.UploadFileFormProvider
 import models.UserAnswers
-import models.requests.OptionalDataRequest
+import models.requests.{DataRequest, OptionalDataRequest}
 import models.upscan._
 import pages.UploadIDPage
 import play.api.Logging
@@ -39,6 +39,7 @@ class UploadFileController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
   upscanConnector: UpscanConnector,
   formProvider: UploadFileFormProvider,
   sessionRepository: SessionRepository,
@@ -53,16 +54,16 @@ class UploadFileController @Inject() (
 
   val form = formProvider()
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData()).async {
+  def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
       toResponse(form)
   }
 
-  private def toResponse(preparedForm: Form[String])(implicit request: OptionalDataRequest[AnyContent], hc: HeaderCarrier): Future[Result] =
+  private def toResponse(preparedForm: Form[String])(implicit request: DataRequest[AnyContent], hc: HeaderCarrier): Future[Result] =
     (for {
       upscanInitiateResponse <- upscanConnector.getUpscanFormData
       uploadId               <- upscanConnector.requestUpload(upscanInitiateResponse.fileReference)
-      updatedAnswers         <- Future.fromTry(UserAnswers(request.userId).set(UploadIDPage, uploadId))
+      updatedAnswers         <- Future.fromTry(request.userAnswers.set(UploadIDPage, uploadId))
       _                      <- sessionRepository.set(updatedAnswers)
     } yield Ok(view(preparedForm, upscanInitiateResponse)))
       .recover {
@@ -76,7 +77,7 @@ class UploadFileController @Inject() (
       Future.successful(Ok(fileCheckView()))
   }
 
-  def showError(errorCode: String, errorMessage: String, errorRequestId: String): Action[AnyContent] = (identify andThen getData()).async {
+  def showError(errorCode: String, errorMessage: String, errorRequestId: String): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
       errorCode match {
         case "EntityTooLarge" =>
@@ -90,10 +91,10 @@ class UploadFileController @Inject() (
       }
   }
 
-  def getStatus: Action[AnyContent] = (identify andThen getData()).async {
+  def getStatus: Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
       logger.debug("Show status called")
-      request.userAnswers.flatMap(_.get(UploadIDPage)) match {
+      request.userAnswers.get(UploadIDPage) match {
         case Some(uploadId) =>
           upscanConnector.getUploadStatus(uploadId) flatMap {
             case Some(_: UploadedSuccessfully) =>

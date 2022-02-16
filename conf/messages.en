@@ -252,6 +252,15 @@ xml.not.valid.percentage = {0} must be a whole number between 0 and 100
 xml.optional.field.empty = If provided, {0} must have a value
 xml.addressFix.error = AddressFix must be placed before AddressFree
 
+checksWillTakeLonger.title = We need more time to check the file you sent us
+checksWillTakeLonger.heading = We need more time to check the file you sent us
+checksWillTakeLonger.p1 = We are carrying out more automatic checks on your file. This should take a few minutes and you can check for updates on the next page.
+checksWillTakeLonger.p2 = We will email you at {0}{1} to confirm if we have received your file or if you need to upload a new version.
+checksWillTakeLonger.secondContact = and {0}
+checksWillTakeLonger.warning.altText = Warning
+checksWillTakeLonger.warning = You may be fined if your report fails the checks and you do not send another version.
+checksWillTakeLonger.button = View your file status
+
 fileStatus.title = Status of files
 fileStatus.heading = Status of files
 fileStatus.p1 = Refresh this page
