@@ -24,27 +24,16 @@ case object MDR402 extends MessageTypeIndic
 
 object MessageTypeIndic {
 
-  def fromString(typeIndic: String): MessageTypeIndic = typeIndic.toUpperCase match {
-    case "MDR401" => MDR401
-    case "MDR402" => MDR402
-    case _        => throw new NoSuchElementException
+  implicit val writes: Writes[MessageTypeIndic] = Writes[MessageTypeIndic] {
+    case MDR401 => JsString("MDR401")
+    case MDR402 => JsString("MDR402")
   }
 
-  implicit val read: Reads[MessageTypeIndic] = (json: JsValue) => {
-    val jsObject = json.asInstanceOf[JsObject]
-    jsObject.value.get("_type") match {
-      case Some(JsString("MDR401")) => JsSuccess(MDR401)
-      case Some(JsString("MDR402")) => JsSuccess(MDR402)
-      case Some(value)              => JsError(s"Unexpected value of _type: $value")
-      case None                     => JsError("Missing _type field")
-    }
+  implicit val reads: Reads[MessageTypeIndic] = Reads[MessageTypeIndic] {
+    case JsString("MDR401") => JsSuccess(MDR401)
+    case JsString("MDR402") => JsSuccess(MDR402)
+    case value              => JsError(s"Unexpected value of _type: $value")
   }
-
-  implicit val write: Writes[MessageTypeIndic] = {
-    case MDR401 => JsObject(Map("_type" -> JsString("MDR401")))
-    case MDR402 => JsObject(Map("_type" -> JsString("MDR402")))
-  }
-
 }
 
 case class MessageSpecData(messageRefId: String, messageTypeIndic: MessageTypeIndic)

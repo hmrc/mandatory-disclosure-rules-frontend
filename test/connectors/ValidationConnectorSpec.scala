@@ -43,9 +43,7 @@ class ValidationConnectorSpec extends Connector {
       val expectedBody =
         """{"messageSpecData": {
           |   "messageRefId": "someId",
-          |   "messageTypeIndic": {
-          |     "_type":"MDR401"
-          |   }
+          |   "messageTypeIndic": "MDR401"
           |}}""".stripMargin
 
       stubPostResponse(validationUrl, OK, expectedBody)
