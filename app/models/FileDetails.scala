@@ -21,9 +21,13 @@ import play.api.libs.json.{Json, OFormat}
 import java.time.LocalDateTime
 
 sealed trait FileStatus
+
 case object Pending extends FileStatus
-case class Rejected(error: FileError) extends FileStatus
 case object Accepted extends FileStatus
+
+case class Rejected(error: FileError) extends FileStatus {
+  override def toString: String = "Rejected"
+}
 
 object FileStatus {
 
@@ -45,4 +49,6 @@ case class FileDetails(name: String, submitted: LocalDateTime, status: FileStatu
 
 object FileDetails {
   implicit val format: OFormat[FileDetails] = Json.format[FileDetails]
+
+  implicit val localDateTimeOrdering: Ordering[LocalDateTime] = _ compareTo _
 }

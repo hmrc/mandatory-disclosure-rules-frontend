@@ -19,9 +19,9 @@ package connectors
 import config.FrontendAppConfig
 import models.FileDetails
 import play.api.Logging
-import uk.gov.hmrc.http.HttpReads.is2xx
 import uk.gov.hmrc.http.HttpReads.Implicits.readRaw
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import uk.gov.hmrc.http.HttpReads.is2xx
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -30,7 +30,7 @@ class HandleXMLFileConnector @Inject() (httpClient: HttpClient, config: Frontend
 
   def getAllFileDetails(mdrId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[Seq[FileDetails]]] = {
     val url = s"${config.mdrStubsUrl}/mdr/all-files/$mdrId"
-    httpClient.POSTEmpty(url).map {
+    httpClient.GET[HttpResponse](url).map {
       case responseMessage if is2xx(responseMessage.status) =>
         responseMessage.json
           .asOpt[Seq[FileDetails]]

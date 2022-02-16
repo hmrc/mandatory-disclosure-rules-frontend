@@ -20,6 +20,7 @@ import base.SpecBase
 import models.UserAnswers
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers.any
+import org.scalatest.BeforeAndAfterEach
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -28,7 +29,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.Future
 
-class ChangeIndividualContactDetailsControllerSpec extends SpecBase {
+class ChangeIndividualContactDetailsControllerSpec extends SpecBase with BeforeAndAfterEach {
 
   val mockSubscriptionService: SubscriptionService = mock[SubscriptionService]
 
