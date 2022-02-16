@@ -16,6 +16,7 @@
 
 package controllers
 
+import config.FrontendAppConfig
 import connectors.HandleXMLFileConnector
 import controllers.actions._
 import play.api.Logging
@@ -34,6 +35,7 @@ class FileStatusController @Inject() (
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
   fileConnector: HandleXMLFileConnector,
+  appConfig: FrontendAppConfig,
   val controllerComponents: MessagesControllerComponents,
   view: FileStatusView,
   errorView: ThereIsAProblemView
@@ -44,10 +46,11 @@ class FileStatusController @Inject() (
   def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
       fileConnector.getAllFileDetails(request.subscriptionId) map {
-        case Some(allFiles) => Ok(view(FileStatusViewModel.createStatusTable(allFiles)))
+        case Some(allFiles) => Ok(view(FileStatusViewModel.createStatusTable(allFiles), appConfig.homePageUrl))
         case _ =>
           logger.warn("FileStatusController: failed to get AllFileDetails")
           InternalServerError(errorView())
       }
+
   }
 }

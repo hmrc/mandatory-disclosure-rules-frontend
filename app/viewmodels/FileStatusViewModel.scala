@@ -16,24 +16,43 @@
 
 package viewmodels
 
-import models.FileDetails
-import utils.DateTimeFormatUtil
+import models.{Accepted, FileDetails, FileStatus, Pending, Rejected}
+import models.FileDetails._
 import play.api.i18n.Messages
-import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, HtmlContent, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.{HeadCell, Table, TableRow}
+import utils.DateTimeFormatUtil
 
 object FileStatusViewModel {
 
-  def createStatusTable(allFiles: Seq[FileDetails])(implicit messages: Messages): Table = {
+  private def htmlStatus(fileStatus: FileStatus)(implicit messages: Messages): Content = {
+    val cssClass = Messages(s"cssColour.${fileStatus.toString}")
+    val status   = Messages(s"status.${fileStatus.toString}")
 
-    val tableRow: Seq[Seq[TableRow]] = allFiles map (
-      file =>
+    HtmlContent(s"<strong class='govuk-tag govuk-tag--$cssClass'>$status</strong>")
+  }
+
+  private def buildTableRow(fileStatus: FileStatus)(implicit messages: Messages): TableRow = {
+    val action = fileStatus match {
+      case Pending     => ""
+      case Accepted    => s"<a href=''>${Messages("fileStatus.accepted")}</a>"
+      case Rejected(_) => s"<a href=''>${Messages("fileStatus.rejected")}</a>"
+    }
+
+    TableRow(HtmlContent(action), classes = "app-custom-class govuk-!-width-one-half")
+  }
+
+  def createStatusTable(allFileDetails: Seq[FileDetails])(implicit messages: Messages): Table = {
+
+    val tableRow: Seq[Seq[TableRow]] = allFileDetails.sortBy(_.submitted) map {
+      fileDetails =>
         Seq(
-          TableRow(Text(file.name), classes = "app-custom-class govuk-!-width-one-half"),
-          TableRow(Text(DateTimeFormatUtil.dateFormatted(file.submitted)), classes = "app-custom-class govuk-!-width-one-half"),
-          TableRow(Text(file.status.toString), classes = "app-custom-class govuk-!-width-one-half")
+          TableRow(Text(fileDetails.name)),
+          TableRow(Text(DateTimeFormatUtil.dateFormatted(fileDetails.submitted))),
+          TableRow(htmlStatus(fileDetails.status)),
+          buildTableRow(fileDetails.status)
         )
-    )
+    }
 
     val header = Some(
       Seq(

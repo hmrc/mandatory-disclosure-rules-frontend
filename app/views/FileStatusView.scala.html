@@ -22,18 +22,21 @@
         govukTable: GovukTable
 )
 
-@(table: Table)(implicit request: Request[_], messages: Messages)
+@(table: Table, homePageUrl: String)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("fileStatus.title"))) {
 
-    <div class="govuk-grid-row">
-        <h1 class="govuk-heading-l">@messages("fileStatus.heading")</h1>
+    <h1 class="govuk-heading-l">@messages("fileStatus.heading")</h1>
 
-        <p class="govuk-body">@messages("fileStatus.p1")</p>
-        <p>@messages("fileStatus.p2")</p>
-        <p>@messages("fileStatus.p3")</p>
+    <p class="govuk-body"><a href=@routes.FileStatusController.onPageLoad().url>@messages("fileStatus.p1")</a> @messages("fileStatus.p1.update") </p></p>
 
-        @govukTable(table)
+    <p class="govuk-body">@messages("fileStatus.p2")</p>
+    <p class="govuk-body">@messages("fileStatus.p3")</p>
 
-    </div>
+    @govukTable(table)
+
+    <p class="govuk-!-padding-top-5 govuk-body">
+        <a class="govuk-link" href=@homePageUrl>@messages("changeOrganisationContactDetails.landing-page.link")</a>
+    </p>
+
 }
