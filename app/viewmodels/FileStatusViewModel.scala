@@ -63,7 +63,7 @@ object FileStatusViewModel {
       )
     )
 
-    Table(rows = tableRow, head = header, caption = Some(Messages("fileStatus.fileStatus")))
+    Table(rows = tableRow, head = header, caption = Some(Messages("fileStatus.fileStatus")), captionClasses= "govuk-table__caption govuk-table__caption--m")
   }
 
 }

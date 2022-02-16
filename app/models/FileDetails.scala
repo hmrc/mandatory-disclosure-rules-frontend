@@ -34,8 +34,8 @@ object FileStatus {
   implicit def rejected: OFormat[Rejected] = Json.format[Rejected]
 
   implicit val writes: Writes[FileStatus] = Writes[FileStatus] {
-    case Pending     => JsString("Pending")
-    case Accepted    => JsString("Accepted")
+    case Pending            => JsString("Pending")
+    case Accepted           => JsString("Accepted")
     case rejected: Rejected => Json.toJson(rejected)
   }
 
