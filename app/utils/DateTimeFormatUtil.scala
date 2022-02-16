@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-package models.requests
+package utils
 
-import models.UserAnswers
-import play.api.mvc.{Request, WrappedRequest}
-import uk.gov.hmrc.auth.core.AffinityGroup
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
-case class OptionalDataRequest[A](request: Request[A], userId: String, userAnswers: Option[UserAnswers], userType: AffinityGroup, subscriptionId: String)
-    extends WrappedRequest[A](request)
+object DateTimeFormatUtil {
 
-case class DataRequest[A](request: Request[A], userId: String, subscriptionId: String, userType: AffinityGroup, userAnswers: UserAnswers)
-    extends WrappedRequest[A](request)
+  val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
+  val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("h:mma")
+
+  def dateFormatted(dateTime: LocalDateTime): String =
+    s"${dateTime.toLocalDate.format(dateFormatter)} ${dateTime.toLocalTime.format(timeFormatter).toLowerCase}"
+
+}

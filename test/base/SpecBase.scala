@@ -18,6 +18,7 @@ package base
 
 import controllers.actions._
 import models.UserAnswers
+import org.mockito.MockitoSugar
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
@@ -27,22 +28,28 @@ import play.api.Application
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
+import play.api.mvc.Call
 import play.api.test.FakeRequest
+import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
 
 trait SpecBase
     extends AnyFreeSpec
     with GuiceOneAppPerSuite
     with Matchers
+    with MockitoSugar
     with TryValues
     with OptionValues
     with ScalaFutures
-    with IntegrationPatience
-    with ControllerMockFixtures {
+    with IntegrationPatience {
 
   val userAnswersId: String = "id"
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
+
+  def onwardRoute: Call                                  = Call("GET", "/foo")
+  final val mockDataRetrievalAction: DataRetrievalAction = mock[DataRetrievalAction]
+  final val mockSessionRepository: SessionRepository     = mock[SessionRepository]
 
   def emptyUserAnswers: UserAnswers = UserAnswers(userAnswersId)
 

@@ -23,6 +23,7 @@ import models.subscription.{ContactInformation, IndividualDetails, OrganisationD
 import org.mockito.ArgumentMatchers.any
 import org.scalacheck.Arbitrary
 import pages._
+import play.api.Application
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
@@ -34,10 +35,11 @@ class SubscriptionServiceSpec extends SpecBase with ModelGenerators {
 
   val mockSubscriptionConnector: SubscriptionConnector = mock[SubscriptionConnector]
 
-  override def guiceApplicationBuilder(): GuiceApplicationBuilder = new GuiceApplicationBuilder()
+  override lazy val app: Application = new GuiceApplicationBuilder()
     .overrides(
       bind[SubscriptionConnector].toInstance(mockSubscriptionConnector)
     )
+    .build()
 
   val service: SubscriptionService = app.injector.instanceOf[SubscriptionService]
 

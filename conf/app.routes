@@ -79,3 +79,5 @@ GET         /report/change-contact/details-updated                            co
 GET         /report/file-received                                             controllers.FileReceivedController.onPageLoad()
 
 GET         /report/checks-will-take-longer                                   controllers.ChecksWillTakeLongerController.onPageLoad()
+
+GET        /fileStatus                       controllers.FileStatusController.onPageLoad()

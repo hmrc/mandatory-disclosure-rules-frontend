@@ -84,7 +84,7 @@ class HandleXMLFileConnectorSpec extends Connector {
           )
         )
 
-        stubPostResponse(allFilesUrls, OK, allFiles)
+        stubGetResponse(allFilesUrls, OK, allFiles)
 
         val result = connector.getAllFileDetails(mdrId)
 
@@ -93,7 +93,7 @@ class HandleXMLFileConnectorSpec extends Connector {
 
       "must return 'None' when getAllFileDetails is successful but response json is invalid" in {
 
-        stubPostResponse(allFilesUrls, OK)
+        stubGetResponse(allFilesUrls, OK)
 
         val result = connector.getAllFileDetails(mdrId)
 
@@ -103,7 +103,7 @@ class HandleXMLFileConnectorSpec extends Connector {
       "must return 'None' when getAllFileDetails fails with Error" in {
 
         val errorCode = errorCodes.sample.value
-        stubPostResponse(allFilesUrls, errorCode)
+        stubGetResponse(allFilesUrls, errorCode)
 
         val result = connector.getAllFileDetails(mdrId)
 
