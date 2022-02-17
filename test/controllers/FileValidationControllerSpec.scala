@@ -20,14 +20,14 @@ import base.SpecBase
 import connectors.{UpscanConnector, ValidationConnector}
 import helpers.FakeUpscanConnector
 import models.upscan.{Reference, UploadId, UploadSessionDetails, UploadedSuccessfully}
-import models.{GenericError, InvalidXmlError, Message, UserAnswers, ValidationErrors}
+import models.{GenericError, InvalidXmlError, MDR401, Message, MessageSpecData, UserAnswers, ValidatedFileData, ValidationErrors}
 import org.bson.types.ObjectId
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.scalatest.BeforeAndAfterEach
 import pages.UploadIDPage
 import play.api.inject.bind
-import play.api.libs.json.Json
+import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.Result
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -37,14 +37,14 @@ import scala.concurrent.{ExecutionContextExecutor, Future}
 
 class FileValidationControllerSpec extends SpecBase with BeforeAndAfterEach {
 
-  val mockValidationConnector = mock[ValidationConnector]
+  val mockValidationConnector: ValidationConnector = mock[ValidationConnector]
 
   implicit val ec: ExecutionContextExecutor = scala.concurrent.ExecutionContext.global
 
   override def beforeEach: Unit =
     reset(mockSessionRepository)
 
-  val fakeUpscanConnector = app.injector.instanceOf[FakeUpscanConnector]
+  val fakeUpscanConnector: FakeUpscanConnector = app.injector.instanceOf[FakeUpscanConnector]
 
   "FileValidationController" - {
     val uploadId    = UploadId("123")
@@ -67,10 +67,11 @@ class FileValidationControllerSpec extends SpecBase with BeforeAndAfterEach {
 
     "must redirect to Check your answers and present the correct view for a GET" in {
 
-      val userAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
-      val expectedData      = Json.obj("uploadID" -> UploadId("123"), "validXML" -> "afile", "url" -> downloadURL)
+      val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
+      val messageSpecData                                = MessageSpecData("XBG1999999", MDR401)
+      val expectedData: JsObject                         = Json.obj("uploadID" -> UploadId("123"), "validXML" -> ValidatedFileData("afile", messageSpecData), "url" -> downloadURL)
 
-      when(mockValidationConnector.sendForValidation(any())(any(), any())).thenReturn(Future.successful(Right(true)))
+      when(mockValidationConnector.sendForValidation(any())(any(), any())).thenReturn(Future.successful(Right(messageSpecData)))
       when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
       fakeUpscanConnector.setDetails(uploadDetails)
 
@@ -86,9 +87,9 @@ class FileValidationControllerSpec extends SpecBase with BeforeAndAfterEach {
 
     "must redirect to invalid XML page if XML validation fails" in {
 
-      val errors: Seq[GenericError] = Seq(GenericError(1, Message("error")))
-      val userAnswersCaptor         = ArgumentCaptor.forClass(classOf[UserAnswers])
-      val expectedData              = Json.obj("invalidXML" -> "afile", "errors" -> errors)
+      val errors: Seq[GenericError]                      = Seq(GenericError(1, Message("error")))
+      val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
+      val expectedData                                   = Json.obj("invalidXML" -> "afile", "errors" -> errors)
 
       fakeUpscanConnector.setDetails(uploadDetails)
 
@@ -106,8 +107,8 @@ class FileValidationControllerSpec extends SpecBase with BeforeAndAfterEach {
 
     "must redirect to file error page if XML parser fails" in {
 
-      val userAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
-      val expectedData      = Json.obj("invalidXML" -> "afile")
+      val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
+      val expectedData                                   = Json.obj("invalidXML" -> "afile")
 
       fakeUpscanConnector.setDetails(uploadDetails)
       //noinspection ScalaStyle

@@ -66,7 +66,7 @@ object SubmissionValidationResult {
   }
 }
 
-case class SubmissionValidationSuccess(boolean: Boolean) extends SubmissionValidationResult
+case class SubmissionValidationSuccess(messageSpecData: MessageSpecData) extends SubmissionValidationResult
 
 object SubmissionValidationSuccess {
   implicit val format: OFormat[SubmissionValidationSuccess] = Json.format[SubmissionValidationSuccess]

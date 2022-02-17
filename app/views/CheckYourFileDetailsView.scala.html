@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,17 +12,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package pages
+@this(
+        layout: templates.Layout,
+        govukButton: GovukButton
+)
 
-import models.ValidatedFileData
-import play.api.libs.json.JsPath
+@()(implicit request: Request[_], messages: Messages)
 
-case object ValidXMLPage extends QuestionPage[ValidatedFileData] {
+@layout(pageTitle = titleNoForm(messages("checkYourFileDetails.title"))) {
 
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "validXML"
-
+    <h1 class="govuk-heading-l">@messages("checkYourFileDetails.heading")</h1>
 }

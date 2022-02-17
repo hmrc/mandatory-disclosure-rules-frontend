@@ -20,7 +20,7 @@ import connectors.{UpscanConnector, ValidationConnector}
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import models.requests.DataRequest
 import models.upscan.{UploadSessionDetails, UploadedSuccessfully}
-import models.{InvalidXmlError, NormalMode, UserAnswers, ValidationErrors}
+import models.{InvalidXmlError, NormalMode, UserAnswers, ValidatedFileData, ValidationErrors}
 import navigation.Navigator
 import pages._
 import play.api.Logging
@@ -68,9 +68,9 @@ class FileValidationController @Inject() (
                     downloadDetails =>
                       val (fileName, upScanUrl) = downloadDetails
                       validationConnector.sendForValidation(upScanUrl) flatMap {
-                        case Right(_) =>
+                        case Right(messageSpecData) =>
                           for {
-                            updatedAnswers        <- Future.fromTry(request.userAnswers.set(ValidXMLPage, fileName))
+                            updatedAnswers        <- Future.fromTry(request.userAnswers.set(ValidXMLPage, ValidatedFileData(fileName, messageSpecData)))
                             updatedAnswersWithURL <- Future.fromTry(updatedAnswers.set(URLPage, upScanUrl))
                             _                     <- sessionRepository.set(updatedAnswersWithURL)
                           } yield Redirect(navigator.nextPage(ValidXMLPage, NormalMode, updatedAnswers))
