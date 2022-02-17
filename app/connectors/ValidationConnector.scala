@@ -17,7 +17,7 @@
 package connectors
 
 import config.FrontendAppConfig
-import models.{Errors, InvalidXmlError, MessageSpecData, NonFatalErrors, SubmissionValidationFailure, SubmissionValidationResult, SubmissionValidationSuccess}
+import models.{Errors, InvalidXmlError, NonFatalErrors, SubmissionValidationFailure, SubmissionValidationResult, SubmissionValidationSuccess}
 import play.api.Logging
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
@@ -30,7 +30,7 @@ class ValidationConnector @Inject() (http: HttpClient, config: FrontendAppConfig
 
   val url = s"${config.mdrUrl}/mandatory-disclosure-rules/validate-submission"
 
-  def sendForValidation(upScanUrl: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Either[Errors, MessageSpecData]] =
+  def sendForValidation(upScanUrl: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Either[Errors, Boolean]] =
     http
       .POSTString[HttpResponse](url, upScanUrl)
       .map {
@@ -39,7 +39,7 @@ class ValidationConnector @Inject() (http: HttpClient, config: FrontendAppConfig
             case OK =>
               response.json.as[SubmissionValidationResult] match {
                 case x: SubmissionValidationSuccess =>
-                  Right(x.messageSpecData)
+                  Right(x.boolean)
                 case x: SubmissionValidationFailure =>
                   Left(x.validationErrors)
               }

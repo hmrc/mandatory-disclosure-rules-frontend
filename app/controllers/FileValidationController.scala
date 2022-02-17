@@ -68,12 +68,11 @@ class FileValidationController @Inject() (
                     downloadDetails =>
                       val (fileName, upScanUrl) = downloadDetails
                       validationConnector.sendForValidation(upScanUrl) flatMap {
-                        case Right(msd) =>
+                        case Right(_) =>
                           for {
                             updatedAnswers        <- Future.fromTry(request.userAnswers.set(ValidXMLPage, fileName))
                             updatedAnswersWithURL <- Future.fromTry(updatedAnswers.set(URLPage, upScanUrl))
-                            updatedAnswersWithMSD <- Future.fromTry(updatedAnswersWithURL.set(MessageSpecDataPage, msd))
-                            _                     <- sessionRepository.set(updatedAnswersWithMSD)
+                            _                     <- sessionRepository.set(updatedAnswersWithURL)
                           } yield Redirect(navigator.nextPage(ValidXMLPage, NormalMode, updatedAnswers))
 
                         case Left(ValidationErrors(errors, _)) =>

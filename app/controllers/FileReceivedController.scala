@@ -18,7 +18,6 @@ package controllers
 
 import connectors.HandleXMLFileConnector
 import controllers.actions._
-import pages.MessageSpecDataPage
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -49,14 +48,13 @@ class FileReceivedController @Inject() (
       handleXMLFileConnector.getFileDetails(conversationId) map {
         fileDetails =>
           (for {
-            data    <- request.userAnswers.get(MessageSpecDataPage)
             emails  <- getContactEmails
             details <- fileDetails
           } yield {
             val time = details.submitted.format(timeFormatter).toLowerCase
             val date = details.submitted.format(dateFormatter)
 
-            Ok(view(data.messageRefId, time, date, emails.firstContactEmail, emails.secondContactEmail))
+            Ok(view("details.messageRefId", time, date, emails.firstContactEmail, emails.secondContactEmail))
           }).getOrElse(InternalServerError(errorView()))
       }
   }

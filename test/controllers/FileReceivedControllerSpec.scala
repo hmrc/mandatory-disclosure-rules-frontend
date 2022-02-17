@@ -18,9 +18,9 @@ package controllers
 
 import base.SpecBase
 import connectors.HandleXMLFileConnector
-import models.{Accepted, FileDetails, MDR401, MessageSpecData}
+import models.{Accepted, FileDetails}
 import org.mockito.ArgumentMatchers.any
-import pages.{ContactEmailPage, MessageSpecDataPage, SecondContactEmailPage}
+import pages.{ContactEmailPage, SecondContactEmailPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -39,7 +39,6 @@ class FileReceivedControllerSpec extends SpecBase {
 
       val messageRefId       = "messageRefId"
       val conversationId     = "conversationId"
-      val msd                = MessageSpecData(messageRefId, MDR401)
       val time               = "10:30am"
       val date               = "1 January 2022"
       val firstContactEmail  = "first@email.com"
@@ -50,9 +49,6 @@ class FileReceivedControllerSpec extends SpecBase {
         .success
         .value
         .set(SecondContactEmailPage, secondContactEmail)
-        .success
-        .value
-        .set(MessageSpecDataPage, msd)
         .success
         .value
 

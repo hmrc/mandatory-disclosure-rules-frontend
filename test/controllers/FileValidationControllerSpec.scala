@@ -20,7 +20,7 @@ import base.SpecBase
 import connectors.{UpscanConnector, ValidationConnector}
 import helpers.FakeUpscanConnector
 import models.upscan.{Reference, UploadId, UploadSessionDetails, UploadedSuccessfully}
-import models.{GenericError, InvalidXmlError, MDR401, Message, MessageSpecData, UserAnswers, ValidationErrors}
+import models.{GenericError, InvalidXmlError, Message, UserAnswers, ValidationErrors}
 import org.bson.types.ObjectId
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
@@ -68,10 +68,9 @@ class FileValidationControllerSpec extends SpecBase with BeforeAndAfterEach {
     "must redirect to Check your answers and present the correct view for a GET" in {
 
       val userAnswersCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
-      val msd               = MessageSpecData("messageRefId", MDR401)
-      val expectedData      = Json.obj("uploadID" -> UploadId("123"), "validXML" -> "afile", "url" -> downloadURL, "messageSpecData" -> msd)
+      val expectedData      = Json.obj("uploadID" -> UploadId("123"), "validXML" -> "afile", "url" -> downloadURL)
 
-      when(mockValidationConnector.sendForValidation(any())(any(), any())).thenReturn(Future.successful(Right(msd)))
+      when(mockValidationConnector.sendForValidation(any())(any(), any())).thenReturn(Future.successful(Right(true)))
       when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
       fakeUpscanConnector.setDetails(uploadDetails)
 
