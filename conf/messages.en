@@ -295,3 +295,10 @@ status.Pending = Pending
 
 checkYourFileDetails.title = Check your file details
 checkYourFileDetails.heading = Check your file details
+checkYourFileDetails.uploadedFile = Uploaded file
+checkYourFileDetails.uploadedFile.change.hidden = your file
+checkYourFileDetails.messageRefId = MessageRefId
+checkYourFileDetails.messageTypeIndic = MessageTypeIndic
+
+
+

@@ -17,11 +17,14 @@
 package controllers
 
 import controllers.actions._
+
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.CheckYourFileDetailsView
+import viewmodels.CheckYourFileDetailsHelper
+import views.html.{CheckYourFileDetailsView, ThereIsAProblemView}
+import viewmodels.govuk.summarylist._
 
 class CheckYourFileDetailsController @Inject() (
   override val messagesApi: MessagesApi,
@@ -29,12 +32,18 @@ class CheckYourFileDetailsController @Inject() (
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
-  view: CheckYourFileDetailsView
+  view: CheckYourFileDetailsView,
+  errorView: ThereIsAProblemView
 ) extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData.apply() andThen requireData) {
     implicit request =>
-      Ok(view())
+      val helper = new CheckYourFileDetailsHelper(request.userAnswers)
+      helper.getFileDetails() match {
+        case Some(details) => Ok(view(SummaryListViewModel(details)))
+        case _             => InternalServerError(errorView())
+      }
+
   }
 }

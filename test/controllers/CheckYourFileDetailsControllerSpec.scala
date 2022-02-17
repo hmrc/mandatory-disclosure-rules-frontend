@@ -20,6 +20,7 @@ import base.SpecBase
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.CheckYourFileDetailsView
+import viewmodels.govuk.summarylist._
 
 class CheckYourFileDetailsControllerSpec extends SpecBase {
 
@@ -36,8 +37,10 @@ class CheckYourFileDetailsControllerSpec extends SpecBase {
 
         val view = application.injector.instanceOf[CheckYourFileDetailsView]
 
+        val list = SummaryListViewModel(Seq.empty)
+
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view()(request, messages(application)).toString
+        contentAsString(result) mustEqual view(list)(request, messages(application)).toString
       }
     }
   }
