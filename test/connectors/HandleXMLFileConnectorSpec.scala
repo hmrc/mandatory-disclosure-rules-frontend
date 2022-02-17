@@ -38,6 +38,7 @@ class HandleXMLFileConnectorSpec extends Connector {
       |[
       |  {
       |    "name": "test1.xml",
+      |    "messageRefId": "messageRefId1",
       |    "submitted": "2022-02-10T15:35:37.636",
       |    "lastUpdated": "2022-02-10T15:35:37.636",
       |    "status": "Pending",
@@ -45,13 +46,13 @@ class HandleXMLFileConnectorSpec extends Connector {
       |  },
       |  {
       |    "name": "test2.xml",
+      |    "messageRefId": "messageRefId2",
       |    "submitted": "2022-02-10T15:35:37.636",
       |    "lastUpdated": "2022-02-10T15:45:37.636",
       |    "status": {
       |      "error": {
       |        "detail": "error"
-      |      },
-      |      "_type": "models.Rejected"
+      |      }
       |    },
       |    "_id": "conversationId2"
       |  }
@@ -65,6 +66,7 @@ class HandleXMLFileConnectorSpec extends Connector {
         val expectedResult = Some(
           Seq(
             FileDetails("test1.xml",
+                        "messageRefId1",
                         LocalDateTime.parse("2022-02-10T15:35:37.636"),
                         LocalDateTime.parse("2022-02-10T15:35:37.636"),
                         Pending,
@@ -72,6 +74,7 @@ class HandleXMLFileConnectorSpec extends Connector {
             ),
             FileDetails(
               "test2.xml",
+              "messageRefId2",
               LocalDateTime.parse("2022-02-10T15:35:37.636"),
               LocalDateTime.parse("2022-02-10T15:45:37.636"),
               Rejected(FileError("error")),

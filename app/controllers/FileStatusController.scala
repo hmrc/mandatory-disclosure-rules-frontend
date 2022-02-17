@@ -51,6 +51,5 @@ class FileStatusController @Inject() (
           logger.warn("FileStatusController: failed to get AllFileDetails")
           InternalServerError(errorView())
       }
-
   }
 }

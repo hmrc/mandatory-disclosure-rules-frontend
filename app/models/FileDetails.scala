@@ -26,8 +26,7 @@ case object Pending extends FileStatus
 case object Accepted extends FileStatus
 
 case class Rejected(error: FileError) extends FileStatus {
-  override def toString: String            = "Rejected"
-  implicit def rejected: OFormat[Rejected] = Json.format[Rejected]
+  override def toString: String = "Rejected"
 }
 
 object FileStatus {
@@ -42,7 +41,8 @@ object FileStatus {
   implicit val reads: Reads[FileStatus] = Reads[FileStatus] {
     case JsString("Pending")  => JsSuccess(Pending)
     case JsString("Accepted") => JsSuccess(Accepted)
-    case rejected             => JsSuccess(rejected.as[Rejected])
+    case rejected: JsObject   => JsSuccess(rejected.as[Rejected])
+    case error                => JsError(s"Unexpected value: $error")
   }
 }
 
@@ -52,7 +52,7 @@ object FileError {
   implicit val format: OFormat[FileError] = Json.format[FileError]
 }
 
-case class FileDetails(name: String, submitted: LocalDateTime, lastUpdated: LocalDateTime, status: FileStatus, _id: String)
+case class FileDetails(name: String, messageRefId: String, submitted: LocalDateTime, lastUpdated: LocalDateTime, status: FileStatus, _id: String)
 
 object FileDetails {
   implicit val format: OFormat[FileDetails] = Json.format[FileDetails]
