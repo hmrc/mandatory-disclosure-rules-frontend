@@ -59,7 +59,20 @@ class FileReceivedControllerSpec extends SpecBase {
         .build()
 
       when(mockHandleXMLFileConnector.getFileDetails(any())(any(), any()))
-        .thenReturn(Future.successful(Some(FileDetails("name", LocalDateTime.parse("2022-01-01T10:30:00.000"), Accepted, conversationId))))
+        .thenReturn(
+          Future.successful(
+            Some(
+              FileDetails(
+                "name",
+                messageRefId,
+                LocalDateTime.parse("2022-01-01T10:30:00.000"),
+                LocalDateTime.parse("2022-01-01T10:30:00.000"),
+                Accepted,
+                conversationId
+              )
+            )
+          )
+        )
 
       running(application) {
         val request = FakeRequest(GET, routes.FileReceivedController.onPageLoad(conversationId).url)

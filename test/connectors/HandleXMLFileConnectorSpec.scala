@@ -66,11 +66,11 @@ class HandleXMLFileConnectorSpec extends Connector {
   private val file: String = """
      |  {
      |    "name": "test3.xml",
+     |    "messageRefId": "messageRefId3",
      |    "submitted": "2022-02-10T15:35:37.636",
-     |    "status": {
-     |      "_type": "models.Accepted"
-     |    },
-     |    "conversationId": "conversationId3"
+     |    "lastUpdated": "2022-02-10T15:45:37.636",
+     |    "status": "Accepted",
+     |    "_id": "conversationId3"
      |  }""".stripMargin
 
   "HandleXMLFileConnector" - {
@@ -130,7 +130,13 @@ class HandleXMLFileConnectorSpec extends Connector {
 
       "must return 'file details' when getFileDetails is successful" in {
         val expectedResult = Some(
-          FileDetails("test3.xml", LocalDateTime.parse("2022-02-10T15:35:37.636"), Accepted, "conversationId3")
+          FileDetails("test3.xml",
+                      "messageRefId3",
+                      LocalDateTime.parse("2022-02-10T15:35:37.636"),
+                      LocalDateTime.parse("2022-02-10T15:45:37.636"),
+                      Accepted,
+                      "conversationId3"
+          )
         )
 
         stubGetResponse(fileUrl, OK, file)

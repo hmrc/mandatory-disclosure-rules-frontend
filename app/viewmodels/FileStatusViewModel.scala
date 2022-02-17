@@ -51,7 +51,7 @@ object FileStatusViewModel {
           TableRow(Text(fileDetails.name)),
           TableRow(Text(DateTimeFormatUtil.dateFormatted(fileDetails.submitted))),
           TableRow(htmlStatus(fileDetails.status)),
-          buildTableRow(fileDetails.status, fileDetails.conversationId)
+          buildTableRow(fileDetails.status, fileDetails._id)
         )
     }
 

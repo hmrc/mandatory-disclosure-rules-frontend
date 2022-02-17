@@ -54,7 +54,7 @@ class FileReceivedController @Inject() (
             val time = details.submitted.format(timeFormatter).toLowerCase
             val date = details.submitted.format(dateFormatter)
 
-            Ok(view("details.messageRefId", time, date, emails.firstContactEmail, emails.secondContactEmail))
+            Ok(view(details.messageRefId, time, date, emails.firstContactEmail, emails.secondContactEmail))
           }).getOrElse(InternalServerError(errorView()))
       }
   }
