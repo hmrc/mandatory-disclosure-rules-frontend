@@ -19,8 +19,7 @@ package controllers
 import connectors.UpscanConnector
 import controllers.actions._
 import forms.UploadFileFormProvider
-import models.UserAnswers
-import models.requests.{DataRequest, OptionalDataRequest}
+import models.requests.DataRequest
 import models.upscan._
 import pages.UploadIDPage
 import play.api.Logging

@@ -41,7 +41,7 @@ class FileStatusControllerSpec extends SpecBase {
         )
         .build()
 
-      val fileDetails = Seq(FileDetails("name.xml", LocalDateTime.now(), Pending, "id"))
+      val fileDetails = Seq(FileDetails("name.xml", "messageRefId1", LocalDateTime.now(), LocalDateTime.now(), Pending, "id"))
       when(mockFileConnector.getAllFileDetails(any())(any(), any())).thenReturn(Future.successful(Some(fileDetails)))
 
       running(application) {
