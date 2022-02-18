@@ -35,7 +35,7 @@ class SecondContactEmailFormProviderSpec extends StringFieldBehaviours {
     behave like fieldThatBindsValidData(
       form,
       fieldName,
-      validEmailAddressWithinLength(maxLength)
+      stringsWithMaxLength(maxLength)
     )
 
     behave like fieldWithInvalidData(
