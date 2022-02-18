@@ -17,8 +17,11 @@
 package controllers
 
 import base.SpecBase
+import models.{MDR401, MessageSpecData, UserAnswers, ValidatedFileData}
+import pages.ValidXMLPage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import viewmodels.CheckYourFileDetailsViewModel
 import views.html.CheckYourFileDetailsView
 import viewmodels.govuk.summarylist._
 
@@ -28,7 +31,9 @@ class CheckYourFileDetailsControllerSpec extends SpecBase {
 
     "must return OK and the correct view for a GET" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val vfd: ValidatedFileData = ValidatedFileData("test.xml", MessageSpecData("GDC99999999", MDR401))
+      val ua: UserAnswers        = emptyUserAnswers.set(ValidXMLPage, vfd).success.value
+      val application            = applicationBuilder(userAnswers = Some(ua)).build()
 
       running(application) {
         val request = FakeRequest(GET, routes.CheckYourFileDetailsController.onPageLoad().url)
@@ -37,7 +42,7 @@ class CheckYourFileDetailsControllerSpec extends SpecBase {
 
         val view = application.injector.instanceOf[CheckYourFileDetailsView]
 
-        val list = SummaryListViewModel(Seq.empty)
+        val list = SummaryListViewModel(CheckYourFileDetailsViewModel.getSummaryRows(vfd)(messages(application)))
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(list)(request, messages(application)).toString

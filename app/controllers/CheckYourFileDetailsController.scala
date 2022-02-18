@@ -17,12 +17,13 @@
 package controllers
 
 import controllers.actions._
+import pages.ValidXMLPage
 
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewmodels.CheckYourFileDetailsHelper
+import viewmodels.CheckYourFileDetailsViewModel
 import views.html.{CheckYourFileDetailsView, ThereIsAProblemView}
 import viewmodels.govuk.summarylist._
 
@@ -39,10 +40,10 @@ class CheckYourFileDetailsController @Inject() (
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData.apply() andThen requireData) {
     implicit request =>
-      val helper = new CheckYourFileDetailsHelper(request.userAnswers)
-      helper.getFileDetails() match {
-        case Some(details) => Ok(view(SummaryListViewModel(details)))
-        case _             => InternalServerError(errorView())
+      request.userAnswers.get(ValidXMLPage) match {
+        case Some(details) =>
+          Ok(view(SummaryListViewModel(CheckYourFileDetailsViewModel.getSummaryRows(details))))
+        case _ => InternalServerError(errorView())
       }
 
   }
