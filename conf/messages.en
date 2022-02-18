@@ -252,6 +252,19 @@ xml.not.valid.percentage = {0} must be a whole number between 0 and 100
 xml.optional.field.empty = If provided, {0} must have a value
 xml.addressFix.error = AddressFix must be placed before AddressFree
 
+fileReceived.heading = at
+fileReceived.heading.2 = {0} on {1}
+fileReceived.title = File received
+fileReceived.p1 = We received your file with the following MessageRefId:
+fileReceived.p2 = We have sent a confirmation email to {0}{1}
+fileReceived.p2.5 = and {0}
+fileReceived.p3 = If we have any questions about your report, we will contact you.
+fileReceived.subheading = What happens next
+fileReceived.back = Back to report cross-border arrangements
+fileReceived.altText = File received
+fileReceived.thoughts = What did you think of this service? (Opens in new tab)
+
+
 checksWillTakeLonger.title = We need more time to check the file you sent us
 checksWillTakeLonger.heading = We need more time to check the file you sent us
 checksWillTakeLonger.p1 = We are carrying out more automatic checks on your file. This should take a few minutes and you can check for updates on the next page.
@@ -264,7 +277,7 @@ checksWillTakeLonger.button = View your file status
 fileStatus.title = Status of files
 fileStatus.heading = Status of files
 fileStatus.p1 = Refresh this page
-fileStatus.p1.update = to see any updates
+fileStatus.p1.update = to see any updates.
 fileStatus.p2 = If the checks take longer than 10 minutes, your file is still pending. You will then receive an email about the next steps you need to take.
 fileStatus.p3 = This information will be available for 28 days from the day you sent the file.
 fileStatus.file = File

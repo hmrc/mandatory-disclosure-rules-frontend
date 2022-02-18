@@ -16,33 +16,46 @@
 
 package controllers
 
+import connectors.HandleXMLFileConnector
 import controllers.actions._
+import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.ContactEmailHelper.getContactEmails
-import views.html.{ChecksWillTakeLongerView, ThereIsAProblemView}
+import utils.DateTimeFormatUtil._
+import views.html.{FileReceivedView, ThereIsAProblemView}
 
 import javax.inject.Inject
+import scala.concurrent.ExecutionContext
 
-class ChecksWillTakeLongerController @Inject() (
+class FileReceivedController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
-  view: ChecksWillTakeLongerView,
-  errorView: ThereIsAProblemView
-) extends FrontendBaseController
-    with I18nSupport {
+  view: FileReceivedView,
+  errorView: ThereIsAProblemView,
+  handleXMLFileConnector: HandleXMLFileConnector
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Logging {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData) {
+  def onPageLoad(conversationId: String): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
-      getContactEmails.fold {
-        InternalServerError(errorView())
-      } {
-        emails =>
-          Ok(view(emails.firstContactEmail, emails.secondContactEmail))
+      handleXMLFileConnector.getFileDetails(conversationId) map {
+        fileDetails =>
+          (for {
+            emails  <- getContactEmails
+            details <- fileDetails
+          } yield {
+            val time = details.submitted.format(timeFormatter).toLowerCase
+            val date = details.submitted.format(dateFormatter)
+
+            Ok(view(details.messageRefId, time, date, emails.firstContactEmail, emails.secondContactEmail))
+          }).getOrElse(InternalServerError(errorView()))
       }
   }
 }
