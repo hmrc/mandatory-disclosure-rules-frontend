@@ -16,6 +16,7 @@
 
 package models
 
+import julienrf.json.derived
 import play.api.libs.json._
 
 import java.time.LocalDateTime
@@ -30,20 +31,7 @@ case class Rejected(error: FileError) extends FileStatus {
 }
 
 object FileStatus {
-  implicit def rejected: OFormat[Rejected] = Json.format[Rejected]
-
-  implicit val writes: Writes[FileStatus] = Writes[FileStatus] {
-    case Pending            => JsString("Pending")
-    case Accepted           => JsString("Accepted")
-    case rejected: Rejected => Json.toJson(rejected)
-  }
-
-  implicit val reads: Reads[FileStatus] = Reads[FileStatus] {
-    case JsString("Pending")  => JsSuccess(Pending)
-    case JsString("Accepted") => JsSuccess(Accepted)
-    case rejected: JsObject   => JsSuccess(rejected.as[Rejected])
-    case error                => JsError(s"Unexpected value: $error")
-  }
+  implicit val format: OFormat[FileStatus] = derived.oformat()
 }
 
 case class FileError(detail: String)
