@@ -43,6 +43,8 @@ class CheckYourFileDetailsControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[CheckYourFileDetailsView]
 
         val list = SummaryListViewModel(CheckYourFileDetailsViewModel.getSummaryRows(vfd)(messages(application)))
+          .withoutBorders()
+          .withCssClass("govuk-!-margin-bottom-0")
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(list)(request, messages(application)).toString

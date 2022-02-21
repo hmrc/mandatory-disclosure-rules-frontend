@@ -24,12 +24,6 @@ case object MDR402 extends MessageTypeIndic
 
 object MessageTypeIndic {
 
-  def fromString(typeIndic: String): MessageTypeIndic = typeIndic.toUpperCase match {
-    case "MDR401" => MDR401
-    case "MDR402" => MDR402
-    case _        => throw new NoSuchElementException
-  }
-
   implicit val writes: Writes[MessageTypeIndic] = Writes[MessageTypeIndic] {
     case MDR401 => JsString("MDR401")
     case MDR402 => JsString("MDR402")
