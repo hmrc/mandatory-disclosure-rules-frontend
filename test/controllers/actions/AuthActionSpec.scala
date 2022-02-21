@@ -22,7 +22,7 @@ import config.FrontendAppConfig
 import controllers.routes
 import org.mockito.ArgumentMatchers.any
 import play.api.mvc.Results.Ok
-import play.api.mvc.{BodyParsers, Results}
+import play.api.mvc.{Action, AnyContent, BodyParsers, Results}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AffinityGroup.{Individual, Organisation}
@@ -30,7 +30,7 @@ import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{~, Retrieval}
 import uk.gov.hmrc.http.HeaderCarrier
-import utils.RetrievalOps._
+import utils.RetrievalOps.Ops
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
@@ -39,7 +39,7 @@ class AuthActionSpec extends SpecBase {
 
   class Harness(authAction: IdentifierAction) {
 
-    def onPageLoad() = authAction {
+    def onPageLoad(): Action[AnyContent] = authAction {
       _ => Results.Ok
     }
   }
