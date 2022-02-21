@@ -27,8 +27,10 @@
     <h1 class="govuk-heading-l">@messages("checkYourFileDetails.heading")</h1>
 
     @govukSummaryList(fileDetails)
+    <hr>
 
+   @* ToDo link to correct page *@
    @govukButton(
-    ButtonViewModel(Text(messages("site.continue"))).withAttribute( "id" -> "submit")
+    ButtonViewModel(Text(messages("site.continue"))).withAttribute( "id" -> "submit").asLink(routes.IndexController.onPageLoad().url).withCssClass("govuk-!-margin-top-7")
    )
 }

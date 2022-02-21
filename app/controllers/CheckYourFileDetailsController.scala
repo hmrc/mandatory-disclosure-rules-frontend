@@ -18,14 +18,14 @@ package controllers
 
 import controllers.actions._
 import pages.ValidXMLPage
-
-import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.CheckYourFileDetailsViewModel
-import views.html.{CheckYourFileDetailsView, ThereIsAProblemView}
 import viewmodels.govuk.summarylist._
+import views.html.{CheckYourFileDetailsView, ThereIsAProblemView}
+
+import javax.inject.Inject
 
 class CheckYourFileDetailsController @Inject() (
   override val messagesApi: MessagesApi,
@@ -42,7 +42,8 @@ class CheckYourFileDetailsController @Inject() (
     implicit request =>
       request.userAnswers.get(ValidXMLPage) match {
         case Some(details) =>
-          Ok(view(SummaryListViewModel(CheckYourFileDetailsViewModel.getSummaryRows(details))))
+          val detailsList = SummaryListViewModel(CheckYourFileDetailsViewModel.getSummaryRows(details)).withoutBorders().withCssClass("govuk-!-margin-bottom-0")
+          Ok(view(detailsList))
         case _ => InternalServerError(errorView())
       }
 
