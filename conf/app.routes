@@ -38,6 +38,8 @@ GET         /report/problem/data-errors                  controllers.InvalidXMLF
 
 GET         /report/problem/invalid-xml-file             controllers.FileErrorController.onPageLoad()
 
+GET         /report/problem/business-rule-errors/:conversationId      controllers.FileRejectedController.onPageLoad(conversationId)
+
 GET         /report/file-validation                      controllers.FileValidationController.onPageLoad()
 
 GET         /report/change-contact/individual/details    controllers.ChangeIndividualContactDetailsController.onPageLoad()
@@ -72,7 +74,6 @@ POST        /report/change-contact/organisation/second-contact-name           co
 
 GET         /report/change-contact/organisation/second-contact-phone          controllers.SecondContactPhoneController.onPageLoad()
 POST        /report/change-contact/organisation/second-contact-phone          controllers.SecondContactPhoneController.onSubmit()
-
 
 GET         /report/change-contact/details-updated                            controllers.DetailsUpdatedController.onPageLoad()
 

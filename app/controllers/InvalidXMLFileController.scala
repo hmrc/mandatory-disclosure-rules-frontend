@@ -17,13 +17,11 @@
 package controllers
 
 import controllers.actions._
-import models.GenericError
 import pages.{GenericErrorPage, InvalidXMLPage}
-import play.api.i18n.{I18nSupport, Messages, MessagesApi}
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.govukfrontend.views.Aliases.Text
-import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.ErrorViewHelper
 import views.html.{InvalidXMLFileView, ThereIsAProblemView}
 
 import javax.inject.Inject
@@ -35,6 +33,7 @@ class InvalidXMLFileController @Inject() (
   requireData: DataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
   view: InvalidXMLFileView,
+  errorViewHelper: ErrorViewHelper,
   errorView: ThereIsAProblemView
 ) extends FrontendBaseController
     with I18nSupport {
@@ -46,19 +45,9 @@ class InvalidXMLFileController @Inject() (
           val xmlErrors = for {
             error <- errors.sorted
           } yield error
-          Ok(view(fileName, generateTable(xmlErrors)))
+          Ok(view(fileName, errorViewHelper.generateTable(xmlErrors)))
         case _ =>
           InternalServerError(errorView())
       }
-
   }
-
-  private def generateTable(error: Seq[GenericError])(implicit messages: Messages): Seq[Seq[TableRow]] =
-    error.map {
-      er =>
-        Seq(
-          TableRow(content = Text(er.lineNumber.toString), classes = "govuk-table__cell--numeric", attributes = Map("id" -> s"lineNumber_${er.lineNumber}")),
-          TableRow(content = Text(messages(er.message.messageKey, er.message.args: _*)), attributes = Map("id" -> s"errorMessage_${er.lineNumber}"))
-        )
-    }
 }

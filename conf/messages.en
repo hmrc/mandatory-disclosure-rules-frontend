@@ -229,6 +229,19 @@ fileError.tableCaption = Errors
 fileError.tableHeading1 = Line
 fileError.tableHeading2 = Error
 
+fileRejected.title = There is a problem with your file
+fileRejected.heading = There is a problem with your file
+fileRejected.p1 = We cannot accept the file {0} because it does not meet the MDR business rules.
+fileRejected.subheading1 = What you can do next
+fileRejected.bullet1 = Print or save this page
+fileRejected.bullet2 = View the errors on this page
+fileRejected.bullet3 = Correct the errors using the {0}
+fileRejected.bullet3.link = MDR technical guidance for XML files (opens in new tab)
+fileRejected.bullet4 = Upload your corrected file
+fileRejected.tableCaption = Errors
+fileRejected.tableHeading1 = Line
+fileRejected.tableHeading2 = Error
+
 xml.defaultMessage = There is a problem with this line number
 xml.add.an.element = Add an {0}
 xml.add.a.element = Add a {0}
