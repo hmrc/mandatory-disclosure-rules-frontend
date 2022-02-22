@@ -81,3 +81,6 @@ GET         /report/file-received/:conversationId                             co
 GET         /report/checks-will-take-longer                                   controllers.ChecksWillTakeLongerController.onPageLoad()
 
 GET         /report/file-status                                               controllers.FileStatusController.onPageLoad()
+
+GET        /report/check-your-file-details                       controllers.CheckYourFileDetailsController.onPageLoad()
+

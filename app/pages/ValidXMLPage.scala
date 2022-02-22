@@ -16,9 +16,10 @@
 
 package pages
 
+import models.ValidatedFileData
 import play.api.libs.json.JsPath
 
-case object ValidXMLPage extends QuestionPage[String] {
+case object ValidXMLPage extends QuestionPage[ValidatedFileData] {
 
   override def path: JsPath = JsPath \ toString
 
