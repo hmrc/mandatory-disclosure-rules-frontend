@@ -239,7 +239,7 @@ fileRejected.bullet3 = Correct the errors using the {0}
 fileRejected.bullet3.link = MDR technical guidance for XML files (opens in new tab)
 fileRejected.bullet4 = Upload your corrected file
 fileRejected.tableCaption = Errors
-fileRejected.tableHeading1 = Line
+fileRejected.tableHeading1 = Location
 fileRejected.tableHeading2 = Error
 
 xml.defaultMessage = There is a problem with this line number

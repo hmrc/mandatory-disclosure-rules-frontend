@@ -18,7 +18,7 @@ package controllers
 
 import connectors.HandleXMLFileConnector
 import controllers.actions._
-import models.{GenericError, Message, Rejected}
+import models.{GenericError, Message, Pending, Rejected}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -48,18 +48,13 @@ class FileRejectedController @Inject() (
         fileDetails =>
           (for {
             details <- fileDetails
-          } yield {
-            //TODO - temporary until we know in what format we will receive businessRuleErrors
-            val brErrors = details.status match {
-              case Rejected(fileError) => toGenericError(fileError.detail)
-              case _                   => toGenericError("")
-            }
-
-            Ok(view(details.name, errorViewHelper.generateTable(brErrors)))
+          } yield details.status match {
+            case Rejected(fileError) =>
+              //TODO - change when we have confirmation on how the business rule errors will be returned to us
+              val toGenericError = Seq(GenericError(1, Message(fileError.detail)))
+              Ok(view(details.name, errorViewHelper.generateTable(toGenericError)))
+            case _ => InternalServerError(errorView())
           }).getOrElse(InternalServerError(errorView()))
       }
   }
-
-  private def toGenericError(error: String): Seq[GenericError] =
-    Seq(GenericError(1, Message(error)))
 }
