@@ -45,7 +45,7 @@ class FileStatusController @Inject() (
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
-      fileConnector.getAllFileDetails(request.subscriptionId) map {
+      fileConnector.getAllFileDetails map {
         case Some(allFiles) => Ok(view(FileStatusViewModel.createStatusTable(allFiles), appConfig.homePageUrl))
         case _ =>
           logger.warn("FileStatusController: failed to get AllFileDetails")

@@ -28,7 +28,7 @@ class HandleXMLFileConnectorSpec extends Connector {
 
   override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(
-      conf = "microservice.services.mandatory-disclosure-rules-stub.port" -> server.port()
+      conf = "microservice.services.mandatory-disclosure-rules.port" -> server.port()
     )
     .build()
 
@@ -36,8 +36,8 @@ class HandleXMLFileConnectorSpec extends Connector {
 
   private val conversationId = "conversationId3"
 
-  private val allFilesUrls = s"/mdr/all-files/$mdrId"
-  private val fileUrl      = s"/mdr/file/$conversationId"
+  private val allFilesUrls = "/mandatory-disclosure-rules/files/details"
+  private val fileUrl      = s"/mandatory-disclosure-rules/files/$conversationId/details"
 
   private val allFiles: String = """
       |[
@@ -102,7 +102,7 @@ class HandleXMLFileConnectorSpec extends Connector {
 
         stubGetResponse(allFilesUrls, OK, allFiles)
 
-        val result = connector.getAllFileDetails(mdrId)
+        val result = connector.getAllFileDetails
 
         result.futureValue mustBe expectedResult
       }
@@ -111,7 +111,7 @@ class HandleXMLFileConnectorSpec extends Connector {
 
         stubGetResponse(allFilesUrls, OK)
 
-        val result = connector.getAllFileDetails(mdrId)
+        val result = connector.getAllFileDetails
 
         result.futureValue mustBe None
       }
@@ -121,7 +121,7 @@ class HandleXMLFileConnectorSpec extends Connector {
         val errorCode = errorCodes.sample.value
         stubGetResponse(allFilesUrls, errorCode)
 
-        val result = connector.getAllFileDetails(mdrId)
+        val result = connector.getAllFileDetails
 
         result.futureValue mustBe None
 
