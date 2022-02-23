@@ -42,7 +42,7 @@ class FileStatusControllerSpec extends SpecBase {
         .build()
 
       val fileDetails = Seq(FileDetails("name.xml", "messageRefId1", LocalDateTime.now(), LocalDateTime.now(), Pending, "id"))
-      when(mockFileConnector.getAllFileDetails(any())(any(), any())).thenReturn(Future.successful(Some(fileDetails)))
+      when(mockFileConnector.getAllFileDetails(any(), any())).thenReturn(Future.successful(Some(fileDetails)))
 
       running(application) {
         val request = FakeRequest(GET, routes.FileStatusController.onPageLoad().url)
@@ -61,7 +61,7 @@ class FileStatusControllerSpec extends SpecBase {
         )
         .build()
 
-      when(mockFileConnector.getAllFileDetails(any())(any(), any())).thenReturn(Future.successful(None))
+      when(mockFileConnector.getAllFileDetails(any(), any())).thenReturn(Future.successful(None))
 
       running(application) {
         val request = FakeRequest(GET, routes.FileStatusController.onPageLoad().url)
