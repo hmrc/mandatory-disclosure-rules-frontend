@@ -314,3 +314,9 @@ checkYourFileDetails.messageRefId = MessageRefId
 checkYourFileDetails.messageTypeIndic = MessageTypeIndic
 checkYourFileDetails.messageTypeIndic.MDR401 = New information
 checkYourFileDetails.messageTypeIndic.MDR402 = Correction or deletion
+
+
+
+
+sendYourFile.title = sendYourFile
+sendYourFile.heading = sendYourFile
