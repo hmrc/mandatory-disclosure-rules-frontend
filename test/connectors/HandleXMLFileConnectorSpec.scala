@@ -47,7 +47,7 @@ class HandleXMLFileConnectorSpec extends Connector {
       |    "submitted": "2022-02-10T15:35:37.636",
       |    "lastUpdated": "2022-02-10T15:35:37.636",
       |    "status":{"Pending":{}},
-      |    "_id": "conversationId1"
+      |    "conversationId": "conversationId1"
       |  },
       |  {
       |    "name": "test2.xml",
@@ -61,7 +61,7 @@ class HandleXMLFileConnectorSpec extends Connector {
       |       }
       |      }
       |    },
-      |    "_id": "conversationId2"
+      |    "conversationId": "conversationId2"
       |  }
       |]""".stripMargin
 
@@ -72,7 +72,7 @@ class HandleXMLFileConnectorSpec extends Connector {
      |    "submitted": "2022-02-10T15:35:37.636",
      |    "lastUpdated": "2022-02-10T15:45:37.636",
      |    "status": {"Accepted":{}},
-     |    "_id": "conversationId3"
+     |    "conversationId": "conversationId3"
      |  }""".stripMargin
 
   "HandleXMLFileConnector" - {
