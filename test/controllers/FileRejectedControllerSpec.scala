@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import connectors.HandleXMLFileConnector
-import models.{FileDetails, FileError, Rejected}
+import models.{Accepted, FileDetails, FileError, Rejected}
 import org.mockito.ArgumentMatchers.any
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -32,9 +32,11 @@ import scala.concurrent.Future
 
 class FileRejectedControllerSpec extends SpecBase {
 
-  private val fileName   = "CornerShop"
-  private val error      = "Brimful of Asha on the 45"
-  private val lineNumber = "1"
+  private val fileName       = "CornerShop"
+  private val error          = "Brimful of Asha on the 45"
+  private val lineNumber     = "1"
+  private val conversationId = "conversationId"
+  private val messageRefId   = "messageRefId"
 
   private val errorRows = Seq(
     Seq(
@@ -49,9 +51,7 @@ class FileRejectedControllerSpec extends SpecBase {
 
     "must return OK and the correct view for a GET" in {
 
-      val conversationId = "conversationId"
-      val userAnswers    = emptyUserAnswers
-      val application = applicationBuilder(userAnswers = Some(userAnswers))
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
           bind[HandleXMLFileConnector].toInstance(mockHandleXMLFileConnector)
         )
@@ -63,7 +63,7 @@ class FileRejectedControllerSpec extends SpecBase {
             Some(
               FileDetails(
                 fileName,
-                "messageRefId",
+                messageRefId,
                 LocalDateTime.parse("2022-01-01T10:30:00.000"),
                 LocalDateTime.parse("2022-01-01T10:30:00.000"),
                 Rejected(FileError(error)),
@@ -85,9 +85,48 @@ class FileRejectedControllerSpec extends SpecBase {
       }
     }
 
-    "must return Internal server error on failing to read error details from userAnswers" in {
+    "must return Internal server error on failing to get FileDetails" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[HandleXMLFileConnector].toInstance(mockHandleXMLFileConnector)
+        )
+        .build()
+
+      when(mockHandleXMLFileConnector.getFileDetails(any())(any(), any())).thenReturn(Future.successful(None))
+
+      running(application) {
+        val request = FakeRequest(GET, routes.FileRejectedController.onPageLoad("conversationId").url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual INTERNAL_SERVER_ERROR
+      }
+    }
+
+    "must return Internal server error on getting FileDetails with a status other than Rejected" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[HandleXMLFileConnector].toInstance(mockHandleXMLFileConnector)
+        )
+        .build()
+
+      when(mockHandleXMLFileConnector.getFileDetails(any())(any(), any()))
+        .thenReturn(
+          Future.successful(
+            Some(
+              FileDetails(
+                fileName,
+                messageRefId,
+                LocalDateTime.parse("2022-01-01T10:30:00.000"),
+                LocalDateTime.parse("2022-01-01T10:30:00.000"),
+                Accepted,
+                conversationId
+              )
+            )
+          )
+        )
 
       running(application) {
         val request = FakeRequest(GET, routes.FileRejectedController.onPageLoad("conversationId").url)
