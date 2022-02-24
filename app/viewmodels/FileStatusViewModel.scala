@@ -37,7 +37,7 @@ object FileStatusViewModel {
     val action = fileStatus match {
       case Pending     => ""
       case Accepted    => s"<a href='${routes.FileReceivedController.onPageLoad(conversationId).url}'>${Messages("fileStatus.accepted")}</a>"
-      case Rejected(_) => s"<a href=''>${Messages("fileStatus.rejected")}</a>"
+      case Rejected(_) => s"<a href='${routes.FileRejectedController.onPageLoad(conversationId).url}'>${Messages("fileStatus.rejected")}</a>"
     }
 
     TableRow(HtmlContent(action), classes = "app-custom-class govuk-!-width-one-half")

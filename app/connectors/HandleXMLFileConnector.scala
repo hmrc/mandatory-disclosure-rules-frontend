@@ -31,13 +31,13 @@ class HandleXMLFileConnector @Inject() (httpClient: HttpClient, config: Frontend
   def getAllFileDetails(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[Seq[FileDetails]]] = {
     val url = s"${config.mdrUrl}/mandatory-disclosure-rules/files/details"
     httpClient.GET[HttpResponse](url).map {
-          case responseMessage if is2xx(responseMessage.status) =>
-            responseMessage.json
-              .asOpt[Seq[FileDetails]]
-          case _ =>
-            logger.warn("HandleXMLFileConnector: Failed to get AllFileDetails")
-            None
-        }
+      case responseMessage if is2xx(responseMessage.status) =>
+        responseMessage.json
+          .asOpt[Seq[FileDetails]]
+      case _ =>
+        logger.warn("HandleXMLFileConnector: Failed to get AllFileDetails")
+        None
+    }
   }
 
   def getFileDetails(conversationId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[FileDetails]] = {

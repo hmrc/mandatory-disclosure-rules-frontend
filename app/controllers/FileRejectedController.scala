@@ -16,38 +16,44 @@
 
 package controllers
 
+import connectors.HandleXMLFileConnector
 import controllers.actions._
-import pages.{GenericErrorPage, InvalidXMLPage}
+import models.{GenericError, Message, Rejected}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.ErrorViewHelper
-import views.html.{InvalidXMLFileView, ThereIsAProblemView}
+import views.html.{FileRejectedView, ThereIsAProblemView}
 
 import javax.inject.Inject
+import scala.concurrent.ExecutionContext
 
-class InvalidXMLFileController @Inject() (
+class FileRejectedController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
-  view: InvalidXMLFileView,
   errorViewHelper: ErrorViewHelper,
-  errorView: ThereIsAProblemView
-) extends FrontendBaseController
+  view: FileRejectedView,
+  errorView: ThereIsAProblemView,
+  handleXMLFileConnector: HandleXMLFileConnector
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData() andThen requireData) {
+  def onPageLoad(conversationId: String): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
-      (request.userAnswers.get(GenericErrorPage), request.userAnswers.get(InvalidXMLPage)) match {
-        case (Some(errors), Some(fileName)) =>
-          val xmlErrors = for {
-            error <- errors.sorted
-          } yield error
-          Ok(view(fileName, errorViewHelper.generateTable(xmlErrors)))
-        case _ =>
-          InternalServerError(errorView())
+      handleXMLFileConnector.getFileDetails(conversationId) map {
+        case Some(details) =>
+          details.status match {
+            case Rejected(fileError) =>
+              //TODO - change when we have confirmation on how the business rule errors will be returned to us
+              val toGenericError = Seq(GenericError(1, Message(fileError.detail)))
+              Ok(view(details.name, errorViewHelper.generateTable(toGenericError)))
+            case _ => InternalServerError(errorView())
+          }
+        case _ => InternalServerError(errorView())
       }
   }
 }
