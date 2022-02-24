@@ -40,7 +40,7 @@ object FileError {
   implicit val format: OFormat[FileError] = Json.format[FileError]
 }
 
-case class FileDetails(name: String, messageRefId: String, submitted: LocalDateTime, lastUpdated: LocalDateTime, status: FileStatus, _id: String)
+case class FileDetails(name: String, messageRefId: String, submitted: LocalDateTime, lastUpdated: LocalDateTime, status: FileStatus, conversationId: String)
 
 object FileDetails {
   implicit val format: OFormat[FileDetails] = Json.format[FileDetails]
