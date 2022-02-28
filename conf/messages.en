@@ -275,7 +275,7 @@ fileReceived.p3 = If we have any questions about your report, we will contact yo
 fileReceived.subheading = What happens next
 fileReceived.back = Back to report cross-border arrangements
 fileReceived.altText = File received
-fileReceived.thoughts = What did you think of this service? (Opens in new tab)
+fileReceived.thoughts = What did you think of this service? (opens in new tab)
 
 
 checksWillTakeLonger.title = We need more time to check the file you sent us
