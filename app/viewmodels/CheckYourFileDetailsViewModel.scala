@@ -17,7 +17,7 @@
 package viewmodels
 
 import controllers.routes
-import models.ValidatedFileData
+import models.{MDR401, MDR402, MessageTypeIndic, ValidatedFileData}
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
@@ -43,8 +43,15 @@ object CheckYourFileDetailsViewModel {
       ),
       SummaryListRowViewModel(
         key = "checkYourFileDetails.messageTypeIndic",
-        value = ValueViewModel(HtmlFormat.escape(s"${vfd.messageSpecData.messageTypeIndic}").toString), //ToDo change display of messageTypeIndic
+        value = ValueViewModel(HtmlFormat.escape(s"${displayTypeIndictator(vfd.messageSpecData.messageTypeIndic)}").toString),
         actions = Seq()
       )
     )
+
+  private def displayTypeIndictator(typeIndic: MessageTypeIndic)(implicit messages: Messages) =
+    typeIndic match {
+      case MDR401 => messages("checkYourFileDetails.messageTypeIndic.MDR401")
+      case MDR402 => messages("checkYourFileDetails.messageTypeIndic.MDR402")
+    }
+
 }
