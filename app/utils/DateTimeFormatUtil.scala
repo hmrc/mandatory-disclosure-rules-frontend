@@ -21,10 +21,11 @@ import java.time.format.DateTimeFormatter
 
 object DateTimeFormatUtil {
 
-  val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
-  val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("h:mma")
+  val dateFormatter: DateTimeFormatter      = DateTimeFormatter.ofPattern("d MMMM yyyy")
+  val timeFormatter: DateTimeFormatter      = DateTimeFormatter.ofPattern("h:mma")
+  val smallDateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("d MMM yyyy")
 
   def dateFormatted(dateTime: LocalDateTime): String =
-    s"${dateTime.toLocalDate.format(dateFormatter)} ${dateTime.toLocalTime.format(timeFormatter).toLowerCase}"
+    s"${dateTime.toLocalDate.format(smallDateFormatter)} ${dateTime.toLocalTime.format(timeFormatter).toLowerCase}"
 
 }

@@ -40,7 +40,9 @@
 
     <p class="govuk-body">@messages("fileReceived.p1")</p>
     @govukInsetText(InsetText(
-    content = messageRefId))
+    content = messageRefId,
+    classes = "text-overflow"
+    ))
     <h2 class="govuk-heading-m">@messages("fileReceived.subheading")</h2>
     <p class="govuk-body">@messages("fileReceived.p2", firstContactEmail, secondContactMessage)</p>
     <p class="govuk-body">@messages("fileReceived.p3")</p>
