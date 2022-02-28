@@ -30,7 +30,7 @@
 
 @layout(pageTitle = title(form, messages(s"contactEmail.title.$affinityType"))) {
 
-    @formHelper(action = routes.ContactEmailController.onSubmit(affinityType)) {
+    @formHelper(action = routes.ContactEmailController.onSubmit(affinityType), 'novalidate -> "novalidate") {
 
         @if(form.errors.nonEmpty) {
             @govukErrorSummary(ErrorSummaryViewModel(form))
