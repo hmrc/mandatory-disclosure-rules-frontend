@@ -312,6 +312,5 @@ checkYourFileDetails.uploadedFile = Uploaded file
 checkYourFileDetails.uploadedFile.change.hidden = your file
 checkYourFileDetails.messageRefId = MessageRefId
 checkYourFileDetails.messageTypeIndic = MessageTypeIndic
-
-
-
+checkYourFileDetails.messageTypeIndic.MDR401 = New information
+checkYourFileDetails.messageTypeIndic.MDR402 = Correction or deletion
