@@ -25,7 +25,7 @@ import uk.gov.hmrc.http.HttpReads.is2xx
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 import scala.concurrent.ExecutionContext
-import scala.xml.{Elem, NodeSeq}
+import scala.xml.NodeSeq
 
 class TestSubmissionController @Inject() (
   identifierAction: IdentifierAction,
