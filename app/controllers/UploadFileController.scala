@@ -25,11 +25,12 @@ import pages.UploadIDPage
 import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.{FileCheckView, JourneyRecoveryStartAgainView, UploadFileView}
+import views.html.{JourneyRecoveryStartAgainView, UploadFileView}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -44,7 +45,6 @@ class UploadFileController @Inject() (
   sessionRepository: SessionRepository,
   val controllerComponents: MessagesControllerComponents,
   view: UploadFileView,
-  fileCheckView: FileCheckView,
   errorView: JourneyRecoveryStartAgainView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
@@ -71,11 +71,6 @@ class UploadFileController @Inject() (
           Redirect(routes.ThereIsAProblemController.onPageLoad())
       }
 
-  def showResult: Action[AnyContent] = Action.async {
-    implicit uploadResponse =>
-      Future.successful(Ok(fileCheckView()))
-  }
-
   def showError(errorCode: String, errorMessage: String, errorRequestId: String): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
       errorCode match {
@@ -97,27 +92,27 @@ class UploadFileController @Inject() (
         case Some(uploadId) =>
           upscanConnector.getUploadStatus(uploadId) flatMap {
             case Some(_: UploadedSuccessfully) =>
-              Future.successful(Redirect(routes.FileValidationController.onPageLoad()))
+              Future.successful(Ok(Json.toJson(UpScanRedirect(routes.FileValidationController.onPageLoad().url))))
             case Some(r: UploadRejected) =>
               if (r.details.message.contains("octet-stream")) {
                 val errorForm: Form[String] = form.withError("file-upload", "uploadFile.error.file.empty")
                 logger.debug(s"Show errorForm on rejection $errorForm")
-                toResponse(errorForm)
+                toResponse(errorForm) //TODO
               } else {
                 logger.debug(s"Upload rejected. Error details: ${r.details}")
-                Future.successful(Redirect(routes.NotXMLFileController.onPageLoad()))
+                Future.successful(Ok(Json.toJson(UpScanRedirect(routes.NotXMLFileController.onPageLoad().url))))
               }
             case Some(Quarantined) =>
-              Future.successful(Redirect(routes.VirusFileFoundController.onPageLoad()))
+              Future.successful(Ok(Json.toJson(UpScanRedirect(routes.VirusFileFoundController.onPageLoad().url))))
             case Some(Failed) =>
-              Future.successful(InternalServerError(errorView()))
+              Future.successful(InternalServerError(errorView())) //TODO  need a redirect url
             case Some(_) =>
-              Future.successful(Ok(fileCheckView()))
+              Future.successful(Continue)
             case None =>
-              Future.successful(InternalServerError(errorView()))
+              Future.successful(InternalServerError(errorView())) //TODO need a redirect url
           }
         case None =>
-          Future.successful(InternalServerError(errorView()))
+          Future.successful(InternalServerError(errorView())) //TODO need a redirect url
       }
   }
 }

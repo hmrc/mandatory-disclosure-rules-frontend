@@ -24,8 +24,6 @@ GET         /report/upload-file                          controllers.UploadFileC
 
 GET         /report/status                               controllers.UploadFileController.getStatus()
 
-GET         /report/success                              controllers.UploadFileController.showResult()
-
 GET         /report/error                                controllers.UploadFileController.showError(errorCode: String, errorMessage: String, errorRequestId: String)
 
 GET         /report/problem/file-too-large               controllers.FileTooLargeController.onPageLoad()

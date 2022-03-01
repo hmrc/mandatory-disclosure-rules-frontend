@@ -34,7 +34,7 @@ class UpscanConnectorSpec extends Connector {
     .build()
 
   lazy val connector: UpscanConnector = app.injector.instanceOf[UpscanConnector]
-  val request: UpscanInitiateRequest  = UpscanInitiateRequest("callbackUrl", "successRedirectUrl", "errorRedirectUrl")
+  val request: UpscanInitiateRequest  = UpscanInitiateRequest("callbackUrl")
 
   "getUpscanFormData" - {
     "should return an UpscanInitiateResponse" - {

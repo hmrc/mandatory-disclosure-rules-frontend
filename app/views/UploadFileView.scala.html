@@ -27,7 +27,7 @@
 
 @layout(pageTitle = titleNoForm(messages("uploadFile.title"))) {
 
- <form action="@upscanInitiateResponse.postTarget" method="post" enctype="multipart/form-data" novalidate>
+ <form action="@upscanInitiateResponse.postTarget" method="post" id="uploadForm" enctype="multipart/form-data" novalidate>
 
   @errorSummary(form.errors)
 
@@ -40,6 +40,9 @@
   @for((key, value) <- upscanInitiateResponse.formFields){
    <input type="hidden" name="@key" value="@value" />
   }
+  <input type="hidden" id="fileUploadRefreshUrl" value="@routes.UploadFileController.getStatus().url" />
+  <input type="hidden" id="upScanErrorRedirectUrl" value="/report-under-mandatory-disclosure-rules/report/error" />
+  <input type="hidden" id="processingMessage" value="@messages("fileCheck.heading")" />
 
   <div class="js-visible mt-3">
 

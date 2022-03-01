@@ -68,7 +68,7 @@ class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
       val request = FakeRequest(GET, routes.UploadFileController.getStatus().url)
 
-      def verifyResult(uploadStatus: UploadStatus, expectedResult: Int = SEE_OTHER, expectedUI: String = ""): Unit = {
+      def verifyResult(uploadStatus: UploadStatus, expectedResult: Int = OK, expectedUI: String = ""): Unit = {
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
@@ -77,26 +77,21 @@ class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
           .build()
 
         fakeUpscanConnector.setStatus(uploadStatus)
-
         val result = route(application, request).value
 
         status(result) mustBe expectedResult
-        if (expectedResult == OK) {
-          contentAsString(result) mustEqual expectedUI
-        }
 
         application.stop()
       }
 
-      val fileCheckView  = application.injector.instanceOf[FileCheckView]
       val notXmlFileView = application.injector.instanceOf[NotXMLFileView]
       val errorView      = application.injector.instanceOf[JourneyRecoveryStartAgainView]
-
-      verifyResult(InProgress, OK, fileCheckView()(request, messages(application)).toString())
+      verifyResult(UploadedSuccessfully("file", "/deomloadurl"))
+      verifyResult(InProgress, CONTINUE, "")
       verifyResult(Quarantined)
       verifyResult(
         UploadRejected(ErrorDetails("REJECTED", "message")),
-        SEE_OTHER,
+        OK,
         notXmlFileView()(
           request,
           messages(application)
@@ -128,15 +123,5 @@ class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
       redirectLocation(result) mustBe Some(controllers.routes.FileTooLargeController.onPageLoad().url)
     }
 
-    "must display file check page while file is successfully updated " in {
-
-      val request = FakeRequest(GET, routes.UploadFileController.showResult().url)
-      val result  = route(application, request).value
-
-      val view = application.injector.instanceOf[FileCheckView]
-
-      status(result) mustBe OK
-      contentAsString(result) mustEqual view()(request, messages(application)).toString
-    }
   }
 }
