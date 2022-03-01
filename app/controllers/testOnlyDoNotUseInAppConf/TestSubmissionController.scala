@@ -37,10 +37,9 @@ class TestSubmissionController @Inject() (
 
   def insertTestSubmission(fileName: String): Action[NodeSeq] = identifierAction(parse.xml).async {
     implicit request =>
-      val xml = request.body.asInstanceOf[Elem]
-      logger.info(s"inserting test submission: $xml")
+      logger.info(s"inserting test submission: ${request.body}")
       connector
-        .submitDocument(fileName, request.subscriptionId, xml)
+        .submitDocument(fileName, request.subscriptionId, request.body)
         .map(
           response =>
             if (is2xx(response.status)) {

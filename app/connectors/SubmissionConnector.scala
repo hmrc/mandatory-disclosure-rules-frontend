@@ -31,10 +31,10 @@ class SubmissionConnector @Inject() (httpClient: HttpClient, config: FrontendApp
 
   val submitUrl = s"${config.mdrUrl}/mandatory-disclosure-rules/submit"
 
-  def submitDocument(fileName: String, enrolmentID: String, xmlDocument: Elem)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] =
+  def submitDocument(fileName: String, enrolmentID: String, xmlDocument: NodeSeq)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] =
     httpClient.POSTString[HttpResponse](submitUrl, constructSubmission(fileName, enrolmentID, xmlDocument).toString(), headers)
 
-  private def constructSubmission(fileName: String, enrolmentID: String, document: Elem): NodeSeq = {
+  private def constructSubmission(fileName: String, enrolmentID: String, document: NodeSeq): NodeSeq = {
     val submission =
       <submission>
         <fileName>{fileName}</fileName>
