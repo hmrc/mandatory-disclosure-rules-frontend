@@ -11,3 +11,6 @@
 
 # Add all the application routes to the prod.routes file
 ->         /                          prod.Routes
+
++ nocsrf
+POST       /report-under-mandatory-disclosure-rules/test-only/insert-test-submission/:fileName         controllers.testOnlyDoNotUseInAppConf.TestSubmissionController.insertTestSubmission(fileName)
