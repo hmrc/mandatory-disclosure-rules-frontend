@@ -52,20 +52,16 @@ function refreshPage(){
     var refreshUrl = $("#fileUploadRefreshUrl").val();
     if (refreshUrl) {
         window.refreshIntervalId = setInterval(function () {
-            console.log("scheduling ajax call, refreshUrl", refreshUrl)
-
             $.getJSON(refreshUrl, function (data, textStatus, jqXhr) {
                 if (jqXhr.status === 200) {
-                     console.log("status changed, updating page", data);
                       window.location = data.url;
                 } else if (jqXhr.status === 100) {
-                 console.log("status didn't change, we not updating anything continue", jqXhr.status);
+                   return false
                 } else {
-                    console.log("Something went wrong", jqXhr);
+                    console.debug("Something went wrong", jqXhr);
                 }
             });
         }, 3000);
-        console.log("intervalRefreshScheduled, id: ", window.refreshIntervalId);
     }
 
 }
