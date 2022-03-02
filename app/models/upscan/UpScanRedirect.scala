@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,24 +12,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@this(
-        layout: templates.Layout,
-        govukButton: GovukButton
-)
+package models.upscan
 
-@()(implicit request: Request[_], messages: Messages)
+import play.api.libs.json.{Json, OFormat}
 
-@layout(pageTitle = titleNoForm(messages("fileCheck.title"))) {
+case class UpScanRedirect(url: String)
 
-    <input type="hidden" id="fileUploadRefreshUrl" value="@routes.UploadFileController.getStatus().url" />
-
-    <div id="processing" aria-live="polite" class="govuk-!-margin-bottom-5">
-    <h1 class="govuk-heading-l">@messages("fileCheck.heading")</h1>
-
-    <div>
-        <div class="ccms-loader"></div>
-    </div>
-    </div>
+object UpScanRedirect {
+  implicit val format: OFormat[UpScanRedirect] = Json.format[UpScanRedirect]
 }

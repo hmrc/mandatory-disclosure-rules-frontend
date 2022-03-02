@@ -110,7 +110,7 @@ uploadFile.error.file.invalid = The selected file must be an XML
 uploadFile.error.file.empty = Select a file to upload
 
 fileCheck.title = We are checking your file
-fileCheck.heading = We are checking your file
+fileCheck.heading = We are checking your file, please wait
 
 fileValidation.title = fileValidation
 fileValidation.heading = fileValidation
