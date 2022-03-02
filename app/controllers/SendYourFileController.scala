@@ -16,7 +16,11 @@
 
 package controllers
 
+import connectors.SubmissionConnector
 import controllers.actions._
+import models.{MDR402, MessageSpecData, MessageTypeIndic, ValidatedFileData}
+import pages.{URLPage, ValidXMLPage}
+
 import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -28,6 +32,7 @@ class SendYourFileController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
+  submissionConnector: SubmissionConnector,
   val controllerComponents: MessagesControllerComponents,
   view: SendYourFileView
 ) extends FrontendBaseController
@@ -35,6 +40,23 @@ class SendYourFileController @Inject() (
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData) {
     implicit request =>
-      Ok(view())
+      val displayWarning = request.userAnswers
+        .get(ValidXMLPage)
+        .fold(false)(
+          validatedFileData => validatedFileData.messageSpecData.messageTypeIndic.equals(MDR402)
+        )
+      Ok(view(displayWarning))
   }
+
+//  def onSubmit: Action[AnyContent] = (identify andThen getData() andThen requireData).async {
+//    implicit request =>
+//
+//      (request.userAnswers.get(ValidXMLPage), request.userAnswers.get(URLPage)) match {
+//        case (Some(ValidatedFileData(filename, _)), Some(fileUrl)) =>
+//          val filename = filename
+//
+//          submissionConnector.submitDocument(filename, request.userId, )
+//      }
+//  }
+
 }

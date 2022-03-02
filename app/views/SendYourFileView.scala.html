@@ -16,12 +16,29 @@
 
 @this(
         layout: templates.Layout,
+        govukWarningText : GovukWarningText,
         govukButton: GovukButton
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@(displayWarning: Boolean)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("sendYourFile.title"))) {
 
     <h1 class="govuk-heading-l">@messages("sendYourFile.heading")</h1>
+
+    <p class="govuk-body">@messages("sendYourFile.p1")</p>
+    <p class="govuk-body">@messages("sendYourFile.p2")</p>
+
+    @if(displayWarning){
+        @govukWarningText(WarningText(
+            iconFallbackText = "site.warning",
+            content = Text(messages("sendYourFile.warning"))
+        ))
+    }
+
+   @govukButton(
+      ButtonViewModel(Text(messages("site.send"))).withAttribute( "id" -> "submit").asLink(
+        routes.IndexController.onPageLoad().url)
+   )
+
 }
