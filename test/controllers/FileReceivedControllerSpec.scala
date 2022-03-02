@@ -18,7 +18,8 @@ package controllers
 
 import base.SpecBase
 import connectors.HandleXMLFileConnector
-import models.{Accepted, FileDetails}
+import models.ConversationId
+import models.fileDetails.{Accepted, FileDetails}
 import org.mockito.ArgumentMatchers.any
 import pages.{ContactEmailPage, SecondContactEmailPage}
 import play.api.inject.bind
@@ -38,7 +39,7 @@ class FileReceivedControllerSpec extends SpecBase {
     "must return OK and the correct view for a GET" in {
 
       val messageRefId       = "messageRefId"
-      val conversationId     = "conversationId"
+      val conversationId     = ConversationId("conversationId")
       val time               = "10:30am"
       val date               = "1 January 2022"
       val firstContactEmail  = "first@email.com"

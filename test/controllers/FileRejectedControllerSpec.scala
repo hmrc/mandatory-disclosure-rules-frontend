@@ -18,8 +18,12 @@ package controllers
 
 import base.SpecBase
 import connectors.HandleXMLFileConnector
-import models.{Accepted, FileDetails, FileError, Rejected}
+import generators.ModelGenerators
+import models.ConversationId
+import models.fileDetails.{Accepted, FileDetails, Rejected, ValidationErrors}
 import org.mockito.ArgumentMatchers.any
+import org.scalacheck.Arbitrary
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -30,12 +34,12 @@ import views.html.FileRejectedView
 import java.time.LocalDateTime
 import scala.concurrent.Future
 
-class FileRejectedControllerSpec extends SpecBase {
+class FileRejectedControllerSpec extends SpecBase with ModelGenerators with ScalaCheckPropertyChecks {
 
   private val fileName       = "CornerShop"
-  private val error          = "Brimful of Asha on the 45"
+  private val error          = "detail"
   private val lineNumber     = "1"
-  private val conversationId = "conversationId"
+  private val conversationId = ConversationId("conversationId")
   private val messageRefId   = "messageRefId"
 
   private val errorRows = Seq(
@@ -57,6 +61,8 @@ class FileRejectedControllerSpec extends SpecBase {
         )
         .build()
 
+      val validationErrors = Arbitrary.arbitrary[ValidationErrors].sample.value
+
       when(mockHandleXMLFileConnector.getFileDetails(any())(any(), any()))
         .thenReturn(
           Future.successful(
@@ -66,7 +72,7 @@ class FileRejectedControllerSpec extends SpecBase {
                 messageRefId,
                 LocalDateTime.parse("2022-01-01T10:30:00.000"),
                 LocalDateTime.parse("2022-01-01T10:30:00.000"),
-                Rejected(FileError(error)),
+                Rejected(validationErrors),
                 conversationId
               )
             )
@@ -96,7 +102,7 @@ class FileRejectedControllerSpec extends SpecBase {
       when(mockHandleXMLFileConnector.getFileDetails(any())(any(), any())).thenReturn(Future.successful(None))
 
       running(application) {
-        val request = FakeRequest(GET, routes.FileRejectedController.onPageLoad("conversationId").url)
+        val request = FakeRequest(GET, routes.FileRejectedController.onPageLoad(conversationId).url)
 
         val result = route(application, request).value
 
@@ -129,7 +135,7 @@ class FileRejectedControllerSpec extends SpecBase {
         )
 
       running(application) {
-        val request = FakeRequest(GET, routes.FileRejectedController.onPageLoad("conversationId").url)
+        val request = FakeRequest(GET, routes.FileRejectedController.onPageLoad(conversationId).url)
 
         val result = route(application, request).value
 

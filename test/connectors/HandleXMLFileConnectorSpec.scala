@@ -16,7 +16,10 @@
 
 package connectors
 
-import models.{Accepted, FileDetails, FileError, Pending, Rejected}
+import models.fileDetails.FileErrorCode.MessageRefIDHasAlreadyBeenUsed
+import models.fileDetails.RecordErrorCode.MessageTypeIndic
+import models.fileDetails.{Accepted, FileDetails, FileErrors, Pending, RecordError, Rejected, ValidationErrors}
+import models.{fileDetails, ConversationId}
 import play.api.Application
 import play.api.http.Status.OK
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -34,10 +37,10 @@ class HandleXMLFileConnectorSpec extends Connector {
 
   lazy val connector: HandleXMLFileConnector = app.injector.instanceOf[HandleXMLFileConnector]
 
-  private val conversationId = "conversationId3"
+  private val conversationId = ConversationId("conversationId3")
 
   private val allFilesUrls = "/mandatory-disclosure-rules/files/details"
-  private val fileUrl      = s"/mandatory-disclosure-rules/files/$conversationId/details"
+  private val fileUrl      = s"/mandatory-disclosure-rules/files/${conversationId.value}/details"
 
   private val allFiles: String = """
       |[
@@ -56,9 +59,7 @@ class HandleXMLFileConnectorSpec extends Connector {
       |    "lastUpdated": "2022-02-10T15:45:37.636",
       |    "status": {
       |    "Rejected":{
-      |      "error": {
-      |        "detail": "error"
-      |       }
+      |      "error":{"fileError":[{"code":"50009","details":"Duplicate message ref ID"}],"recordError":[{"code":"80010","details":"A message can contain either new records (OECD1) or corrections/deletions (OECD2 and OECD3), but cannot contain a mixture of both","docRefIDInError":["asjdhjjhjssjhdjshdAJGSJJS"]}]}
       |      }
       |    },
       |    "conversationId": "conversationId2"
@@ -82,20 +83,36 @@ class HandleXMLFileConnectorSpec extends Connector {
       "must return 'all file details' when getAllFileDetails is successful" in {
         val expectedResult = Some(
           Seq(
-            FileDetails("test1.xml",
-                        "messageRefId1",
-                        LocalDateTime.parse("2022-02-10T15:35:37.636"),
-                        LocalDateTime.parse("2022-02-10T15:35:37.636"),
-                        Pending,
-                        "conversationId1"
-            ),
             FileDetails(
+              "test1.xml",
+              "messageRefId1",
+              LocalDateTime.parse("2022-02-10T15:35:37.636"),
+              LocalDateTime.parse("2022-02-10T15:35:37.636"),
+              Pending,
+              ConversationId("conversationId1")
+            ),
+            fileDetails.FileDetails(
               "test2.xml",
               "messageRefId2",
               LocalDateTime.parse("2022-02-10T15:35:37.636"),
               LocalDateTime.parse("2022-02-10T15:45:37.636"),
-              Rejected(FileError("error")),
-              "conversationId2"
+              Rejected(
+                ValidationErrors(
+                  Some(List(FileErrors(MessageRefIDHasAlreadyBeenUsed, Some("Duplicate message ref ID")))),
+                  Some(
+                    List(
+                      RecordError(
+                        MessageTypeIndic,
+                        Some(
+                          "A message can contain either new records (OECD1) or corrections/deletions (OECD2 and OECD3), but cannot contain a mixture of both"
+                        ),
+                        Some(List("asjdhjjhjssjhdjshdAJGSJJS"))
+                      )
+                    )
+                  )
+                )
+              ),
+              ConversationId("conversationId2")
             )
           )
         )
@@ -132,12 +149,13 @@ class HandleXMLFileConnectorSpec extends Connector {
 
       "must return 'file details' when getFileDetails is successful" in {
         val expectedResult = Some(
-          FileDetails("test3.xml",
-                      "messageRefId3",
-                      LocalDateTime.parse("2022-02-10T15:35:37.636"),
-                      LocalDateTime.parse("2022-02-10T15:45:37.636"),
-                      Accepted,
-                      "conversationId3"
+          fileDetails.FileDetails(
+            "test3.xml",
+            "messageRefId3",
+            LocalDateTime.parse("2022-02-10T15:35:37.636"),
+            LocalDateTime.parse("2022-02-10T15:45:37.636"),
+            Accepted,
+            ConversationId("conversationId3")
           )
         )
 
@@ -152,7 +170,7 @@ class HandleXMLFileConnectorSpec extends Connector {
 
         stubPostResponse(fileUrl, OK)
 
-        val result = connector.getFileDetails(mdrId)
+        val result = connector.getFileDetails(conversationId)
 
         result.futureValue mustBe None
       }

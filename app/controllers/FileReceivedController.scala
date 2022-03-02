@@ -18,6 +18,7 @@ package controllers
 
 import connectors.HandleXMLFileConnector
 import controllers.actions._
+import models.ConversationId
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -43,7 +44,7 @@ class FileReceivedController @Inject() (
     with I18nSupport
     with Logging {
 
-  def onPageLoad(conversationId: String): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
+  def onPageLoad(conversationId: ConversationId): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
       handleXMLFileConnector.getFileDetails(conversationId) map {
         fileDetails =>

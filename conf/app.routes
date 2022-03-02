@@ -38,7 +38,7 @@ GET         /report/problem/data-errors                  controllers.InvalidXMLF
 
 GET         /report/problem/invalid-xml-file             controllers.FileErrorController.onPageLoad()
 
-GET         /report/problem/business-rule-errors/:conversationId      controllers.FileRejectedController.onPageLoad(conversationId)
+GET         /report/problem/business-rule-errors/:conversationId      controllers.FileRejectedController.onPageLoad(conversationId: ConversationId)
 
 GET         /report/file-validation                      controllers.FileValidationController.onPageLoad()
 
@@ -57,8 +57,8 @@ POST        /report/change-contact/:affinityType/phone                        co
 GET         /report/change-contact/:affinityType/have-phone                   controllers.HaveTelephoneController.onPageLoad(mode: Mode = CheckMode, affinityType: models.AffinityType)
 POST        /report/change-contact/:affinityType/have-phone                   controllers.HaveTelephoneController.onSubmit(mode: Mode = CheckMode, affinityType: models.AffinityType)
 
-GET        /report/change-contact/organisation/contact-name                  controllers.ContactNameController.onPageLoad(mode: Mode = CheckMode)
-POST       /report/change-contact/organisation/contact-name                  controllers.ContactNameController.onSubmit(mode: Mode = CheckMode)
+GET         /report/change-contact/organisation/contact-name                  controllers.ContactNameController.onPageLoad(mode: Mode = CheckMode)
+POST        /report/change-contact/organisation/contact-name                  controllers.ContactNameController.onSubmit(mode: Mode = CheckMode)
 
 GET         /report/change-contact/organisation/have-second-contact           controllers.HaveSecondContactController.onPageLoad()
 POST        /report/change-contact/organisation/have-second-contact           controllers.HaveSecondContactController.onSubmit()
@@ -77,11 +77,11 @@ POST        /report/change-contact/organisation/second-contact-phone          co
 
 GET         /report/change-contact/details-updated                            controllers.DetailsUpdatedController.onPageLoad()
 
-GET         /report/file-received/:conversationId                             controllers.FileReceivedController.onPageLoad(conversationId)
+GET         /report/file-received/:conversationId                             controllers.FileReceivedController.onPageLoad(conversationId: ConversationId)
 
 GET         /report/checks-will-take-longer                                   controllers.ChecksWillTakeLongerController.onPageLoad()
 
 GET         /report/file-status                                               controllers.FileStatusController.onPageLoad()
 
-GET        /report/check-your-file-details                       controllers.CheckYourFileDetailsController.onPageLoad()
+GET        /report/check-your-file-details                                    controllers.CheckYourFileDetailsController.onPageLoad()
 

@@ -16,6 +16,7 @@
 
 package generators
 
+import models.fileDetails._
 import models.subscription._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
@@ -69,5 +70,42 @@ trait ModelGenerators {
       secondaryContact <- Gen.option(arbitrary[ContactInformation])
     } yield ResponseDetail(subscriptionID, tradingName, isGBUser, primaryContact, secondaryContact)
   }
+
+  implicit val arbitraryFileErrorCode: Arbitrary[FileErrorCode] = Arbitrary {
+    Gen.oneOf[FileErrorCode](FileErrorCode.values)
+  }
+
+  implicit val arbitraryRecordErrorCode: Arbitrary[RecordErrorCode] = Arbitrary {
+    Gen.oneOf[RecordErrorCode](RecordErrorCode.values)
+  }
+
+  implicit val arbitraryUpdateFileErrors: Arbitrary[FileErrors] = Arbitrary {
+    for {
+      fileErrorCode <- arbitrary[FileErrorCode]
+      details       <- Gen.option(arbitrary[String])
+    } yield FileErrors(fileErrorCode, details)
+  }
+
+  implicit val arbitraryUpdateRecordErrors: Arbitrary[RecordError] = Arbitrary {
+    for {
+      recordErrorCode <- arbitrary[RecordErrorCode]
+      details         <- Gen.option(arbitrary[String])
+      docRefIdRef     <- Gen.option(listWithMaxLength(5, arbitrary[String]))
+    } yield RecordError(recordErrorCode, details, docRefIdRef)
+  }
+
+  implicit val arbitraryUpdateValidationErrors: Arbitrary[ValidationErrors] =
+    Arbitrary {
+      for {
+        fileErrors   <- Gen.option(listWithMaxLength(5, arbitrary[FileErrors]))
+        recordErrors <- Gen.option(listWithMaxLength(5, arbitrary[RecordError]))
+      } yield ValidationErrors(fileErrors, recordErrors)
+    }
+
+  def listWithMaxLength[T](maxSize: Int, gen: Gen[T]): Gen[Seq[T]] =
+    for {
+      size  <- Gen.choose(1, maxSize)
+      items <- Gen.listOfN(size, gen)
+    } yield items
 
 }
