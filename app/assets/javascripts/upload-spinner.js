@@ -36,7 +36,7 @@ if(fileLength === 0){
             "</h2><div><div class=\"ccms-loader\"></div></div></div>"
             )
             $("#file-upload").attr('disabled', 'disabled')
-             $("#submit").addClass('govuk-button--disabled')
+             $("#submit").prop('disabled', true)
              refreshPage();
         });
     };
