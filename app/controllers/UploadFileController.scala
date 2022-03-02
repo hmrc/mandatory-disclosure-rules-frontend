@@ -30,7 +30,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.{JourneyRecoveryStartAgainView, UploadFileView}
+import views.html.UploadFileView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -44,8 +44,7 @@ class UploadFileController @Inject() (
   formProvider: UploadFileFormProvider,
   sessionRepository: SessionRepository,
   val controllerComponents: MessagesControllerComponents,
-  view: UploadFileView,
-  errorView: JourneyRecoveryStartAgainView
+  view: UploadFileView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
@@ -76,12 +75,12 @@ class UploadFileController @Inject() (
       errorCode match {
         case "EntityTooLarge" =>
           Future.successful(Redirect(routes.FileTooLargeController.onPageLoad()))
-        case "InvalidArgument" =>
+        case "InvalidArgument" | "OctetStream" =>
           val formWithErrors: Form[String] = form.withError("file-upload", "uploadFile.error.file.empty")
           toResponse(formWithErrors)
         case _ =>
           logger.error(s"Upscan error $errorCode: $errorMessage, requestId is $errorRequestId")
-          Future.successful(InternalServerError(errorView()))
+          Future.successful(Redirect(routes.ThereIsAProblemController.onPageLoad()))
       }
   }
 
@@ -95,9 +94,9 @@ class UploadFileController @Inject() (
               Future.successful(Ok(Json.toJson(UpScanRedirect(routes.FileValidationController.onPageLoad().url))))
             case Some(r: UploadRejected) =>
               if (r.details.message.contains("octet-stream")) {
-                val errorForm: Form[String] = form.withError("file-upload", "uploadFile.error.file.empty")
-                logger.debug(s"Show errorForm on rejection $errorForm")
-                toResponse(errorForm) //TODO
+                logger.debug(s"Show errorForm on rejection $r")
+                val errorReason = r.details.failureReason
+                Future.successful(Ok(Json.toJson(UpScanRedirect(routes.UploadFileController.showError("OctetStream", errorReason, "").url))))
               } else {
                 logger.debug(s"Upload rejected. Error details: ${r.details}")
                 Future.successful(Ok(Json.toJson(UpScanRedirect(routes.NotXMLFileController.onPageLoad().url))))
@@ -105,14 +104,14 @@ class UploadFileController @Inject() (
             case Some(Quarantined) =>
               Future.successful(Ok(Json.toJson(UpScanRedirect(routes.VirusFileFoundController.onPageLoad().url))))
             case Some(Failed) =>
-              Future.successful(InternalServerError(errorView())) //TODO  need a redirect url
+              Future.successful(Ok(Json.toJson(UpScanRedirect(routes.ThereIsAProblemController.onPageLoad().url))))
             case Some(_) =>
               Future.successful(Continue)
             case None =>
-              Future.successful(InternalServerError(errorView())) //TODO need a redirect url
+              Future.successful(Ok(Json.toJson(UpScanRedirect(routes.ThereIsAProblemController.onPageLoad().url))))
           }
         case None =>
-          Future.successful(InternalServerError(errorView())) //TODO need a redirect url
+          Future.successful(Ok(Json.toJson(UpScanRedirect(routes.ThereIsAProblemController.onPageLoad().url))))
       }
   }
 }

@@ -28,9 +28,10 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.UploadIDPage
 import play.api.Application
 import play.api.inject.bind
+import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{status, _}
-import views.html.{FileCheckView, JourneyRecoveryStartAgainView, NotXMLFileView, UploadFileView}
+import views.html.{NotXMLFileView, ThereIsAProblemView, UploadFileView}
 
 import scala.concurrent.Future
 
@@ -68,7 +69,7 @@ class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
       val request = FakeRequest(GET, routes.UploadFileController.getStatus().url)
 
-      def verifyResult(uploadStatus: UploadStatus, expectedResult: Int = OK, expectedUI: String = ""): Unit = {
+      def verifyResult(uploadStatus: UploadStatus, expectedStatus: Int = OK, expectedResult: Option[UpScanRedirect] = None): Unit = {
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
@@ -79,26 +80,21 @@ class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
         fakeUpscanConnector.setStatus(uploadStatus)
         val result = route(application, request).value
 
-        status(result) mustBe expectedResult
-
+        status(result) mustBe expectedStatus
+        val actualResult = Option(contentAsString(result)).collect { case x if x.trim.nonEmpty => x }.map(Json.parse(_).as[UpScanRedirect])
+        actualResult mustBe expectedResult
         application.stop()
       }
 
-      val notXmlFileView = application.injector.instanceOf[NotXMLFileView]
-      val errorView      = application.injector.instanceOf[JourneyRecoveryStartAgainView]
-      verifyResult(UploadedSuccessfully("file", "/deomloadurl"))
-      verifyResult(InProgress, CONTINUE, "")
-      verifyResult(Quarantined)
+      verifyResult(InProgress, CONTINUE, None)
+      verifyResult(Quarantined, OK, Some(UpScanRedirect("/report-under-mandatory-disclosure-rules/report/problem/virus-file-found")))
       verifyResult(
         UploadRejected(ErrorDetails("REJECTED", "message")),
         OK,
-        notXmlFileView()(
-          request,
-          messages(application)
-        ).toString()
+        Some(UpScanRedirect("/report-under-mandatory-disclosure-rules/report/problem/not-xml-file"))
       )
-      verifyResult(Failed, INTERNAL_SERVER_ERROR, errorView()(request, messages(application)).toString())
-      verifyResult(UploadedSuccessfully("name", "downloadUrl"))
+      verifyResult(Failed, OK, Some(UpScanRedirect("/report-under-mandatory-disclosure-rules/report/problem/there-is-a-problem")))
+      verifyResult(UploadedSuccessfully("name", "downloadUrl"), OK, Some(UpScanRedirect("/report-under-mandatory-disclosure-rules/report/file-validation")))
 
     }
 
@@ -107,10 +103,7 @@ class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
       val request = FakeRequest(GET, routes.UploadFileController.showError("errorCode", "errorMessage", "errorReqId").url)
       val result  = route(application, request).value
 
-      val view = application.injector.instanceOf[JourneyRecoveryStartAgainView]
-
-      status(result) mustEqual INTERNAL_SERVER_ERROR
-      contentAsString(result) mustEqual view()(request, messages(application)).toString
+      status(result) mustEqual SEE_OTHER
     }
 
     "must show File to large error when the errorCode is EntityTooLarge" in {
