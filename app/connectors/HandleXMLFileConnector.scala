@@ -17,7 +17,8 @@
 package connectors
 
 import config.FrontendAppConfig
-import models.FileDetails
+import models.ConversationId
+import models.fileDetails.FileDetails
 import play.api.Logging
 import uk.gov.hmrc.http.HttpReads.Implicits.readRaw
 import uk.gov.hmrc.http.HttpReads.is2xx
@@ -40,8 +41,8 @@ class HandleXMLFileConnector @Inject() (httpClient: HttpClient, config: Frontend
     }
   }
 
-  def getFileDetails(conversationId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[FileDetails]] = {
-    val url = s"${config.mdrUrl}/mandatory-disclosure-rules/files/$conversationId/details"
+  def getFileDetails(conversationId: ConversationId)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[FileDetails]] = {
+    val url = s"${config.mdrUrl}/mandatory-disclosure-rules/files/${conversationId.value}/details"
     httpClient.GET(url).map {
       case responseMessage if is2xx(responseMessage.status) =>
         responseMessage.json

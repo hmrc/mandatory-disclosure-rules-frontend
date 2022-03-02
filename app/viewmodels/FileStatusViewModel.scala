@@ -17,8 +17,9 @@
 package viewmodels
 
 import controllers.routes
-import models.{Accepted, FileDetails, FileStatus, Pending, Rejected}
-import models.FileDetails._
+import models.ConversationId
+import models.fileDetails.FileDetails.localDateTimeOrdering
+import models.fileDetails._
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, HtmlContent, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.{HeadCell, Table, TableRow}
@@ -33,7 +34,7 @@ object FileStatusViewModel {
     HtmlContent(s"<strong class='govuk-tag govuk-tag--$cssClass'>$status</strong>")
   }
 
-  private def buildTableRow(fileStatus: FileStatus, conversationId: String)(implicit messages: Messages): TableRow = {
+  private def buildTableRow(fileStatus: FileStatus, conversationId: ConversationId)(implicit messages: Messages): TableRow = {
     val action = fileStatus match {
       case Pending     => ""
       case Accepted    => s"<a href='${routes.FileReceivedController.onPageLoad(conversationId).url}'>${Messages("fileStatus.accepted")}</a>"

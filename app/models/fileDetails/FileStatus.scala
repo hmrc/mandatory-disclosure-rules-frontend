@@ -14,36 +14,20 @@
  * limitations under the License.
  */
 
-package models
+package models.fileDetails
 
 import julienrf.json.derived
-import play.api.libs.json._
-
-import java.time.LocalDateTime
+import play.api.libs.json.OFormat
 
 sealed trait FileStatus
 
 case object Pending extends FileStatus
 case object Accepted extends FileStatus
 
-case class Rejected(error: FileError) extends FileStatus {
+case class Rejected(error: ValidationErrors) extends FileStatus {
   override def toString: String = "Rejected"
 }
 
 object FileStatus {
   implicit val format: OFormat[FileStatus] = derived.oformat()
-}
-
-case class FileError(detail: String)
-
-object FileError {
-  implicit val format: OFormat[FileError] = Json.format[FileError]
-}
-
-case class FileDetails(name: String, messageRefId: String, submitted: LocalDateTime, lastUpdated: LocalDateTime, status: FileStatus, conversationId: String)
-
-object FileDetails {
-  implicit val format: OFormat[FileDetails] = Json.format[FileDetails]
-
-  implicit val localDateTimeOrdering: Ordering[LocalDateTime] = _ compareTo _
 }

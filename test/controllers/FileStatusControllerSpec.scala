@@ -18,7 +18,8 @@ package controllers
 
 import base.SpecBase
 import connectors.HandleXMLFileConnector
-import models.{FileDetails, Pending}
+import models.ConversationId
+import models.fileDetails.{FileDetails, Pending}
 import org.mockito.ArgumentMatchers.any
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -41,7 +42,7 @@ class FileStatusControllerSpec extends SpecBase {
         )
         .build()
 
-      val fileDetails = Seq(FileDetails("name.xml", "messageRefId1", LocalDateTime.now(), LocalDateTime.now(), Pending, "id"))
+      val fileDetails = Seq(FileDetails("name.xml", "messageRefId1", LocalDateTime.now(), LocalDateTime.now(), Pending, ConversationId("id")))
       when(mockFileConnector.getAllFileDetails(any(), any())).thenReturn(Future.successful(Some(fileDetails)))
 
       running(application) {
