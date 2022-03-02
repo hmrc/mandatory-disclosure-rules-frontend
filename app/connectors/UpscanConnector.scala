@@ -71,8 +71,6 @@ class UpscanConnector @Inject() (configuration: FrontendAppConfig, httpClient: H
     httpClient.GET[HttpResponse](statusUrl).map {
       response =>
         logger.debug(s"Status uploaded: $response")
-        logger.debug(s"********************\n*******Status uploaded: ${response.json}******\n****************")
-
         response.status match {
           case OK =>
             response.json.validate[UploadStatus] match {
