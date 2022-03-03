@@ -12,10 +12,12 @@ if(fileLength === 0){
     var uploadForm = this;
     function submitError(error, jqXHR){
         var errorCode = jqXHR.responseJSON.errorCode
-        var errorMessage  = jqXHR.responseJSON.errorCode
-        var errorRequestId = jqXHR.responseJSON.errorCode
-        var errorUrl = $("#upScanErrorRedirectUrl").val() + "?errorCode="+errorCode+"&errorMessage="+errorMessage+"&errorRequestId="+errorRequestId
-        window.location = errorUrl
+        var errorMessage  = jqXHR.responseJSON.errorMessage
+        var errorRequestId = jqXHR.responseJSON.errorRequestId
+        if (errorMessage !== "'file' field not found") {
+         var errorUrl = $("#upScanErrorRedirectUrl").val() + "?errorCode="+errorCode+"&errorMessage="+errorMessage+"&errorRequestId="+errorRequestId
+         window.location = errorUrl
+        }
     };
 
     function fileUpload(form){
@@ -36,7 +38,7 @@ if(fileLength === 0){
             "</h2><div><div class=\"ccms-loader\"></div></div></div>"
             )
             $("#file-upload").attr('disabled', 'disabled')
-             $("#submit").prop('disabled', true)
+            // $("#submit").prop('disabled', true)
              refreshPage();
         });
     };
