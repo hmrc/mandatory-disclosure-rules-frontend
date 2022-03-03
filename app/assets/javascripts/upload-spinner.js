@@ -1,6 +1,7 @@
 // =====================================================
 // UpScan upload
 // =====================================================
+var inProgress = false
 $("#uploadForm").submit(function(e){
 e.preventDefault();
 const fileLength = $("#file-upload")[0].files.length;
@@ -9,38 +10,43 @@ if(fileLength === 0){
         var errorUrl = $("#upScanErrorRedirectUrl").val() + "?errorCode=InvalidArgument&errorMessage=FileNotSelected&errorRequestId="+errorRequestId
         window.location = errorUrl
 } else {
+
     var uploadForm = this;
     function submitError(error, jqXHR){
         var errorCode = jqXHR.responseJSON.errorCode
         var errorMessage  = jqXHR.responseJSON.errorMessage
         var errorRequestId = jqXHR.responseJSON.errorRequestId
-        if (errorMessage !== "'file' field not found") {
          var errorUrl = $("#upScanErrorRedirectUrl").val() + "?errorCode="+errorCode+"&errorMessage="+errorMessage+"&errorRequestId="+errorRequestId
          window.location = errorUrl
-        }
     };
 
+   function addSpinner(){
+       $("#file-upload").before(
+       "<div id=\"processing\" aria-live=\"polite\" class=\"govuk-!-margin-bottom-5\">" +
+       "<h2 class=\"govuk-heading-m\">"+ $("#processingMessage").val() +
+       "</h2><div><div class=\"ccms-loader\"></div></div></div>"
+       )
+       $("#file-upload").attr('disabled', 'disabled')
+   };
+
     function fileUpload(form){
-        $.ajax({
-              url: form.action,
-              type: "POST",
-              data: new FormData(form),
-              processData: false,
-              contentType: false,
-              crossDomain: true
-        }).error(function(jqXHR, textStatus, errorThrown ){
-            submitError("4000", jqXHR)
-        }).done(function(){
-            // Disable UI
-            $("#file-upload").before(
-            "<div id=\"processing\" aria-live=\"polite\" class=\"govuk-!-margin-bottom-5\">" +
-            "<h2 class=\"govuk-heading-m\">"+ $("#processingMessage").val() +
-            "</h2><div><div class=\"ccms-loader\"></div></div></div>"
-            )
-            $("#file-upload").attr('disabled', 'disabled')
-            // $("#submit").prop('disabled', true)
-             refreshPage();
-        });
+        if (inProgress === false) {
+            $.ajax({
+                  url: form.action,
+                  type: "POST",
+                  data: new FormData(form),
+                  processData: false,
+                  contentType: false,
+                  crossDomain: true
+            }).error(function(jqXHR, textStatus, errorThrown ){
+                submitError("4000", jqXHR)
+            }).done(function(){
+                // Disable UI
+                 inProgress = true
+                 addSpinner();
+                 refreshPage();
+            });
+        }
     };
 
     fileUpload(uploadForm);
