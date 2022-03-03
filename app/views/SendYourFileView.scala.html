@@ -16,6 +16,7 @@
 
 @this(
         layout: templates.Layout,
+        formHelper: FormWithCSRF,
         govukWarningText : GovukWarningText,
         govukButton: GovukButton
 )
@@ -24,21 +25,23 @@
 
 @layout(pageTitle = titleNoForm(messages("sendYourFile.title"))) {
 
-    <h1 class="govuk-heading-l">@messages("sendYourFile.heading")</h1>
+    @formHelper(action = routes.SendYourFileController.onSubmit()) {
 
-    <p class="govuk-body">@messages("sendYourFile.p1")</p>
-    <p class="govuk-body">@messages("sendYourFile.p2")</p>
+        <h1 class="govuk-heading-l">@messages("sendYourFile.heading")</h1>
 
-    @if(displayWarning){
-        @govukWarningText(WarningText(
-            iconFallbackText = "site.warning",
-            content = Text(messages("sendYourFile.warning"))
-        ))
+        <p class="govuk-body">@messages("sendYourFile.p1")</p>
+        <p class="govuk-body">@messages("sendYourFile.p2")</p>
+
+        @if(displayWarning){
+            @govukWarningText(WarningText(
+                iconFallbackText = "site.warning",
+                content = Text(messages("sendYourFile.warning"))
+            ))
+        }
+
+       @govukButton(
+          ButtonViewModel(Text(messages("site.send"))).withAttribute( "id" -> "submit").asLink(
+            routes.IndexController.onPageLoad().url)
+       )
     }
-
-   @govukButton(
-      ButtonViewModel(Text(messages("site.send"))).withAttribute( "id" -> "submit").asLink(
-        routes.IndexController.onPageLoad().url)
-   )
-
 }

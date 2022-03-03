@@ -18,14 +18,17 @@ package controllers
 
 import connectors.SubmissionConnector
 import controllers.actions._
-import models.{MDR402, MessageSpecData, MessageTypeIndic, ValidatedFileData}
+import handlers.XmlHandler
+import models.{ConversationId, MDR402, ValidatedFileData}
 import pages.{URLPage, ValidXMLPage}
-
-import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import uk.gov.hmrc.http.HttpResponse
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.SendYourFileView
+import views.html.{SendYourFileView, ThereIsAProblemView}
+
+import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 class SendYourFileController @Inject() (
   override val messagesApi: MessagesApi,
@@ -33,9 +36,12 @@ class SendYourFileController @Inject() (
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
   submissionConnector: SubmissionConnector,
+  xmlHandler: XmlHandler,
   val controllerComponents: MessagesControllerComponents,
-  view: SendYourFileView
-) extends FrontendBaseController
+  view: SendYourFileView,
+  errorView: ThereIsAProblemView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData) {
@@ -48,15 +54,18 @@ class SendYourFileController @Inject() (
       Ok(view(displayWarning))
   }
 
-//  def onSubmit: Action[AnyContent] = (identify andThen getData() andThen requireData).async {
-//    implicit request =>
-//
-//      (request.userAnswers.get(ValidXMLPage), request.userAnswers.get(URLPage)) match {
-//        case (Some(ValidatedFileData(filename, _)), Some(fileUrl)) =>
-//          val filename = filename
-//
-//          submissionConnector.submitDocument(filename, request.userId, )
-//      }
-//  }
-
+  //TODO - below method to change when spinny wheel added
+  def onSubmit: Action[AnyContent] = (identify andThen getData() andThen requireData).async {
+    implicit request =>
+      (request.userAnswers.get(ValidXMLPage), request.userAnswers.get(URLPage)) match {
+        case (Some(ValidatedFileData(filename, _)), Some(fileUrl)) =>
+          val xml = xmlHandler.load(fileUrl)
+          submissionConnector.submitDocument(filename, request.userId, xml) map {
+            response: HttpResponse =>
+              Redirect(routes.FileReceivedController.onPageLoad(response.json.as[ConversationId]))
+          }
+        case _ =>
+          Future.successful(InternalServerError(errorView()))
+      }
+  }
 }
