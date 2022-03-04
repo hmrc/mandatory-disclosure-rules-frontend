@@ -40,12 +40,12 @@ class CheckYourFileDetailsController @Inject() (
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData.apply() andThen requireData) {
     implicit request =>
+      val action = routes.SendYourFileController.onPageLoad().url
       request.userAnswers.get(ValidXMLPage) match {
         case Some(details) =>
           val detailsList = SummaryListViewModel(CheckYourFileDetailsViewModel.getSummaryRows(details)).withoutBorders().withCssClass("govuk-!-margin-bottom-0")
-          Ok(view(detailsList))
+          Ok(view(detailsList, action))
         case _ => InternalServerError(errorView())
       }
-
   }
 }
