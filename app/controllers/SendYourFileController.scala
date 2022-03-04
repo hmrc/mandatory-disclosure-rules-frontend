@@ -60,10 +60,9 @@ class SendYourFileController @Inject() (
       (request.userAnswers.get(ValidXMLPage), request.userAnswers.get(URLPage)) match {
         case (Some(ValidatedFileData(filename, _)), Some(fileUrl)) =>
           val xml = xmlHandler.load(fileUrl)
-          submissionConnector.submitDocument(filename, request.userId, xml) map {
-            response: HttpResponse =>
-              Redirect(routes.FileReceivedController.onPageLoad(response.json.as[ConversationId]))
-          }
+          for {
+            response <- submissionConnector.submitDocument(filename, request.subscriptionId, xml)
+          } yield Redirect(routes.FileReceivedController.onPageLoad(response.json.as[ConversationId]))
         case _ =>
           Future.successful(InternalServerError(errorView()))
       }
