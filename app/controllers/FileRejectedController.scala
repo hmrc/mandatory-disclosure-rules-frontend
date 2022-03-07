@@ -16,7 +16,7 @@
 
 package controllers
 
-import connectors.HandleXMLFileConnector
+import connectors.FileDetailsConnector
 import controllers.actions._
 import models.fileDetails.Rejected
 import models.{ConversationId, GenericError, Message}
@@ -38,7 +38,7 @@ class FileRejectedController @Inject() (
   errorViewHelper: ErrorViewHelper,
   view: FileRejectedView,
   errorView: ThereIsAProblemView,
-  handleXMLFileConnector: HandleXMLFileConnector
+  handleXMLFileConnector: FileDetailsConnector
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {

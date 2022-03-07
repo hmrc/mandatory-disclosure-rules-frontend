@@ -17,7 +17,7 @@
 package controllers
 
 import base.SpecBase
-import connectors.HandleXMLFileConnector
+import connectors.FileDetailsConnector
 import models.ConversationId
 import models.fileDetails.{FileDetails, Pending}
 import org.mockito.ArgumentMatchers.any
@@ -30,7 +30,7 @@ import scala.concurrent.Future
 
 class FileStatusControllerSpec extends SpecBase {
 
-  private val mockFileConnector = mock[HandleXMLFileConnector]
+  private val mockFileConnector = mock[FileDetailsConnector]
 
   "FileStatus Controller" - {
 
@@ -38,7 +38,7 @@ class FileStatusControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
-          bind[HandleXMLFileConnector].toInstance(mockFileConnector)
+          bind[FileDetailsConnector].toInstance(mockFileConnector)
         )
         .build()
 
@@ -58,7 +58,7 @@ class FileStatusControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
-          bind[HandleXMLFileConnector].toInstance(mockFileConnector)
+          bind[FileDetailsConnector].toInstance(mockFileConnector)
         )
         .build()
 

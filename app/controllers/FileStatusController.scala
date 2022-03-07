@@ -17,7 +17,7 @@
 package controllers
 
 import config.FrontendAppConfig
-import connectors.HandleXMLFileConnector
+import connectors.FileDetailsConnector
 import controllers.actions._
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -34,7 +34,7 @@ class FileStatusController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
-  fileConnector: HandleXMLFileConnector,
+  fileConnector: FileDetailsConnector,
   appConfig: FrontendAppConfig,
   val controllerComponents: MessagesControllerComponents,
   view: FileStatusView,

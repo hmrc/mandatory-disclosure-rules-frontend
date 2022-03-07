@@ -17,7 +17,7 @@
 package controllers
 
 import base.SpecBase
-import connectors.HandleXMLFileConnector
+import connectors.FileDetailsConnector
 import models.ConversationId
 import models.fileDetails.{Accepted, FileDetails}
 import org.mockito.ArgumentMatchers.any
@@ -32,7 +32,7 @@ import scala.concurrent.Future
 
 class FileReceivedControllerSpec extends SpecBase {
 
-  val mockHandleXMLFileConnector: HandleXMLFileConnector = mock[HandleXMLFileConnector]
+  val mockHandleXMLFileConnector: FileDetailsConnector = mock[FileDetailsConnector]
 
   "FileReceived Controller" - {
 
@@ -55,7 +55,7 @@ class FileReceivedControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
-          bind[HandleXMLFileConnector].toInstance(mockHandleXMLFileConnector)
+          bind[FileDetailsConnector].toInstance(mockHandleXMLFileConnector)
         )
         .build()
 

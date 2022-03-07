@@ -27,7 +27,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import java.time.LocalDateTime
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class HandleXMLFileConnectorSpec extends Connector {
+class FileDetailsConnectorSpec extends Connector {
 
   override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(
@@ -35,7 +35,7 @@ class HandleXMLFileConnectorSpec extends Connector {
     )
     .build()
 
-  lazy val connector: HandleXMLFileConnector = app.injector.instanceOf[HandleXMLFileConnector]
+  lazy val connector: FileDetailsConnector = app.injector.instanceOf[FileDetailsConnector]
 
   private val conversationId = ConversationId("conversationId3")
 

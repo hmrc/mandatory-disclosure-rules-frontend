@@ -17,7 +17,7 @@
 package controllers
 
 import base.SpecBase
-import connectors.HandleXMLFileConnector
+import connectors.FileDetailsConnector
 import generators.ModelGenerators
 import models.ConversationId
 import models.fileDetails.{Accepted, FileDetails, Rejected, ValidationErrors}
@@ -51,13 +51,13 @@ class FileRejectedControllerSpec extends SpecBase with ModelGenerators with Scal
 
   "FileRejected Controller" - {
 
-    val mockHandleXMLFileConnector: HandleXMLFileConnector = mock[HandleXMLFileConnector]
+    val mockHandleXMLFileConnector: FileDetailsConnector = mock[FileDetailsConnector]
 
     "must return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
-          bind[HandleXMLFileConnector].toInstance(mockHandleXMLFileConnector)
+          bind[FileDetailsConnector].toInstance(mockHandleXMLFileConnector)
         )
         .build()
 
@@ -95,7 +95,7 @@ class FileRejectedControllerSpec extends SpecBase with ModelGenerators with Scal
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
-          bind[HandleXMLFileConnector].toInstance(mockHandleXMLFileConnector)
+          bind[FileDetailsConnector].toInstance(mockHandleXMLFileConnector)
         )
         .build()
 
@@ -114,7 +114,7 @@ class FileRejectedControllerSpec extends SpecBase with ModelGenerators with Scal
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
-          bind[HandleXMLFileConnector].toInstance(mockHandleXMLFileConnector)
+          bind[FileDetailsConnector].toInstance(mockHandleXMLFileConnector)
         )
         .build()
 
