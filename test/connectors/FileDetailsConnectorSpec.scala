@@ -27,7 +27,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import java.time.LocalDateTime
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class HandleXMLFileConnectorSpec extends Connector {
+class FileDetailsConnectorSpec extends Connector {
 
   override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(
@@ -35,12 +35,13 @@ class HandleXMLFileConnectorSpec extends Connector {
     )
     .build()
 
-  lazy val connector: HandleXMLFileConnector = app.injector.instanceOf[HandleXMLFileConnector]
+  lazy val connector: FileDetailsConnector = app.injector.instanceOf[FileDetailsConnector]
 
   private val conversationId = ConversationId("conversationId3")
 
-  private val allFilesUrls = "/mandatory-disclosure-rules/files/details"
-  private val fileUrl      = s"/mandatory-disclosure-rules/files/${conversationId.value}/details"
+  private val allFilesUrls  = "/mandatory-disclosure-rules/files/details"
+  private val fileUrl       = s"/mandatory-disclosure-rules/files/${conversationId.value}/details"
+  private val fileStatusUrl = s"/mandatory-disclosure-rules/files/${conversationId.value}/status"
 
   private val allFiles: String = """
       |[
@@ -76,7 +77,9 @@ class HandleXMLFileConnectorSpec extends Connector {
      |    "conversationId": "conversationId3"
      |  }""".stripMargin
 
-  "HandleXMLFileConnector" - {
+  private val fileStatus: String = """{"Accepted":{}}""".stripMargin
+
+  "FileDetailsConnector" - {
 
     "getAllFileDetails" - {
 
@@ -186,6 +189,40 @@ class HandleXMLFileConnectorSpec extends Connector {
 
       }
     }
+
+    "getStatus" - {
+
+      "must return 'file status' when getStatus is successful" in {
+        val expectedResult = Some(Accepted)
+
+        stubGetResponse(fileStatusUrl, OK, fileStatus)
+
+        val result = connector.getStatus(conversationId)
+
+        result.futureValue mustBe expectedResult
+      }
+
+      "must return 'None' when getStatus is successful but response json is invalid" in {
+
+        stubPostResponse(fileStatusUrl, OK)
+
+        val result = connector.getStatus(conversationId)
+
+        result.futureValue mustBe None
+      }
+
+      "must return 'None' when getStatus fails with Error" in {
+
+        val errorCode = errorCodes.sample.value
+        stubPostResponse(fileStatusUrl, errorCode)
+
+        val result = connector.getStatus(conversationId)
+
+        result.futureValue mustBe None
+
+      }
+    }
+
   }
 
 }

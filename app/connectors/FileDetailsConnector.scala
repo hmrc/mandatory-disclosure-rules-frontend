@@ -18,7 +18,7 @@ package connectors
 
 import config.FrontendAppConfig
 import models.ConversationId
-import models.fileDetails.FileDetails
+import models.fileDetails.{FileDetails, FileStatus}
 import play.api.Logging
 import uk.gov.hmrc.http.HttpReads.Implicits.readRaw
 import uk.gov.hmrc.http.HttpReads.is2xx
@@ -27,7 +27,7 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class HandleXMLFileConnector @Inject() (httpClient: HttpClient, config: FrontendAppConfig) extends Logging {
+class FileDetailsConnector @Inject() (httpClient: HttpClient, config: FrontendAppConfig) extends Logging {
 
   def getAllFileDetails(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[Seq[FileDetails]]] = {
     val url = s"${config.mdrUrl}/mandatory-disclosure-rules/files/details"
@@ -36,7 +36,7 @@ class HandleXMLFileConnector @Inject() (httpClient: HttpClient, config: Frontend
         responseMessage.json
           .asOpt[Seq[FileDetails]]
       case _ =>
-        logger.warn("HandleXMLFileConnector: Failed to get AllFileDetails")
+        logger.warn("FileDetailsConnector: Failed to get AllFileDetails")
         None
     }
   }
@@ -48,7 +48,19 @@ class HandleXMLFileConnector @Inject() (httpClient: HttpClient, config: Frontend
         responseMessage.json
           .asOpt[FileDetails]
       case _ =>
-        logger.warn("HandleXMLFileConnector: Failed to get FileDetails")
+        logger.warn("FileDetailsConnector: Failed to get FileDetails")
+        None
+    }
+  }
+
+  def getStatus(conversationId: ConversationId)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[FileStatus]] = {
+    val url = s"${config.mdrUrl}/mandatory-disclosure-rules/files/${conversationId.value}/status"
+    httpClient.GET(url).map {
+      case responseMessage if is2xx(responseMessage.status) =>
+        responseMessage.json
+          .asOpt[FileStatus]
+      case _ =>
+        logger.warn("FileDetailsConnector: Failed to getStatus")
         None
     }
   }

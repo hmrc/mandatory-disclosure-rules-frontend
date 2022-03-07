@@ -16,7 +16,7 @@
 
 package controllers
 
-import connectors.HandleXMLFileConnector
+import connectors.FileDetailsConnector
 import controllers.actions._
 import models.ConversationId
 import play.api.Logging
@@ -38,7 +38,7 @@ class FileReceivedController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: FileReceivedView,
   errorView: ThereIsAProblemView,
-  handleXMLFileConnector: HandleXMLFileConnector
+  fileDetailsConnector: FileDetailsConnector
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
@@ -46,7 +46,7 @@ class FileReceivedController @Inject() (
 
   def onPageLoad(conversationId: ConversationId): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
-      handleXMLFileConnector.getFileDetails(conversationId) map {
+      fileDetailsConnector.getFileDetails(conversationId) map {
         fileDetails =>
           (for {
             emails  <- getContactEmails
