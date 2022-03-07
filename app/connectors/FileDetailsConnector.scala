@@ -60,7 +60,7 @@ class FileDetailsConnector @Inject() (httpClient: HttpClient, config: FrontendAp
         responseMessage.json
           .asOpt[FileStatus]
       case _ =>
-        logger.warn("FileDetailsConnector: Failed to get FileDetails")
+        logger.warn("FileDetailsConnector: Failed to getStatus")
         None
     }
   }
