@@ -51,19 +51,19 @@ class FileRejectedControllerSpec extends SpecBase with ModelGenerators with Scal
 
   "FileRejected Controller" - {
 
-    val mockHandleXMLFileConnector: FileDetailsConnector = mock[FileDetailsConnector]
+    val mockFileDetailsConnector: FileDetailsConnector = mock[FileDetailsConnector]
 
     "must return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
-          bind[FileDetailsConnector].toInstance(mockHandleXMLFileConnector)
+          bind[FileDetailsConnector].toInstance(mockFileDetailsConnector)
         )
         .build()
 
       val validationErrors = Arbitrary.arbitrary[ValidationErrors].sample.value
 
-      when(mockHandleXMLFileConnector.getFileDetails(any())(any(), any()))
+      when(mockFileDetailsConnector.getFileDetails(any())(any(), any()))
         .thenReturn(
           Future.successful(
             Some(
@@ -95,11 +95,11 @@ class FileRejectedControllerSpec extends SpecBase with ModelGenerators with Scal
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
-          bind[FileDetailsConnector].toInstance(mockHandleXMLFileConnector)
+          bind[FileDetailsConnector].toInstance(mockFileDetailsConnector)
         )
         .build()
 
-      when(mockHandleXMLFileConnector.getFileDetails(any())(any(), any())).thenReturn(Future.successful(None))
+      when(mockFileDetailsConnector.getFileDetails(any())(any(), any())).thenReturn(Future.successful(None))
 
       running(application) {
         val request = FakeRequest(GET, routes.FileRejectedController.onPageLoad(conversationId).url)
@@ -114,11 +114,11 @@ class FileRejectedControllerSpec extends SpecBase with ModelGenerators with Scal
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
         .overrides(
-          bind[FileDetailsConnector].toInstance(mockHandleXMLFileConnector)
+          bind[FileDetailsConnector].toInstance(mockFileDetailsConnector)
         )
         .build()
 
-      when(mockHandleXMLFileConnector.getFileDetails(any())(any(), any()))
+      when(mockFileDetailsConnector.getFileDetails(any())(any(), any()))
         .thenReturn(
           Future.successful(
             Some(

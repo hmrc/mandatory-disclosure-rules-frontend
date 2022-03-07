@@ -32,7 +32,7 @@ import scala.concurrent.Future
 
 class FileReceivedControllerSpec extends SpecBase {
 
-  val mockHandleXMLFileConnector: FileDetailsConnector = mock[FileDetailsConnector]
+  val mockFileDetailsConnector: FileDetailsConnector = mock[FileDetailsConnector]
 
   "FileReceived Controller" - {
 
@@ -55,11 +55,11 @@ class FileReceivedControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
-          bind[FileDetailsConnector].toInstance(mockHandleXMLFileConnector)
+          bind[FileDetailsConnector].toInstance(mockFileDetailsConnector)
         )
         .build()
 
-      when(mockHandleXMLFileConnector.getFileDetails(any())(any(), any()))
+      when(mockFileDetailsConnector.getFileDetails(any())(any(), any()))
         .thenReturn(
           Future.successful(
             Some(

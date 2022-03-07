@@ -38,14 +38,14 @@ class FileRejectedController @Inject() (
   errorViewHelper: ErrorViewHelper,
   view: FileRejectedView,
   errorView: ThereIsAProblemView,
-  handleXMLFileConnector: FileDetailsConnector
+  fileDetailsConnector: FileDetailsConnector
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {
 
   def onPageLoad(conversationId: ConversationId): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
-      handleXMLFileConnector.getFileDetails(conversationId) map {
+      fileDetailsConnector.getFileDetails(conversationId) map {
         case Some(details) =>
           details.status match {
             case Rejected(fileError) =>
