@@ -245,6 +245,7 @@ fileRejected.tableHeading1 = Location
 fileRejected.tableHeading2 = Error
 
 xml.defaultMessage = There is a problem with this line number
+xml.must.have.element.declaration = The {0} field must have an XML namespace (xmlns), which must be {1}
 xml.add.an.element = Add an {0}
 xml.add.a.element = Add a {0}
 xml.add.element = Add {0}
