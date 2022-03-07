@@ -79,7 +79,7 @@ class FileValidationControllerSpec extends SpecBase with BeforeAndAfterEach {
       val result: Future[Result] = route(application, request).value
 
       status(result) mustBe SEE_OTHER
-      redirectLocation(result).value mustEqual routes.CheckYourAnswersController.onPageLoad().url
+      redirectLocation(result).value mustEqual routes.CheckYourFileDetailsController.onPageLoad().url
 
       verify(mockSessionRepository, times(1)).set(userAnswersCaptor.capture())
       userAnswersCaptor.getValue.data mustEqual expectedData

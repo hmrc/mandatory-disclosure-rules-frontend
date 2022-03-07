@@ -83,3 +83,6 @@ GET         /report/file-status                                               co
 
 GET        /report/check-your-file-details                                    controllers.CheckYourFileDetailsController.onPageLoad()
 
+GET        /report/send-your-file                       controllers.SendYourFileController.onPageLoad()
+POST       /report/send-your-file                       controllers.SendYourFileController.onSubmit()
+
