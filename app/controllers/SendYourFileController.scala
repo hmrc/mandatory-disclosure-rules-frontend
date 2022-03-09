@@ -82,7 +82,7 @@ class SendYourFileController @Inject() (
     implicit request =>
       request.userAnswers.get(ConversationIdPage) match {
         case Some(conversationId) =>
-          logger.info(s"The conversation id:$conversationId")
+          logger.info(s"The conversation id is $conversationId") //TODO delete this line after testing in staging DAC6-1494
           fileDetailsConnector.getStatus(conversationId) flatMap {
             case Some(FileStatusAccepted) =>
               Future.successful(Ok(Json.toJson(RedirectAsJson(routes.FileReceivedController.onPageLoad(conversationId).url))))
