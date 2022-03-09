@@ -12,5 +12,9 @@
 # Add all the application routes to the prod.routes file
 ->         /                          prod.Routes
 
-+ nocsrf
++nocsrf
+POST       /report-under-mandatory-disclosure-rules/test-only/process-eis-response                     controllers.testOnlyDoNotUseInAppConf.TestProcessEISResponseController.processEISResponse()
+
++nocsrf
 POST       /report-under-mandatory-disclosure-rules/test-only/insert-test-submission/:fileName         controllers.testOnlyDoNotUseInAppConf.TestSubmissionController.insertTestSubmission(fileName)
+
