@@ -21,15 +21,16 @@
         govukButton: GovukButton
 )
 
-@(displayWarning: Boolean)(implicit request: Request[_], messages: Messages)
+@(displayWarning:  Boolean)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("sendYourFile.title"))) {
 
-    @formHelper(action = routes.SendYourFileController.onSubmit()) {
+    @formHelper(action = routes.SendYourFileController.onSubmit(), args= 'id -> "sendYourFileForm") {
+       <input type="hidden" id="fileStatusRefreshUrl" value="@routes.SendYourFileController.getStatus().url" />
 
         <h1 class="govuk-heading-l">@messages("sendYourFile.heading")</h1>
 
-        <p class="govuk-body">@messages("sendYourFile.p1")</p>
+        <p class="govuk-body" id ="information" >@messages("sendYourFile.p1")</p>
         <p class="govuk-body">@messages("sendYourFile.p2")</p>
 
         @if(displayWarning){

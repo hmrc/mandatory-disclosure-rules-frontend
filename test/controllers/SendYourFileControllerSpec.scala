@@ -17,21 +17,23 @@
 package controllers
 
 import base.SpecBase
-import connectors.SubmissionConnector
+import connectors.{FileDetailsConnector, SubmissionConnector}
 import handlers.XmlHandler
+import models.fileDetails.{Accepted, Pending, Rejected, ValidationErrors}
 import models.{ConversationId, MDR401, MDR402, MessageSpecData, UserAnswers, ValidatedFileData}
 import org.mockito.ArgumentMatchers.any
-import pages.{URLPage, ValidXMLPage}
+import pages.{ConversationIdPage, URLPage, ValidXMLPage}
 import play.api.inject.bind
-import play.api.libs.json.JsString
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
+import uk.gov.hmrc.http.HeaderCarrier
 import views.html.SendYourFileView
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class SendYourFileControllerSpec extends SpecBase {
+
+  private val conversationId: ConversationId = ConversationId("conversationId")
 
   "SendYourFile Controller" - {
 
@@ -95,8 +97,6 @@ class SendYourFileControllerSpec extends SpecBase {
           .success
           .value
 
-        val conversationId = ConversationId("conversationId")
-
         val application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
             bind[SubmissionConnector].toInstance(mockSubmissionConnector),
@@ -105,7 +105,7 @@ class SendYourFileControllerSpec extends SpecBase {
           .build()
 
         when(mockSubmissionConnector.submitDocument(any[String], any[String], any())(any[HeaderCarrier], any[ExecutionContext]))
-          .thenReturn(Future.successful(HttpResponse(OK, JsString("conversationId"), Map("" -> Seq("")))))
+          .thenReturn(Future.successful(Some(ConversationId("conversationId"))))
 
         when(mockXmlHandler.load(any[String]())).thenReturn(<test><value>Success</value></test>)
 
@@ -114,8 +114,7 @@ class SendYourFileControllerSpec extends SpecBase {
 
           val result = route(application, request).value
 
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual routes.FileReceivedController.onPageLoad(conversationId).url
+          status(result) mustEqual OK
 
           verify(mockSubmissionConnector, times(1))
             .submitDocument(any(), any(), any())(any(), any())
@@ -133,6 +132,133 @@ class SendYourFileControllerSpec extends SpecBase {
 
           status(result) mustEqual SEE_OTHER
           redirectLocation(result).value mustEqual routes.ThereIsAProblemController.onPageLoad().url
+        }
+      }
+    }
+
+    "getStatus" - {
+
+      "must return OK and load the page 'FileReceived' for a GET" in {
+
+        val mockFileDetailsConnector = mock[FileDetailsConnector]
+
+        val userAnswers = UserAnswers("Id")
+          .set(ConversationIdPage, conversationId)
+          .success
+          .value
+
+        when(mockFileDetailsConnector.getStatus(any[ConversationId]())(any[HeaderCarrier](), any[ExecutionContext]()))
+          .thenReturn(Future.successful(Some(Accepted)))
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[FileDetailsConnector].toInstance(mockFileDetailsConnector)
+          )
+          .build()
+
+        running(application) {
+          val request = FakeRequest(GET, routes.SendYourFileController.getStatus().url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual OK
+        }
+      }
+
+      "must return Continue and continue with spinning the wheel" in {
+
+        val mockFileDetailsConnector = mock[FileDetailsConnector]
+
+        val userAnswers = UserAnswers("Id")
+          .set(ConversationIdPage, conversationId)
+          .success
+          .value
+
+        when(mockFileDetailsConnector.getStatus(any[ConversationId]())(any[HeaderCarrier](), any[ExecutionContext]()))
+          .thenReturn(Future.successful(Some(Pending)))
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[FileDetailsConnector].toInstance(mockFileDetailsConnector)
+          )
+          .build()
+
+        running(application) {
+          val request = FakeRequest(GET, routes.SendYourFileController.getStatus().url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual CONTINUE
+        }
+      }
+
+      "must return OK and load the page 'FileRejected' for a GET" in {
+
+        val mockFileDetailsConnector = mock[FileDetailsConnector]
+
+        val userAnswers = UserAnswers("Id")
+          .set(ConversationIdPage, conversationId)
+          .success
+          .value
+
+        when(mockFileDetailsConnector.getStatus(any[ConversationId]())(any[HeaderCarrier](), any[ExecutionContext]()))
+          .thenReturn(Future.successful(Some(Rejected(ValidationErrors(None, None)))))
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[FileDetailsConnector].toInstance(mockFileDetailsConnector)
+          )
+          .build()
+
+        running(application) {
+          val request = FakeRequest(GET, routes.SendYourFileController.getStatus().url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual OK
+        }
+      }
+
+      "must return OK and load the page 'Technical difficulties' page when getStatus returns no status" in {
+
+        val mockFileDetailsConnector = mock[FileDetailsConnector]
+
+        val userAnswers = UserAnswers("Id")
+          .set(ConversationIdPage, conversationId)
+          .success
+          .value
+
+        when(mockFileDetailsConnector.getStatus(any[ConversationId]())(any[HeaderCarrier](), any[ExecutionContext]()))
+          .thenReturn(Future.successful(None))
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[FileDetailsConnector].toInstance(mockFileDetailsConnector)
+          )
+          .build()
+
+        running(application) {
+          val request = FakeRequest(GET, routes.SendYourFileController.getStatus().url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual OK
+        }
+      }
+
+      "must return OK and load the page 'Technical difficulties' page when ConversationId is None" in {
+
+        val userAnswers = UserAnswers("Id")
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers))
+          .build()
+
+        running(application) {
+          val request = FakeRequest(GET, routes.SendYourFileController.getStatus().url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual OK
         }
       }
     }

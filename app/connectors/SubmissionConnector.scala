@@ -39,7 +39,7 @@ class SubmissionConnector @Inject() (httpClient: HttpClient, config: FrontendApp
   ): Future[Option[ConversationId]] =
     httpClient.POSTString[HttpResponse](submitUrl, constructSubmission(fileName, enrolmentID, xmlDocument).toString(), headers) map {
       case response if is2xx(response.status) => Some(response.json.as[ConversationId])
-      case errorResponse                                 =>
+      case errorResponse =>
         logger.warn(s"Failed to submitDocument: revived the status: ${errorResponse.status} and message: ${errorResponse.body}")
         None
     }
