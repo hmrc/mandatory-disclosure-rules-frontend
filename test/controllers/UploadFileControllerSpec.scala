@@ -31,7 +31,7 @@ import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{status, _}
-import views.html.{NotXMLFileView, ThereIsAProblemView, UploadFileView}
+import views.html.UploadFileView
 
 import scala.concurrent.Future
 
