@@ -8,12 +8,8 @@ console.log("====================================================")
 {
      var sendYourFileForm = this;
 
-    function submitError1(error, jqXHR){
-        var errorCode = jqXHR.responseJSON.errorCode
-        var errorMessage  = jqXHR.responseJSON.errorMessage
-        var errorRequestId = jqXHR.responseJSON.errorRequestId
-         var errorUrl = $("#upScanErrorRedirectUrl").val() + "?errorCode="+errorCode+"&errorMessage="+errorMessage+"&errorRequestId="+errorRequestId
-         window.location = errorUrl
+    function submitForError(error, jqXHR){
+         window.location =  $("#technicalDifficultiesRedirectUrl").val()
     };
 
        function addSpinner(){
@@ -33,7 +29,7 @@ console.log("====================================================")
                   contentType: false,
                   crossDomain: true
             }).error(function(jqXHR, textStatus, errorThrown ){
-                submitError1("4000", jqXHR)
+                submitForError("4000", jqXHR)
             }).done(function(){
                 // Disable UI
                  checkProgress = true

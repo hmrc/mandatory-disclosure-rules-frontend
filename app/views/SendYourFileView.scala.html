@@ -27,6 +27,7 @@
 
     @formHelper(action = routes.SendYourFileController.onSubmit(), args= 'id -> "sendYourFileForm") {
        <input type="hidden" id="fileStatusRefreshUrl" value="@routes.SendYourFileController.getStatus().url" />
+       <input type="hidden" id="technicalDifficultiesRedirectUrl" value="@routes.ThereIsAProblemController.onPageLoad().url" />
 
         <h1 class="govuk-heading-l">@messages("sendYourFile.heading")</h1>
 

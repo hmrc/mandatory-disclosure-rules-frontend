@@ -92,7 +92,7 @@ class SendYourFileController @Inject() (
               Future.successful(Continue)
             case None =>
               logger.info("getStatus: no status returned")
-              Future.successful(SeeOther(routes.ThereIsAProblemController.onPageLoad().url))
+              Future.successful(Ok(Json.toJson(RedirectAsJson(routes.ThereIsAProblemController.onPageLoad().url))))
           }
         case None =>
           logger.info("UserAnswers.ConversationId is empty")
