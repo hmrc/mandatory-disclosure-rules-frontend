@@ -4,7 +4,6 @@
 var checkProgress = false
 $("#sendYourFileForm").submit(function(e){
 e.preventDefault();
-console.log("====================================================")
 {
      var sendYourFileForm = this;
 
