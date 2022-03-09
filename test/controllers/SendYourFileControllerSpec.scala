@@ -123,22 +123,60 @@ class SendYourFileControllerSpec extends SpecBase {
 
       "redirect to there is a problem page if userAnswers missing" in {
 
-        val application = applicationBuilder(userAnswers = None).build()
+        val userAnswers = UserAnswers("Id")
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402)))
+          .success
+          .value
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers))
+          .build()
 
         running(application) {
           val request = FakeRequest(POST, routes.SendYourFileController.onSubmit().url)
 
           val result = route(application, request).value
 
-          status(result) mustEqual SEE_OTHER
-          redirectLocation(result).value mustEqual routes.ThereIsAProblemController.onPageLoad().url
+          status(result) mustEqual INTERNAL_SERVER_ERROR
+        }
+      }
+
+      "redirect to there is a problem page on failing to submitDocument" in {
+        val mockSubmissionConnector = mock[SubmissionConnector]
+        val mockXmlHandler          = mock[XmlHandler]
+
+        val userAnswers = UserAnswers("Id")
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402)))
+          .success
+          .value
+          .set(URLPage, "url")
+          .success
+          .value
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[SubmissionConnector].toInstance(mockSubmissionConnector),
+            bind[XmlHandler].toInstance(mockXmlHandler)
+          )
+          .build()
+
+        when(mockXmlHandler.load(any[String]())).thenReturn(<test><value>Success</value></test>)
+
+        when(mockSubmissionConnector.submitDocument(any[String], any[String], any())(any[HeaderCarrier], any[ExecutionContext]))
+          .thenReturn(Future.successful(None))
+
+        running(application) {
+          val request = FakeRequest(POST, routes.SendYourFileController.onSubmit().url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual INTERNAL_SERVER_ERROR
         }
       }
     }
 
     "getStatus" - {
 
-      "must return OK and load the page 'FileReceived' for a GET" in {
+      "must return OK and load the page 'FileReceived' when the file status is 'Accepted'" in {
 
         val mockFileDetailsConnector = mock[FileDetailsConnector]
 
@@ -165,7 +203,7 @@ class SendYourFileControllerSpec extends SpecBase {
         }
       }
 
-      "must return Continue and continue with spinning the wheel" in {
+      "must return NoContent when the file status is 'Pending'" in {
 
         val mockFileDetailsConnector = mock[FileDetailsConnector]
 
@@ -188,11 +226,11 @@ class SendYourFileControllerSpec extends SpecBase {
 
           val result = route(application, request).value
 
-          status(result) mustEqual CONTINUE
+          status(result) mustEqual NO_CONTENT
         }
       }
 
-      "must return OK and load the page 'FileRejected' for a GET" in {
+      "must return OK and load the page 'FileRejected' when the file status is 'Rejected'" in {
 
         val mockFileDetailsConnector = mock[FileDetailsConnector]
 
@@ -242,7 +280,7 @@ class SendYourFileControllerSpec extends SpecBase {
 
           val result = route(application, request).value
 
-          status(result) mustEqual OK
+          status(result) mustEqual INTERNAL_SERVER_ERROR
         }
       }
 
@@ -258,7 +296,7 @@ class SendYourFileControllerSpec extends SpecBase {
 
           val result = route(application, request).value
 
-          status(result) mustEqual OK
+          status(result) mustEqual INTERNAL_SERVER_ERROR
         }
       }
     }

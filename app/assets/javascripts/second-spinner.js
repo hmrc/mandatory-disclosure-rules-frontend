@@ -7,10 +7,6 @@ e.preventDefault();
 {
      var sendYourFileForm = this;
 
-    function submitForError(error, jqXHR){
-         window.location =  $("#technicalDifficultiesRedirectUrl").val()
-    };
-
        function addSpinner(){
               $("#information").before(
                 "<div id=\"processing\" aria-live=\"polite\" class=\"govuk-!-margin-bottom-5\">" +
@@ -28,9 +24,8 @@ e.preventDefault();
                   contentType: false,
                   crossDomain: true
             }).error(function(jqXHR, textStatus, errorThrown ){
-                submitForError("4000", jqXHR)
+                window.location =  $("#technicalDifficultiesRedirectUrl").val()
             }).done(function(){
-                // Disable UI
                  checkProgress = true
                  addSpinner();
                  refreshToCheckStatusPage();
@@ -41,22 +36,30 @@ e.preventDefault();
 }
 
 });
+
 // =====================================================
 //  Refresh status page
 // =====================================================
 function refreshToCheckStatusPage(){
     var refreshUrl = $("#fileStatusRefreshUrl").val();
+    var count = 0;
     if (refreshUrl) {
         window.refreshIntervalId = setInterval(function () {
-            $.getJSON(refreshUrl, function (data, textStatus, jqXhr) {
-                if (jqXhr.status === 200) {
-                      window.location = data.url;
-                } else if (jqXhr.status === 100) {
-                   return false
-                } else {
-                    console.debug("Something went wrong", jqXhr);
-                }
-            });
+            if (count < 12) { //TODO Need to change it to 3/4 after all the testing
+                $.getJSON(refreshUrl)
+                .done(function (data, textStatus, jqXhr) {
+                    if (jqXhr.status === 200) {
+                          window.location = data.url;
+                    } else {
+                       count += 1
+                       return false
+                    }
+                }).fail(function( jqxhr, textStatus, error ) {
+                    window.location =  $("#technicalDifficultiesRedirectUrl").val()
+                });
+            } else {
+                window.location =  $("#slowJourneyUrl").val()
+            }
         }, 3000);
     }
 

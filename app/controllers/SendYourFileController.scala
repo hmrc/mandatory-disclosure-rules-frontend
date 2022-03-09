@@ -44,8 +44,7 @@ class SendYourFileController @Inject() (
   sessionRepository: SessionRepository,
   xmlHandler: XmlHandler,
   val controllerComponents: MessagesControllerComponents,
-  view: SendYourFileView,
-  errorView: ThereIsAProblemView
+  view: SendYourFileView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
@@ -72,10 +71,10 @@ class SendYourFileController @Inject() (
                 userAnswers <- Future.fromTry(request.userAnswers.set(ConversationIdPage, conversationId))
                 _           <- sessionRepository.set(userAnswers)
               } yield Ok
-            case _ => Future.successful(Ok(Json.toJson(RedirectAsJson(routes.ThereIsAProblemController.onPageLoad().url))))
+            case _ => Future.successful(InternalServerError)
           }
         case _ =>
-          Future.successful(Ok(Json.toJson(RedirectAsJson(routes.ThereIsAProblemController.onPageLoad().url))))
+          Future.successful(InternalServerError)
       }
   }
 
@@ -83,20 +82,21 @@ class SendYourFileController @Inject() (
     implicit request =>
       request.userAnswers.get(ConversationIdPage) match {
         case Some(conversationId) =>
+          logger.info(s"The conversation id:$conversationId")
           fileDetailsConnector.getStatus(conversationId) flatMap {
             case Some(FileStatusAccepted) =>
               Future.successful(Ok(Json.toJson(RedirectAsJson(routes.FileReceivedController.onPageLoad(conversationId).url))))
             case Some(Rejected(_)) =>
               Future.successful(Ok(Json.toJson(RedirectAsJson(routes.FileRejectedController.onPageLoad(conversationId).url))))
             case Some(Pending) =>
-              Future.successful(Continue)
+              Future.successful(NoContent)
             case None =>
               logger.info("getStatus: no status returned")
-              Future.successful(Ok(Json.toJson(RedirectAsJson(routes.ThereIsAProblemController.onPageLoad().url))))
+              Future.successful(InternalServerError)
           }
         case None =>
           logger.info("UserAnswers.ConversationId is empty")
-          Future.successful(Ok(Json.toJson(RedirectAsJson(routes.ThereIsAProblemController.onPageLoad().url))))
+          Future.successful(InternalServerError)
       }
   }
 }
