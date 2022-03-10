@@ -10,7 +10,8 @@ e.preventDefault();
        function addSpinner(){
               $("#information").before(
                 "<div id=\"processing\" aria-live=\"polite\" class=\"govuk-!-margin-bottom-5\">" +
-                "<div><div class=\"ccms-loader\"></div></div></div>"
+                "<h2 class=\"govuk-heading-m\">"+ $("#processingMessage").val() +
+                "</h2><div><div class=\"ccms-loader\"></div></div></div>"
                 )
        };
 

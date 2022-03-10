@@ -19,7 +19,7 @@ package controllers
 import connectors.{FileDetailsConnector, SubmissionConnector}
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import handlers.XmlHandler
-import models.fileDetails.{Accepted => FileStatusAccepted, Pending, Rejected}
+import models.fileDetails.{Pending, Rejected, Accepted => FileStatusAccepted}
 import models.upscan.RedirectAsJson
 import models.{MDR402, ValidatedFileData}
 import pages.{ConversationIdPage, URLPage, ValidXMLPage}
@@ -29,7 +29,7 @@ import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.{SendYourFileView, ThereIsAProblemView}
+import views.html.SendYourFileView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}

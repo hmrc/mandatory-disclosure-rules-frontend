@@ -29,8 +29,9 @@
        <input type="hidden" id="fileStatusRefreshUrl" value="@routes.SendYourFileController.getStatus().url" />
        <input type="hidden" id="technicalDifficultiesRedirectUrl" value="@routes.ThereIsAProblemController.onPageLoad().url" />
        <input type="hidden" id="slowJourneyUrl" value="@routes.ChecksWillTakeLongerController.onPageLoad().url" />
-
+       <input type="hidden" id="processingMessage" value="@messages("sendYourFile.status.heading")" />
         <h1 class="govuk-heading-l">@messages("sendYourFile.heading")</h1>
+
 
         <p class="govuk-body" id ="information" >@messages("sendYourFile.p1")</p>
         <p class="govuk-body">@messages("sendYourFile.p2")</p>
