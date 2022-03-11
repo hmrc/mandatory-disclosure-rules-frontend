@@ -17,6 +17,7 @@
 package connectors
 
 import config.FrontendAppConfig
+import models.upscan.UpscanURL
 import models.{Errors, InvalidXmlError, MessageSpecData, NonFatalErrors, SubmissionValidationFailure, SubmissionValidationResult, SubmissionValidationSuccess}
 import play.api.Logging
 import play.api.http.Status.OK
@@ -30,9 +31,9 @@ class ValidationConnector @Inject() (http: HttpClient, config: FrontendAppConfig
 
   val url = s"${config.mdrUrl}/mandatory-disclosure-rules/validate-submission"
 
-  def sendForValidation(upScanUrl: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Either[Errors, MessageSpecData]] =
+  def sendForValidation(upScanUrl: UpscanURL)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Either[Errors, MessageSpecData]] =
     http
-      .POSTString[HttpResponse](url, upScanUrl)
+      .POST[UpscanURL, HttpResponse](url, upScanUrl)
       .map {
         response =>
           response.status match {

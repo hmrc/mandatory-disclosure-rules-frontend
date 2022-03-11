@@ -19,7 +19,7 @@ package controllers
 import connectors.{UpscanConnector, ValidationConnector}
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import models.requests.DataRequest
-import models.upscan.{UploadSessionDetails, UploadedSuccessfully}
+import models.upscan.{UploadSessionDetails, UploadedSuccessfully, UpscanURL}
 import models.{InvalidXmlError, NormalMode, UserAnswers, ValidatedFileData, ValidationErrors}
 import navigation.Navigator
 import pages._
@@ -66,12 +66,12 @@ class FileValidationController @Inject() (
                     Future.successful(InternalServerError(errorView()))
                   } {
                     downloadDetails =>
-                      val (fileName, upScanUrl) = downloadDetails
-                      validationConnector.sendForValidation(upScanUrl) flatMap {
+                      val (fileName, url) = downloadDetails
+                      validationConnector.sendForValidation(UpscanURL(url)) flatMap {
                         case Right(messageSpecData) =>
                           for {
                             updatedAnswers        <- Future.fromTry(request.userAnswers.set(ValidXMLPage, ValidatedFileData(fileName, messageSpecData)))
-                            updatedAnswersWithURL <- Future.fromTry(updatedAnswers.set(URLPage, upScanUrl))
+                            updatedAnswersWithURL <- Future.fromTry(updatedAnswers.set(URLPage, url))
                             _                     <- sessionRepository.set(updatedAnswersWithURL)
                           } yield Redirect(navigator.nextPage(ValidXMLPage, NormalMode, updatedAnswers))
 

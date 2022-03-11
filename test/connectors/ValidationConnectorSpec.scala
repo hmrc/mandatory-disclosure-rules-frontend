@@ -16,6 +16,7 @@
 
 package connectors
 
+import models.upscan.UpscanURL
 import models.{GenericError, InvalidXmlError, MDR401, Message, MessageSpecData, NonFatalErrors, ValidationErrors}
 import play.api.Application
 import play.api.http.Status.{BAD_REQUEST, OK}
@@ -41,15 +42,17 @@ class ValidationConnectorSpec extends Connector {
     "must return a 200 and a Success Object when passing validation" in {
 
       val expectedBody = """{"messageSpecData": {"messageRefId":"XDSG111111","messageTypeIndic":"MDR401"}}"""
+      val upscanURL    = UpscanURL("someUrl")
 
       stubPostResponse(validationUrl, OK, expectedBody)
 
-      val result = connector.sendForValidation("SomeUrl")
+      val result = connector.sendForValidation(upscanURL)
       result.futureValue mustBe Right(MessageSpecData("XDSG111111", MDR401))
     }
 
     "must return a 200 and a Failure Object when failing validation" in {
 
+      val upscanURL    = UpscanURL("someUrl")
       val expectedBody = """
                                |{ "validationErrors": {
                                | "errors":[
@@ -72,14 +75,16 @@ class ValidationConnectorSpec extends Connector {
 
       stubPostResponse(validationUrl, OK, expectedBody)
 
-      val result = connector.sendForValidation("SomeUrl")
+      val result = connector.sendForValidation(upscanURL)
       result.futureValue mustBe Left(failurePayloadResult)
     }
 
     "must return a InvalidXmlError when validation returns a Invalid XML in error message" in {
       stubPostResponse(validationUrl, BAD_REQUEST, "Invalid XML")
 
-      val result = connector.sendForValidation("SomeUrl")
+      val upscanURL = UpscanURL("someUrl")
+
+      val result = connector.sendForValidation(upscanURL)
 
       val message = s"POST of '${server.baseUrl() + validationUrl}' returned 400 (Bad Request). Response body 'Invalid XML'"
 
@@ -89,7 +94,9 @@ class ValidationConnectorSpec extends Connector {
     "must return a NonFatalErrors when validation returns a 400 (BAD_REQUEST) status" in {
       stubPostResponse(validationUrl, BAD_REQUEST, "Some error")
 
-      val result = connector.sendForValidation("SomeUrl")
+      val upscanURL = UpscanURL("someUrl")
+
+      val result = connector.sendForValidation(upscanURL)
 
       val message = s"POST of '${server.baseUrl() + validationUrl}' returned 400 (Bad Request). Response body 'Some error'"
 
