@@ -91,27 +91,27 @@ class UploadFileController @Inject() (
         case Some(uploadId) =>
           upscanConnector.getUploadStatus(uploadId) flatMap {
             case Some(_: UploadedSuccessfully) =>
-              Future.successful(Ok(Json.toJson(UpScanRedirect(routes.FileValidationController.onPageLoad().url))))
+              Future.successful(Ok(Json.toJson(URL(routes.FileValidationController.onPageLoad().url))))
             case Some(r: UploadRejected) =>
               if (r.details.message.contains("octet-stream")) {
                 logger.debug(s"Show errorForm on rejection $r")
                 val errorReason = r.details.failureReason
-                Future.successful(Ok(Json.toJson(UpScanRedirect(routes.UploadFileController.showError("OctetStream", errorReason, "").url))))
+                Future.successful(Ok(Json.toJson(URL(routes.UploadFileController.showError("OctetStream", errorReason, "").url))))
               } else {
                 logger.debug(s"Upload rejected. Error details: ${r.details}")
-                Future.successful(Ok(Json.toJson(UpScanRedirect(routes.NotXMLFileController.onPageLoad().url))))
+                Future.successful(Ok(Json.toJson(URL(routes.NotXMLFileController.onPageLoad().url))))
               }
             case Some(Quarantined) =>
-              Future.successful(Ok(Json.toJson(UpScanRedirect(routes.VirusFileFoundController.onPageLoad().url))))
+              Future.successful(Ok(Json.toJson(URL(routes.VirusFileFoundController.onPageLoad().url))))
             case Some(Failed) =>
-              Future.successful(Ok(Json.toJson(UpScanRedirect(routes.ThereIsAProblemController.onPageLoad().url))))
+              Future.successful(Ok(Json.toJson(URL(routes.ThereIsAProblemController.onPageLoad().url))))
             case Some(_) =>
               Future.successful(Continue)
             case None =>
-              Future.successful(Ok(Json.toJson(UpScanRedirect(routes.ThereIsAProblemController.onPageLoad().url))))
+              Future.successful(Ok(Json.toJson(URL(routes.ThereIsAProblemController.onPageLoad().url))))
           }
         case None =>
-          Future.successful(Ok(Json.toJson(UpScanRedirect(routes.ThereIsAProblemController.onPageLoad().url))))
+          Future.successful(Ok(Json.toJson(URL(routes.ThereIsAProblemController.onPageLoad().url))))
       }
   }
 }

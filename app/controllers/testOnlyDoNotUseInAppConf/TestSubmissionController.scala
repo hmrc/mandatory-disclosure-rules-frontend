@@ -21,7 +21,7 @@ import connectors.SubmissionConnector
 import controllers.actions.IdentifierAction
 import play.api.Logging
 import play.api.mvc.{Action, MessagesControllerComponents}
-import uk.gov.hmrc.http.HttpReads.is2xx
+
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 import scala.concurrent.ExecutionContext
@@ -40,14 +40,10 @@ class TestSubmissionController @Inject() (
       logger.info(s"inserting test submission: ${request.body}")
       connector
         .submitDocument(fileName, request.subscriptionId, request.body)
-        .map(
-          response =>
-            if (is2xx(response.status)) {
-              Ok(response.body)
-            } else {
-              Status(response.status)
-            }
-        )
+        .map {
+          case Some(conversationId) => Ok //(conversationId)
+          case _                    => InternalServerError
+        }
   }
 
 }

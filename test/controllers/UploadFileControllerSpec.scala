@@ -69,7 +69,7 @@ class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
       val request = FakeRequest(GET, routes.UploadFileController.getStatus().url)
 
-      def verifyResult(uploadStatus: UploadStatus, expectedStatus: Int = OK, expectedResult: Option[UpScanRedirect] = None): Unit = {
+      def verifyResult(uploadStatus: UploadStatus, expectedStatus: Int = OK, expectedResult: Option[URL] = None): Unit = {
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
@@ -81,20 +81,20 @@ class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
         val result = route(application, request).value
 
         status(result) mustBe expectedStatus
-        val actualResult = Option(contentAsString(result)).collect { case x if x.trim.nonEmpty => x }.map(Json.parse(_).as[UpScanRedirect])
+        val actualResult = Option(contentAsString(result)).collect { case x if x.trim.nonEmpty => x }.map(Json.parse(_).as[URL])
         actualResult mustBe expectedResult
         application.stop()
       }
 
       verifyResult(InProgress, CONTINUE, None)
-      verifyResult(Quarantined, OK, Some(UpScanRedirect("/report-under-mandatory-disclosure-rules/report/problem/virus-file-found")))
+      verifyResult(Quarantined, OK, Some(URL("/report-under-mandatory-disclosure-rules/report/problem/virus-file-found")))
       verifyResult(
         UploadRejected(ErrorDetails("REJECTED", "message")),
         OK,
-        Some(UpScanRedirect("/report-under-mandatory-disclosure-rules/report/problem/not-xml-file"))
+        Some(URL("/report-under-mandatory-disclosure-rules/report/problem/not-xml-file"))
       )
-      verifyResult(Failed, OK, Some(UpScanRedirect("/report-under-mandatory-disclosure-rules/report/problem/there-is-a-problem")))
-      verifyResult(UploadedSuccessfully("name", "downloadUrl"), OK, Some(UpScanRedirect("/report-under-mandatory-disclosure-rules/report/file-validation")))
+      verifyResult(Failed, OK, Some(URL("/report-under-mandatory-disclosure-rules/report/problem/there-is-a-problem")))
+      verifyResult(UploadedSuccessfully("name", "downloadUrl"), OK, Some(URL("/report-under-mandatory-disclosure-rules/report/file-validation")))
 
     }
 

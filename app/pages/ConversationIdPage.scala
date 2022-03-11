@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package models.upscan
+package pages
 
-import play.api.libs.json.{Json, OFormat}
+import models.ConversationId
+import play.api.libs.json.JsPath
 
-case class UpScanRedirect(url: String)
+case object ConversationIdPage extends QuestionPage[ConversationId] {
 
-object UpScanRedirect {
-  implicit val format: OFormat[UpScanRedirect] = Json.format[UpScanRedirect]
+  override def path: JsPath = JsPath \ toString
+
+  override def toString: String = "conversationId"
 }

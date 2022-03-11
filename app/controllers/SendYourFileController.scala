@@ -16,16 +16,20 @@
 
 package controllers
 
-import connectors.SubmissionConnector
-import controllers.actions._
+import connectors.{FileDetailsConnector, SubmissionConnector}
+import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import handlers.XmlHandler
-import models.{ConversationId, MDR402, ValidatedFileData}
-import pages.{URLPage, ValidXMLPage}
+import models.fileDetails.{Pending, Rejected, Accepted => FileStatusAccepted}
+import models.upscan.URL
+import models.{MDR402, ValidatedFileData}
+import pages.{ConversationIdPage, URLPage, ValidXMLPage}
+import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.http.HttpResponse
+import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.{SendYourFileView, ThereIsAProblemView}
+import views.html.SendYourFileView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -36,35 +40,63 @@ class SendYourFileController @Inject() (
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
   submissionConnector: SubmissionConnector,
+  fileDetailsConnector: FileDetailsConnector,
+  sessionRepository: SessionRepository,
   xmlHandler: XmlHandler,
   val controllerComponents: MessagesControllerComponents,
-  view: SendYourFileView,
-  errorView: ThereIsAProblemView
+  view: SendYourFileView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
-    with I18nSupport {
+    with I18nSupport
+    with Logging {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData) {
+  def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
       val displayWarning = request.userAnswers
         .get(ValidXMLPage)
         .fold(false)(
           validatedFileData => validatedFileData.messageSpecData.messageTypeIndic.equals(MDR402)
         )
-      Ok(view(displayWarning))
+      Future.successful(Ok(view(displayWarning)))
   }
 
-  //TODO - below method to change when spinny wheel added
   def onSubmit: Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
       (request.userAnswers.get(ValidXMLPage), request.userAnswers.get(URLPage)) match {
         case (Some(ValidatedFileData(filename, _)), Some(fileUrl)) =>
           val xml = xmlHandler.load(fileUrl)
-          for {
-            response <- submissionConnector.submitDocument(filename, request.subscriptionId, xml)
-          } yield Redirect(routes.FileReceivedController.onPageLoad(response.json.as[ConversationId]))
+          submissionConnector.submitDocument(filename, request.subscriptionId, xml) flatMap {
+            case Some(conversationId) =>
+              for {
+                userAnswers <- Future.fromTry(request.userAnswers.set(ConversationIdPage, conversationId))
+                _           <- sessionRepository.set(userAnswers)
+              } yield Ok
+            case _ => Future.successful(InternalServerError)
+          }
         case _ =>
-          Future.successful(InternalServerError(errorView()))
+          Future.successful(InternalServerError)
+      }
+  }
+
+  def getStatus: Action[AnyContent] = (identify andThen getData() andThen requireData).async {
+    implicit request =>
+      request.userAnswers.get(ConversationIdPage) match {
+        case Some(conversationId) =>
+          logger.info(s"The conversation id is $conversationId") //TODO delete this line after testing in staging DAC6-1494
+          fileDetailsConnector.getStatus(conversationId) flatMap {
+            case Some(FileStatusAccepted) =>
+              Future.successful(Ok(Json.toJson(URL(routes.FileReceivedController.onPageLoad(conversationId).url))))
+            case Some(Rejected(_)) =>
+              Future.successful(Ok(Json.toJson(URL(routes.FileRejectedController.onPageLoad(conversationId).url))))
+            case Some(Pending) =>
+              Future.successful(NoContent)
+            case None =>
+              logger.info("getStatus: no status returned")
+              Future.successful(InternalServerError)
+          }
+        case None =>
+          logger.info("UserAnswers.ConversationId is empty")
+          Future.successful(InternalServerError)
       }
   }
 }

@@ -57,8 +57,7 @@ class FileDetailsConnector @Inject() (httpClient: HttpClient, config: FrontendAp
     val url = s"${config.mdrUrl}/mandatory-disclosure-rules/files/${conversationId.value}/status"
     httpClient.GET(url).map {
       case responseMessage if is2xx(responseMessage.status) =>
-        responseMessage.json
-          .asOpt[FileStatus]
+        responseMessage.json.asOpt[FileStatus]
       case _ =>
         logger.warn("FileDetailsConnector: Failed to getStatus")
         None
