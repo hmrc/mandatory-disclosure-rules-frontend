@@ -18,8 +18,8 @@ package models.upscan
 
 import play.api.libs.json.{Json, OFormat}
 
-case class RedirectAsJson(url: String)
+case class URL(url: String)
 
-object RedirectAsJson {
-  implicit val format: OFormat[RedirectAsJson] = Json.format[RedirectAsJson]
+object URL {
+  implicit val format: OFormat[URL] = Json.format[URL]
 }

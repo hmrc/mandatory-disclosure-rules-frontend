@@ -20,7 +20,7 @@ import connectors.{FileDetailsConnector, SubmissionConnector}
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import handlers.XmlHandler
 import models.fileDetails.{Pending, Rejected, Accepted => FileStatusAccepted}
-import models.upscan.RedirectAsJson
+import models.upscan.URL
 import models.{MDR402, ValidatedFileData}
 import pages.{ConversationIdPage, URLPage, ValidXMLPage}
 import play.api.Logging
@@ -85,9 +85,9 @@ class SendYourFileController @Inject() (
           logger.info(s"The conversation id is $conversationId") //TODO delete this line after testing in staging DAC6-1494
           fileDetailsConnector.getStatus(conversationId) flatMap {
             case Some(FileStatusAccepted) =>
-              Future.successful(Ok(Json.toJson(RedirectAsJson(routes.FileReceivedController.onPageLoad(conversationId).url))))
+              Future.successful(Ok(Json.toJson(URL(routes.FileReceivedController.onPageLoad(conversationId).url))))
             case Some(Rejected(_)) =>
-              Future.successful(Ok(Json.toJson(RedirectAsJson(routes.FileRejectedController.onPageLoad(conversationId).url))))
+              Future.successful(Ok(Json.toJson(URL(routes.FileRejectedController.onPageLoad(conversationId).url))))
             case Some(Pending) =>
               Future.successful(NoContent)
             case None =>
