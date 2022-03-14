@@ -20,8 +20,8 @@ import com.google.inject.Inject
 import connectors.SubmissionConnector
 import controllers.actions.IdentifierAction
 import play.api.Logging
+import play.api.libs.json.Json
 import play.api.mvc.{Action, MessagesControllerComponents}
-
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 import scala.concurrent.ExecutionContext
@@ -41,7 +41,7 @@ class TestSubmissionController @Inject() (
       connector
         .submitDocument(fileName, request.subscriptionId, request.body)
         .map {
-          case Some(conversationId) => Ok //(conversationId)
+          case Some(conversationId) => Ok(Json.toJson(conversationId))
           case _                    => InternalServerError
         }
   }
