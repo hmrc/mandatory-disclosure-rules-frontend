@@ -103,7 +103,7 @@ class ChangeIndividualContactDetailsControllerSpec extends SpecBase with BeforeA
     }
 
     "onSubmit" - {
-      "redirect to confirmation page on updating ContactDetails" in { // TODO replace with actual confirmation page
+      "redirect to confirmation page on updating ContactDetails" in {
         when(mockSubscriptionService.updateContactDetails(any[UserAnswers]())(any[HeaderCarrier]()))
           .thenReturn(Future.successful(true))
 
