@@ -14,6 +14,14 @@
  * limitations under the License.
  */
 
-package models
+package pages
 
-case class ContactEmails(firstContact: String, secondContact: Option[String])
+import models.fileDetails.FileDetails
+import play.api.libs.json.JsPath
+
+case object FileDetailsPage extends QuestionPage[FileDetails] {
+
+  override def path: JsPath = JsPath \ toString
+
+  override def toString: String = "fileDetails"
+}

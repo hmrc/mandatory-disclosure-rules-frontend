@@ -25,6 +25,7 @@ import views.html.{ChecksWillTakeLongerView, ThereIsAProblemView}
 
 import javax.inject.Inject
 
+//TODO - remove this controller & related code once new journey built
 class ChecksWillTakeLongerController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
@@ -42,7 +43,7 @@ class ChecksWillTakeLongerController @Inject() (
         InternalServerError(errorView())
       } {
         emails =>
-          Ok(view(emails.firstContactEmail, emails.secondContactEmail))
+          Ok(view(emails.firstContact, emails.secondContact))
       }
   }
 }

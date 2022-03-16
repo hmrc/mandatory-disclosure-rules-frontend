@@ -17,8 +17,7 @@
 package controllers
 
 import controllers.actions._
-import models.ConversationId
-import pages.ValidXMLPage
+import pages.FileDetailsPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -38,12 +37,12 @@ class FilePassedChecksController @Inject() (
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(conversationId: ConversationId): Action[AnyContent] = (identify andThen getData() andThen requireData) {
+  def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData) {
     implicit request =>
-      val action = routes.FileReceivedController.onPageLoad(conversationId).url
-      request.userAnswers.get(ValidXMLPage) match {
+      request.userAnswers.get(FileDetailsPage) match {
         case Some(details) =>
-          val summary = FileStatusViewModel.createFileSummary(details.fileName, "Accepted")
+          val action  = routes.FileReceivedController.onPageLoad().url
+          val summary = FileStatusViewModel.createFileSummary(details.name, details.status)
           Ok(view(summary, action))
         case _ => InternalServerError(errorView())
       }
