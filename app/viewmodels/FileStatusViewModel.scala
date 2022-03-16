@@ -22,14 +22,15 @@ import models.fileDetails.FileDetails.localDateTimeOrdering
 import models.fileDetails._
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, HtmlContent, Text}
+import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{Key, SummaryListRow, Value}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.{HeadCell, Table, TableRow}
 import utils.DateTimeFormatUtil
 
 object FileStatusViewModel {
 
-  private def htmlStatus(fileStatus: FileStatus)(implicit messages: Messages): Content = {
-    val cssClass = Messages(s"cssColour.${fileStatus.toString}")
-    val status   = Messages(s"status.${fileStatus.toString}")
+  private def htmlStatus(fileStatus: String)(implicit messages: Messages): Content = {
+    val cssClass = Messages(s"cssColour.$fileStatus")
+    val status   = Messages(s"status.$fileStatus")
 
     HtmlContent(s"<strong class='govuk-tag govuk-tag--$cssClass'>$status</strong>")
   }
@@ -51,7 +52,7 @@ object FileStatusViewModel {
         Seq(
           TableRow(Text(fileDetails.name)),
           TableRow(Text(DateTimeFormatUtil.dateFormatted(fileDetails.submitted))),
-          TableRow(htmlStatus(fileDetails.status)),
+          TableRow(htmlStatus(fileDetails.status.toString)),
           buildTableRow(fileDetails.status, fileDetails.conversationId)
         )
     }
@@ -67,5 +68,17 @@ object FileStatusViewModel {
 
     Table(rows = tableRow, head = header, caption = Some(Messages("fileStatus.fileStatus")), captionClasses = "govuk-table__caption govuk-table__caption--m")
   }
+
+  def createFileSummary(fileName: String, fileStatus: String)(implicit messages: Messages): Seq[SummaryListRow] =
+    Seq(
+      SummaryListRow(
+        key = Key(Text(Messages("fileSummary.fileName"))),
+        value = Value(fileName)
+      ),
+      SummaryListRow(
+        key = Key(Text(Messages("fileSummary.result"))),
+        value = Value(htmlStatus(fileStatus))
+      )
+    )
 
 }

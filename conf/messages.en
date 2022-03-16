@@ -305,8 +305,8 @@ fileStatus.accepted = View confirmation
 cssColour.Rejected = red
 cssColour.Accepted = green
 cssColour.Pending = blue
-status.Rejected = Rejected
-status.Accepted = Received
+status.Rejected = Failed
+status.Accepted = Passed
 status.Pending = Pending
 
 checkYourFileDetails.title = Check your file details
@@ -324,3 +324,11 @@ sendYourFile.p1 = We will automatically check if your file meets our requirement
 sendYourFile.p2 = By sending this file, you are confirming that the information is correct and complete to the best of your knowledge.
 sendYourFile.warning = This will permanently change your reported information.
 sendYourFile.status.heading = We are checking your file against the business rules
+
+filePassedChecks.title = Your file has passed our checks
+filePassedChecks.heading = Your file has passed our checks
+
+fileSummary.fileName = File name
+fileSummary.result = Result of automatic checks
+fileSummary.viewConfirmation = View confirmation
+
