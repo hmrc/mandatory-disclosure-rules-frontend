@@ -49,7 +49,6 @@ class FileRejectedController @Inject() (
         case Some(details) =>
           details.status match {
             case Rejected(fileError) =>
-              //TODO - change when we have confirmation on how the business rule errors will be returned to us
               val toGenericError = Seq(GenericError(1, Message("detail")))
               Ok(view(details.name, errorViewHelper.generateTable(toGenericError)))
             case _ => InternalServerError(errorView())

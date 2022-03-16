@@ -34,7 +34,7 @@ class ContactDetailsNavigator @Inject() () {
   val checkRouteMap: (Page, AffinityType) => UserAnswers => Call = {
     case (ContactPhonePage, Individual)   => _ => routes.ChangeIndividualContactDetailsController.onPageLoad()
     case (ContactPhonePage, Organisation) => _ => routes.ChangeOrganisationContactDetailsController.onPageLoad()
-    case (HaveTelephonePage, affinity)    => ua => haveTelephoneRoutes(CheckMode, affinity)(ua) //ToDo do we need to clean telephone on No
+    case (HaveTelephonePage, affinity)    => ua => haveTelephoneRoutes(CheckMode, affinity)(ua)
     case (ContactNamePage, affinity)      => _ => routes.ContactEmailController.onPageLoad(affinity)
     case (ContactEmailPage, affinity)     => _ => routes.HaveTelephoneController.onPageLoad(affinity)
     case (HaveSecondContactPage, Organisation) =>
