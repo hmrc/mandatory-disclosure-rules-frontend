@@ -22,7 +22,7 @@
 
 @(fileSummary: Seq[SummaryListRow], action: String)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("filePassedChecks.title"))) {
+@layout(pageTitle = titleNoForm(messages("filePassedChecks.title")), showBackLink = false) {
 
     <h1 class="govuk-heading-l">@messages("filePassedChecks.heading")</h1>
 
