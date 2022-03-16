@@ -336,8 +336,7 @@ fileSummary.refresh = Refresh for updates
 
 filePendingChecks.title = We need a few more minutes to check your file
 filePendingChecks.heading = We need a few more minutes to check your file
-filePendingChecks.p1 = If you have been refreshing for more than 10 minutes, you can sign out. We will email you to tell you if your file has passed the checks or not.
+filePendingChecks.p1 = If you have been refreshing for more than 10 minutes, {0}. We will email you to tell you if your file has passed the checks or not.
 filePendingChecks.link = you can sign out
-filePendingChecks.p1a = . We will email you to tell you if your file has passed the checks or not.
 
 
