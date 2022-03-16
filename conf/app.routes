@@ -75,7 +75,7 @@ POST        /report/change-contact/organisation/second-contact-phone          co
 
 GET         /report/change-contact/details-updated                            controllers.DetailsUpdatedController.onPageLoad()
 
-GET         /report/file-received/:conversationId                             controllers.FileReceivedController.onPageLoad(conversationId: ConversationId)
+GET         /report/file-received/                                            controllers.FileReceivedController.onPageLoad()
 
 GET         /report/checks-will-take-longer                                   controllers.ChecksWillTakeLongerController.onPageLoad()
 
@@ -87,4 +87,6 @@ GET        /report/send-your-file                                             co
 POST       /report/send-your-file                                             controllers.SendYourFileController.onSubmit()
 GET        /report/check-status                                               controllers.SendYourFileController.getStatus()
 
-GET        /report/file-passed-checks/:conversationId                         controllers.FilePassedChecksController.onPageLoad(conversationId: ConversationId)
+GET        /report/file-passed-checks                                         controllers.FilePassedChecksController.onPageLoad()
+
+GET        /report/still-checking-your-file                                   controllers.FilePendingChecksController.onPageLoad()

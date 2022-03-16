@@ -17,12 +17,16 @@
 package controllers
 
 import base.SpecBase
-import models.{ConversationId, MDR401, MessageSpecData, UserAnswers, ValidatedFileData}
-import pages.ValidXMLPage
+import models.ConversationId
+import models.fileDetails.{Accepted, FileDetails}
+import pages.FileDetailsPage
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import viewmodels.{CheckYourFileDetailsViewModel, FileStatusViewModel}
+import viewmodels.FileStatusViewModel
 import views.html.FilePassedChecksView
+
+import java.time.LocalDateTime
 
 class FilePassedChecksControllerSpec extends SpecBase {
 
@@ -30,20 +34,29 @@ class FilePassedChecksControllerSpec extends SpecBase {
 
     "must return OK and the correct view for a GET" in {
 
-      val vfd: ValidatedFileData = ValidatedFileData("test.xml", MessageSpecData("GDC99999999", MDR401))
-      val ua: UserAnswers        = emptyUserAnswers.set(ValidXMLPage, vfd).success.value
-      val conversationId         = ConversationId("123")
-      val application            = applicationBuilder(userAnswers = Some(ua)).build()
-      val action                 = routes.FileReceivedController.onPageLoad(conversationId).url
+      val fileDetails = FileDetails(
+        "name",
+        "messageRefId",
+        LocalDateTime.parse("2022-01-01T10:30:00.000"),
+        LocalDateTime.parse("2022-01-01T10:30:00.000"),
+        Accepted,
+        ConversationId("conversationId")
+      )
+
+      val userAnswers = emptyUserAnswers
+        .set(FileDetailsPage, fileDetails)
+        .success
+        .value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       running(application) {
 
-        val fileSummaryList = FileStatusViewModel.createFileSummary(vfd.fileName, "Accepted")(messages(application))
-        val request         = FakeRequest(GET, routes.FilePassedChecksController.onPageLoad(conversationId).url)
-
-        val result = route(application, request).value
-
-        val view = application.injector.instanceOf[FilePassedChecksView]
+        val fileSummaryList = FileStatusViewModel.createFileSummary(fileDetails.name, fileDetails.status)(messages(application))
+        val action          = routes.FileReceivedController.onPageLoad().url
+        val request         = FakeRequest(GET, routes.FilePassedChecksController.onPageLoad().url)
+        val result          = route(application, request).value
+        val view            = application.injector.instanceOf[FilePassedChecksView]
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(fileSummaryList, action)(request, messages(application)).toString

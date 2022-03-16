@@ -85,7 +85,7 @@ class SendYourFileController @Inject() (
           logger.info(s"The conversation id is $conversationId") //TODO delete this line after testing in staging DAC6-1494
           fileDetailsConnector.getStatus(conversationId) flatMap {
             case Some(FileStatusAccepted) =>
-              Future.successful(Ok(Json.toJson(URL(routes.FileReceivedController.onPageLoad(conversationId).url))))
+              Future.successful(Ok(Json.toJson(URL(routes.FileReceivedController.onPageLoad().url))))
             case Some(Rejected(_)) =>
               Future.successful(Ok(Json.toJson(URL(routes.FileRejectedController.onPageLoad(conversationId).url))))
             case Some(Pending) =>
