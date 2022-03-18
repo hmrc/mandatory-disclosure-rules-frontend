@@ -19,26 +19,44 @@ package viewmodels
 import controllers.routes
 import models.ConversationId
 import models.fileDetails.FileDetails.localDateTimeOrdering
+import models.fileDetails.FileErrorCode.fileErrorCodesForProblemStatus
+import models.fileDetails.RecordErrorCode.DocRefIDFormat
 import models.fileDetails._
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, HtmlContent, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.{HeadCell, Table, TableRow}
 import utils.DateTimeFormatUtil
 
+import java.time.LocalDateTime
+
 object FileStatusViewModel {
 
   private def htmlStatus(fileStatus: FileStatus)(implicit messages: Messages): Content = {
-    val cssClass = Messages(s"cssColour.${fileStatus.toString}")
-    val status   = Messages(s"status.${fileStatus.toString}")
+    val (cssClass, status): (String, String) = fileStatus match {
+      case Rejected(errors) if isProblemStatus(errors) => (Messages(s"cssColour.Problem"), Messages(s"status.Problem"))
+      case _                                           => (Messages(s"cssColour.${fileStatus.toString}"), Messages(s"status.${fileStatus.toString}"))
+    }
 
     HtmlContent(s"<strong class='govuk-tag govuk-tag--$cssClass'>$status</strong>")
   }
 
+  private val problemsStatusErrorCodes: Seq[String] = fileErrorCodesForProblemStatus.map(_.code).:+(DocRefIDFormat.code)
+
+  private[viewmodels] def isProblemStatus(errors: ValidationErrors): Boolean = {
+    val codes: Seq[String] = Seq(errors.fileError.map(_.map(_.code.code)).getOrElse(Nil), errors.recordError.map(_.map(_.code.code)).getOrElse(Nil)).flatten
+
+    codes.exists(problemsStatusErrorCodes.contains(_))
+
+  }
+
   private def buildTableRow(fileStatus: FileStatus, conversationId: ConversationId)(implicit messages: Messages): TableRow = {
     val action = fileStatus match {
-      case Pending     => ""
-      case Accepted    => s"<a href='${routes.FileReceivedController.onPageLoad(conversationId).url}'>${Messages("fileStatus.accepted")}</a>"
-      case Rejected(_) => s"<a href='${routes.FileRejectedController.onPageLoad(conversationId).url}'>${Messages("fileStatus.rejected")}</a>"
+      case Pending => ""
+      case Accepted =>
+        s"<a href='${routes.FileReceivedController.onPageLoad(conversationId).url}'>${Messages("fileStatus.accepted")}</a>"
+      case Rejected(errors) if isProblemStatus(errors) => s"<a href='#'>${Messages("fileStatus.problem")}</a>"
+      case Rejected(_) =>
+        s"<a href='${routes.FileRejectedController.onPageLoad(conversationId).url}'>${Messages("fileStatus.rejected")}</a>"
     }
 
     TableRow(HtmlContent(action), classes = "app-custom-class govuk-!-width-one-half")
@@ -46,7 +64,7 @@ object FileStatusViewModel {
 
   def createStatusTable(allFileDetails: Seq[FileDetails])(implicit messages: Messages): Table = {
 
-    val tableRow: Seq[Seq[TableRow]] = allFileDetails.sortBy(_.submitted) map {
+    val tableRow: Seq[Seq[TableRow]] = allFileDetails.sortBy(_.submitted)(Ordering[LocalDateTime].reverse) map {
       fileDetails =>
         Seq(
           TableRow(Text(fileDetails.name)),
