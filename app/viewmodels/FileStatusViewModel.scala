@@ -77,13 +77,13 @@ object FileStatusViewModel {
     val header = Some(
       Seq(
         HeadCell(Text(Messages("fileStatus.file")), classes = "app-custom-class govuk-!-width-one-half"),
-        HeadCell(Text(Messages("fileStatus.sent")), classes = "app-custom-class govuk-!-width-one-half"),
-        HeadCell(Text(Messages("fileStatus.fileStatus")), classes = "app-custom-class"),
+        HeadCell(Text(Messages("fileStatus.uploaded")), classes = "app-custom-class govuk-!-width-one-half"),
+        HeadCell(Text(Messages("fileStatus.result")), classes = "app-custom-class"),
         HeadCell(Text(Messages("fileStatus.nextSteps")), classes = "app-custom-class")
       )
     )
 
-    Table(rows = tableRow, head = header, caption = Some(Messages("fileStatus.fileStatus")), captionClasses = "govuk-table__caption govuk-table__caption--m")
+    Table(rows = tableRow, head = header, caption = Some(Messages("fileStatus.heading")), captionClasses = "govuk-table__caption govuk-table__caption--m")
   }
 
 }

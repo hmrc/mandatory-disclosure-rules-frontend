@@ -33,8 +33,8 @@ class FileStatusViewModelSpec extends SpecBase {
     val header: Option[List[HeadCell]] = Some(
       List(
         HeadCell(Text("File"), None, "app-custom-class govuk-!-width-one-half", None, None, Map()),
-        HeadCell(Text("Sent"), None, "app-custom-class govuk-!-width-one-half", None, None, Map()),
-        HeadCell(Text("File status"), None, "app-custom-class", None, None, Map()),
+        HeadCell(Text("Uploaded"), None, "app-custom-class govuk-!-width-one-half", None, None, Map()),
+        HeadCell(Text("Result"), None, "app-custom-class", None, None, Map()),
         HeadCell(Text("Next steps"), None, "app-custom-class", None, None, Map())
       )
     )
@@ -76,7 +76,7 @@ class FileStatusViewModelSpec extends SpecBase {
           )
         ),
         header,
-        Some("File status"),
+        Some("Result of automatic checks"),
         "govuk-table__caption govuk-table__caption--m",
         firstCellIsHeader = false,
         "",
@@ -120,7 +120,7 @@ class FileStatusViewModelSpec extends SpecBase {
           )
         ),
         header,
-        Some("File status"),
+        Some("Result of automatic checks"),
         "govuk-table__caption govuk-table__caption--m",
         firstCellIsHeader = false,
         "",
