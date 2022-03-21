@@ -108,11 +108,12 @@ invalidXMLFile.p3.link = read the MDR technical guidance for XML files (opens in
 
 uploadFile.title = Upload an XML file
 uploadFile.heading = Upload an XML file
+uploadFile.p1 = We will run two sets of automatic checks to make sure your file meets the MDR XML requirements.
 uploadFile.error.file.invalid = The selected file must be an XML
 uploadFile.error.file.empty = Select a file to upload
 
 fileCheck.title = We are checking your file
-fileCheck.heading = We are checking your file, please wait
+fileCheck.heading = We are checking your file
 
 fileValidation.title = fileValidation
 fileValidation.heading = fileValidation

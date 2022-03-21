@@ -37,6 +37,8 @@
   </label>
  </h1>
 
+  <p class="govuk-body">@messages("uploadFile.p1")</p>
+
   @for((key, value) <- upscanInitiateResponse.formFields){
    <input type="hidden" name="@key" value="@value" />
   }
