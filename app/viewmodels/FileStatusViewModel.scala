@@ -46,7 +46,6 @@ object FileStatusViewModel {
     val codes: Seq[String] = Seq(errors.fileError.map(_.map(_.code.code)).getOrElse(Nil), errors.recordError.map(_.map(_.code.code)).getOrElse(Nil)).flatten
 
     codes.exists(problemsStatusErrorCodes.contains(_))
-
   }
 
   private def buildTableRow(fileStatus: FileStatus, conversationId: ConversationId)(implicit messages: Messages): TableRow = {
