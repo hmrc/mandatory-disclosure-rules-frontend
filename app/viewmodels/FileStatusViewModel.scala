@@ -82,7 +82,6 @@ object FileStatusViewModel {
         HeadCell(Text(Messages("fileStatus.nextSteps")), classes = "app-custom-class")
       )
     )
-
     Table(rows = tableRow, head = header, caption = Some(Messages("fileStatus.heading")), captionClasses = "govuk-table__caption govuk-visually-hidden")
   }
 
