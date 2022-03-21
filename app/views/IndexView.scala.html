@@ -36,11 +36,11 @@
 
     <ul class="govuk-list govuk-list--bullet">
 
-        <li>@Html(messages("index.bullet1", link("#", "index.bullet1.link", openInNewWindow = true)))</li>@*Todo: update link href*@
+        @if(showRecentFiles){<li>@link(routes.FileStatusController.onPageLoad().url, "index.bullet1")</li>}
 
-        <li><a class="govuk-link" href=@changeDetailsUrl>@messages("index.bullet2")</a></li>
+        <li>@link("#", "index.bullet2", openInNewWindow = true)</li>@*Todo: update link href*@
 
-        @if(showRecentFiles){<li><a class="govuk-link" href=@routes.FileStatusController.onPageLoad()>@messages("index.bullet3")</a></li>}
+        <li>@link(changeDetailsUrl, "index.bullet3")</li>
 
     </ul>
 
