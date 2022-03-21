@@ -17,7 +17,9 @@
 package controllers
 
 import base.SpecBase
-import models.UserAnswers
+import connectors.FileDetailsConnector
+import models.{ConversationId, UserAnswers}
+import models.fileDetails.{Accepted, FileDetails}
 import org.mockito.ArgumentMatchers.any
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -27,52 +29,107 @@ import services.SubscriptionService
 import uk.gov.hmrc.http.HeaderCarrier
 import views.html.IndexView
 
-import scala.concurrent.Future
+import java.time.LocalDateTime
+import scala.concurrent.{ExecutionContext, Future}
 
 class IndexControllerSpec extends SpecBase {
 
   "Index Controller" - {
 
-    "must return OK and the correct view for a GET" in {
+    "must return OK and the correct view for a GET" - {
 
-      val mockSubscriptionService = mock[SubscriptionService]
-      val mockSessionRepository   = mock[SessionRepository]
+      "when there are recent file upload details" in {
+        val mockSubscriptionService = mock[SubscriptionService]
+        val mockFileConnector       = mock[FileDetailsConnector]
+        val mockSessionRepository   = mock[SessionRepository]
 
-      val application = applicationBuilder(userAnswers = None)
-        .overrides(
-          bind[SubscriptionService].toInstance(mockSubscriptionService),
-          bind[SessionRepository].toInstance(mockSessionRepository)
-        )
-        .build()
+        val application = applicationBuilder(userAnswers = None)
+          .overrides(
+            bind[SubscriptionService].toInstance(mockSubscriptionService),
+            bind[FileDetailsConnector].toInstance(mockFileConnector),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
 
-      val userAnswers = UserAnswers("id")
-      when(mockSubscriptionService.getContactDetails(any[UserAnswers]())(any[HeaderCarrier]()))
-        .thenReturn(Future.successful(Some(userAnswers)))
-      when(mockSessionRepository.set(any[UserAnswers]())).thenReturn(Future.successful(true))
+        val userAnswers = UserAnswers("id")
+        when(mockSubscriptionService.getContactDetails(any[UserAnswers]())(any[HeaderCarrier]()))
+          .thenReturn(Future.successful(Some(userAnswers)))
+        when(mockSessionRepository.set(any[UserAnswers]())).thenReturn(Future.successful(true))
+        when(mockFileConnector.getAllFileDetails(any[HeaderCarrier], any[ExecutionContext]))
+          .thenReturn(
+            Future.successful(
+              Some(Seq(FileDetails("FileName", "messageRefId", LocalDateTime.now(), LocalDateTime.now(), Accepted, ConversationId("conversationId"))))
+            )
+          )
 
-      running(application) {
-        val request = FakeRequest(GET, routes.IndexController.onPageLoad().url)
+        running(application) {
+          val request = FakeRequest(GET, routes.IndexController.onPageLoad().url)
 
-        val result = route(application, request).value
+          val result = route(application, request).value
 
-        val view = application.injector.instanceOf[IndexView]
+          val view = application.injector.instanceOf[IndexView]
 
-        status(result) mustEqual OK
+          status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view("subscriptionId", controllers.routes.ChangeOrganisationContactDetailsController.onPageLoad().url)(
-          request,
-          messages(application)
-        ).toString
+          contentAsString(result) mustEqual view("subscriptionId",
+                                                 controllers.routes.ChangeOrganisationContactDetailsController.onPageLoad().url,
+                                                 showRecentFiles = true
+          )(
+            request,
+            messages(application)
+          ).toString
+        }
+      }
+
+      "when there are no recent file upload details" in {
+        val mockSubscriptionService = mock[SubscriptionService]
+        val mockFileConnector       = mock[FileDetailsConnector]
+        val mockSessionRepository   = mock[SessionRepository]
+
+        val application = applicationBuilder(userAnswers = None)
+          .overrides(
+            bind[SubscriptionService].toInstance(mockSubscriptionService),
+            bind[FileDetailsConnector].toInstance(mockFileConnector),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+        val userAnswers = UserAnswers("id")
+        when(mockSubscriptionService.getContactDetails(any[UserAnswers]())(any[HeaderCarrier]()))
+          .thenReturn(Future.successful(Some(userAnswers)))
+        when(mockSessionRepository.set(any[UserAnswers]())).thenReturn(Future.successful(true))
+        when(mockFileConnector.getAllFileDetails(any[HeaderCarrier], any[ExecutionContext]))
+          .thenReturn(Future.successful(None))
+
+        running(application) {
+          val request = FakeRequest(GET, routes.IndexController.onPageLoad().url)
+
+          val result = route(application, request).value
+
+          val view = application.injector.instanceOf[IndexView]
+
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual view("subscriptionId",
+                                                 controllers.routes.ChangeOrganisationContactDetailsController.onPageLoad().url,
+                                                 showRecentFiles = false
+          )(
+            request,
+            messages(application)
+          ).toString
+        }
       }
     }
     "must redirect to error page when an error occurs" in {
 
       val mockSubscriptionService = mock[SubscriptionService]
       val mockSessionRepository   = mock[SessionRepository]
+      val mockFileConnector       = mock[FileDetailsConnector]
 
       val application = applicationBuilder(userAnswers = None)
         .overrides(
           bind[SubscriptionService].toInstance(mockSubscriptionService),
+          bind[FileDetailsConnector].toInstance(mockFileConnector),
           bind[SessionRepository].toInstance(mockSessionRepository)
         )
         .build()
@@ -80,6 +137,8 @@ class IndexControllerSpec extends SpecBase {
       when(mockSubscriptionService.getContactDetails(any[UserAnswers]())(any[HeaderCarrier]()))
         .thenReturn(Future.successful(None))
       when(mockSessionRepository.set(any[UserAnswers]())).thenReturn(Future.successful(true))
+      when(mockFileConnector.getAllFileDetails(any[HeaderCarrier], any[ExecutionContext]))
+        .thenReturn(Future.successful(None))
 
       running(application) {
         val request = FakeRequest(GET, routes.IndexController.onPageLoad().url)
