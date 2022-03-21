@@ -19,7 +19,7 @@
     link: components.Link
 )
 
-@(mdrID: String, changeDetailsUrl: String)(implicit request: Request[_], messages: Messages)
+@(mdrID: String, changeDetailsUrl: String, showRecentFiles: Boolean)(implicit request: Request[_], messages: Messages)
 
 @layout(
     pageTitle    = titleNoForm(messages("index.title")),
@@ -36,11 +36,13 @@
 
     <ul class="govuk-list govuk-list--bullet">
 
-        <li>@Html(messages("index.p4", link("#", "index.p4.link", openInNewWindow = true)))</li>@*Todo: update link href*@
+        @if(showRecentFiles){<li>@link(routes.FileStatusController.onPageLoad().url, "index.bullet1")</li>}
 
-        <li><a class="govuk-link" href=@changeDetailsUrl>@messages("index.p4.link1")</a></li>
+        <li>@link("#", "index.bullet2", openInNewWindow = true)</li>@*Todo: update link href*@
+
+        <li>@link(changeDetailsUrl, "index.bullet3")</li>
 
     </ul>
 
-    <p class="govuk-body">@Html(messages("index.p5", link("mailto:enquiries.aeoi@hmrc.gov.uk", "index.p5.link")))</p>
+    <p class="govuk-body">@Html(messages("index.p4", link("mailto:enquiries.aeoi@hmrc.gov.uk", "index.p4.link")))</p>
 }
