@@ -51,7 +51,7 @@ object FileStatusViewModel {
 
   private def buildTableRow(fileStatus: FileStatus, conversationId: ConversationId)(implicit messages: Messages): TableRow = {
     val action = fileStatus match {
-      case Pending => ""
+      case Pending => "<p class='govuk-visually-hidden'>None</p>"
       case Accepted =>
         s"<a href='${routes.FileReceivedController.onPageLoad(conversationId).url}'>${Messages("fileStatus.accepted")}</a>"
       case Rejected(errors) if isProblemStatus(errors) => s"<a href='#'>${Messages("fileStatus.problem")}</a>"
@@ -83,7 +83,7 @@ object FileStatusViewModel {
       )
     )
 
-    Table(rows = tableRow, head = header, caption = Some(Messages("fileStatus.heading")), captionClasses = "govuk-table__caption govuk-table__caption--m")
+    Table(rows = tableRow, head = header, caption = Some(Messages("fileStatus.heading")), captionClasses = "govuk-table__caption govuk-visually-hidden")
   }
 
 }
