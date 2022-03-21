@@ -72,12 +72,12 @@ class FileStatusViewModelSpec extends SpecBase {
             TableRow(Text("name1.xml"), None, "", None, None, Map()),
             TableRow(Text("18 Mar 2022 8:10am"), None, "", None, None, Map()),
             TableRow(HtmlContent("<strong class='govuk-tag govuk-tag--blue'>Pending</strong>"), None, "", None, None, Map()),
-            TableRow(HtmlContent(""), None, "app-custom-class govuk-!-width-one-half", None, None, Map())
+            TableRow(HtmlContent("<p class='govuk-visually-hidden'>None</p>"), None, "app-custom-class govuk-!-width-one-half", None, None, Map())
           )
         ),
         header,
         Some("Result of automatic checks"),
-        "govuk-table__caption govuk-table__caption--m",
+        "govuk-table__caption govuk-visually-hidden",
         firstCellIsHeader = false,
         "",
         Map()
@@ -103,7 +103,7 @@ class FileStatusViewModelSpec extends SpecBase {
             TableRow(Text("name1.xml"), None, "", None, None, Map()),
             TableRow(Text("19 Mar 2022 11:16am"), None, "", None, None, Map()),
             TableRow(HtmlContent("<strong class='govuk-tag govuk-tag--blue'>Pending</strong>"), None, "", None, None, Map()),
-            TableRow(HtmlContent(""), None, "app-custom-class govuk-!-width-one-half", None, None, Map())
+            TableRow(HtmlContent("<p class='govuk-visually-hidden'>None</p>"), None, "app-custom-class govuk-!-width-one-half", None, None, Map())
           ),
           List(
             TableRow(Text("name2.xml"), None, "", None, None, Map()),
@@ -121,7 +121,7 @@ class FileStatusViewModelSpec extends SpecBase {
         ),
         header,
         Some("Result of automatic checks"),
-        "govuk-table__caption govuk-table__caption--m",
+        "govuk-table__caption govuk-visually-hidden",
         firstCellIsHeader = false,
         "",
         Map()
