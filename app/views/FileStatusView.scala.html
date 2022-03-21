@@ -28,10 +28,7 @@
 
     <h1 class="govuk-heading-l">@messages("fileStatus.heading")</h1>
 
-    <p class="govuk-body"><a href=@routes.FileStatusController.onPageLoad().url>@messages("fileStatus.p1")</a> @messages("fileStatus.p1.update") </p></p>
-
-    <p class="govuk-body">@messages("fileStatus.p2")</p>
-    <p class="govuk-body">@messages("fileStatus.p3")</p>
+    <p class="govuk-body">@messages("fileStatus.p1")</p>
 
     @govukTable(table)
 
