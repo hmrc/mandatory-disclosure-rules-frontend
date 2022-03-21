@@ -16,6 +16,7 @@
 
 package controllers
 
+import connectors.FileDetailsConnector
 import controllers.actions.{DataRetrievalAction, IdentifierAction}
 import models.UserAnswers
 import play.api.Logging
@@ -25,6 +26,7 @@ import repositories.SessionRepository
 import services.SubscriptionService
 import uk.gov.hmrc.auth.core.AffinityGroup.{Individual, Organisation}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import viewmodels.FileStatusViewModel
 import views.html.IndexView
 
 import javax.inject.Inject
@@ -37,6 +39,7 @@ class IndexController @Inject() (
   getData: DataRetrievalAction,
   sessionRepository: SessionRepository,
   subscriptionService: SubscriptionService,
+  fileConnector: FileDetailsConnector,
   view: IndexView
 ) extends FrontendBaseController
     with I18nSupport
@@ -51,9 +54,12 @@ class IndexController @Inject() (
 
       subscriptionService.getContactDetails(UserAnswers(request.userId)) flatMap {
         case Some(userAnswers) =>
-          sessionRepository.set(userAnswers) map {
+          sessionRepository.set(userAnswers) flatMap {
             _ =>
-              Ok(view(request.subscriptionId, changeDetailsUrl))
+              fileConnector.getAllFileDetails map {
+                fileDetails =>
+                  Ok(view(request.subscriptionId, changeDetailsUrl, fileDetails.isDefined))
+              }
           }
         case _ =>
           Future.successful(Redirect(routes.ThereIsAProblemController.onPageLoad()))
