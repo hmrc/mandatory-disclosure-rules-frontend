@@ -138,7 +138,6 @@ class FileStatusViewModelSpec extends SpecBase {
         )
 
       FileStatusViewModel.createStatusTable(fileDetails)(messages(app)) mustBe expectedTable
-
     }
   }
 }
