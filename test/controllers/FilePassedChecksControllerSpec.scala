@@ -17,16 +17,13 @@
 package controllers
 
 import base.SpecBase
-import models.ConversationId
-import models.fileDetails.{Accepted, FileDetails}
-import pages.FileDetailsPage
+import models.{ConversationId, MDR401, MessageSpecData, ValidatedFileData}
+import pages.{ConversationIdPage, ValidXMLPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import viewmodels.FileStatusViewModel
 import views.html.FilePassedChecksView
-
-import java.time.LocalDateTime
 
 class FilePassedChecksControllerSpec extends SpecBase {
 
@@ -34,17 +31,14 @@ class FilePassedChecksControllerSpec extends SpecBase {
 
     "must return OK and the correct view for a GET" in {
 
-      val fileDetails = FileDetails(
-        "name",
-        "messageRefId",
-        LocalDateTime.parse("2022-01-01T10:30:00.000"),
-        LocalDateTime.parse("2022-01-01T10:30:00.000"),
-        Accepted,
-        ConversationId("conversationId")
-      )
+      val conversationId  = ConversationId("conversationId")
+      val validXmlDetails = ValidatedFileData("name", MessageSpecData("messageRefId", MDR401))
 
       val userAnswers = emptyUserAnswers
-        .set(FileDetailsPage, fileDetails)
+        .set(ValidXMLPage, validXmlDetails)
+        .success
+        .value
+        .set(ConversationIdPage, conversationId)
         .success
         .value
 
@@ -52,8 +46,8 @@ class FilePassedChecksControllerSpec extends SpecBase {
 
       running(application) {
 
-        val fileSummaryList = FileStatusViewModel.createFileSummary(fileDetails.name, fileDetails.status)(messages(application))
-        val action          = routes.FileReceivedController.onPageLoad().url
+        val fileSummaryList = FileStatusViewModel.createFileSummary(validXmlDetails.fileName, "Accepted")(messages(application))
+        val action          = routes.FileReceivedController.onPageLoad(conversationId).url
         val request         = FakeRequest(GET, routes.FilePassedChecksController.onPageLoad().url)
         val result          = route(application, request).value
         val view            = application.injector.instanceOf[FilePassedChecksView]
