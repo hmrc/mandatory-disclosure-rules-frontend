@@ -16,52 +16,35 @@
 
 package controllers
 
-import connectors.FileDetailsConnector
 import controllers.actions._
-import models.fileDetails.{Pending, Rejected, Accepted => FileStatusAccepted}
 import pages.{ConversationIdPage, ValidXMLPage}
-import play.api.i18n.Lang.logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.FileStatusViewModel
-import views.html.{FilePendingChecksView, ThereIsAProblemView}
+import views.html.{FileFailedChecksView, ThereIsAProblemView}
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 
-class FilePendingChecksController @Inject() (
+class FileFailedChecksController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
-  fileConnector: FileDetailsConnector,
   val controllerComponents: MessagesControllerComponents,
-  view: FilePendingChecksView,
+  view: FileFailedChecksView,
   errorView: ThereIsAProblemView
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
+  def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData) {
     implicit request =>
       (request.userAnswers.get(ValidXMLPage), request.userAnswers.get(ConversationIdPage)) match {
         case (Some(xmlDetails), Some(conversationId)) =>
-          fileConnector.getStatus(conversationId) flatMap {
-            case Some(FileStatusAccepted) =>
-              Future.successful(Redirect(routes.FilePassedChecksController.onPageLoad()))
-            case Some(Rejected(_)) =>
-              Future.successful(Redirect(routes.FileFailedChecksController.onPageLoad()))
-            case Some(Pending) =>
-              val summary = FileStatusViewModel.createFileSummary(xmlDetails.fileName, "Pending")
-              Future.successful(Ok(view(summary, routes.FilePendingChecksController.onPageLoad().url)))
-            case _ =>
-              logger.error("Unable to get Status")
-              Future.successful(InternalServerError(errorView()))
-          }
-        case _ =>
-          logger.error("Unable to retrieve fileName & conversationId")
-          Future.successful(InternalServerError(errorView()))
+          val action  = routes.FileRejectedController.onPageLoad(conversationId).url
+          val summary = FileStatusViewModel.createFileSummary(xmlDetails.fileName, "Rejected")
+          Ok(view(summary, action))
+        case _ => InternalServerError(errorView())
       }
   }
 }
