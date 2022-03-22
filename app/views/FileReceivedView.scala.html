@@ -21,6 +21,7 @@
         govukInsetText: GovukInsetText,
         link: components.Link,
         govukPanel: GovukPanel,
+        govukSummaryList: GovukSummaryList,
         govukButton: GovukButton,
         appConfig: FrontendAppConfig
 )
@@ -28,26 +29,39 @@
 @(messageRefId: String, timeSubmitted: String, dateSubmitted: String, firstContactEmail: String, secondContactEmail:Option[String])(implicit request: Request[_], messages: Messages)
 
 @secondContactMessage = {
-    @if(secondContactEmail.isDefined){@messages("fileReceived.p2.5", secondContactEmail.get)}
+    @if(secondContactEmail.isDefined){@messages("fileReceived.p1.5", secondContactEmail.get)}
 }
 
 @layout(pageTitle = titleNoForm(messages("fileReceived.title")), showBackLink = false) {
 
     @govukPanel(Panel(
-        title = Text(messages("fileReceived.altText")),
-        content = HtmlContent(s"""${messages("fileReceived.heading")} <strong>${messages("fileReceived.heading.2", timeSubmitted, dateSubmitted)}</strong>""")
+        title = Text(messages("fileReceived.heading"))
     ))
 
-    <p class="govuk-body">@messages("fileReceived.p1")</p>
-    @govukInsetText(InsetText(
-    content = messageRefId,
-    classes = "text-overflow"
-    ))
+    @govukSummaryList(
+        SummaryList(
+            Seq(
+                SummaryListRow(
+                    key = Key(messages("fileReceived.messageRefId.key")),
+                    value = Value(messageRefId)
+                ),
+                SummaryListRow(
+                    key = Key(messages("fileReceived.ChecksCompleted.key")),
+                    value = Value(messages("fileReceived.ChecksCompleted.time", dateSubmitted, timeSubmitted))
+                )
+            )
+        )
+    )
+
+    <p class="govuk-body">@messages("fileReceived.p1", firstContactEmail, secondContactMessage)</p>
+
     <h2 class="govuk-heading-m">@messages("fileReceived.subheading")</h2>
-    <p class="govuk-body">@messages("fileReceived.p2", firstContactEmail, secondContactMessage)</p>
-    <p class="govuk-body">@messages("fileReceived.p3")</p>
-    <div class="govuk-!-padding-top-5">
-        <p class="govuk-body">@link(routes.IndexController.onPageLoad.url, "fileReceived.back")</p>
-        <p class="govuk-body">@link(appConfig.feedbackUrl, "fileReceived.thoughts", openInNewWindow = true)</p>
-    </div>
+
+    <p class="govuk-body">@messages("fileReceived.p2")</p>
+
+    <ul class="govuk-list">
+        <li>@link("javascript:window.print()", "fileReceived.print")</li>
+        <li>@link(routes.IndexController.onPageLoad.url, "fileReceived.back")</li>
+        <li>@link(appConfig.feedbackUrl, "fileReceived.thoughts", openInNewWindow = true)</li>
+    </ul>
 }
