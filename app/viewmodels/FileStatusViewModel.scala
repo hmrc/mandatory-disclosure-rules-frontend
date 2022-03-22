@@ -24,6 +24,7 @@ import models.fileDetails.RecordErrorCode.DocRefIDFormat
 import models.fileDetails._
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, HtmlContent, Text}
+import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{Key, SummaryListRow, Value}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.{HeadCell, Table, TableRow}
 import utils.DateTimeFormatUtil
 
@@ -34,9 +35,8 @@ object FileStatusViewModel {
   private def htmlStatus(fileStatus: FileStatus)(implicit messages: Messages): Content = {
     val (cssClass, status): (String, String) = fileStatus match {
       case Rejected(errors) if isProblemStatus(errors) => (Messages(s"cssColour.Problem"), Messages(s"status.Problem"))
-      case _                                           => (Messages(s"cssColour.${fileStatus.toString}"), Messages(s"status.${fileStatus.toString}"))
+      case _ => (Messages(s"cssColour.${fileStatus.toString}"), Messages(s"status.${fileStatus.toString}"))
     }
-
     HtmlContent(s"<strong class='govuk-tag govuk-tag--$cssClass'>$status</strong>")
   }
 
@@ -82,6 +82,22 @@ object FileStatusViewModel {
       )
     )
     Table(rows = tableRow, head = header, caption = Some(Messages("fileStatus.heading")), captionClasses = "govuk-table__caption govuk-visually-hidden")
+  }
+
+
+  def createFileSummary(fileName: String, fileStatus: String)(implicit messages: Messages): Seq[SummaryListRow] = {
+
+    val displayTags = HtmlContent(s"<strong class='govuk-taggovuk-tag--${Messages(s"cssColour.$fileStatus")}'>${Messages(s"status.$fileStatus")}</strong>")
+    Seq(
+      SummaryListRow(
+        key = Key(Text(Messages("fileSummary.fileName"))),
+        value = Value(fileName)
+      ),
+      SummaryListRow(
+        key = Key(Text(Messages("fileSummary.result"))),
+        value = Value(displayTags)
+      )
+    )
   }
 
 }

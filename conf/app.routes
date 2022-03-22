@@ -87,3 +87,4 @@ GET        /report/send-your-file                                             co
 POST       /report/send-your-file                                             controllers.SendYourFileController.onSubmit()
 GET        /report/check-status                                               controllers.SendYourFileController.getStatus()
 
+GET        /report/file-passed-checks/:conversationId                         controllers.FilePassedChecksController.onPageLoad(conversationId: ConversationId)
