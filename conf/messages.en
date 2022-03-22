@@ -281,16 +281,6 @@ fileReceived.back = Back to report cross-border arrangements
 fileReceived.altText = File received
 fileReceived.thoughts = What did you think of this service? (opens in new tab)
 
-
-checksWillTakeLonger.title = We need more time to check the file you sent us
-checksWillTakeLonger.heading = We need more time to check the file you sent us
-checksWillTakeLonger.p1 = We are carrying out more automatic checks on your file. This should take a few minutes and you can check for updates on the next page.
-checksWillTakeLonger.p2 = We will email you at {0}{1} to confirm if we have received your file or if you need to upload a new version.
-checksWillTakeLonger.secondContact = and {0}
-checksWillTakeLonger.warning.altText = Warning
-checksWillTakeLonger.warning = You may be fined if your report fails the checks and you do not send another version.
-checksWillTakeLonger.button = View your file status
-
 fileStatus.title = Result of automatic checks
 fileStatus.heading = Result of automatic checks
 fileStatus.p1 = This information will be available for 28 days from the date you uploaded the file.
