@@ -28,7 +28,7 @@ import utils.DateTimeFormatUtil
 
 object FileStatusViewModel {
 
-  private def htmlStatus(fileStatus: FileStatus)(implicit messages: Messages): Content = {
+  private def htmlStatus(fileStatus: String)(implicit messages: Messages): Content = {
     val cssClass = Messages(s"cssColour.$fileStatus")
     val status   = Messages(s"status.$fileStatus")
 
@@ -38,7 +38,7 @@ object FileStatusViewModel {
   private def buildTableRow(fileStatus: FileStatus, conversationId: ConversationId)(implicit messages: Messages): TableRow = {
     val action = fileStatus match {
       case Pending     => ""
-      case Accepted    => s"<a href='${routes.FileReceivedController.onPageLoad().url}'>${Messages("fileStatus.accepted")}</a>"
+      case Accepted    => s"<a href='${routes.FileReceivedController.onPageLoad(conversationId).url}'>${Messages("fileStatus.accepted")}</a>"
       case Rejected(_) => s"<a href='${routes.FileRejectedController.onPageLoad(conversationId).url}'>${Messages("fileStatus.rejected")}</a>"
     }
 
@@ -52,7 +52,7 @@ object FileStatusViewModel {
         Seq(
           TableRow(Text(fileDetails.name)),
           TableRow(Text(DateTimeFormatUtil.dateFormatted(fileDetails.submitted))),
-          TableRow(htmlStatus(fileDetails.status)),
+          TableRow(htmlStatus(fileDetails.status.toString)),
           buildTableRow(fileDetails.status, fileDetails.conversationId)
         )
     }
@@ -69,7 +69,7 @@ object FileStatusViewModel {
     Table(rows = tableRow, head = header, caption = Some(Messages("fileStatus.fileStatus")), captionClasses = "govuk-table__caption govuk-table__caption--m")
   }
 
-  def createFileSummary(fileName: String, fileStatus: FileStatus)(implicit messages: Messages): Seq[SummaryListRow] =
+  def createFileSummary(fileName: String, fileStatus: String)(implicit messages: Messages): Seq[SummaryListRow] =
     Seq(
       SummaryListRow(
         key = Key(Text(Messages("fileSummary.fileName"))),

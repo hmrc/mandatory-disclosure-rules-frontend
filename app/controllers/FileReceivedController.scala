@@ -16,14 +16,14 @@
 
 package controllers
 
+import connectors.FileDetailsConnector
 import controllers.actions._
-import models.ContactEmails
-import pages.FileDetailsPage
+import models.ConversationId
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.ContactEmailHelper
+import utils.ContactEmailHelper.getContactEmails
 import utils.DateTimeFormatUtil._
 import views.html.{FileReceivedView, ThereIsAProblemView}
 
@@ -36,6 +36,7 @@ class FileReceivedController @Inject() (
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
+  fileDetailsConnector: FileDetailsConnector,
   view: FileReceivedView,
   errorView: ThereIsAProblemView
 )(implicit ec: ExecutionContext)
@@ -43,16 +44,19 @@ class FileReceivedController @Inject() (
     with I18nSupport
     with Logging {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData) {
+  def onPageLoad(conversationId: ConversationId): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
-      (request.userAnswers.get(FileDetailsPage), ContactEmailHelper.getContactEmails()) match {
-        case (Some(fileDetails), Some(ContactEmails(firstContact, secondContact))) =>
-          val time = fileDetails.submitted.format(timeFormatter).toLowerCase
-          val date = fileDetails.submitted.format(dateFormatter)
+      fileDetailsConnector.getFileDetails(conversationId) map {
+        fileDetails =>
+          (for {
+            emails  <- getContactEmails
+            details <- fileDetails
+          } yield {
+            val time = details.submitted.format(timeFormatter).toLowerCase
+            val date = details.submitted.format(dateFormatter)
 
-          Ok(view(fileDetails.messageRefId, time, date, firstContact, secondContact))
-
-        case _ => InternalServerError(errorView())
+            Ok(view(details.messageRefId, time, date, emails.firstContact, emails.secondContact))
+          }).getOrElse(InternalServerError(errorView()))
       }
   }
 }

@@ -21,7 +21,7 @@ import connectors.FileDetailsConnector
 import models.ConversationId
 import models.fileDetails.{Accepted, FileDetails}
 import org.mockito.ArgumentMatchers.any
-import pages.{ContactEmailPage, FileDetailsPage, SecondContactEmailPage}
+import pages.{ContactEmailPage, SecondContactEmailPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -38,23 +38,14 @@ class FileReceivedControllerSpec extends SpecBase {
 
     "must return OK and the correct view for a GET" in {
 
+      val messageRefId       = "messageRefId"
+      val conversationId     = ConversationId("conversationId")
       val time               = "10:30am"
       val date               = "1 January 2022"
       val firstContactEmail  = "first@email.com"
       val secondContactEmail = "second@email.com"
-      val fileDetails = FileDetails(
-        "name",
-        "messageRefId",
-        LocalDateTime.parse("2022-01-01T10:30:00.000"),
-        LocalDateTime.parse("2022-01-01T10:30:00.000"),
-        Accepted,
-        ConversationId("conversationId")
-      )
 
       val userAnswers = emptyUserAnswers
-        .set(FileDetailsPage, fileDetails)
-        .success
-        .value
         .set(ContactEmailPage, firstContactEmail)
         .success
         .value
@@ -62,24 +53,38 @@ class FileReceivedControllerSpec extends SpecBase {
         .success
         .value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(
+          bind[FileDetailsConnector].toInstance(mockFileDetailsConnector)
+        )
+        .build()
+
+      when(mockFileDetailsConnector.getFileDetails(any())(any(), any()))
+        .thenReturn(
+          Future.successful(
+            Some(
+              FileDetails(
+                "name",
+                messageRefId,
+                LocalDateTime.parse("2022-01-01T10:30:00.000"),
+                LocalDateTime.parse("2022-01-01T10:30:00.000"),
+                Accepted,
+                conversationId
+              )
+            )
+          )
+        )
 
       running(application) {
+        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoad(conversationId).url)
 
-        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoad().url)
-        val result  = route(application, request).value
-        val view    = application.injector.instanceOf[FileReceivedView]
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[FileReceivedView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(
-          fileDetails.messageRefId,
-          time,
-          date,
-          firstContactEmail,
-          Some(secondContactEmail)
-        )(request, messages(application)).toString
+        contentAsString(result) mustEqual view(messageRefId, time, date, firstContactEmail, Some(secondContactEmail))(request, messages(application)).toString
       }
-
     }
   }
 }

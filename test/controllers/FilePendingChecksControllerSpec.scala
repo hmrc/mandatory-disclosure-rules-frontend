@@ -19,9 +19,9 @@ package controllers
 import base.SpecBase
 import connectors.FileDetailsConnector
 import models.fileDetails.{FileDetails, Pending}
-import models.{ConversationId, UserAnswers}
+import models.{ConversationId, MDR401, MessageSpecData, UserAnswers, ValidatedFileData}
 import org.mockito.ArgumentMatchers.any
-import pages.{ConversationIdPage, FileDetailsPage}
+import pages.{ConversationIdPage, ValidXMLPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -39,24 +39,18 @@ class FilePendingChecksControllerSpec extends SpecBase {
 
     "must return OK and the correct view for a GET when fileStatus is Pending" in {
 
-      val fileDetails = FileDetails(
-        "name",
-        "messageRefId",
-        LocalDateTime.parse("2022-01-01T10:30:00.000"),
-        LocalDateTime.parse("2022-01-01T10:30:00.000"),
-        Pending,
-        ConversationId("conversationId")
-      )
+      val conversationId  = ConversationId("conversationId")
+      val validXmlDetails = ValidatedFileData("name", MessageSpecData("messageRefId", MDR401))
 
       val userAnswers: UserAnswers = emptyUserAnswers
-        .set(ConversationIdPage, ConversationId("conversationId"))
+        .set(ConversationIdPage, conversationId)
         .success
         .value
-        .set(FileDetailsPage, fileDetails)
+        .set(ValidXMLPage, validXmlDetails)
         .success
         .value
 
-      when(mockFileDetailsConnector.getFileDetails(any())(any(), any())).thenReturn(Future.successful(Some(fileDetails)))
+      when(mockFileDetailsConnector.getStatus(any())(any(), any())).thenReturn(Future.successful(Some(Pending)))
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
@@ -64,7 +58,7 @@ class FilePendingChecksControllerSpec extends SpecBase {
         )
         .build()
 
-      val fileSummaryList = FileStatusViewModel.createFileSummary("name", Pending)(messages(application))
+      val fileSummaryList = FileStatusViewModel.createFileSummary(validXmlDetails.fileName, "Pending")(messages(application))
       val action          = routes.FilePendingChecksController.onPageLoad().url
 
       running(application) {
