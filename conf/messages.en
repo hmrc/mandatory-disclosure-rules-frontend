@@ -327,7 +327,7 @@ sendYourFile.warning = This will permanently change your reported information.
 sendYourFile.status.heading = We are checking your file
 
 filePassedChecks.title = Your file has passed our checks
-filePassedChecks.heading = Your file has passed Four checks
+filePassedChecks.heading = Your file has passed our checks
 
 fileSummary.fileName = File name
 fileSummary.result = Result of automatic checks

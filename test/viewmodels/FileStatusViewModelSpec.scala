@@ -45,7 +45,7 @@ class FileStatusViewModelSpec extends SpecBase {
           List(
             TableRow(Text("name3.xml"), None, "", None, None, Map()),
             TableRow(Text("18 Mar 2022 11:10am"), None, "", None, None, Map()),
-            TableRow(HtmlContent("<strong class='govuk-tag govuk-tag--red'>Rejected</strong>"), None, "", None, None, Map()),
+            TableRow(HtmlContent("<strong class='govuk-tag govuk-tag--red'>Failed</strong>"), None, "", None, None, Map()),
             TableRow(
               HtmlContent("<a href='/report-under-mandatory-disclosure-rules/report/problem/business-rule-errors/id'>View errors</a>"),
               None,
@@ -58,7 +58,7 @@ class FileStatusViewModelSpec extends SpecBase {
           List(
             TableRow(Text("name2.xml"), None, "", None, None, Map()),
             TableRow(Text("18 Mar 2022 10:15am"), None, "", None, None, Map()),
-            TableRow(HtmlContent("<strong class='govuk-tag govuk-tag--green'>Received</strong>"), None, "", None, None, Map()),
+            TableRow(HtmlContent("<strong class='govuk-tag govuk-tag--green'>Passed</strong>"), None, "", None, None, Map()),
             TableRow(
               HtmlContent("<a href='/report-under-mandatory-disclosure-rules/report/file-received/id'>View confirmation</a>"),
               None,
@@ -96,7 +96,7 @@ class FileStatusViewModelSpec extends SpecBase {
 
     }
 
-    "must return the viewModel with all the file statusus to display on the page for the valid input" in {
+    "must return the viewModel with all the file status to display on the page for the valid input" in {
       val expectedTable = Table(
         List(
           List(
