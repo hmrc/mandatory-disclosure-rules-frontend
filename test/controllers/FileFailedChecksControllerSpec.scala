@@ -21,7 +21,7 @@ import models.{ConversationId, MDR401, MessageSpecData, ValidatedFileData}
 import pages.{ConversationIdPage, ValidXMLPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import viewmodels.FileStatusViewModel
+import viewmodels.FileCheckViewModel
 import views.html.FileFailedChecksView
 
 class FileFailedChecksControllerSpec extends SpecBase {
@@ -45,7 +45,7 @@ class FileFailedChecksControllerSpec extends SpecBase {
 
       running(application) {
 
-        val fileSummaryList = FileStatusViewModel.createFileSummary(validXmlDetails.fileName, "Rejected")(messages(application))
+        val fileSummaryList = FileCheckViewModel.createFileSummary(validXmlDetails.fileName, "Rejected")(messages(application))
         val action          = routes.FileRejectedController.onPageLoad(conversationId).url
         val request         = FakeRequest(GET, routes.FileFailedChecksController.onPageLoad().url)
         val result          = route(application, request).value

@@ -22,7 +22,7 @@ import pages.{ConversationIdPage, ValidXMLPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import viewmodels.FileStatusViewModel
+import viewmodels.FileCheckViewModel
 import views.html.FilePassedChecksView
 
 class FilePassedChecksControllerSpec extends SpecBase {
@@ -46,7 +46,7 @@ class FilePassedChecksControllerSpec extends SpecBase {
 
       running(application) {
 
-        val fileSummaryList = FileStatusViewModel.createFileSummary(validXmlDetails.fileName, "Accepted")(messages(application))
+        val fileSummaryList = FileCheckViewModel.createFileSummary(validXmlDetails.fileName, "Accepted")(messages(application))
         val action          = routes.FileReceivedController.onPageLoad(conversationId).url
         val request         = FakeRequest(GET, routes.FilePassedChecksController.onPageLoad().url)
         val result          = route(application, request).value

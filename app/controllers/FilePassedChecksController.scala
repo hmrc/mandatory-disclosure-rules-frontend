@@ -21,7 +21,7 @@ import pages.{ConversationIdPage, ValidXMLPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewmodels.FileStatusViewModel
+import viewmodels.FileCheckViewModel
 import views.html.{FilePassedChecksView, ThereIsAProblemView}
 
 import javax.inject.Inject
@@ -42,7 +42,7 @@ class FilePassedChecksController @Inject() (
       (request.userAnswers.get(ValidXMLPage), request.userAnswers.get(ConversationIdPage)) match {
         case (Some(xmlDetails), Some(conversationId)) =>
           val action  = routes.FileReceivedController.onPageLoad(conversationId).url
-          val summary = FileStatusViewModel.createFileSummary(xmlDetails.fileName, "Accepted")
+          val summary = FileCheckViewModel.createFileSummary(xmlDetails.fileName, "Accepted")
           Ok(view(summary, action))
 
         case _ => InternalServerError(errorView())

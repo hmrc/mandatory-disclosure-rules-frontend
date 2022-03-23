@@ -24,7 +24,7 @@ import play.api.i18n.Lang.logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewmodels.FileStatusViewModel
+import viewmodels.FileCheckViewModel
 import views.html.{FilePendingChecksView, ThereIsAProblemView}
 
 import javax.inject.Inject
@@ -53,14 +53,14 @@ class FilePendingChecksController @Inject() (
             case Some(Rejected(_)) =>
               Future.successful(Redirect(routes.FileFailedChecksController.onPageLoad()))
             case Some(Pending) =>
-              val summary = FileStatusViewModel.createFileSummary(xmlDetails.fileName, "Pending")
+              val summary = FileCheckViewModel.createFileSummary(xmlDetails.fileName, Pending.toString)
               Future.successful(Ok(view(summary, routes.FilePendingChecksController.onPageLoad().url)))
             case _ =>
-              logger.error("Unable to get Status")
+              logger.warn("Unable to get Status")
               Future.successful(InternalServerError(errorView()))
           }
         case _ =>
-          logger.error("Unable to retrieve fileName & conversationId")
+          logger.warn("Unable to retrieve fileName & conversationId")
           Future.successful(InternalServerError(errorView()))
       }
   }

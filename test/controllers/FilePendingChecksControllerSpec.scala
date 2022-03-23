@@ -18,17 +18,16 @@ package controllers
 
 import base.SpecBase
 import connectors.FileDetailsConnector
-import models.fileDetails.{FileDetails, Pending}
+import models.fileDetails.Pending
 import models.{ConversationId, MDR401, MessageSpecData, UserAnswers, ValidatedFileData}
 import org.mockito.ArgumentMatchers.any
 import pages.{ConversationIdPage, ValidXMLPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import viewmodels.FileStatusViewModel
+import viewmodels.FileCheckViewModel
 import views.html.FilePendingChecksView
 
-import java.time.LocalDateTime
 import scala.concurrent.Future
 
 class FilePendingChecksControllerSpec extends SpecBase {
@@ -58,7 +57,7 @@ class FilePendingChecksControllerSpec extends SpecBase {
         )
         .build()
 
-      val fileSummaryList = FileStatusViewModel.createFileSummary(validXmlDetails.fileName, "Pending")(messages(application))
+      val fileSummaryList = FileCheckViewModel.createFileSummary(validXmlDetails.fileName, "Pending")(messages(application))
       val action          = routes.FilePendingChecksController.onPageLoad().url
 
       running(application) {
