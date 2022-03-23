@@ -60,7 +60,7 @@ class FileStatusViewModelSpec extends SpecBase {
             TableRow(Text("18 Mar 2022 10:15am"), None, "", None, None, Map()),
             TableRow(HtmlContent("<strong class='govuk-tag govuk-tag--green'>Received</strong>"), None, "", None, None, Map()),
             TableRow(
-              HtmlContent("<a href='/report-under-mandatory-disclosure-rules/report/file-received/id'>View confirmation</a>"),
+              HtmlContent("<a href='/report-under-mandatory-disclosure-rules/report/file-confirmation/id'>View confirmation</a>"),
               None,
               "app-custom-class govuk-!-width-one-half",
               None,
