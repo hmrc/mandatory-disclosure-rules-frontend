@@ -269,16 +269,17 @@ xml.not.valid.percentage = {0} must be a whole number between 0 and 100
 xml.optional.field.empty = If provided, {0} must have a value
 xml.addressFix.error = AddressFix must be placed before AddressFree
 
-fileReceived.heading = at
-fileReceived.heading.2 = {0} on {1}
-fileReceived.title = File received
-fileReceived.p1 = We received your file with the following MessageRefId:
-fileReceived.p2 = We have sent a confirmation email to {0}{1}
-fileReceived.p2.5 = and {0}
-fileReceived.p3 = If we have any questions about your report, we will contact you.
+fileReceived.title = Your file passed our automatic checks
+fileReceived.heading = Your file passed our automatic checks
+fileReceived.messageRefId.key = File MessageRefId
+fileReceived.ChecksCompleted.key = Checks completed
+fileReceived.ChecksCompleted.time = {0} at {1}
+fileReceived.p1 = We have sent a confirmation email to {0}{1} to show the file has passed our automatic checks.
+fileReceived.p1.5 = and {0}
 fileReceived.subheading = What happens next
+fileReceived.p2 = If we have any questions about your report, we will contact you.
+fileReceived.print = Print or save this page
 fileReceived.back = Back to report cross-border arrangements
-fileReceived.altText = File received
 fileReceived.thoughts = What did you think of this service? (opens in new tab)
 
 
