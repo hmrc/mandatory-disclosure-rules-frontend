@@ -36,7 +36,6 @@ object FileStatusViewModel {
       case Rejected(errors) if isProblemStatus(errors) => (Messages(s"cssColour.Problem"), Messages(s"status.Problem"))
       case _                                           => (Messages(s"cssColour.${fileStatus.toString}"), Messages(s"status.${fileStatus.toString}"))
     }
-
     HtmlContent(s"<strong class='govuk-tag govuk-tag--$cssClass'>$status</strong>")
   }
 
@@ -83,5 +82,4 @@ object FileStatusViewModel {
     )
     Table(rows = tableRow, head = header, caption = Some(Messages("fileStatus.heading")), captionClasses = "govuk-table__caption govuk-visually-hidden")
   }
-
 }

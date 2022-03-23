@@ -87,3 +87,8 @@ GET        /report/send-your-file                                             co
 POST       /report/send-your-file                                             controllers.SendYourFileController.onSubmit()
 GET        /report/check-status                                               controllers.SendYourFileController.getStatus()
 
+GET        /report/file-passed-checks                                         controllers.FilePassedChecksController.onPageLoad()
+
+GET        /report/still-checking-your-file                                   controllers.FilePendingChecksController.onPageLoad()
+
+GET        /report/file-failed-checks                                         controllers.FileFailedChecksController.onPageLoad()

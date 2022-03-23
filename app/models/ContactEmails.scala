@@ -16,4 +16,4 @@
 
 package models
 
-case class ContactEmails(firstContactEmail: String, secondContactEmail: Option[String])
+case class ContactEmails(firstContact: String, secondContact: Option[String])

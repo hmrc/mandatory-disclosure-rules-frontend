@@ -16,47 +16,36 @@
 
 package controllers
 
-import connectors.FileDetailsConnector
 import controllers.actions._
-import models.ConversationId
-import play.api.Logging
+import pages.{ConversationIdPage, ValidXMLPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.ContactEmailHelper.getContactEmails
-import utils.DateTimeFormatUtil._
-import views.html.{FileReceivedView, ThereIsAProblemView}
+import viewmodels.FileCheckViewModel
+import views.html.{FilePassedChecksView, ThereIsAProblemView}
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext
 
-class FileReceivedController @Inject() (
+class FilePassedChecksController @Inject() (
   override val messagesApi: MessagesApi,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
-  fileDetailsConnector: FileDetailsConnector,
-  view: FileReceivedView,
+  view: FilePassedChecksView,
   errorView: ThereIsAProblemView
-)(implicit ec: ExecutionContext)
-    extends FrontendBaseController
-    with I18nSupport
-    with Logging {
+) extends FrontendBaseController
+    with I18nSupport {
 
-  def onPageLoad(conversationId: ConversationId): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
+  def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData) {
     implicit request =>
-      fileDetailsConnector.getFileDetails(conversationId) map {
-        fileDetails =>
-          (for {
-            emails  <- getContactEmails
-            details <- fileDetails
-          } yield {
-            val time = details.submitted.format(timeFormatter).toLowerCase
-            val date = details.submitted.format(dateFormatter)
+      (request.userAnswers.get(ValidXMLPage), request.userAnswers.get(ConversationIdPage)) match {
+        case (Some(xmlDetails), Some(conversationId)) =>
+          val action  = routes.FileReceivedController.onPageLoad(conversationId).url
+          val summary = FileCheckViewModel.createFileSummary(xmlDetails.fileName, "Accepted")
+          Ok(view(summary, action))
 
-            Ok(view(details.messageRefId, time, date, emails.firstContact, emails.secondContact))
-          }).getOrElse(InternalServerError(errorView()))
+        case _ => InternalServerError(errorView())
       }
   }
 }
