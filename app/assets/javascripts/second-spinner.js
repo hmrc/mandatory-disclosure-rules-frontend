@@ -61,7 +61,7 @@ function refreshToCheckStatusPage(){
             } else {
                 window.location =  $("#slowJourneyUrl").val()
             }
-        }, 3000);
+        }, $("#spinner-time-interval").val());
     }
 
 }
