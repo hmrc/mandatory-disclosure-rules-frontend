@@ -51,10 +51,10 @@ object FileStatusViewModel {
     val action = fileStatus match {
       case Pending => "<p class='govuk-visually-hidden'>None</p>"
       case Accepted =>
-        s"<a href='${routes.FileReceivedController.onPageLoad(conversationId).url}'>${Messages("fileStatus.accepted")}</a>"
-      case Rejected(errors) if isProblemStatus(errors) => s"<a href='#'>${Messages("fileStatus.problem")}</a>"
+        s"<a href='${routes.FileReceivedController.onPageLoad(conversationId).url}' class='govuk-link'>${Messages("fileStatus.accepted")}</a>"
+      case Rejected(errors) if isProblemStatus(errors) => s"<a href='#' class='govuk-link'>${Messages("fileStatus.problem")}</a>"
       case Rejected(_) =>
-        s"<a href='${routes.FileRejectedController.onPageLoad(conversationId).url}'>${Messages("fileStatus.rejected")}</a>"
+        s"<a href='${routes.FileRejectedController.onPageLoad(conversationId).url}' class='govuk-link'>${Messages("fileStatus.rejected")}</a>"
     }
 
     TableRow(HtmlContent(action), classes = "app-custom-class govuk-!-width-one-half")
@@ -65,7 +65,7 @@ object FileStatusViewModel {
     val tableRow: Seq[Seq[TableRow]] = allFileDetails.sortBy(_.submitted)(Ordering[LocalDateTime].reverse) map {
       fileDetails =>
         Seq(
-          TableRow(Text(fileDetails.name)),
+          TableRow(Text(fileDetails.name), classes = "govuk-table__header"),
           TableRow(Text(DateTimeFormatUtil.dateFormatted(fileDetails.submitted))),
           TableRow(htmlStatus(fileDetails.status)),
           buildTableRow(fileDetails.status, fileDetails.conversationId)
