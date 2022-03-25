@@ -64,6 +64,6 @@ class FrontendAppConfig @Inject() (configuration: Configuration, servicesConfig:
 
   val cacheTtl: Int = configuration.get[Int]("mongodb.timeToLiveInSeconds")
 
-  val spinnerInterval: Int = configuration.get[Int]("spinner.interval")
+  val spinnerCounter: Int = configuration.get[Int]("spinner.counter")
 
 }
