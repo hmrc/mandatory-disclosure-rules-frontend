@@ -65,7 +65,7 @@ object FileStatusViewModel {
     val tableRow: Seq[Seq[TableRow]] = allFileDetails.sortBy(_.submitted)(Ordering[LocalDateTime].reverse) map {
       fileDetails =>
         Seq(
-          TableRow(Text(fileDetails.name), classes = "govuk-table__header"),
+          TableRow(Text(fileDetails.name)),
           TableRow(Text(DateTimeFormatUtil.dateFormatted(fileDetails.submitted))),
           TableRow(htmlStatus(fileDetails.status)),
           buildTableRow(fileDetails.status, fileDetails.conversationId)
@@ -80,6 +80,7 @@ object FileStatusViewModel {
         HeadCell(Text(Messages("fileStatus.nextSteps")), classes = "app-custom-class")
       )
     )
-    Table(rows = tableRow, head = header, caption = Some(Messages("fileStatus.heading")), captionClasses = "govuk-table__caption govuk-visually-hidden")
+    Table(rows = tableRow, head = header,
+      firstCellIsHeader = true, caption = Some(Messages("fileStatus.heading")), captionClasses = "govuk-table__caption govuk-visually-hidden")
   }
 }
