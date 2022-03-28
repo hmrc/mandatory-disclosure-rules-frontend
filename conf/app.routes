@@ -77,8 +77,6 @@ GET         /report/change-contact/details-updated                            co
 
 GET         /report/file-confirmation/:conversationId                         controllers.FileReceivedController.onPageLoad(conversationId: ConversationId)
 
-GET         /report/checks-will-take-longer                                   controllers.ChecksWillTakeLongerController.onPageLoad()
-
 GET         /report/result-of-automatic-checks                                controllers.FileStatusController.onPageLoad()
 
 GET        /report/check-your-file-details                                    controllers.CheckYourFileDetailsController.onPageLoad()
