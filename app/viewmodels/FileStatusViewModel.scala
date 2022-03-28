@@ -19,13 +19,11 @@ package viewmodels
 import controllers.routes
 import models.ConversationId
 import models.fileDetails.FileDetails.localDateTimeOrdering
-import models.fileDetails.FileErrorCode.fileErrorCodesForProblemStatus
-import models.fileDetails.RecordErrorCode.DocRefIDFormat
 import models.fileDetails._
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, HtmlContent, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.{HeadCell, Table, TableRow}
-import utils.DateTimeFormatUtil
+import utils.{DateTimeFormatUtil, FileProblemHelper}
 
 import java.time.LocalDateTime
 
@@ -33,18 +31,10 @@ object FileStatusViewModel {
 
   private def htmlStatus(fileStatus: FileStatus)(implicit messages: Messages): Content = {
     val (cssClass, status): (String, String) = fileStatus match {
-      case Rejected(errors) if isProblemStatus(errors) => (Messages(s"cssColour.Problem"), Messages(s"status.Problem"))
-      case _                                           => (Messages(s"cssColour.${fileStatus.toString}"), Messages(s"status.${fileStatus.toString}"))
+      case Rejected(errors) if FileProblemHelper.isProblemStatus(errors) => (Messages(s"cssColour.Problem"), Messages(s"status.Problem"))
+      case _                                                             => (Messages(s"cssColour.${fileStatus.toString}"), Messages(s"status.${fileStatus.toString}"))
     }
     HtmlContent(s"<strong class='govuk-tag govuk-tag--$cssClass'>$status</strong>")
-  }
-
-  private val problemsStatusErrorCodes: Seq[String] = fileErrorCodesForProblemStatus.map(_.code).:+(DocRefIDFormat.code)
-
-  private[viewmodels] def isProblemStatus(errors: ValidationErrors): Boolean = {
-    val codes: Seq[String] = Seq(errors.fileError.map(_.map(_.code.code)).getOrElse(Nil), errors.recordError.map(_.map(_.code.code)).getOrElse(Nil)).flatten
-
-    codes.exists(problemsStatusErrorCodes.contains(_))
   }
 
   private def buildTableRow(fileStatus: FileStatus, conversationId: ConversationId)(implicit messages: Messages): TableRow = {
@@ -52,7 +42,8 @@ object FileStatusViewModel {
       case Pending => "<p class='govuk-visually-hidden'>None</p>"
       case Accepted =>
         s"<a href='${routes.FileReceivedController.onPageLoad(conversationId).url}' class='govuk-link'>${Messages("fileStatus.accepted")}</a>"
-      case Rejected(errors) if isProblemStatus(errors) => s"<a href='#' class='govuk-link'>${Messages("fileStatus.problem")}</a>"
+      case Rejected(errors) if FileProblemHelper.isProblemStatus(errors) =>
+        s"<a href='${routes.FileProblemController.onPageLoad().url}' class='govuk-link'>${Messages("fileStatus.problem")}</a>"
       case Rejected(_) =>
         s"<a href='${routes.FileRejectedController.onPageLoad(conversationId).url}' class='govuk-link'>${Messages("fileStatus.rejected")}</a>"
     }
