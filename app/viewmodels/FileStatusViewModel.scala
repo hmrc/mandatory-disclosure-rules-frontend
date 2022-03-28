@@ -51,10 +51,10 @@ object FileStatusViewModel {
     val action = fileStatus match {
       case Pending => "<p class='govuk-visually-hidden'>None</p>"
       case Accepted =>
-        s"<a href='${routes.FileReceivedController.onPageLoad(conversationId).url}'>${Messages("fileStatus.accepted")}</a>"
-      case Rejected(errors) if isProblemStatus(errors) => s"<a href='#'>${Messages("fileStatus.problem")}</a>"
+        s"<a href='${routes.FileReceivedController.onPageLoad(conversationId).url}' class='govuk-link'>${Messages("fileStatus.accepted")}</a>"
+      case Rejected(errors) if isProblemStatus(errors) => s"<a href='#' class='govuk-link'>${Messages("fileStatus.problem")}</a>"
       case Rejected(_) =>
-        s"<a href='${routes.FileRejectedController.onPageLoad(conversationId).url}'>${Messages("fileStatus.rejected")}</a>"
+        s"<a href='${routes.FileRejectedController.onPageLoad(conversationId).url}' class='govuk-link'>${Messages("fileStatus.rejected")}</a>"
     }
 
     TableRow(HtmlContent(action), classes = "app-custom-class govuk-!-width-one-half")
@@ -80,6 +80,12 @@ object FileStatusViewModel {
         HeadCell(Text(Messages("fileStatus.nextSteps")), classes = "app-custom-class")
       )
     )
-    Table(rows = tableRow, head = header, caption = Some(Messages("fileStatus.heading")), captionClasses = "govuk-table__caption govuk-visually-hidden")
+    Table(
+      rows = tableRow,
+      head = header,
+      firstCellIsHeader = true,
+      caption = Some(Messages("fileStatus.heading")),
+      captionClasses = "govuk-table__caption govuk-visually-hidden"
+    )
   }
 }

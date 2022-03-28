@@ -47,7 +47,7 @@ class FileStatusViewModelSpec extends SpecBase {
             TableRow(Text("18 Mar 2022 11:10am"), None, "", None, None, Map()),
             TableRow(HtmlContent("<strong class='govuk-tag govuk-tag--red'>Failed</strong>"), None, "", None, None, Map()),
             TableRow(
-              HtmlContent("<a href='/report-under-mandatory-disclosure-rules/report/problem/business-rule-errors/id'>View errors</a>"),
+              HtmlContent("<a href='/report-under-mandatory-disclosure-rules/report/problem/business-rule-errors/id' class='govuk-link'>View errors</a>"),
               None,
               "app-custom-class govuk-!-width-one-half",
               None,
@@ -60,7 +60,7 @@ class FileStatusViewModelSpec extends SpecBase {
             TableRow(Text("18 Mar 2022 10:15am"), None, "", None, None, Map()),
             TableRow(HtmlContent("<strong class='govuk-tag govuk-tag--green'>Passed</strong>"), None, "", None, None, Map()),
             TableRow(
-              HtmlContent("<a href='/report-under-mandatory-disclosure-rules/report/file-confirmation/id'>View confirmation</a>"),
+              HtmlContent("<a href='/report-under-mandatory-disclosure-rules/report/file-confirmation/id' class='govuk-link'>View confirmation</a>"),
               None,
               "app-custom-class govuk-!-width-one-half",
               None,
@@ -78,7 +78,7 @@ class FileStatusViewModelSpec extends SpecBase {
         header,
         Some("Result of automatic checks"),
         "govuk-table__caption govuk-visually-hidden",
-        firstCellIsHeader = false,
+        firstCellIsHeader = true,
         "",
         Map()
       )
@@ -110,7 +110,7 @@ class FileStatusViewModelSpec extends SpecBase {
             TableRow(Text("18 Mar 2022 11:09am"), None, "", None, None, Map()),
             TableRow(HtmlContent("<strong class='govuk-tag govuk-tag--purple'>Problem</strong>"), None, "", None, None, Map()),
             TableRow(
-              HtmlContent("<a href='#'>Contact us</a>"),
+              HtmlContent("<a href='#' class='govuk-link'>Contact us</a>"),
               None,
               "app-custom-class govuk-!-width-one-half",
               None,
@@ -122,7 +122,7 @@ class FileStatusViewModelSpec extends SpecBase {
         header,
         Some("Result of automatic checks"),
         "govuk-table__caption govuk-visually-hidden",
-        firstCellIsHeader = false,
+        firstCellIsHeader = true,
         "",
         Map()
       )
