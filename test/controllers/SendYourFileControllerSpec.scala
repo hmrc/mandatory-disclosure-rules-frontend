@@ -17,6 +17,7 @@
 package controllers
 
 import base.SpecBase
+import config.FrontendAppConfig
 import connectors.{FileDetailsConnector, SubmissionConnector}
 import handlers.XmlHandler
 import models.fileDetails.{Accepted, Pending, Rejected, ValidationErrors}
@@ -49,14 +50,15 @@ class SendYourFileControllerSpec extends SpecBase {
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
         running(application) {
-          val request = FakeRequest(GET, routes.SendYourFileController.onPageLoad().url)
+          val request   = FakeRequest(GET, routes.SendYourFileController.onPageLoad().url)
+          val appConfig = application.injector.instanceOf[FrontendAppConfig]
 
           val result = route(application, request).value
 
           val view = application.injector.instanceOf[SendYourFileView]
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(displayWarning = false)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(displayWarning = false, appConfig)(request, messages(application)).toString
         }
       }
 
@@ -70,14 +72,15 @@ class SendYourFileControllerSpec extends SpecBase {
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
         running(application) {
-          val request = FakeRequest(GET, routes.SendYourFileController.onPageLoad().url)
+          val request   = FakeRequest(GET, routes.SendYourFileController.onPageLoad().url)
+          val appConfig = application.injector.instanceOf[FrontendAppConfig]
 
           val result = route(application, request).value
 
           val view = application.injector.instanceOf[SendYourFileView]
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(displayWarning = true)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(displayWarning = true, appConfig)(request, messages(application)).toString
         }
       }
     }
