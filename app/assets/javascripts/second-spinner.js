@@ -46,7 +46,7 @@ function refreshToCheckStatusPage(){
     var count = 0;
     if (refreshUrl) {
         window.refreshIntervalId = setInterval(function () {
-            if (count < 12) { //TODO Need to change it to 3/4 after all the testing
+            if (count < $("#spinner-counter").val()) {
                 $.getJSON(refreshUrl)
                 .done(function (data, textStatus, jqXhr) {
                     if (jqXhr.status === 200) {

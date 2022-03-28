@@ -44,12 +44,7 @@ class TestProcessEISResponseController @Inject() (
             connector
               .submitEISResponse(conversationId, request.body)
               .map(
-                response =>
-                  if (is2xx(response.status)) {
-                    Ok(response.body)
-                  } else {
-                    Status(response.status)
-                  }
+                response => Status(response.status)
               )
         }
   }

@@ -16,6 +16,7 @@
 
 package controllers
 
+import config.FrontendAppConfig
 import connectors.{FileDetailsConnector, SubmissionConnector}
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import handlers.XmlHandler
@@ -43,6 +44,7 @@ class SendYourFileController @Inject() (
   fileDetailsConnector: FileDetailsConnector,
   sessionRepository: SessionRepository,
   xmlHandler: XmlHandler,
+  appConfig: FrontendAppConfig,
   val controllerComponents: MessagesControllerComponents,
   view: SendYourFileView
 )(implicit ec: ExecutionContext)
@@ -57,7 +59,7 @@ class SendYourFileController @Inject() (
         .fold(false)(
           validatedFileData => validatedFileData.messageSpecData.messageTypeIndic.equals(MDR402)
         )
-      Future.successful(Ok(view(displayWarning)))
+      Future.successful(Ok(view(displayWarning, appConfig)))
   }
 
   def onSubmit: Action[AnyContent] = (identify andThen getData() andThen requireData).async {
