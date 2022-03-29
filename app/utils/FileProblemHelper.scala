@@ -18,14 +18,16 @@ package utils
 
 import models.fileDetails.FileErrorCode.fileErrorCodesForProblemStatus
 import models.fileDetails.RecordErrorCode.DocRefIDFormat
-import models.fileDetails.ValidationErrors
+import models.fileDetails.{FileErrorCode, RecordErrorCode, ValidationErrors}
 
 object FileProblemHelper {
 
-  private val problemsStatusErrorCodes: Seq[String] = fileErrorCodesForProblemStatus.map(_.code).:+(DocRefIDFormat.code)
+  private val acceptedErrorCodes: Seq[String]       = FileErrorCode.values.map(_.code) ++ RecordErrorCode.values.map(_.code)
+  private val problemsStatusErrorCodes: Seq[String] = fileErrorCodesForProblemStatus.map(_.code) :+ DocRefIDFormat.code
 
   def isProblemStatus(errors: ValidationErrors): Boolean = {
-    val codes: Seq[String] = Seq(errors.fileError.map(_.map(_.code.code)).getOrElse(Nil), errors.recordError.map(_.map(_.code.code)).getOrElse(Nil)).flatten
-    codes.exists(problemsStatusErrorCodes.contains(_))
+    val errorCodes = Seq(errors.fileError.map(_.map(_.code.code)).getOrElse(Nil), errors.recordError.map(_.map(_.code.code)).getOrElse(Nil)).flatten
+    errorCodes.exists(!acceptedErrorCodes.contains(_) || errorCodes.exists(problemsStatusErrorCodes.contains(_)))
   }
+
 }
