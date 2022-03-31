@@ -14,14 +14,16 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.govukfrontend.views.viewmodels.table.Table
+
 @this(
         layout: templates.Layout,
-        table: components.Table,
+        govukTable: GovukTable,
         link: components.Link,
         govukButton: GovukButton
 )
 
-@(fileName: String, errorRows: Seq[Seq[TableRow]])(implicit request: Request[_], messages: Messages)
+@(fileName: String, table: Table)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("fileRejected.title"))) {
 
@@ -39,12 +41,6 @@
     </ol>
 
     <div class="govuk-!-padding-top-3">
-    @table(
-        caption = Some(messages("fileRejected.tableCaption")),
-        rows = errorRows,
-        head = Some(
-            Seq(HeadCell(Text(messages("fileRejected.tableHeading1"))), HeadCell(Text(messages("fileRejected.tableHeading2"))))
-        )
-    )
+        @govukTable(table)
     </div>
 }

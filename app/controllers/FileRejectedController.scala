@@ -24,6 +24,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.ErrorViewHelper
+import viewmodels.FileRejectedViewModel
 import views.html.{FileRejectedView, ThereIsAProblemView}
 
 import javax.inject.Inject
@@ -35,7 +36,6 @@ class FileRejectedController @Inject() (
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
-  errorViewHelper: ErrorViewHelper,
   view: FileRejectedView,
   errorView: ThereIsAProblemView,
   fileDetailsConnector: FileDetailsConnector
@@ -48,9 +48,8 @@ class FileRejectedController @Inject() (
       fileDetailsConnector.getFileDetails(conversationId) map {
         case Some(details) =>
           details.status match {
-            case Rejected(fileError) =>
-              val toGenericError = Seq(GenericError(1, Message("detail")))
-              Ok(view(details.name, errorViewHelper.generateTable(toGenericError)))
+            case Rejected(validationErrors) =>
+              Ok(view(details.name, FileRejectedViewModel.createTable(validationErrors)))
             case _ => InternalServerError(errorView())
           }
         case _ => InternalServerError(errorView())
