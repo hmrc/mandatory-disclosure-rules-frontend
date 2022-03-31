@@ -18,12 +18,13 @@ package controllers
 
 import connectors.FileDetailsConnector
 import controllers.actions._
-import models.fileDetails.{Pending, Rejected, Accepted => FileStatusAccepted}
+import models.fileDetails.{Pending, Rejected, ValidationErrors, Accepted => FileStatusAccepted}
 import pages.{ConversationIdPage, ValidXMLPage}
 import play.api.i18n.Lang.logger
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.FileProblemHelper.isProblemStatus
 import viewmodels.FileCheckViewModel
 import views.html.{FilePendingChecksView, ThereIsAProblemView}
 
@@ -50,8 +51,11 @@ class FilePendingChecksController @Inject() (
           fileConnector.getStatus(conversationId) flatMap {
             case Some(FileStatusAccepted) =>
               Future.successful(Redirect(routes.FilePassedChecksController.onPageLoad()))
-            case Some(Rejected(_)) =>
-              Future.successful(Redirect(routes.FileFailedChecksController.onPageLoad()))
+            case Some(Rejected(errors)) =>
+              slowJourneyErrorRoute(
+                errors,
+                Future.successful(Redirect(routes.FileFailedChecksController.onPageLoad()))
+              )
             case Some(Pending) =>
               val summary = FileCheckViewModel.createFileSummary(xmlDetails.fileName, Pending.toString)
               Future.successful(Ok(view(summary, routes.FilePendingChecksController.onPageLoad().url)))
@@ -64,4 +68,11 @@ class FilePendingChecksController @Inject() (
           Future.successful(InternalServerError(errorView()))
       }
   }
+
+  private def slowJourneyErrorRoute(errors: ValidationErrors, result: Future[Result]): Future[Result] =
+    if (isProblemStatus(errors)) {
+      Future.successful(Redirect(routes.FileProblemController.onPageLoad()))
+    } else {
+      result
+    }
 }

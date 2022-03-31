@@ -336,3 +336,9 @@ fileFailedChecks.title = Your file has failed our checks
 fileFailedChecks.heading = Your file has failed our checks
 fileFailedChecks.warning = You may be fined if you do not send another version.
 
+
+fileProblem.title = Sorry, there is a problem with the service
+fileProblem.heading = Sorry, there is a problem with the service
+fileProblem.p1 = We have not accepted your file.
+fileProblem.p2 = You must email {0} so we can investigate the problem.
+fileProblem.link = enquiries.aeoi@hmrc.gov.uk
