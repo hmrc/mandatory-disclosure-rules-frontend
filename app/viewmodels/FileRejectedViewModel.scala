@@ -20,6 +20,11 @@ import models.fileDetails._
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, HtmlContent, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.{HeadCell, Table, TableRow}
 import play.api.i18n.Messages
+import play.twirl.api.Html
+import utils.DateTimeFormatUtil
+import viewmodels.FileStatusViewModel.{buildTableRow, htmlStatus}
+
+import java.time.LocalDateTime
 
 object FileRejectedViewModel {
 
@@ -41,6 +46,33 @@ object FileRejectedViewModel {
     )
   }
 
-  private def createTableRow(validationErrors: ValidationErrors)(implicit messages: Messages): Seq[Seq[TableRow]] = Seq.empty
+  private def createTableRow(validationErrors: ValidationErrors)(implicit messages: Messages): Seq[Seq[TableRow]] = {
+    val fileErrors: Option[Seq[(String, Content, String)]] = validationErrors.fileError.map(
+      _.map(
+        x => (Messages(s"fileRejected.${x.code.code}.key"), Text(Messages("label.file")), Messages(s"fileRejected.${x.code.code}.value"))
+      )
+    )
+    def docIdContent(docRefIds: Seq[String]): Html = Html(
+      docRefIds
+        .map(
+          x => s"<div class='govuk-!-padding-bottom-2 text-overflow'>$x</div>"
+        )
+        .mkString(" ")
+    )
 
+    val recordErrors: Option[Seq[(String, Content, String)]] = validationErrors.recordError.map(
+      _.map(
+        x =>
+          (Messages(s"fileRejected.${x.code.code}.key"),
+           HtmlContent(docIdContent(x.docRefIDInError.getOrElse(Nil))),
+           Messages(s"fileRejected.${x.code.code}.value")
+          )
+      )
+    )
+    val errors: Seq[(String, Content, String)] = Seq(fileErrors, recordErrors).flatten.flatten
+
+    errors.map {
+      case (x, y, z) => Seq(TableRow(x), TableRow(y), TableRow(z))
+    }
+  }
 }
