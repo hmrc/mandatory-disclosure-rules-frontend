@@ -10,7 +10,7 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.table.{HeadCell, Table}
 class FileRejectedViewModelSpec extends SpecBase {
 
   "FileRejectedViewModel" - {
-    "create table" in {
+    "create table for all the allowed error codes except custom errors " in {
 
       val fileErrors =
         Some(Seq(FileErrors(FileErrorCode.MessageRefIDHasAlreadyBeenUsed, None), FileErrors(FileErrorCode.FileContainsTestDataForProductionEnvironment, None)))
@@ -164,6 +164,27 @@ class FileRejectedViewModelSpec extends SpecBase {
         )
 
       FileRejectedViewModel.createTable(validationErrors)(messages(app)) mustBe expectedTable
+
+    }
+
+    "create table for all the allowed the custom errors " in {
+
+      val fileErrors =
+        Some(Seq(FileErrors(FileErrorCode.MessageRefIDHasAlreadyBeenUsed, None), FileErrors(FileErrorCode.FileContainsTestDataForProductionEnvironment, None)))
+
+      val recordErrors = Some(
+        Seq(
+          RecordError(RecordErrorCode.CustomError,
+            Some("The CorrDocRefId does not match a DocRefId from the same type of section (either Disclosing or MdrReport). It must refer to the same element"), None),
+          RecordError(RecordErrorCode.CustomError, Some(""), None),
+          RecordError(RecordErrorCode.CustomError, Some(""), None),
+          RecordError(RecordErrorCode.CustomError, Some(""), None),
+          RecordError(RecordErrorCode.CustomError, Some(""), None)
+        )
+      )
+      val validationErrors = ValidationErrors(fileErrors, recordErrors)
+
+      FileRejectedViewModel.createTable(validationErrors)(messages(app)) mustBe ""
 
     }
 

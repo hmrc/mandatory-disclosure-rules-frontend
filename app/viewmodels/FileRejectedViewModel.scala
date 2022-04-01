@@ -42,12 +42,33 @@ object FileRejectedViewModel {
     )
   }
 
-  def handleCustomErrors(errorDetails: Option[String]) = {
+  private def docIdContent(docRefIds: Seq[String]): Html = Html(
+    docRefIds
+      .map(
+        docRefId => s"<div class='govuk-!-padding-bottom-2 text-overflow'>$docRefId</div>"
+      )
+      .mkString(" ")
+  )
+
+  //noinspection ScalaStyle
+  private def handleCustomErrors(errorDetails: Option[String], docRefIDInError: Option[Seq[String]])(implicit messages: Messages) = {
     errorDetails match {
-      case Some()
+      case Some(`error_details_901`) => ("901",
+        HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))),
+        Messages(s"fileRejected.901.value")
+      )
+      case Some(`error_details_902`) =>
+      case Some(`error_details_903`) =>
+      case Some(`error_details_904`) =>
+      case Some(`error_details_905`) =>
+      case Some(`error_details_906`) =>
+      case Some(`error_details_907`) =>
+      case Some(`error_details_908`) =>
+      case Some(`error_details_909`) =>
+      case Some(`error_details_910`) =>
+      case Some(`error_details_911`) =>
+      case Some(`error_details_912`) =>
     }
-
-
   }
 
   private def createTableRow(validationErrors: ValidationErrors)(implicit messages: Messages): Seq[Seq[TableRow]] = {
@@ -56,13 +77,7 @@ object FileRejectedViewModel {
         error => (Messages(s"fileRejected.${error.code.code}.key"), Text(Messages("label.file")), Messages(s"fileRejected.${error.code.code}.value"))
       )
     )
-    def docIdContent(docRefIds: Seq[String]): Html = Html(
-      docRefIds
-        .map(
-          docRefId => s"<div class='govuk-!-padding-bottom-2 text-overflow'>$docRefId</div>"
-        )
-        .mkString(" ")
-    )
+
 
     val recordErrors: Option[Seq[(String, Content, String)]] = validationErrors.recordError.map(
       _.map(
@@ -83,4 +98,17 @@ object FileRejectedViewModel {
       case (code, docRefId, details) => Seq(TableRow(code), TableRow(docRefId), TableRow(details))
     }
   }
+
+  val error_details_901 = "The CorrDocRefId does not match a DocRefId from the same type of section (either Disclosing or MdrReport). It must refer to the same element"
+  val error_details_902 = "The MdrReport CorrDocRefId does not refer to the same previously sent MdrBody as the Disclosing element"
+  val error_details_903 = "The Disclosing section contains resent data (DocTypeIndic = OECD0) so it must not have a CorrDocRefId"
+  val error_details_904 = "Disclosing Capacity is not one of the allowed values for the MdrReport CrsAvoidance or OOS Reason provided"
+  val error_details_905 = "Since the DocTypeIndic of Disclosing is OECD0, the DocTypeIndic of MdrReport must be OECD2"
+  val error_details_906 = "Since the MdrReport has a DocTypeIndic of OECD3, indicating this section must be deleted, this Disclosing section must be deleted too"
+  val error_details_907 = "Since the MessageTypeIndic contains the value of MDR401 for new information, the Disclosing DocTypeIndic must contain the value of OECD1 for new information"
+  val error_details_908 = "Since the MessageTypeIndic contains the value of MDR401 for new information, an MdrReport section must be provided with a DocTypeIndic of OECD1 for new information"
+  val error_details_909 = "DocRefId must be 100 characters or less, start with your 15-character MDR ID and include up to 85 other characters of your choice"
+  val error_details_910 = "MessageRefId must be 85 characters or less, start with your 15-character MDR ID and include up to 70 other characters of your choice"
+  val error_details_911 = "Provide an issuedBy for every TIN that has a value other than NOTIN"
+  val error_details_912 = "The top level of the StructureChart must not have an Ownership or InvestAmount"
 }
