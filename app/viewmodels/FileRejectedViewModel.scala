@@ -17,18 +17,14 @@
 package viewmodels
 
 import models.fileDetails._
-import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, HtmlContent, Text}
-import uk.gov.hmrc.govukfrontend.views.viewmodels.table.{HeadCell, Table, TableRow}
 import play.api.i18n.Messages
 import play.twirl.api.Html
-import utils.DateTimeFormatUtil
-import viewmodels.FileStatusViewModel.{buildTableRow, htmlStatus}
-
-import java.time.LocalDateTime
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, HtmlContent, Text}
+import uk.gov.hmrc.govukfrontend.views.viewmodels.table.{HeadCell, Table, TableRow}
 
 object FileRejectedViewModel {
 
-  def createTable(validationErrors: ValidationErrors)(implicit messages: Messages) = {
+  def createTable(validationErrors: ValidationErrors)(implicit messages: Messages): Table = {
 
     val header = Some(
       Seq(
@@ -49,30 +45,31 @@ object FileRejectedViewModel {
   private def createTableRow(validationErrors: ValidationErrors)(implicit messages: Messages): Seq[Seq[TableRow]] = {
     val fileErrors: Option[Seq[(String, Content, String)]] = validationErrors.fileError.map(
       _.map(
-        x => (Messages(s"fileRejected.${x.code.code}.key"), Text(Messages("label.file")), Messages(s"fileRejected.${x.code.code}.value"))
+        error => (Messages(s"fileRejected.${error.code.code}.key"), Text(Messages("label.file")), Messages(s"fileRejected.${error.code.code}.value"))
       )
     )
     def docIdContent(docRefIds: Seq[String]): Html = Html(
       docRefIds
         .map(
-          x => s"<div class='govuk-!-padding-bottom-2 text-overflow'>$x</div>"
+          docRefId => s"<div class='govuk-!-padding-bottom-2 text-overflow'>$docRefId</div>"
         )
         .mkString(" ")
     )
 
     val recordErrors: Option[Seq[(String, Content, String)]] = validationErrors.recordError.map(
       _.map(
-        x =>
-          (Messages(s"fileRejected.${x.code.code}.key"),
-           HtmlContent(docIdContent(x.docRefIDInError.getOrElse(Nil))),
-           Messages(s"fileRejected.${x.code.code}.value")
+        error =>
+          (Messages(s"fileRejected.${error.code.code}.key"),
+           HtmlContent(docIdContent(error.docRefIDInError.getOrElse(Nil))),
+           Messages(s"fileRejected.${error.code.code}.value")
           )
       )
     )
-    val errors: Seq[(String, Content, String)] = Seq(fileErrors, recordErrors).flatten.flatten
+
+    val errors: Seq[(String, Content, String)] = (fileErrors ++ recordErrors).flatten.toSeq
 
     errors.map {
-      case (x, y, z) => Seq(TableRow(x), TableRow(y), TableRow(z))
+      case (code, docRefId, details) => Seq(TableRow(code), TableRow(docRefId), TableRow(details))
     }
   }
 }
