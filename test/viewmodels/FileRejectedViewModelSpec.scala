@@ -9,6 +9,14 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.table.{HeadCell, Table}
 
 class FileRejectedViewModelSpec extends SpecBase {
 
+  val header = Some(
+    List(
+      table.HeadCell(Text("Code"), None, "", None, None, Map()),
+      HeadCell(Text("DocRefId"), None, "govuk-!-width-one-half", None, None, Map()),
+      HeadCell(Text("Error"), None, "govuk-!-width-one-half", None, None, Map())
+    )
+  )
+
   "FileRejectedViewModel" - {
     "create table for all the allowed error codes except custom errors " in {
 
@@ -149,13 +157,7 @@ class FileRejectedViewModelSpec extends SpecBase {
               )
             )
           ),
-          Some(
-            List(
-              table.HeadCell(Text("Code"), None, "", None, None, Map()),
-              HeadCell(Text("DocRefId"), None, "govuk-!-width-one-half", None, None, Map()),
-              HeadCell(Text("Error"), None, "govuk-!-width-one-half", None, None, Map())
-            )
-          ),
+          header,
           Some("Errors"),
           "govuk-table__caption govuk-heading-m",
           false,
@@ -169,22 +171,157 @@ class FileRejectedViewModelSpec extends SpecBase {
 
     "create table for all the allowed the custom errors " in {
 
-      val fileErrors =
-        Some(Seq(FileErrors(FileErrorCode.MessageRefIDHasAlreadyBeenUsed, None), FileErrors(FileErrorCode.FileContainsTestDataForProductionEnvironment, None)))
-
       val recordErrors = Some(
         Seq(
-          RecordError(RecordErrorCode.CustomError,
-            Some("The CorrDocRefId does not match a DocRefId from the same type of section (either Disclosing or MdrReport). It must refer to the same element"), None),
-          RecordError(RecordErrorCode.CustomError, Some(""), None),
-          RecordError(RecordErrorCode.CustomError, Some(""), None),
-          RecordError(RecordErrorCode.CustomError, Some(""), None),
-          RecordError(RecordErrorCode.CustomError, Some(""), None)
+          RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_901), None),
+          RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_902), None),
+          RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_903), None),
+          RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_904), None),
+          RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_905), None),
+          RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_906), None),
+          RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_907), None),
+          RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_908), None),
+          RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_909), None),
+          RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_910), None),
+          RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_911), None),
+          RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_912), None)
         )
       )
-      val validationErrors = ValidationErrors(fileErrors, recordErrors)
 
-      FileRejectedViewModel.createTable(validationErrors)(messages(app)) mustBe ""
+      val expectedTable = Table(
+        List(
+          List(
+            TableRow(Text("901"), None, "", None, None, Map()),
+            TableRow(HtmlContent(""), None, "", None, None, Map()),
+            TableRow(
+              Text(
+                "The CorrDocRefId does not match a DocRefId from the same type of section (either Disclosing or MdrReport). It must refer to the same element"
+              ),
+              None,
+              "",
+              None,
+              None,
+              Map()
+            )
+          ),
+          List(
+            TableRow(Text("902"), None, "", None, None, Map()),
+            TableRow(HtmlContent(""), None, "", None, None, Map()),
+            TableRow(Text("The MdrReport CorrDocRefId does not refer to the same previously sent MdrBody as the Disclosing element"),
+                     None,
+                     "",
+                     None,
+                     None,
+                     Map()
+            )
+          ),
+          List(
+            TableRow(Text("903"), None, "", None, None, Map()),
+            TableRow(HtmlContent(""), None, "", None, None, Map()),
+            TableRow(Text("The Disclosing section contains resent data (DocTypeIndic = OECD0) so it must not have a CorrDocRefId"), None, "", None, None, Map())
+          ),
+          List(
+            TableRow(Text("904"), None, "", None, None, Map()),
+            TableRow(HtmlContent(""), None, "", None, None, Map()),
+            TableRow(Text("Disclosing Capacity is not one of the allowed values for the MdrReport CrsAvoidance or OOS Reason provided"),
+                     None,
+                     "",
+                     None,
+                     None,
+                     Map()
+            )
+          ),
+          List(
+            TableRow(Text("905"), None, "", None, None, Map()),
+            TableRow(HtmlContent(""), None, "", None, None, Map()),
+            TableRow(Text("Since the DocTypeIndic of Disclosing is OECD0, the DocTypeIndic of MdrReport must be OECD2"), None, "", None, None, Map())
+          ),
+          List(
+            TableRow(Text("906"), None, "", None, None, Map()),
+            TableRow(HtmlContent(""), None, "", None, None, Map()),
+            TableRow(
+              Text("Since the MdrReport has a DocTypeIndic of OECD3, indicating this section must be deleted, this Disclosing section must be deleted too"),
+              None,
+              "",
+              None,
+              None,
+              Map()
+            )
+          ),
+          List(
+            TableRow(Text("907"), None, "", None, None, Map()),
+            TableRow(HtmlContent(""), None, "", None, None, Map()),
+            TableRow(
+              Text(
+                "Since the MessageTypeIndic contains the value of MDR401 for new information, the Disclosing DocTypeIndic must contain the value of OECD1 for new information"
+              ),
+              None,
+              "",
+              None,
+              None,
+              Map()
+            )
+          ),
+          List(
+            TableRow(Text("908"), None, "", None, None, Map()),
+            TableRow(HtmlContent(""), None, "", None, None, Map()),
+            TableRow(
+              Text(
+                "Since the MessageTypeIndic contains the value of MDR401 for new information, an MdrReport section must be provided with a DocTypeIndic of OECD1 for new information"
+              ),
+              None,
+              "",
+              None,
+              None,
+              Map()
+            )
+          ),
+          List(
+            TableRow(Text("909"), None, "", None, None, Map()),
+            TableRow(HtmlContent(""), None, "", None, None, Map()),
+            TableRow(
+              Text("DocRefId must be 100 characters or less, start with your 15-character MDR ID and include up to 85 other characters of your choice"),
+              None,
+              "",
+              None,
+              None,
+              Map()
+            )
+          ),
+          List(
+            TableRow(Text("910"), None, "", None, None, Map()),
+            TableRow(HtmlContent(""), None, "", None, None, Map()),
+            TableRow(
+              Text("MessageRefId must be 85 characters or less, start with your 15-character MDR ID and include up to 70 other characters of your choice"),
+              None,
+              "",
+              None,
+              None,
+              Map()
+            )
+          ),
+          List(
+            TableRow(Text("911"), None, "", None, None, Map()),
+            TableRow(HtmlContent(""), None, "", None, None, Map()),
+            TableRow(Text("Provide an issuedBy for every TIN that has a value other than NOTIN"), None, "", None, None, Map())
+          ),
+          List(
+            TableRow(Text("912"), None, "", None, None, Map()),
+            TableRow(HtmlContent(""), None, "", None, None, Map()),
+            TableRow(Text("The top level of the StructureChart must not have an Ownership or InvestAmount"), None, "", None, None, Map())
+          )
+        ),
+        header,
+        Some("Errors"),
+        "govuk-table__caption govuk-heading-m",
+        false,
+        "",
+        Map()
+      )
+
+      val validationErrors = ValidationErrors(None, recordErrors)
+
+      FileRejectedViewModel.createTable(validationErrors)(messages(app)) mustBe expectedTable
 
     }
 

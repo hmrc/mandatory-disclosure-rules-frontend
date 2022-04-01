@@ -57,17 +57,58 @@ object FileRejectedViewModel {
         HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))),
         Messages(s"fileRejected.901.value")
       )
-      case Some(`error_details_902`) =>
-      case Some(`error_details_903`) =>
-      case Some(`error_details_904`) =>
-      case Some(`error_details_905`) =>
-      case Some(`error_details_906`) =>
-      case Some(`error_details_907`) =>
-      case Some(`error_details_908`) =>
-      case Some(`error_details_909`) =>
-      case Some(`error_details_910`) =>
-      case Some(`error_details_911`) =>
-      case Some(`error_details_912`) =>
+      case Some(`error_details_902`) => ("902",
+        HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))),
+        Messages(s"fileRejected.902.value")
+      )
+      case Some(`error_details_903`) => ("903",
+        HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))),
+        Messages(s"fileRejected.903.value")
+      )
+      case Some(`error_details_904`) => ("904",
+        HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))),
+        Messages(s"fileRejected.904.value")
+      )
+      case Some(`error_details_905`) => ("905",
+        HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))),
+        Messages(s"fileRejected.905.value")
+      )
+      case Some(`error_details_906`) =>("906",
+        HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))),
+        Messages(s"fileRejected.906.value")
+      )
+      case Some(`error_details_907`) => ("907",
+        HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))),
+        Messages(s"fileRejected.907.value")
+      )
+      case Some(`error_details_908`) => ("908",
+        HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))),
+        Messages(s"fileRejected.908.value")
+      )
+      case Some(`error_details_909`) => ("909",
+        HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))),
+        Messages(s"fileRejected.909.value")
+      )
+      case Some(`error_details_910`) => ("910",
+        HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))),
+        Messages(s"fileRejected.910.value")
+      )
+      case Some(`error_details_911`) => ("911",
+        HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))),
+        Messages(s"fileRejected.911.value")
+      )
+      case Some(`error_details_912`) => ("912",
+        HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))),
+        Messages(s"fileRejected.912.value")
+      )
+
+      //TODO - Check two cases below with Jill
+      case Some(details) => ("99999",
+        HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), details
+      )
+      case None => ("99999",
+        HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), ""
+      )
     }
   }
 
@@ -78,12 +119,11 @@ object FileRejectedViewModel {
       )
     )
 
-
     val recordErrors: Option[Seq[(String, Content, String)]] = validationErrors.recordError.map(
       _.map(
         recordError =>
           recordError.code match {
-            case RecordErrorCode.CustomError => handleCustomErrors(recordError.details)
+            case RecordErrorCode.CustomError => handleCustomErrors(recordError.details, recordError.docRefIDInError)
             case errorCode => (Messages(s"fileRejected.${errorCode.code}.key"),
               HtmlContent(docIdContent(recordError.docRefIDInError.getOrElse(Nil))),
               Messages(s"fileRejected.${errorCode.code}.value")
