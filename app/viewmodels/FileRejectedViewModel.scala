@@ -42,6 +42,14 @@ object FileRejectedViewModel {
     )
   }
 
+  def handleCustomErrors(errorDetails: Option[String]) = {
+    errorDetails match {
+      case Some()
+    }
+
+
+  }
+
   private def createTableRow(validationErrors: ValidationErrors)(implicit messages: Messages): Seq[Seq[TableRow]] = {
     val fileErrors: Option[Seq[(String, Content, String)]] = validationErrors.fileError.map(
       _.map(
@@ -58,11 +66,14 @@ object FileRejectedViewModel {
 
     val recordErrors: Option[Seq[(String, Content, String)]] = validationErrors.recordError.map(
       _.map(
-        error =>
-          (Messages(s"fileRejected.${error.code.code}.key"),
-           HtmlContent(docIdContent(error.docRefIDInError.getOrElse(Nil))),
-           Messages(s"fileRejected.${error.code.code}.value")
-          )
+        recordError =>
+          recordError.code match {
+            case RecordErrorCode.CustomError => handleCustomErrors(recordError.details)
+            case errorCode => (Messages(s"fileRejected.${errorCode.code}.key"),
+              HtmlContent(docIdContent(recordError.docRefIDInError.getOrElse(Nil))),
+              Messages(s"fileRejected.${errorCode.code}.value")
+            )
+          }
       )
     )
 
