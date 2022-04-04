@@ -21,7 +21,7 @@
 
 @()(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("virusFileFound.title"))) {
+@layout(pageTitle = titleNoForm(messages("virusFileFound.title")), showBackLink = false) {
 
     <h1 class="govuk-heading-l">@messages("virusFileFound.heading")</h1>
 
