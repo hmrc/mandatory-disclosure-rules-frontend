@@ -20,20 +20,16 @@ import config.FrontendAppConfig
 import connectors.{FileDetailsConnector, SubmissionConnector}
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import handlers.XmlHandler
-import models.fileDetails.FileErrorCode.fileErrorCodesForProblemStatus
-import models.fileDetails.RecordErrorCode.DocRefIDFormat
-import models.fileDetails.{FileErrors, Pending, Rejected, ValidationErrors, Accepted => FileStatusAccepted}
+import models.fileDetails.{Pending, Rejected, ValidationErrors, Accepted => FileStatusAccepted}
 import models.upscan.URL
 import models.{MDR402, ValidatedFileData}
 import pages.{ConversationIdPage, URLPage, ValidXMLPage}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
-import play.api.mvc.Results.Ok
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.FileProblemHelper
 import utils.FileProblemHelper.isProblemStatus
 import views.html.SendYourFileView
 
