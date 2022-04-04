@@ -29,7 +29,13 @@
 
     <p class="govuk-body">@messages("invalidXMLFile.p2")</p>
 
-    <p class="govuk-body">@link(routes.UploadFileController.onPageLoad().url, "invalidXMLFile.uploadLink")</p>
+    <ul class="govuk-list govuk-list--bullet">
+        <li>@messages("invalidXMLFile.bullet1")</li>
+        <li>@messages("invalidXMLFile.bullet2")</li>
+        <li>@messages("invalidXMLFile.bullet3")</li>
+    </ul>
 
     <p class="govuk-body">@Html(messages("invalidXMLFile.p3", link("#", "invalidXMLFile.p3.link")))</p> @*Todo: update link href*@
+
+    <p class="govuk-body">@link(routes.UploadFileController.onPageLoad().url, "invalidXMLFile.uploadLink")</p>
 }
