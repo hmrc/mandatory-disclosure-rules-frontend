@@ -32,8 +32,9 @@ class TestProcessEISResponseConnector @Inject() (httpClient: HttpClient, config:
 
   def submitEISResponse(conversationId: String, xmlDocument: NodeSeq)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     val headers = Seq(
-      HeaderNames.CONTENT_TYPE -> "application/xml",
-      "x-conversation-id"      -> conversationId
+      HeaderNames.CONTENT_TYPE  -> "application/xml",
+      "x-conversation-id"       -> conversationId,
+      HeaderNames.AUTHORIZATION -> "Bearer token"
     )
 
     httpClient.POSTString[HttpResponse](submitUrl, xmlDocument.toString(), headers)
