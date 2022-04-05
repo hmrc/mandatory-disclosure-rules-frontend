@@ -51,66 +51,25 @@ object FileRejectedViewModel {
   )
 
   //noinspection ScalaStyle
-  private def handleCustomErrors(errorDetails: Option[String], docRefIDInError: Option[Seq[String]])(implicit messages: Messages) = {
+  private def handleCustomErrors(errorDetails: Option[String], docRefIDInError: Option[Seq[String]])(implicit messages: Messages) =
     errorDetails match {
-      case Some(`error_details_901`) => ("901",
-        HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))),
-        Messages(s"fileRejected.901.value")
-      )
-      case Some(`error_details_902`) => ("902",
-        HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))),
-        Messages(s"fileRejected.902.value")
-      )
-      case Some(`error_details_903`) => ("903",
-        HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))),
-        Messages(s"fileRejected.903.value")
-      )
-      case Some(`error_details_904`) => ("904",
-        HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))),
-        Messages(s"fileRejected.904.value")
-      )
-      case Some(`error_details_905`) => ("905",
-        HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))),
-        Messages(s"fileRejected.905.value")
-      )
-      case Some(`error_details_906`) =>("906",
-        HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))),
-        Messages(s"fileRejected.906.value")
-      )
-      case Some(`error_details_907`) => ("907",
-        HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))),
-        Messages(s"fileRejected.907.value")
-      )
-      case Some(`error_details_908`) => ("908",
-        HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))),
-        Messages(s"fileRejected.908.value")
-      )
-      case Some(`error_details_909`) => ("909",
-        HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))),
-        Messages(s"fileRejected.909.value")
-      )
-      case Some(`error_details_910`) => ("910",
-        HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))),
-        Messages(s"fileRejected.910.value")
-      )
-      case Some(`error_details_911`) => ("911",
-        HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))),
-        Messages(s"fileRejected.911.value")
-      )
-      case Some(`error_details_912`) => ("912",
-        HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))),
-        Messages(s"fileRejected.912.value")
-      )
+      case Some(`error_details_901`) => ("901", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.901.value"))
+      case Some(`error_details_902`) => ("902", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.902.value"))
+      case Some(`error_details_903`) => ("903", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.903.value"))
+      case Some(`error_details_904`) => ("904", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.904.value"))
+      case Some(`error_details_905`) => ("905", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.905.value"))
+      case Some(`error_details_906`) => ("906", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.906.value"))
+      case Some(`error_details_907`) => ("907", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.907.value"))
+      case Some(`error_details_908`) => ("908", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.908.value"))
+      case Some(`error_details_909`) => ("909", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.909.value"))
+      case Some(`error_details_910`) => ("910", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.910.value"))
+      case Some(`error_details_911`) => ("911", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.911.value"))
+      case Some(`error_details_912`) => ("912", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.912.value"))
 
       //TODO - Check two cases below with Jill
-      case Some(details) => ("99999",
-        HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), details
-      )
-      case None => ("99999",
-        HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), ""
-      )
+      case Some(details) => ("99999", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), details)
+      case None          => ("99999", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), "")
     }
-  }
 
   private def createTableRow(validationErrors: ValidationErrors)(implicit messages: Messages): Seq[Seq[TableRow]] = {
     val fileErrors: Option[Seq[(String, Content, String)]] = validationErrors.fileError.map(
@@ -124,10 +83,11 @@ object FileRejectedViewModel {
         recordError =>
           recordError.code match {
             case RecordErrorCode.CustomError => handleCustomErrors(recordError.details, recordError.docRefIDInError)
-            case errorCode => (Messages(s"fileRejected.${errorCode.code}.key"),
-              HtmlContent(docIdContent(recordError.docRefIDInError.getOrElse(Nil))),
-              Messages(s"fileRejected.${errorCode.code}.value")
-            )
+            case errorCode =>
+              (Messages(s"fileRejected.${errorCode.code}.key"),
+               HtmlContent(docIdContent(recordError.docRefIDInError.getOrElse(Nil))),
+               Messages(s"fileRejected.${errorCode.code}.value")
+              )
           }
       )
     )
@@ -135,18 +95,30 @@ object FileRejectedViewModel {
     val errors: Seq[(String, Content, String)] = (fileErrors ++ recordErrors).flatten.toSeq
 
     errors.map {
-      case (code, docRefId, details) => Seq(TableRow(code), TableRow(docRefId), TableRow(details))
+      case (code, docRefId, details) =>
+        Seq(
+          TableRow(code, attributes = Map("id" -> s"code_$code")),
+          TableRow(docRefId, attributes = Map("id" -> s"docRefId_$code")),
+          TableRow(details, attributes = Map("id" -> s"errorMessage_$code"))
+        )
     }
   }
 
-  val error_details_901 = "The CorrDocRefId does not match a DocRefId from the same type of section (either Disclosing or MdrReport). It must refer to the same element"
+  val error_details_901 =
+    "The CorrDocRefId does not match a DocRefId from the same type of section (either Disclosing or MdrReport). It must refer to the same element"
   val error_details_902 = "The MdrReport CorrDocRefId does not refer to the same previously sent MdrBody as the Disclosing element"
   val error_details_903 = "The Disclosing section contains resent data (DocTypeIndic = OECD0) so it must not have a CorrDocRefId"
   val error_details_904 = "Disclosing Capacity is not one of the allowed values for the MdrReport CrsAvoidance or OOS Reason provided"
   val error_details_905 = "Since the DocTypeIndic of Disclosing is OECD0, the DocTypeIndic of MdrReport must be OECD2"
-  val error_details_906 = "Since the MdrReport has a DocTypeIndic of OECD3, indicating this section must be deleted, this Disclosing section must be deleted too"
-  val error_details_907 = "Since the MessageTypeIndic contains the value of MDR401 for new information, the Disclosing DocTypeIndic must contain the value of OECD1 for new information"
-  val error_details_908 = "Since the MessageTypeIndic contains the value of MDR401 for new information, an MdrReport section must be provided with a DocTypeIndic of OECD1 for new information"
+
+  val error_details_906 =
+    "Since the MdrReport has a DocTypeIndic of OECD3, indicating this section must be deleted, this Disclosing section must be deleted too"
+
+  val error_details_907 =
+    "Since the MessageTypeIndic contains the value of MDR401 for new information, the Disclosing DocTypeIndic must contain the value of OECD1 for new information"
+
+  val error_details_908 =
+    "Since the MessageTypeIndic contains the value of MDR401 for new information, an MdrReport section must be provided with a DocTypeIndic of OECD1 for new information"
   val error_details_909 = "DocRefId must be 100 characters or less, start with your 15-character MDR ID and include up to 85 other characters of your choice"
   val error_details_910 = "MessageRefId must be 85 characters or less, start with your 15-character MDR ID and include up to 70 other characters of your choice"
   val error_details_911 = "Provide an issuedBy for every TIN that has a value other than NOTIN"
