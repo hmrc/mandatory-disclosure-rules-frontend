@@ -37,7 +37,6 @@
 
 
 @head = {
-    @hmrcTrackingConsentSnippet(nonce = CSPNonce.get)
     @hmrcHead(
         nonce     = CSPNonce.get,
         headBlock = if(timeout) { Some(
