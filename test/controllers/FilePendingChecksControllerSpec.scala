@@ -68,7 +68,7 @@ class FilePendingChecksControllerSpec extends SpecBase {
         val view    = application.injector.instanceOf[FilePendingChecksView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(fileSummaryList, action)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(fileSummaryList, action, conversationId.toString)(request, messages(application)).toString
       }
     }
 
