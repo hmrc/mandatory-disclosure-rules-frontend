@@ -58,7 +58,10 @@ class FilePendingChecksController @Inject() (
               )
             case Some(Pending) =>
               val summary = FileCheckViewModel.createFileSummary(xmlDetails.fileName, Pending.toString)
-              Future.successful(Ok(view(summary, routes.FilePendingChecksController.onPageLoad().url)))
+              request.userAnswers.get(ConversationIdPage) match {
+                case Some(conversationId) => Future.successful(Ok(view(summary, routes.FilePendingChecksController.onPageLoad().url, conversationId.value)))
+                case _                    => Future.successful(InternalServerError(errorView()))
+              }
             case _ =>
               logger.warn("Unable to get Status")
               Future.successful(InternalServerError(errorView()))

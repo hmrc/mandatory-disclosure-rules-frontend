@@ -21,9 +21,11 @@
         govukButton: GovukButton
 )
 
-@(fileSummary: Seq[SummaryListRow], action: String)(implicit request: Request[_], messages: Messages)
+@(fileSummary: Seq[SummaryListRow], action: String, conversationId: String)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("filePendingChecks.title")), showBackLink = false) {
+
+    <input type="hidden" id="conversationId" value="@conversationId">
 
     <h1 class="govuk-heading-l">@messages("filePendingChecks.heading")</h1>
 
