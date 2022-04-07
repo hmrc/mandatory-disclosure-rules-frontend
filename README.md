@@ -17,7 +17,6 @@ Submission endpoint:
      /mandatory-disclosure-rules/submit
 
 #### *API specs*: 
-
  - [MDR Read Subscription API
    spec](https://confluence.tools.tax.service.gov.uk/display/DAC6/MDR+Specs?preview=/388662598/434373869/AEOI-DCT70d-1.2-EISAPISpecification-MDRSubscriptionDisplay.pdf)
    
@@ -38,9 +37,10 @@ Mandatory Disclosure Rules runs on port 10018
       identifier = "MDRID"  
       identifier value = "XAMDR0009234568"
       redirect url = "/report-under-mandatory-disclosure-rules"
-
-
-
+      
+#### *Acceptance test repo*:  
+[mandatory-disclosure-rules-file-upload-ui-tests](https://github.com/hmrc/mandatory-disclosure-rules-file-upload-ui-tests)
+      
 ## Requirements
 
 This service is written in [Scala](http://www.scala-lang.org/) and [Play](http://playframework.com/), and requires a Java 8 [JRE] to run.
