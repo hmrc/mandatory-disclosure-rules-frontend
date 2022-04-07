@@ -30,6 +30,15 @@ Run the following command to start services locally:
 
 Mandatory Disclosure Rules runs on port 10018
 
+#### *Auth login details*: 
+
+      enrolmentKey = "HMRC-MDR-ORG"  
+      identifier = "MDRID"  
+      identifier value = "XAMDR0009234568"
+      redirect url = "/report-under-mandatory-disclosure-rules"
+
+
+
 ## Requirements
 
 This service is written in [Scala](http://www.scala-lang.org/) and [Play](http://playframework.com/), and requires a Java 8 [JRE] to run.
