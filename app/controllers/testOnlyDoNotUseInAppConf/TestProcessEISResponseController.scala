@@ -19,7 +19,7 @@ package controllers.testOnlyDoNotUseInAppConf
 import com.google.inject.Inject
 import play.api.Logging
 import play.api.mvc.{Action, MessagesControllerComponents}
-import uk.gov.hmrc.http.HttpReads.is2xx
+import uk.gov.hmrc.http.HeaderNames
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -32,9 +32,9 @@ class TestProcessEISResponseController @Inject() (
     extends FrontendBaseController
     with Logging {
 
-  def processEISResponse(): Action[NodeSeq] = Action(parse.xml).async {
+  def processEISResponse() = Action(parse.xml).async {
     implicit request =>
-      request.headers
+      request.headers.remove(HeaderNames.authorisation)
         .get("x-conversation-id")
         .fold {
           Future.successful(BadRequest("conversation ID is missing from headers"))
