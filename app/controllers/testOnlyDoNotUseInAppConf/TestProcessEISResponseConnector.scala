@@ -31,11 +31,11 @@ class TestProcessEISResponseConnector @Inject() (httpClient: HttpClient, config:
 
   val submitUrl = s"${config.mdrUrl}/mandatory-disclosure-rules/validation-result"
 
-  def submitEISResponse(conversationId: String, xmlDocument: NodeSeq)(ec: ExecutionContext): Future[HttpResponse] = {
+  def submitEISResponse(conversationId: String, xmlDocument: NodeSeq): Future[HttpResponse] = {
     implicit val hc: HeaderCarrier = HeaderCarrier()
     val headers = Seq(
-      HeaderNames.CONTENT_TYPE  -> "application/xml",
-      "x-conversation-id"       -> conversationId
+      HeaderNames.CONTENT_TYPE -> "application/xml",
+      "x-conversation-id"      -> conversationId
     )
 
     httpClient.POSTString[HttpResponse](submitUrl, xmlDocument.toString(), headers)
