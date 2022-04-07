@@ -1,4 +1,4 @@
-# Mandatory Disclosure Rules Frontend
+# Mandatory disclosure rules frontend
 
 This service provides a UI that allows registered users to submit their cross border arrangement to HMRC. Only users with the correct credentials will be redirected to this service. Users can change their contact details within this service and check the status of previous submissions.
 
