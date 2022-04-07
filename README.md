@@ -16,6 +16,7 @@ Submission endpoint:
 
      /mandatory-disclosure-rules/submit
 
+
 #### *API specs*: 
  - [MDR Read Subscription API
    spec](https://confluence.tools.tax.service.gov.uk/display/DAC6/MDR+Specs?preview=/388662598/434373869/AEOI-DCT70d-1.2-EISAPISpecification-MDRSubscriptionDisplay.pdf)
