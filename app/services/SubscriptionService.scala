@@ -44,11 +44,11 @@ class SubscriptionService @Inject() (subscriptionConnector: SubscriptionConnecto
         RequestDetailForUpdate.convertToRequestDetails(responseDetails, userAnswers) match {
           case Some(requestDetails) => subscriptionConnector.updateSubscription(requestDetails)
           case _ =>
-            logger.info("updateContactDetails:failed to convert userAnswers to RequestDetailForUpdate")
+            logger.warn("updateContactDetails: failed to convert userAnswers to RequestDetailForUpdate")
             Future.successful(false)
         }
       case _ =>
-        logger.info("updateContactDetails:readSubscription call failed to fetch the data")
+        logger.warn("updateContactDetails: readSubscription call failed to fetch the data")
         Future.successful(false)
     }
 
@@ -70,7 +70,7 @@ class SubscriptionService @Inject() (subscriptionConnector: SubscriptionConnecto
         } yield !responseDetail.copy(primaryContact = primaryContact, secondaryContact = secondaryContact).equals(responseDetail)
 
       case _ =>
-        logger.info("isContactInformationUpdated:readSubscription call failed to fetch the data")
+        logger.warn("isContactInformationUpdated: readSubscription call failed to fetch the data")
         None
     }
 

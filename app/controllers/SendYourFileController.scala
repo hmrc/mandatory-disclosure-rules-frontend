@@ -96,11 +96,11 @@ class SendYourFileController @Inject() (
             case Some(Pending) =>
               Future.successful(NoContent)
             case None =>
-              logger.info("getStatus: no status returned")
+              logger.warn("getStatus: no status returned")
               Future.successful(InternalServerError)
           }
         case None =>
-          logger.info("UserAnswers.ConversationId is empty")
+          logger.warn("UserAnswers.ConversationId is empty")
           Future.successful(InternalServerError)
       }
   }

@@ -19,7 +19,6 @@ package controllers.testOnlyDoNotUseInAppConf
 import com.google.inject.Inject
 import play.api.Logging
 import play.api.mvc.{Action, MessagesControllerComponents}
-import uk.gov.hmrc.http.HttpReads.is2xx
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -40,7 +39,7 @@ class TestProcessEISResponseController @Inject() (
           Future.successful(BadRequest("conversation ID is missing from headers"))
         } {
           conversationId =>
-            logger.info(s"testing EIS process submission endpoint with conversation ID $conversationId and submission: ${request.body}")
+            logger.debug(s"testing EIS process submission endpoint with conversation ID $conversationId and submission: ${request.body}")
             connector
               .submitEISResponse(conversationId, request.body)
               .map(

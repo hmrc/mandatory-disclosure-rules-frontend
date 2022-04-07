@@ -40,16 +40,13 @@ class FileStatusController @Inject() (
   view: FileStatusView,
   errorView: ThereIsAProblemView
 ) extends FrontendBaseController
-    with I18nSupport
-    with Logging {
+    with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
       fileConnector.getAllFileDetails map {
         case Some(allFiles) => Ok(view(FileStatusViewModel.createStatusTable(allFiles), appConfig.homePageUrl))
-        case _ =>
-          logger.warn("FileStatusController: failed to get AllFileDetails")
-          InternalServerError(errorView())
+        case _ => InternalServerError(errorView())
       }
   }
 }
