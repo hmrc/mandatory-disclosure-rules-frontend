@@ -1,4 +1,4 @@
-# Mandatory Disclosure Rules Frontend
+# Mandatory disclosure rules frontend
 
 This service provides a UI that allows registered users to submit their cross border arrangement to HMRC. Only users with the correct credentials will be redirected to this service. Users can change their contact details within this service and check the status of previous submissions.
 
@@ -16,21 +16,20 @@ Submission endpoint:
 
      /mandatory-disclosure-rules/submit
 
-***API Specs:***
 
-[MDR Read Subscription API spec](https://confluence.tools.tax.service.gov.uk/display/DAC6/MDR+Specs?preview=/388662598/434373869/AEOI-DCT70d-1.2-EISAPISpecification-MDRSubscriptionDisplay.pdf)
-
-[MDR Update Subscription API Spec](https://confluence.tools.tax.service.gov.uk/display/DAC6/MDR+Specs?preview=/388662598/434373871/AEOI-DCT70e-1.2-EISAPISpecification-MDRSubscriptionAmend.pdf)
-
-
+#### *API specs*: 
+ - [MDR Read Subscription API
+   spec](https://confluence.tools.tax.service.gov.uk/display/DAC6/MDR+Specs?preview=/388662598/434373869/AEOI-DCT70d-1.2-EISAPISpecification-MDRSubscriptionDisplay.pdf)
+   
+  - [MDR Update Subscription API
+   Spec](https://confluence.tools.tax.service.gov.uk/display/DAC6/MDR+Specs?preview=/388662598/434373871/AEOI-DCT70e-1.2-EISAPISpecification-MDRSubscriptionAmend.pdf)
 
 ## Run Locally
+This service runs on port 10018 and is named MANDATORY_DISCLOSURE_RULES_FRONTEND in service manager.
 
 Run the following command to start services locally:
 
     sm --start MDR_ALL -f
-
-Mandatory Disclosure Rules runs on port 10018
 
 #### *Auth login details*: 
 
@@ -38,9 +37,10 @@ Mandatory Disclosure Rules runs on port 10018
       identifier = "MDRID"  
       identifier value = "XAMDR0009234568"
       redirect url = "/report-under-mandatory-disclosure-rules"
-
-
-
+      
+#### *Acceptance test repo*:  
+[mandatory-disclosure-rules-file-upload-ui-tests](https://github.com/hmrc/mandatory-disclosure-rules-file-upload-ui-tests)
+      
 ## Requirements
 
 This service is written in [Scala](http://www.scala-lang.org/) and [Play](http://playframework.com/), and requires a Java 8 [JRE] to run.
