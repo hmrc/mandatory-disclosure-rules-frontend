@@ -66,7 +66,7 @@ class UploadFileController @Inject() (
     } yield Ok(view(preparedForm, upscanInitiateResponse)))
       .recover {
         case e: Exception =>
-          logger.info(s"An exception occurred when contacting Upscan: $e")
+          logger.warn(s"UploadFileController: An exception occurred when contacting Upscan: $e")
           Redirect(routes.ThereIsAProblemController.onPageLoad())
       }
 

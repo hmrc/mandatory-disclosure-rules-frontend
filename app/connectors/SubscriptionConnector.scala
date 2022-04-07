@@ -38,12 +38,12 @@ class SubscriptionConnector @Inject() (val config: FrontendAppConfig, val http: 
           responseMessage.json
             .asOpt[ResponseDetail]
         case otherStatus =>
-          logger.warn(s"Status $otherStatus has been thrown when display subscription was called")
+          logger.warn(s"readSubscription: Status $otherStatus has been thrown when display subscription was called")
           None
       }
       .recover {
         case e: Exception =>
-          logger.warn(s"S${e.getMessage} has been thrown when display subscription was called")
+          logger.warn(s"readSubscription: S${e.getMessage} has been thrown when display subscription was called")
           None
       }
   }
@@ -55,7 +55,7 @@ class SubscriptionConnector @Inject() (val config: FrontendAppConfig, val http: 
       .POST[RequestDetailForUpdate, HttpResponse](url, requestDetail)
       .map {
         responseMessage =>
-          logger.warn(s"Status ${responseMessage.status} has been received when update subscription was called")
+          logger.warn(s"updateSubscription: Status ${responseMessage.status} has been received when update subscription was called")
           is2xx(responseMessage.status)
       }
   }

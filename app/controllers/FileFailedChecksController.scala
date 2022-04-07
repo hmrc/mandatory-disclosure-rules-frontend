@@ -18,6 +18,7 @@ package controllers
 
 import controllers.actions._
 import pages.{ConversationIdPage, ValidXMLPage}
+import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -35,7 +36,8 @@ class FileFailedChecksController @Inject() (
   view: FileFailedChecksView,
   errorView: ThereIsAProblemView
 ) extends FrontendBaseController
-    with I18nSupport {
+    with I18nSupport
+    with Logging {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData) {
     implicit request =>
@@ -44,7 +46,9 @@ class FileFailedChecksController @Inject() (
           val action  = routes.FileRejectedController.onPageLoad(conversationId).url
           val summary = FileCheckViewModel.createFileSummary(xmlDetails.fileName, "Rejected")
           Ok(view(summary, action))
-        case _ => InternalServerError(errorView())
+        case _ =>
+          logger.warn("FileFailedChecksController: Unable to retrieve either XML information or ConversationId from UserAnswers")
+          InternalServerError(errorView())
       }
   }
 }
