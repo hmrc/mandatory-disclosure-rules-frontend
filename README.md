@@ -4,7 +4,7 @@ This service provides a UI that allows registered users to submit their cross bo
 
 ### Overview:
 
-Only users with the correct credentials will be redirected to this service. Users can change their contact details within this service and check the status of previous submissions. Users will be notified if the submission has a problem or if the submission does not pass validation. 
+Only users with the correct credentials will be redirected to this service. Users will submit their arrangement as an XML file using an upload form. This service allows users to see if the submission is successful or fails against an XML schema or against business rules. Within this service users are also able to change their contact details and check the status of previous submissions.
 
 This service interacts with [mandatory disclosure rules (backend)](https://github.com/hmrc/mandatory-disclosure-rules).
 
