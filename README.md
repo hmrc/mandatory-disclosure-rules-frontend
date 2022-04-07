@@ -34,4 +34,4 @@ Mandatory Disclosure Rules runs on port 10018
 
 This service is written in [Scala](http://www.scala-lang.org/) and [Play](http://playframework.com/), and requires a Java 8 [JRE] to run.
 
-[![Build Status](https://travis-ci.com/hmrc/mandatory-disclosure-rules-frontend.svg?branch=main)](https://travis-ci.com/hmrc/mandatory-disclosure-rules-frontend) [![Apache-2.0 license](http://img.shields.io/badge/license-Apache-brightgreen.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
+[![Apache-2.0 license](http://img.shields.io/badge/license-Apache-brightgreen.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
