@@ -46,10 +46,9 @@ object FileStatusViewModel {
       case Pending => "<p class='govuk-visually-hidden'>None</p>"
       case Accepted =>
         s"<a href='${routes.FileReceivedController.onPageLoad(conversationId).url}' class='govuk-link'>${Messages("fileStatus.accepted")}</a>"
-      case Rejected(errors) if FileProblemHelper.isProblemStatus(errors) => {
-        logger.warn("Received unexpected errorDetails for the CustomError(99999)")
+      case Rejected(errors) if FileProblemHelper.isProblemStatus(errors) =>
+        logger.warn("File Rejected with unexpected error")
         s"<a href='${routes.FileProblemController.onPageLoad().url}' class='govuk-link'>${Messages("fileStatus.problem")}</a>"
-      }
       case Rejected(_) =>
         s"<a href='${routes.FileRejectedController.onPageLoad(conversationId).url}' class='govuk-link'>${Messages("fileStatus.rejected")}</a>"
     }
