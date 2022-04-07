@@ -24,12 +24,11 @@ Submission endpoint:
    Spec](https://confluence.tools.tax.service.gov.uk/display/DAC6/MDR+Specs?preview=/388662598/434373871/AEOI-DCT70e-1.2-EISAPISpecification-MDRSubscriptionAmend.pdf)
 
 ## Run Locally
+This service runs on port 10018 and is named MANDATORY_DISCLOSURE_RULES_FRONTEND in service manager.
 
 Run the following command to start services locally:
 
     sm --start MDR_ALL -f
-
-Mandatory Disclosure Rules runs on port 10018
 
 #### *Auth login details*: 
 
