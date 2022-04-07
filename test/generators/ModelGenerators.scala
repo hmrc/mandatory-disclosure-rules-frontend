@@ -16,6 +16,7 @@
 
 package generators
 
+import models.fileDetails.RecordErrorCode.CustomError
 import models.fileDetails._
 import models.subscription._
 import org.scalacheck.Arbitrary.arbitrary
@@ -76,7 +77,7 @@ trait ModelGenerators {
   }
 
   implicit val arbitraryRecordErrorCode: Arbitrary[RecordErrorCode] = Arbitrary {
-    Gen.oneOf[RecordErrorCode](RecordErrorCode.values)
+    Gen.oneOf[RecordErrorCode](RecordErrorCode.values.filterNot(_ == CustomError))
   }
 
   implicit val arbitraryUpdateFileErrors: Arbitrary[FileErrors] = Arbitrary {

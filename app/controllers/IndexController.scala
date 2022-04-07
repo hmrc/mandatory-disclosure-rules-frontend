@@ -26,7 +26,6 @@ import repositories.SessionRepository
 import services.SubscriptionService
 import uk.gov.hmrc.auth.core.AffinityGroup.{Individual, Organisation}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import viewmodels.FileStatusViewModel
 import views.html.IndexView
 
 import javax.inject.Inject
