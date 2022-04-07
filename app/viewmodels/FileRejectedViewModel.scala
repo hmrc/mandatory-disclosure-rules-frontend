@@ -92,7 +92,12 @@ object FileRejectedViewModel {
     val errors: Seq[(String, Content, String)] = (fileErrors ++ recordErrors).flatten.toSeq
 
     errors.map {
-      case (code, docRefId, details) => Seq(TableRow(code), TableRow(docRefId), TableRow(details))
+      case (code, docRefId, details) =>
+        Seq(
+          TableRow(code, attributes = Map("id" -> s"code_$code")),
+          TableRow(docRefId, attributes = Map("id" -> s"docRefId_$code")),
+          TableRow(details, attributes = Map("id" -> s"errorMessage_$code"))
+        )
     }
   }
 
