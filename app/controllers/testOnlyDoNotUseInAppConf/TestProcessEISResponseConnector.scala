@@ -23,6 +23,7 @@ import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 
 import javax.inject.Inject
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
 
@@ -30,7 +31,8 @@ class TestProcessEISResponseConnector @Inject() (httpClient: HttpClient, config:
 
   val submitUrl = s"${config.mdrUrl}/mandatory-disclosure-rules/validation-result"
 
-  def submitEISResponse(conversationId: String, xmlDocument: NodeSeq)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+  def submitEISResponse(conversationId: String, xmlDocument: NodeSeq)(ec: ExecutionContext): Future[HttpResponse] = {
+    implicit val hc: HeaderCarrier = HeaderCarrier()
     val headers = Seq(
       HeaderNames.CONTENT_TYPE  -> "application/xml",
       "x-conversation-id"       -> conversationId,
