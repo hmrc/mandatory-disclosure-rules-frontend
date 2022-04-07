@@ -37,7 +37,7 @@ class TestSubmissionController @Inject() (
 
   def insertTestSubmission(fileName: String): Action[NodeSeq] = identifierAction(parse.xml).async {
     implicit request =>
-      logger.info(s"inserting test submission: ${request.body}")
+      logger.debug(s"inserting test submission: ${request.body}")
       connector
         .submitDocument(fileName, request.subscriptionId, request.body)
         .map {

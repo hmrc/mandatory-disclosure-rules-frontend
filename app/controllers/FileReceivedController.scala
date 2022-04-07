@@ -19,7 +19,6 @@ package controllers
 import connectors.FileDetailsConnector
 import controllers.actions._
 import models.ConversationId
-import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -41,8 +40,7 @@ class FileReceivedController @Inject() (
   errorView: ThereIsAProblemView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
-    with I18nSupport
-    with Logging {
+    with I18nSupport {
 
   def onPageLoad(conversationId: ConversationId): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>

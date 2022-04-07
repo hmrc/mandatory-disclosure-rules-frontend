@@ -18,6 +18,7 @@ package controllers
 
 import controllers.actions._
 import pages.ValidXMLPage
+import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -36,7 +37,8 @@ class CheckYourFileDetailsController @Inject() (
   view: CheckYourFileDetailsView,
   errorView: ThereIsAProblemView
 ) extends FrontendBaseController
-    with I18nSupport {
+    with I18nSupport
+    with Logging {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData.apply() andThen requireData) {
     implicit request =>
@@ -45,7 +47,9 @@ class CheckYourFileDetailsController @Inject() (
         case Some(details) =>
           val detailsList = SummaryListViewModel(CheckYourFileDetailsViewModel.getSummaryRows(details)).withoutBorders().withCssClass("govuk-!-margin-bottom-0")
           Ok(view(detailsList, action))
-        case _ => InternalServerError(errorView())
+        case _ =>
+          logger.warn("CheckYourFileDetailsController: Unable to retrieve XML information from UserAnswers")
+          InternalServerError(errorView())
       }
   }
 }
