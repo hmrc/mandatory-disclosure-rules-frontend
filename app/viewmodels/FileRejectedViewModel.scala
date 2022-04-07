@@ -51,7 +51,7 @@ object FileRejectedViewModel {
   )
 
   //noinspection ScalaStyle
-  private def handleCustomErrors(errorDetails: Option[String], docRefIDInError: Option[Seq[String]])(implicit messages: Messages) =
+  private def handleCustomErrors(errorDetails: Option[String], docRefIDInError: Option[Seq[String]])(implicit messages: Messages): (String, HtmlContent, String) =
     errorDetails match {
       case Some(`error_details_901`) => ("901", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.901.value"))
       case Some(`error_details_902`) => ("902", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.902.value"))
