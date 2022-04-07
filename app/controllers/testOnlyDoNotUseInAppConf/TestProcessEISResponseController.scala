@@ -43,7 +43,7 @@ class TestProcessEISResponseController @Inject() (
             implicit val hc: HeaderCarrier = HeaderCarrier()
             logger.info(s"testing EIS process submission endpoint with conversation ID $conversationId and submission: ${request.body}")
             connector
-              .submitEISResponse(conversationId, request.body)
+              .submitEISResponse(request.body, request.headers)
               .map(
                 response => Status(response.status)
               )

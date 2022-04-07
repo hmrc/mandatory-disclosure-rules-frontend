@@ -18,27 +18,22 @@ package controllers.testOnlyDoNotUseInAppConf
 
 import config.FrontendAppConfig
 import play.api.Logging
-import play.api.http.HeaderNames
+import play.api.mvc.Headers
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 import scala.xml.NodeSeq
 
 class TestProcessEISResponseConnector @Inject() (httpClient: HttpClient, config: FrontendAppConfig) extends Logging {
 
   val submitUrl = s"${config.mdrUrl}/mandatory-disclosure-rules/validation-result"
 
-  def submitEISResponse(conversationId: String, xmlDocument: NodeSeq): Future[HttpResponse] = {
+  def submitEISResponse(xmlDocument: NodeSeq, headers: Headers): Future[HttpResponse] = {
     implicit val hc: HeaderCarrier = HeaderCarrier()
-    val headers = Seq(
-      HeaderNames.CONTENT_TYPE  -> "application/xml",
-      "x-conversation-id"       -> conversationId,
-      HeaderNames.AUTHORIZATION -> "Bearer token"
-    )
 
-    httpClient.POSTString[HttpResponse](submitUrl, xmlDocument.toString(), headers)
+    httpClient.POSTString[HttpResponse](submitUrl, xmlDocument.toString(), headers.headers)
   }
 }
