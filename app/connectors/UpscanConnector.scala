@@ -70,7 +70,6 @@ class UpscanConnector @Inject() (configuration: FrontendAppConfig, httpClient: H
     val statusUrl = s"$backendUrl/upscan/status/${uploadId.value}"
     httpClient.GET[HttpResponse](statusUrl).map {
       response =>
-        logger.debug(s"Status uploaded: $response")
         response.status match {
           case OK =>
             response.json.validate[UploadStatus] match {
