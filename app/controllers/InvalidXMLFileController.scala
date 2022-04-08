@@ -18,6 +18,7 @@ package controllers
 
 import controllers.actions._
 import pages.{GenericErrorPage, InvalidXMLPage}
+import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -36,7 +37,8 @@ class InvalidXMLFileController @Inject() (
   errorViewHelper: ErrorViewHelper,
   errorView: ThereIsAProblemView
 ) extends FrontendBaseController
-    with I18nSupport {
+    with I18nSupport
+    with Logging {
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData() andThen requireData) {
     implicit request =>
@@ -47,6 +49,7 @@ class InvalidXMLFileController @Inject() (
           } yield error
           Ok(view(fileName, errorViewHelper.generateTable(xmlErrors)))
         case _ =>
+          logger.warn("InvalidXMLFileController: Unable to retrieve either Invalid XML information or GenericErrors from UserAnswers")
           InternalServerError(errorView())
       }
   }

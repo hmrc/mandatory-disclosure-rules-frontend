@@ -19,7 +19,6 @@ package controllers
 import config.FrontendAppConfig
 import connectors.FileDetailsConnector
 import controllers.actions._
-import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -40,16 +39,13 @@ class FileStatusController @Inject() (
   view: FileStatusView,
   errorView: ThereIsAProblemView
 ) extends FrontendBaseController
-    with I18nSupport
-    with Logging {
+    with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
       fileConnector.getAllFileDetails map {
         case Some(allFiles) => Ok(view(FileStatusViewModel.createStatusTable(allFiles), appConfig.homePageUrl))
-        case _ =>
-          logger.warn("FileStatusController: failed to get AllFileDetails")
-          InternalServerError(errorView())
+        case _              => InternalServerError(errorView())
       }
   }
 }

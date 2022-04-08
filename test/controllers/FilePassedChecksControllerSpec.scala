@@ -19,7 +19,6 @@ package controllers
 import base.SpecBase
 import models.{ConversationId, MDR401, MessageSpecData, ValidatedFileData}
 import pages.{ConversationIdPage, ValidXMLPage}
-import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import viewmodels.FileCheckViewModel

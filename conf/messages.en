@@ -100,11 +100,14 @@ problemPage.MDR.guidanceLink = Read the MDR technical guidance for XML files (op
 
 invalidXMLFile.title = There is a problem with your file
 invalidXMLFile.heading = There is a problem with your file
-invalidXMLFile.p1 = Your file {0} has not been formatted correctly.
-invalidXMLFile.p2 = You can restructure the XML and upload it again.
-invalidXMLFile.uploadLink = Upload a different file
+invalidXMLFile.p1 = We cannot accept the file {0} because it has not been formatted correctly.
+invalidXMLFile.p2 = Check that:
+invalidXMLFile.bullet1 = if provided, the <?xml> element only has an attribute of version="1.0" and, optionally, encoding and standalone attributes with valid values
+invalidXMLFile.bullet2 = all elements have an opening and a closing tag
+invalidXMLFile.bullet3 = all tags are correctly nested
 invalidXMLFile.p3 = To ensure your XML is structured correctly, {0}.
 invalidXMLFile.p3.link = read the MDR technical guidance for XML files (opens in new tab)
+invalidXMLFile.uploadLink = Upload a different file
 
 uploadFile.title = Upload an XML file
 uploadFile.heading = Upload an XML file
