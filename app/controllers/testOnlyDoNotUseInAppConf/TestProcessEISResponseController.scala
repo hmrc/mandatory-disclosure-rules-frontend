@@ -40,7 +40,6 @@ class TestProcessEISResponseController @Inject() (
           Future.successful(BadRequest("conversation ID is missing from headers"))
         } {
           conversationId =>
-            implicit val hc: HeaderCarrier = HeaderCarrier()
             logger.info(s"testing EIS process submission endpoint with conversation ID $conversationId and submission: ${request.body}")
             connector
               .submitEISResponse(conversationId, request.body)
