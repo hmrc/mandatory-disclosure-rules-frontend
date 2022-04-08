@@ -18,8 +18,9 @@ package utils
 
 import base.SpecBase
 import models.fileDetails.FileErrorCode.{FailedSchemaValidation, MessageRefIDHasAlreadyBeenUsed, UnknownFileErrorCode}
-import models.fileDetails.RecordErrorCode.{DocRefIDFormat, MissingCorrDocRefId, UnknownRecordErrorCode}
+import models.fileDetails.RecordErrorCode.{CustomError, DocRefIDFormat, MissingCorrDocRefId, UnknownRecordErrorCode}
 import models.fileDetails.{FileErrors, RecordError, ValidationErrors}
+import viewmodels.FileRejectedViewModel.error_details_901
 
 class FileProblemHelperSpec extends SpecBase {
 
@@ -44,6 +45,30 @@ class FileProblemHelperSpec extends SpecBase {
 
       val validationErrors =
         ValidationErrors(Some(Seq(FileErrors(MessageRefIDHasAlreadyBeenUsed, None))), Some(Seq(RecordError(MissingCorrDocRefId, None, None))))
+
+      FileProblemHelper.isProblemStatus(validationErrors) mustBe false
+    }
+
+    "should return true if validation errors contain a 'problem' error for Custom error with unsupported error details" in {
+
+      val validationErrors =
+        ValidationErrors(None, Some(Seq(RecordError(CustomError, Some("something"), None))))
+
+      FileProblemHelper.isProblemStatus(validationErrors) mustBe true
+    }
+
+    "should return true if validation errors contain a 'problem' error for Custom error with unsupported error details is None" in {
+
+      val validationErrors =
+        ValidationErrors(None, Some(Seq(RecordError(CustomError, None, None))))
+
+      FileProblemHelper.isProblemStatus(validationErrors) mustBe true
+    }
+
+    "should return false if validation errors contain a 'problem' error for Custom error with supported error details" in {
+
+      val validationErrors =
+        ValidationErrors(None, Some(Seq(RecordError(CustomError, Some(error_details_901), None))))
 
       FileProblemHelper.isProblemStatus(validationErrors) mustBe false
     }

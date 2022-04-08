@@ -20,7 +20,6 @@ import controllers.routes
 import models.ConversationId
 import models.fileDetails.FileDetails.localDateTimeOrdering
 import models.fileDetails._
-import play.api.Logger
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, HtmlContent, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.{HeadCell, Table, TableRow}
@@ -29,8 +28,6 @@ import utils.{DateTimeFormatUtil, FileProblemHelper}
 import java.time.LocalDateTime
 
 object FileStatusViewModel {
-
-  val logger: Logger = Logger(this.getClass)
 
   private def htmlStatus(fileStatus: FileStatus)(implicit messages: Messages): Content = {
     val (cssClass, status): (String, String) = fileStatus match {
@@ -47,7 +44,6 @@ object FileStatusViewModel {
       case Accepted =>
         s"<a href='${routes.FileReceivedController.onPageLoad(conversationId).url}' class='govuk-link'>${Messages("fileStatus.accepted")}</a>"
       case Rejected(errors) if FileProblemHelper.isProblemStatus(errors) =>
-        logger.warn("File Rejected with unexpected error")
         s"<a href='${routes.FileProblemController.onPageLoad().url}' class='govuk-link'>${Messages("fileStatus.problem")}</a>"
       case Rejected(_) =>
         s"<a href='${routes.FileRejectedController.onPageLoad(conversationId).url}' class='govuk-link'>${Messages("fileStatus.rejected")}</a>"
