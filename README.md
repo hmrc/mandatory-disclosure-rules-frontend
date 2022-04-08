@@ -38,7 +38,7 @@ This service interacts with [mandatory disclosure rules (backend)](https://githu
 
 Run the following command to start services locally:
 
-    sm --start MDR_ALL -f
+    sm --start MDR_ALL -r
 
 Mandatory Disclosure Rules runs on port 10018
 
