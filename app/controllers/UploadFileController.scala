@@ -79,14 +79,13 @@ class UploadFileController @Inject() (
           val formWithErrors: Form[String] = form.withError("file-upload", "uploadFile.error.file.empty")
           toResponse(formWithErrors)
         case _ =>
-          logger.error(s"Upscan error $errorCode: $errorMessage, requestId is $errorRequestId")
+          logger.warn(s"Upscan error $errorCode: $errorMessage, requestId is $errorRequestId")
           Future.successful(Redirect(routes.ThereIsAProblemController.onPageLoad()))
       }
   }
 
   def getStatus: Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
-      logger.debug("Show status called")
       request.userAnswers.get(UploadIDPage) match {
         case Some(uploadId) =>
           upscanConnector.getUploadStatus(uploadId) flatMap {
@@ -94,11 +93,11 @@ class UploadFileController @Inject() (
               Future.successful(Ok(Json.toJson(URL(routes.FileValidationController.onPageLoad().url))))
             case Some(r: UploadRejected) =>
               if (r.details.message.contains("octet-stream")) {
-                logger.debug(s"Show errorForm on rejection $r")
+                logger.warn(s"Show errorForm on rejection $r")
                 val errorReason = r.details.failureReason
                 Future.successful(Ok(Json.toJson(URL(routes.UploadFileController.showError("OctetStream", errorReason, "").url))))
               } else {
-                logger.debug(s"Upload rejected. Error details: ${r.details}")
+                logger.warn(s"Upload rejected. Error details: ${r.details}")
                 Future.successful(Ok(Json.toJson(URL(routes.NotXMLFileController.onPageLoad().url))))
               }
             case Some(Quarantined) =>

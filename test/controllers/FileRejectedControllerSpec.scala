@@ -37,17 +37,8 @@ import scala.concurrent.Future
 class FileRejectedControllerSpec extends SpecBase with ModelGenerators with ScalaCheckPropertyChecks {
 
   private val fileName       = "CornerShop"
-  private val error          = "detail"
-  private val lineNumber     = "1"
   private val conversationId = ConversationId("conversationId")
   private val messageRefId   = "messageRefId"
-
-  private val errorRows = Seq(
-    Seq(
-      TableRow(content = Text(lineNumber), classes = "govuk-table__cell--numeric", attributes = Map("id" -> "lineNumber_1")),
-      TableRow(content = Text(error), attributes = Map("id" -> "errorMessage_1"))
-    )
-  )
 
   "FileRejected Controller" - {
 
@@ -87,7 +78,6 @@ class FileRejectedControllerSpec extends SpecBase with ModelGenerators with Scal
         val view = application.injector.instanceOf[FileRejectedView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(fileName, errorRows)(request, messages(application)).toString
       }
     }
 

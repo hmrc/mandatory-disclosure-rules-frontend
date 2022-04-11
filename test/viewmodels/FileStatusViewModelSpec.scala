@@ -19,6 +19,7 @@ package viewmodels
 import base.SpecBase
 import models.ConversationId
 import models.fileDetails.FileErrorCode.fileErrorCodesForProblemStatus
+import models.fileDetails.RecordErrorCode.CustomError
 import models.fileDetails._
 import uk.gov.hmrc.govukfrontend.views.Aliases.{TableRow, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
@@ -139,5 +140,48 @@ class FileStatusViewModelSpec extends SpecBase {
 
       FileStatusViewModel.createStatusTable(fileDetails)(messages(app)) mustBe expectedTable
     }
+
+    "must return the viewModel with the file status 'Problem'" in {
+      val expectedTable = Table(
+        List(
+          List(
+            TableRow(Text("name1.xml"), None, "", None, None, Map()),
+            TableRow(Text("19 Mar 2022 11:16am"), None, "", None, None, Map()),
+            TableRow(HtmlContent("<strong class='govuk-tag govuk-tag--blue'>Pending</strong>"), None, "", None, None, Map()),
+            TableRow(HtmlContent("<p class='govuk-visually-hidden'>None</p>"), None, "app-custom-class govuk-!-width-one-half", None, None, Map())
+          ),
+          List(
+            TableRow(Text("name2.xml"), None, "", None, None, Map()),
+            TableRow(Text("18 Mar 2022 11:09am"), None, "", None, None, Map()),
+            TableRow(HtmlContent("<strong class='govuk-tag govuk-tag--purple'>Problem</strong>"), None, "", None, None, Map()),
+            TableRow(
+              HtmlContent("<a href='/report-under-mandatory-disclosure-rules/report/file-not-accepted' class='govuk-link'>Contact us</a>"),
+              None,
+              "app-custom-class govuk-!-width-one-half",
+              None,
+              None,
+              Map()
+            )
+          )
+        ),
+        header,
+        Some("Result of automatic checks"),
+        "govuk-table__caption govuk-visually-hidden",
+        firstCellIsHeader = true,
+        "",
+        Map()
+      )
+
+      val rejected: Rejected = Rejected(ValidationErrors(None, Some(Seq(RecordError(CustomError, Some("random error details"), None)))))
+
+      val fileDetails =
+        Seq(
+          FileDetails("name1.xml", "messageRefId1", LocalDateTime.parse("2022-03-19T11:16:19.324"), LocalDateTime.now(), Pending, ConversationId("id")),
+          FileDetails("name2.xml", "messageRefId4", LocalDateTime.parse("2022-03-18T11:09:10.324"), LocalDateTime.now(), rejected, ConversationId("id"))
+        )
+
+      FileStatusViewModel.createStatusTable(fileDetails)(messages(app)) mustBe expectedTable
+    }
+
   }
 }

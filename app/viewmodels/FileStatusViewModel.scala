@@ -32,7 +32,8 @@ object FileStatusViewModel {
   private def htmlStatus(fileStatus: FileStatus)(implicit messages: Messages): Content = {
     val (cssClass, status): (String, String) = fileStatus match {
       case Rejected(errors) if FileProblemHelper.isProblemStatus(errors) => (Messages(s"cssColour.Problem"), Messages(s"status.Problem"))
-      case _                                                             => (Messages(s"cssColour.${fileStatus.toString}"), Messages(s"status.${fileStatus.toString}"))
+      case _ =>
+        (Messages(s"cssColour.${fileStatus.toString}"), Messages(s"status.${fileStatus.toString}"))
     }
     HtmlContent(s"<strong class='govuk-tag govuk-tag--$cssClass'>$status</strong>")
   }
