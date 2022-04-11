@@ -59,9 +59,13 @@ class UpscanConnector @Inject() (configuration: FrontendAppConfig, httpClient: H
           case status if is2xx(status) =>
             response.json.validate[UploadSessionDetails] match {
               case JsSuccess(details, _) => Some(details)
-              case JsError(_)            => None
+              case JsError(_) =>
+                logger.warn(s"GetUploadDetails: not a valid json")
+                None
             }
-          case _ => None
+          case _ =>
+            logger.warn(s"Failed to getUploadDetails")
+            None
         }
     }
   }
@@ -70,16 +74,18 @@ class UpscanConnector @Inject() (configuration: FrontendAppConfig, httpClient: H
     val statusUrl = s"$backendUrl/upscan/status/${uploadId.value}"
     httpClient.GET[HttpResponse](statusUrl).map {
       response =>
-        logger.debug(s"Status uploaded: $response")
         response.status match {
           case OK =>
             response.json.validate[UploadStatus] match {
               case JsSuccess(status, _) =>
                 Some(status)
               case JsError(_) =>
+                logger.warn(s"GetUploadStatus: not a valid json")
                 None
             }
-          case _ => None
+          case _ =>
+            logger.warn(s"Failed to getUploadStatus")
+            None
         }
     }
   }
