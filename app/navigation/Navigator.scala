@@ -29,12 +29,12 @@ class Navigator @Inject() () {
   private val normalRoutes: Page => UserAnswers => Call = {
     case InvalidXMLPage => _ => routes.InvalidXMLFileController.onPageLoad()
     case ValidXMLPage   => _ => routes.CheckYourFileDetailsController.onPageLoad()
-    case _              => _ => routes.IndexController.onPageLoad()
+    case _              => _ => routes.IndexController.onPageLoad
   }
 
   private val checkRouteMap: Page => UserAnswers => Call = {
     case ContactEmailPage => _ => routes.ChangeIndividualContactDetailsController.onPageLoad()
-    case _                => _ => routes.CheckYourAnswersController.onPageLoad()
+    case _                => _ => routes.CheckYourAnswersController.onPageLoad
   }
 
   def nextPage(page: Page, mode: Mode, userAnswers: UserAnswers): Call = mode match {

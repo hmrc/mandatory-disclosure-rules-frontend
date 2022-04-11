@@ -27,8 +27,8 @@ import javax.inject.{Inject, Singleton}
 class ContactDetailsNavigator @Inject() () {
 
   val normalRoutes: (Page, AffinityType) => UserAnswers => Call = {
-    case (ContactEmailPage, _) => _ => routes.IndexController.onPageLoad() //TODO GOTO Telephone
-    case _                     => _ => routes.IndexController.onPageLoad()
+    case (ContactEmailPage, _) => _ => routes.IndexController.onPageLoad //TODO GOTO Telephone
+    case _                     => _ => routes.IndexController.onPageLoad
   }
 
   val checkRouteMap: (Page, AffinityType) => UserAnswers => Call = {
@@ -56,7 +56,7 @@ class ContactDetailsNavigator @Inject() () {
           routes.ChangeOrganisationContactDetailsController.onPageLoad()
         )
     case (SecondContactPhonePage, Organisation) => _ => routes.ChangeOrganisationContactDetailsController.onPageLoad()
-    case _                                      => _ => routes.CheckYourAnswersController.onPageLoad()
+    case _                                      => _ => routes.CheckYourAnswersController.onPageLoad
   }
 
   private def haveTelephoneRoutes(mode: Mode, affinityType: AffinityType)(ua: UserAnswers): Call =
