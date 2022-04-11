@@ -24,7 +24,7 @@ e.preventDefault();
                   processData: false,
                   contentType: false,
                   crossDomain: true
-            }).error(function(jqXHR, textStatus, errorThrown ){
+            }).fail(function(jqXHR, textStatus, errorThrown ){
                 window.location =  $("#technicalDifficultiesRedirectUrl").val()
             }).done(function(){
                  checkProgress = true

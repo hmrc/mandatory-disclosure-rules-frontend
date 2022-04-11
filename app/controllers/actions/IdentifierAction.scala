@@ -51,13 +51,13 @@ class AuthenticatedIdentifierAction @Inject() (
       .retrieve(Retrievals.internalId and Retrievals.allEnrolments and Retrievals.affinityGroup) {
         case Some(internalId) ~ enrolments ~ Some(affinity) => getSubscriptionId(request, enrolments, internalId, affinity, block)
         case _ =>
-          logger.warn("Unable to retrieve internal id and affinity group")
-          throw AuthorisationException.fromString("Unable to retrieve internal id and affinity group")
+          logger.warn("Unable to retrieve internal id or affinity group")
+          throw AuthorisationException.fromString("Unable to retrieve internal id or affinity group")
       } recover {
       case _: NoActiveSession =>
         Redirect(config.loginUrl, Map("continue" -> Seq(config.loginContinueUrl)))
       case _: AuthorisationException =>
-        Redirect(routes.UnauthorisedController.onPageLoad())
+        Redirect(routes.UnauthorisedController.onPageLoad)
     }
   }
 
