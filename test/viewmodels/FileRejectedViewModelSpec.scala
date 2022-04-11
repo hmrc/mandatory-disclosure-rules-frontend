@@ -63,7 +63,7 @@ class FileRejectedViewModelSpec extends SpecBase {
               TableRow(Text("509"), None, "", None, None, Map("id" -> "code_509")),
               TableRow(Text("File"), None, "", None, None, Map("id" -> "docRefId_509")),
               TableRow(
-                Text("Please replace the MessageRefID field value with a unique value (not containing all blanks), and resubmit the file"),
+                Text("The MessageRefId has already been used in a file previously received, it must be unique"),
                 None,
                 "",
                 None,
