@@ -54,7 +54,7 @@ lazy val root = (project in file("."))
         group(
           Seq(
             "javascripts/app.js",
-            "javascripts/jquery.min.js",
+            "javascripts/jquery-3.6.0.min.js",
             "javascripts/upload-spinner.js",
             "javascripts/second-spinner.js"
           )

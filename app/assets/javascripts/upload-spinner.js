@@ -38,7 +38,7 @@ if(fileLength === 0){
                   processData: false,
                   contentType: false,
                   crossDomain: true
-            }).error(function(jqXHR, textStatus, errorThrown ){
+            }).fail(function(jqXHR, textStatus, errorThrown ){
                 submitError("4000", jqXHR)
             }).done(function(){
                 // Disable UI
