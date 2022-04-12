@@ -16,10 +16,10 @@
 
 package utils
 
-import models.fileDetails.FileErrorCode.fileErrorCodesForProblemStatus
+import models.fileDetails.FileErrorCode.{fileErrorCodesForProblemStatus, CustomError => FileCustomError}
 import models.fileDetails.RecordErrorCode.{CustomError, DocRefIDFormat}
-import models.fileDetails.{FileErrorCode, RecordError, RecordErrorCode, ValidationErrors}
-import viewmodels.FileRejectedViewModel.errorList
+import models.fileDetails.{FileErrorCode, FileErrors, RecordError, RecordErrorCode, ValidationErrors}
+import viewmodels.FileRejectedViewModel.{errorList, error_details_910}
 
 object FileProblemHelper {
 
@@ -30,13 +30,25 @@ object FileProblemHelper {
     val errorCodes: Seq[String] =
       Seq(errors.fileError.map(_.map(_.code.code)).getOrElse(Nil), errors.recordError.map(_.map(_.code.code)).getOrElse(Nil)).flatten
 
-    errorCodes.exists(!expectedErrorCodes.contains(_) || errorCodes.exists(problemsStatusErrorCodes.contains(_))) || errorDetailNotAllowed(errors.recordError)
+    (errorCodes.exists(
+      !expectedErrorCodes.contains(_)
+        || errorCodes.exists(problemsStatusErrorCodes.contains(_))
+    )
+    || recordErrorDetailNotAllowed(errors.recordError)
+    || fileErrorDetailNotAllowed(errors.fileError))
   }
 
-  private def errorDetailNotAllowed(errors: Option[Seq[RecordError]]): Boolean =
+  private def recordErrorDetailNotAllowed(errors: Option[Seq[RecordError]]): Boolean =
     errors.exists(
       _.exists(
         error => error.code == CustomError && !errorList.exists(_.equals(error.details.getOrElse("")))
+      )
+    )
+
+  private def fileErrorDetailNotAllowed(errors: Option[Seq[FileErrors]]): Boolean =
+    errors.exists(
+      _.exists(
+        error => error.code == FileCustomError && !error.details.contains(error_details_910)
       )
     )
 }
