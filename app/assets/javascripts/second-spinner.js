@@ -16,11 +16,13 @@ e.preventDefault();
        };
 
     function sendYourFile(form){
+        var formData = new FormData(form);
+        formData.append("", ""); //IE 11 fix to avoid empty form
         if (checkProgress === false) {
             $.ajax({
                   url: form.action,
                   type: "POST",
-                  data: new FormData(form),
+                  data: formData,
                   processData: false,
                   contentType: false,
                   crossDomain: true
