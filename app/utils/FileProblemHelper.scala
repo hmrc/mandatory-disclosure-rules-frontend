@@ -36,6 +36,7 @@ object FileProblemHelper {
     )
     || recordErrorDetailNotAllowed(errors.recordError)
     || fileErrorDetailNotAllowed(errors.fileError))
+
   }
 
   private def recordErrorDetailNotAllowed(errors: Option[Seq[RecordError]]): Boolean =
@@ -45,10 +46,14 @@ object FileProblemHelper {
       )
     )
 
-  private def fileErrorDetailNotAllowed(errors: Option[Seq[FileErrors]]): Boolean =
-    errors.exists(
+  private def fileErrorDetailNotAllowed(errors: Option[Seq[FileErrors]]): Boolean = {
+    println("==================" + errors)
+    val test = errors.exists(
       _.exists(
         error => error.code == FileCustomError && !error.details.contains(error_details_910)
       )
     )
+    println("======test============" + test)
+    test
+  }
 }
