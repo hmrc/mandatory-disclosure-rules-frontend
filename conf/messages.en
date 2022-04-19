@@ -289,7 +289,7 @@ fileRejected.912.value = The top level of the StructureChart must not have an Ow
 
 label.file = File
 
-xml.deleteMessage = Theres a problem with this line number
+xml.defaultMessage = There is a problem with this line number
 xml.must.have.element.declaration = The {0} field must have an XML namespace (xmlns), which must be {1}
 xml.add.an.element = Add an {0}
 xml.add.a.element = Add a {0}
