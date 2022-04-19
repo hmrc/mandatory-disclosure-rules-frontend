@@ -226,7 +226,7 @@ class FileRejectedViewModelSpec extends SpecBase {
           RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_901), None),
           RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_902), None),
           RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_903), None),
-          RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_904), None),
+          RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_904a), None),
           RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_905), None),
           RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_906), None),
           RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_907), None),
