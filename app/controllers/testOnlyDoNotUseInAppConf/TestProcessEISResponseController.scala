@@ -19,7 +19,6 @@ package controllers.testOnlyDoNotUseInAppConf
 import com.google.inject.Inject
 import play.api.Logging
 import play.api.mvc.{Action, MessagesControllerComponents}
-import uk.gov.hmrc.http.{HeaderCarrier, HeaderNames}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 import scala.concurrent.{ExecutionContext, Future}

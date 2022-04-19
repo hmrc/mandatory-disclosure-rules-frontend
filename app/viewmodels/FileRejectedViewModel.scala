@@ -73,7 +73,11 @@ object FileRejectedViewModel {
   private def createTableRow(validationErrors: ValidationErrors)(implicit messages: Messages): Seq[Seq[TableRow]] = {
     val fileErrors: Option[Seq[(String, Content, String)]] = validationErrors.fileError.map(
       _.map(
-        error => (Messages(s"fileRejected.${error.code.code}.key"), Text(Messages("label.file")), Messages(s"fileRejected.${error.code.code}.value"))
+        error =>
+          error.code match {
+            case FileErrorCode.CustomError => handleCustomErrors(error.details, None)
+            case errorCode                 => (Messages(s"fileRejected.${errorCode.code}.key"), Text(Messages("label.file")), Messages(s"fileRejected.${errorCode.code}.value"))
+          }
       )
     )
 
@@ -133,7 +137,6 @@ object FileRejectedViewModel {
     error_details_907,
     error_details_908,
     error_details_909,
-    error_details_910,
     error_details_911,
     error_details_912
   )

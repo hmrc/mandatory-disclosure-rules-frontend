@@ -396,6 +396,54 @@ class FileRejectedViewModelSpec extends SpecBase {
 
     }
 
+    "create table for all the allowed the custom file errors " in {
+
+      val fileErrors = Some(
+        Seq(
+          FileErrors(FileErrorCode.CustomError, Some(FileRejectedViewModel.error_details_910)),
+          FileErrors(FileErrorCode.FileContainsTestDataForProductionEnvironment, Some("error"))
+        )
+      )
+
+      val expectedTable = Table(
+        List(
+          List(
+            TableRow(Text("910"), None, "", None, None, Map("id" -> "code_910")),
+            TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_910")),
+            TableRow(
+              Text("MessageRefId must be 85 characters or less, start with your 15-character MDR ID and include up to 70 other characters of your choice"),
+              None,
+              "",
+              None,
+              None,
+              Map("id" -> "errorMessage_910")
+            )
+          ),
+          List(
+            TableRow(Text("510"), None, "", None, None, Map("id" -> "code_510")),
+            TableRow(Text("File"), None, "", None, None, Map("id" -> "docRefId_510")),
+            TableRow(
+              Text("We cannot accept test data so each DocTypeIndic must have a value of either OECD0, OECD1, OECD2 or OECD3"),
+              None,
+              "",
+              None,
+              None,
+              Map("id" -> "errorMessage_510")
+            )
+          )
+        ),
+        header,
+        Some("Errors"),
+        "govuk-table__caption govuk-heading-m",
+        false,
+        "",
+        Map()
+      )
+
+      val validationErrors = ValidationErrors(fileErrors, None)
+
+      FileRejectedViewModel.createTable(validationErrors)(messages(app)) mustBe expectedTable
+    }
   }
 
 }
