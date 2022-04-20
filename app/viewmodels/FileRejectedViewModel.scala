@@ -54,23 +54,37 @@ object FileRejectedViewModel {
   private def handleCustomErrors(errorDetails: Option[String], docRefIDInError: Option[Seq[String]])(implicit
     messages: Messages
   ): (String, HtmlContent, String) =
-    errorDetails match {
-      case Some(`error_details_901`)  => ("901", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.901.value"))
-      case Some(`error_details_902`)  => ("902", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.902.value"))
-      case Some(`error_details_903`)  => ("903", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.903.value"))
-      case Some(`error_details_904a`) => ("904", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.904.value"))
-      case Some(`error_details_904b`) => ("904", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.904.value"))
-      case Some(`error_details_904c`) => ("904", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.904.value"))
-      case Some(`error_details_904d`) => ("904", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.904.value"))
-      case Some(`error_details_905`)  => ("905", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.905.value"))
-      case Some(`error_details_906`)  => ("906", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.906.value"))
-      case Some(`error_details_907`)  => ("907", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.907.value"))
-      case Some(`error_details_908`)  => ("908", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.908.value"))
-      case Some(`error_details_909`)  => ("909", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.909.value"))
-      case Some(`error_details_910`)  => ("910", HtmlContent(Messages("label.file")), Messages(s"fileRejected.910.value"))
-      case Some(`error_details_911`)  => ("911", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.911.value"))
-      case Some(`error_details_912`)  => ("912", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.912.value"))
-      case _                          => throw new Exception(s"The received RecordError details: ${errorDetails.getOrElse("")} is not the expected error details")
+    errorDetails.getOrElse("") match {
+      case error if error.contains(`error_details_901`) =>
+        ("901", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.901.value"))
+      case error if error.contains(`error_details_902`) =>
+        ("902", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.902.value"))
+      case error if error.contains(`error_details_903`) =>
+        ("903", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.903.value"))
+      case error if error.contains(`error_details_904a`) =>
+        ("904", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.904.value"))
+      case error if error.contains(`error_details_904b`) =>
+        ("904", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.904.value"))
+      case error if error.contains(`error_details_904c`) =>
+        ("904", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.904.value"))
+      case error if error.contains(`error_details_904d`) =>
+        ("904", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.904.value"))
+      case error if error.contains(`error_details_905`) =>
+        ("905", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.905.value"))
+      case error if error.contains(`error_details_906`) =>
+        ("906", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.906.value"))
+      case error if error.contains(`error_details_907`) =>
+        ("907", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.907.value"))
+      case error if error.contains(`error_details_908`) =>
+        ("908", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.908.value"))
+      case error if error.contains(`error_details_909`) =>
+        ("909", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.909.value"))
+      case error if error.contains(`error_details_910`) => ("910", HtmlContent(Messages("label.file")), Messages(s"fileRejected.910.value"))
+      case error if error.contains(`error_details_911`) =>
+        ("911", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.911.value"))
+      case error if error.contains(`error_details_912`) =>
+        ("912", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.912.value"))
+      case error => throw new Exception(s"The received RecordError details: $error is not the expected error details")
     }
 
   private def createTableRow(validationErrors: ValidationErrors)(implicit messages: Messages): Seq[Seq[TableRow]] = {
@@ -113,20 +127,20 @@ object FileRejectedViewModel {
   val error_details_901  = "CorrDocRefID element type does not match original DocRefID element type"
   val error_details_902  = "Correction is not for the relevant Disclosing element"
   val error_details_903  = "CorrDocRefID must not be present for OECD0 at Disclosing Element"
-  val error_details_904a = "If the only Capacity entry is MDR501 the Reason must be either MDR701 or MDR901."
-  val error_details_904b = "If the only Capacity entry is MDR502 the Reason must be either MDR702 or MDR902."
-  val error_details_904c = "If the only Capacity entry is MDR503 the Reason must be either MDR701, MDR702, MDR901 or MDR902."
-  val error_details_904d = "If the only Capacity entry is MDR504 then Reason must not be provided."
-  val error_details_905  = "If DocTypeIndic of Disclosing is OECD0 the DocTypeIndic of MdrReport must OECD2."
-  val error_details_906  = "If DocTypeIndic of MdrReport is OECD3 the DocTypeIndic of Disclosing must be OECD3."
-  val error_details_907  = "If MessageTypeIndic is MDR401, Disclosing DocTypeIndic can only be OECD1."
-  val error_details_908  = "If MessageTypeIndic is MDR401 and Diclosing DocTypeIndic is OECD1, the MdrReport must be present and have DocTypeIndic of OECD1."
-  val error_details_909  = "DocRefID format does not match the format as set out in the HMRC MDR user guide."
-  val error_details_910  = "MessageRefID format does not match the format as set out in the HMRC MDR user guide."
-  val error_details_911  = """TIN issuedby must be provided where a TIN has been reported. The only exception is where "NOTIN" has been reported."""
+  val error_details_904a = "If the only Capacity entry is MDR501 the Reason must be either MDR701 or MDR901"
+  val error_details_904b = "If the only Capacity entry is MDR502 the Reason must be either MDR702 or MDR902"
+  val error_details_904c = "If the only Capacity entry is MDR503 the Reason must be either MDR701, MDR702, MDR901 or MDR902"
+  val error_details_904d = "If the only Capacity entry is MDR504 then Reason must not be provided"
+  val error_details_905  = "If DocTypeIndic of Disclosing is OECD0 the DocTypeIndic of MdrReport must OECD2"
+  val error_details_906  = "If DocTypeIndic of MdrReport is OECD3 the DocTypeIndic of Disclosing must be OECD3"
+  val error_details_907  = "If MessageTypeIndic is MDR401, Disclosing DocTypeIndic can only be OECD1"
+  val error_details_908  = "If MessageTypeIndic is MDR401 and Diclosing DocTypeIndic is OECD1, the MdrReport must be present and have DocTypeIndic of OECD1"
+  val error_details_909  = "DocRefID format does not match the format as set out in the HMRC MDR user guide"
+  val error_details_910  = "MessageRefID format does not match the format as set out in the HMRC MDR user guide"
+  val error_details_911  = """TIN issuedby must be provided where a TIN has been reported. The only exception is where "NOTIN" has been reported"""
 
   val error_details_912 =
-    "The top level of the structure chart must not include the elements: mdr:ownership and mdr:InvestAmount. These should only be provided in the  mdr:ListChilds tag."
+    "The top level of the structure chart must not include the elements: mdr:ownership and mdr:InvestAmount. These should only be provided in the  mdr:ListChilds tag"
 
   val errorList: Seq[String] = Seq(
     error_details_901,

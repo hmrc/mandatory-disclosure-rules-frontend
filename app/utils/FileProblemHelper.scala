@@ -42,14 +42,14 @@ object FileProblemHelper {
   private def recordErrorDetailNotAllowed(errors: Option[Seq[RecordError]]): Boolean =
     errors.exists(
       _.exists(
-        error => error.code == CustomError && !errorList.exists(_.equals(error.details.getOrElse("")))
+        error => error.code == CustomError && !errorList.exists(error.details.getOrElse("").contains(_))
       )
     )
 
   private def fileErrorDetailNotAllowed(errors: Option[Seq[FileErrors]]): Boolean =
     errors.exists(
       _.exists(
-        error => error.code == FileCustomError && !error.details.contains(error_details_910)
+        error => error.code == FileCustomError && !error.details.getOrElse("").contains(error_details_910)
       )
     )
 }
