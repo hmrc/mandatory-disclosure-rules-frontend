@@ -42,7 +42,7 @@ object FileProblemHelper {
   private def recordErrorDetailNotAllowed(errors: Option[Seq[RecordError]]): Boolean =
     errors.exists(
       _.exists(
-        error => error.code == CustomError && !errorList.exists(error.details.contains(_))
+        error => error.code == CustomError && !errorList.exists(error.details.getOrElse("").contains(_))
       )
     )
 
