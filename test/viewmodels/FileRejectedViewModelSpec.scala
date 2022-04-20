@@ -226,7 +226,7 @@ class FileRejectedViewModelSpec extends SpecBase {
           RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_901), None),
           RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_902), None),
           RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_903), None),
-          RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_904), None),
+          RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_904a), None),
           RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_905), None),
           RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_906), None),
           RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_907), None),
@@ -355,7 +355,184 @@ class FileRejectedViewModelSpec extends SpecBase {
           ),
           List(
             TableRow(Text("910"), None, "", None, None, Map("id" -> "code_910")),
-            TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_910")),
+            TableRow(HtmlContent("File"), None, "", None, None, Map("id" -> "docRefId_910")),
+            TableRow(
+              Text("MessageRefId must be 85 characters or less, start with your 15-character MDR ID and include up to 70 other characters of your choice"),
+              None,
+              "",
+              None,
+              None,
+              Map("id" -> "errorMessage_910")
+            )
+          ),
+          List(
+            TableRow(Text("911"), None, "", None, None, Map("id" -> "code_911")),
+            TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_911")),
+            TableRow(Text("Provide an issuedBy for every TIN that has a value other than NOTIN"), None, "", None, None, Map("id" -> "errorMessage_911"))
+          ),
+          List(
+            TableRow(Text("912"), None, "", None, None, Map("id" -> "code_912")),
+            TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_912")),
+            TableRow(Text("The top level of the StructureChart must not have an Ownership or InvestAmount"),
+                     None,
+                     "",
+                     None,
+                     None,
+                     Map("id" -> "errorMessage_912")
+            )
+          )
+        ),
+        header,
+        Some("Errors"),
+        "govuk-table__caption govuk-heading-m",
+        false,
+        "",
+        Map()
+      )
+
+      val validationErrors = ValidationErrors(None, recordErrors)
+
+      FileRejectedViewModel.createTable(validationErrors)(messages(app)) mustBe expectedTable
+
+    }
+
+    "create table for all the allowed the custom errors when the errors have extra content at the end" in {
+
+      val recordErrors = Some(
+        Seq(
+          RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_901 + ". extra content"), None),
+          RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_902 + ". extra content"), None),
+          RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_903 + ". extra content"), None),
+          RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_904a + ". extra content"), None),
+          RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_905 + ". extra content"), None),
+          RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_906 + ". extra content"), None),
+          RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_907 + ". extra content"), None),
+          RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_908 + ". extra content"), None),
+          RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_909 + ". extra content"), None),
+          RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_910 + ". extra content"), None),
+          RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_911 + ". extra content"), None),
+          RecordError(RecordErrorCode.CustomError, Some(FileRejectedViewModel.error_details_912 + ". extra content"), None)
+        )
+      )
+
+      val expectedTable = Table(
+        List(
+          List(
+            TableRow(Text("901"), None, "", None, None, Map("id" -> "code_901")),
+            TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_901")),
+            TableRow(
+              Text(
+                "The CorrDocRefId does not match a DocRefId from the same type of section (either Disclosing or MdrReport). It must refer to the same element"
+              ),
+              None,
+              "",
+              None,
+              None,
+              Map("id" -> "errorMessage_901")
+            )
+          ),
+          List(
+            TableRow(Text("902"), None, "", None, None, Map("id" -> "code_902")),
+            TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_902")),
+            TableRow(
+              Text("The MdrReport CorrDocRefId does not refer to the same previously sent MdrBody as the Disclosing element"),
+              None,
+              "",
+              None,
+              None,
+              Map("id" -> "errorMessage_902")
+            )
+          ),
+          List(
+            TableRow(Text("903"), None, "", None, None, Map("id" -> "code_903")),
+            TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_903")),
+            TableRow(
+              Text("The Disclosing section contains resent data (DocTypeIndic = OECD0) so it must not have a CorrDocRefId"),
+              None,
+              "",
+              None,
+              None,
+              Map("id" -> "errorMessage_903")
+            )
+          ),
+          List(
+            TableRow(Text("904"), None, "", None, None, Map("id" -> "code_904")),
+            TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_904")),
+            TableRow(
+              Text("Disclosing Capacity is not one of the allowed values for the MdrReport CrsAvoidance or OOS Reason provided"),
+              None,
+              "",
+              None,
+              None,
+              Map("id" -> "errorMessage_904")
+            )
+          ),
+          List(
+            TableRow(Text("905"), None, "", None, None, Map("id" -> "code_905")),
+            TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_905")),
+            TableRow(Text("Since the DocTypeIndic of Disclosing is OECD0, the DocTypeIndic of MdrReport must be OECD2"),
+                     None,
+                     "",
+                     None,
+                     None,
+                     Map("id" -> "errorMessage_905")
+            )
+          ),
+          List(
+            TableRow(Text("906"), None, "", None, None, Map("id" -> "code_906")),
+            TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_906")),
+            TableRow(
+              Text("Since the MdrReport has a DocTypeIndic of OECD3, indicating this section must be deleted, this Disclosing section must be deleted too"),
+              None,
+              "",
+              None,
+              None,
+              Map("id" -> "errorMessage_906")
+            )
+          ),
+          List(
+            TableRow(Text("907"), None, "", None, None, Map("id" -> "code_907")),
+            TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_907")),
+            TableRow(
+              Text(
+                "Since the MessageTypeIndic contains the value of MDR401 for new information, the Disclosing DocTypeIndic must contain the value of OECD1 for new information"
+              ),
+              None,
+              "",
+              None,
+              None,
+              Map("id" -> "errorMessage_907")
+            )
+          ),
+          List(
+            TableRow(Text("908"), None, "", None, None, Map("id" -> "code_908")),
+            TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_908")),
+            TableRow(
+              Text(
+                "Since the MessageTypeIndic contains the value of MDR401 for new information, an MdrReport section must be provided with a DocTypeIndic of OECD1 for new information"
+              ),
+              None,
+              "",
+              None,
+              None,
+              Map("id" -> "errorMessage_908")
+            )
+          ),
+          List(
+            TableRow(Text("909"), None, "", None, None, Map("id" -> "code_909")),
+            TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_909")),
+            TableRow(
+              Text("DocRefId must be 100 characters or less, start with your 15-character MDR ID and include up to 85 other characters of your choice"),
+              None,
+              "",
+              None,
+              None,
+              Map("id" -> "errorMessage_909")
+            )
+          ),
+          List(
+            TableRow(Text("910"), None, "", None, None, Map("id" -> "code_910")),
+            TableRow(HtmlContent("File"), None, "", None, None, Map("id" -> "docRefId_910")),
             TableRow(
               Text("MessageRefId must be 85 characters or less, start with your 15-character MDR ID and include up to 70 other characters of your choice"),
               None,
@@ -409,7 +586,7 @@ class FileRejectedViewModelSpec extends SpecBase {
         List(
           List(
             TableRow(Text("910"), None, "", None, None, Map("id" -> "code_910")),
-            TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_910")),
+            TableRow(HtmlContent("File"), None, "", None, None, Map("id" -> "docRefId_910")),
             TableRow(
               Text("MessageRefId must be 85 characters or less, start with your 15-character MDR ID and include up to 70 other characters of your choice"),
               None,
