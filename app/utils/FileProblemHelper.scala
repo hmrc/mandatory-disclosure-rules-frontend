@@ -49,7 +49,7 @@ object FileProblemHelper {
   private def fileErrorDetailNotAllowed(errors: Option[Seq[FileErrors]]): Boolean =
     errors.exists(
       _.exists(
-        error => error.code == FileCustomError && !error.details.contains(error_details_910)
+        error => error.code == FileCustomError && !error.details.getOrElse("").contains(error_details_910)
       )
     )
 }
