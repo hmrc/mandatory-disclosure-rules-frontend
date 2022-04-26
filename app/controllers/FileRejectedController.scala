@@ -18,12 +18,11 @@ package controllers
 
 import connectors.FileDetailsConnector
 import controllers.actions._
+import models.ConversationId
 import models.fileDetails.Rejected
-import models.{ConversationId, GenericError, Message}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.ErrorViewHelper
 import viewmodels.FileRejectedViewModel
 import views.html.{FileRejectedView, ThereIsAProblemView}
 

@@ -22,8 +22,8 @@ import pages.ValidXMLPage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import viewmodels.CheckYourFileDetailsViewModel
-import views.html.CheckYourFileDetailsView
 import viewmodels.govuk.summarylist._
+import views.html.CheckYourFileDetailsView
 
 class CheckYourFileDetailsControllerSpec extends SpecBase {
 

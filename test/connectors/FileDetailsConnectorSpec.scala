@@ -18,7 +18,7 @@ package connectors
 
 import models.fileDetails.FileErrorCode.MessageRefIDHasAlreadyBeenUsed
 import models.fileDetails.RecordErrorCode.MessageTypeIndic
-import models.fileDetails.{Accepted, FileDetails, FileErrors, Pending, RecordError, Rejected, ValidationErrors}
+import models.fileDetails._
 import models.{fileDetails, ConversationId}
 import play.api.Application
 import play.api.http.Status.OK

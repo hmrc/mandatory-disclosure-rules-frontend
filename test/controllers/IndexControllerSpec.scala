@@ -18,8 +18,8 @@ package controllers
 
 import base.SpecBase
 import connectors.FileDetailsConnector
-import models.{ConversationId, UserAnswers}
 import models.fileDetails.{Accepted, FileDetails}
+import models.{ConversationId, UserAnswers}
 import org.mockito.ArgumentMatchers.any
 import play.api.inject.bind
 import play.api.test.FakeRequest
