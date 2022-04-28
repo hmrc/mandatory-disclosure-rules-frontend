@@ -22,17 +22,7 @@ import generators.Generators
 import models.{AffinityType, CheckMode, UserAnswers}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import pages.{
-  ContactEmailPage,
-  ContactNamePage,
-  ContactPhonePage,
-  HaveSecondContactPage,
-  HaveTelephonePage,
-  SecondContactEmailPage,
-  SecondContactHavePhonePage,
-  SecondContactNamePage,
-  SecondContactPhonePage
-}
+import pages._
 
 class ContactDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
   val navigator: ContactDetailsNavigator = new ContactDetailsNavigator

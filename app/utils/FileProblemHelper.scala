@@ -18,7 +18,7 @@ package utils
 
 import models.fileDetails.FileErrorCode.{fileErrorCodesForProblemStatus, CustomError => FileCustomError}
 import models.fileDetails.RecordErrorCode.{CustomError, DocRefIDFormat}
-import models.fileDetails.{FileErrorCode, FileErrors, RecordError, RecordErrorCode, ValidationErrors}
+import models.fileDetails._
 import viewmodels.FileRejectedViewModel.{errorList, error_details_910}
 
 object FileProblemHelper {

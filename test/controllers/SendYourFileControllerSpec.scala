@@ -22,7 +22,7 @@ import connectors.{FileDetailsConnector, SubmissionConnector}
 import handlers.XmlHandler
 import models.fileDetails.FileErrorCode.FailedSchemaValidation
 import models.fileDetails.RecordErrorCode.DocRefIDFormat
-import models.fileDetails.{Accepted, FileErrors, Pending, RecordError, Rejected, ValidationErrors}
+import models.fileDetails._
 import models.{ConversationId, MDR401, MDR402, MessageSpecData, UserAnswers, ValidatedFileData}
 import org.mockito.ArgumentMatchers.any
 import pages.{ConversationIdPage, URLPage, ValidXMLPage}
