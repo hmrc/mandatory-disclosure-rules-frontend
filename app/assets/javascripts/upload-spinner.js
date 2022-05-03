@@ -22,7 +22,7 @@ if(fileLength === 0){
 
    function addSpinner(){
        $("#file-upload-container").after(
-       "<div id=\"processing\" aria-live=\"polite\" class=\"govuk-!-margin-bottom-5 govuk-!-margin-top-5\">" +
+       "<div id=\"processing\" aria-live=\"polite\" role=status class=\"govuk-!-margin-bottom-5 govuk-!-margin-top-5\">" +
        "<h2 class=\"govuk-heading-m\">"+ $("#processingMessage").val() +
        "</h2><div><div class=\"ccms-loader\"></div></div></div>"
        )
