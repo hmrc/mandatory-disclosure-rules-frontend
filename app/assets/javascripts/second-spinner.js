@@ -9,7 +9,7 @@ e.preventDefault();
 
        function addSpinner(){
               $("#submit").before(
-                "<div id=\"processing\" aria-live=\"polite\" role=\"status\" class=\"govuk-!-margin-bottom-5 govuk-!-margin-top-6\">" +
+                "<div id=\"processing\" role=\"status\" tabindex=\"-1\" class=\"govuk-!-margin-bottom-5 govuk-!-margin-top-6\">" +
                 "<h2 class=\"govuk-heading-m\">"+ $("#processingMessage").val() +
                 "</h2><div><div class=\"ccms-loader\"></div></div></div>"
                 )
