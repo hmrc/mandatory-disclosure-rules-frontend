@@ -44,7 +44,6 @@
   }
   <input type="hidden" id="fileUploadRefreshUrl" value="@routes.UploadFileController.getStatus().url" />
   <input type="hidden" id="upScanErrorRedirectUrl" value="/report-under-mandatory-disclosure-rules/report/error" />
-  <input type="hidden" id="processingMessage" value="@messages("fileCheck.heading")" />
 
   <div id="file-upload-container" class="js-visible mt-3">
 
@@ -61,6 +60,13 @@
   )
 
   </div>
+
+  <div id="processing" aria-live="polite" role="status" class="govuk-!-margin-bottom-5 govuk-!-margin-top-5" hidden>
+   <h2 class="govuk-heading-m">@messages("fileCheck.heading")</h2>
+   <div>
+    <div class="ccms-loader"></div>
+   </div>
+ </div>
 
   <p class="govuk-body">
   @govukButton(
