@@ -21,6 +21,9 @@ if(fileLength === 0){
     };
 
    function addSpinner(){
+       $(".govuk-form-group--error").removeClass("govuk-form-group--error")
+       $("#file-upload-error").remove()
+       $("#error-summary").remove()
        $("#processing").attr('hidden', false)
        $("#file-upload").attr('disabled', 'disabled')
    };
