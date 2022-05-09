@@ -25,6 +25,7 @@
 @if(errors.nonEmpty) {
     @govUkErrorSummary(ErrorSummary(
         errorList = errors.asTextErrorLinks,
-        title = Text(messages("error.summary.title"))
+        title = Text(messages("error.summary.title")),
+        attributes = Map("id"-> "error-summary")
     ))
 }
