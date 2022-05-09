@@ -77,7 +77,6 @@ journeyRecovery.startAgain.guidance = [Add content to explain why the user needs
 
 signedOut.title = For your security, we signed you out
 signedOut.heading = For your security, we signed you out
-signedOut.guidance = If you uploaded a file, it has not been saved.
 signedOut.back = Back to report cross-border arrangements
 
 unauthorised.title = You can’t access this service with this account
