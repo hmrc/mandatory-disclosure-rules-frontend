@@ -22,7 +22,7 @@ e.preventDefault();
                   processData: false,
                   contentType: false,
                   crossDomain: true,
-                  timeout: 12000
+                  timeout: 120000
             }).fail(function(jqXHR, textStatus, errorThrown ){
                 window.location =  $("#technicalDifficultiesRedirectUrl").val()
             }).done(function(){
