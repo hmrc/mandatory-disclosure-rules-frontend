@@ -72,3 +72,11 @@ function refreshPage(){
     }
 
 }
+
+$(document).ready(function ()
+{
+  var hasError = (window.location.href.indexOf("errorCode") > -1)
+  var preFixError = hasError ? "Error: " : ""
+  var appendError = preFixError + $("title").html()
+  $("title").html(appendError)
+});

@@ -21,7 +21,8 @@ e.preventDefault();
                   data: formData,
                   processData: false,
                   contentType: false,
-                  crossDomain: true
+                  crossDomain: true,
+                  timeout: 12000
             }).fail(function(jqXHR, textStatus, errorThrown ){
                 window.location =  $("#technicalDifficultiesRedirectUrl").val()
             }).done(function(){
