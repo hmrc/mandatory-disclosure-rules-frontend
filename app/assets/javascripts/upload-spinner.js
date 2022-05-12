@@ -30,13 +30,13 @@ if(fileLength === 0){
 
     function fileUpload(form){
         if (inProgress === false) {
-            $.ajax({
+                $.ajax({
                   url: form.action,
                   type: "POST",
                   data: new FormData(form),
                   processData: false,
                   contentType: false,
-                  crossDomain: true
+                  crossDomain   : true
             }).fail(function(jqXHR, textStatus, errorThrown ){
                 submitError("4000", jqXHR)
             }).done(function(){
