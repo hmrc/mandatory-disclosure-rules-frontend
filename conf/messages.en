@@ -276,7 +276,7 @@ fileRejected.80014.value = The Disclosing DocTypeIndic of OECD0 shows this secti
 fileRejected.901.value = The CorrDocRefId does not match a DocRefId from the same type of section (either Disclosing or MdrReport). It must refer to the same element
 fileRejected.902.value = The MdrReport CorrDocRefId does not refer to the same previously sent MdrBody as the Disclosing element
 fileRejected.903.value = The Disclosing section contains resent data (DocTypeIndic = OECD0) so it must not have a CorrDocRefId
-fileRejected.904.value = Disclosing Capacity is not one of the allowed values for the MdrReport CrsAvoidance or OOS Reason provided
+fileRejected.904.value = MdrReport CrsAvoidance or OOS Reason is not one of the allowed values for the Disclosing Capacity provided
 fileRejected.905.value = Since the DocTypeIndic of Disclosing is OECD0, the DocTypeIndic of MdrReport must be OECD2
 fileRejected.906.value = Since the MdrReport has a DocTypeIndic of OECD3, indicating this section must be deleted, this Disclosing section must be deleted too
 fileRejected.907.value = Since the MessageTypeIndic contains the value of MDR401 for new information, the Disclosing DocTypeIndic must contain the value of OECD1 for new information
