@@ -26,6 +26,10 @@
     <h1 class="govuk-heading-l">@messages("fileTooLarge.heading")</h1>
 
     <p class="govuk-body">@messages("fileTooLarge.p1")</p>
-    <p class="govuk-body">@link(routes.UploadFileController.onPageLoad().url, "problemPage.uploadLink")</p>
-    <p class="govuk-body">@link("#", "problemPage.MDR.guidanceLink")</p>
+
+    <ul class="govuk-list">
+        <li>@link(routes.UploadFileController.onPageLoad().url, "problemPage.uploadLink")</li>
+        <li>@link("#", "problemPage.MDR.guidanceLink")</li>
+        <li>@link(routes.IndexController.onPageLoad.url, "site.backToReportPage")</li>
+    </ul>
 }
