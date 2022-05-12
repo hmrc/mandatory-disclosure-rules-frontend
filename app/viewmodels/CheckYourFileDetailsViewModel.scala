@@ -30,11 +30,7 @@ object CheckYourFileDetailsViewModel {
       SummaryListRowViewModel(
         key = "checkYourFileDetails.uploadedFile",
         value = ValueViewModel(HtmlFormat.escape(s"${vfd.fileName}").toString),
-        actions = Seq(
-          ActionItemViewModel("site.change", routes.UploadFileController.onPageLoad().url)
-            .withAttribute(("id", "your-file"))
-            .withVisuallyHiddenText(messages("checkYourFileDetails.uploadedFile.change.hidden"))
-        )
+        actions = Seq()
       ),
       SummaryListRowViewModel(
         key = "checkYourFileDetails.messageRefId",
@@ -44,7 +40,11 @@ object CheckYourFileDetailsViewModel {
       SummaryListRowViewModel(
         key = "checkYourFileDetails.messageTypeIndic",
         value = ValueViewModel(HtmlFormat.escape(s"${displayTypeIndictator(vfd.messageSpecData.messageTypeIndic)}").toString),
-        actions = Seq()
+        actions = Seq(
+          ActionItemViewModel("site.change", routes.UploadFileController.onPageLoad().url)
+            .withAttribute(("id", "your-file"))
+            .withVisuallyHiddenText(messages("checkYourFileDetails.uploadedFile.change.hidden"))
+        )
       )
     )
 
