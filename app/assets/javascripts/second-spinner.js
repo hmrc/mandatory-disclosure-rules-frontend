@@ -21,8 +21,11 @@ e.preventDefault();
                   data: formData,
                   processData: false,
                   contentType: false,
-                  crossDomain: true
+                  crossDomain: true,
+                  timeout : 0
             }).fail(function(jqXHR, textStatus, errorThrown ){
+                console.log("**************" + jqXHR)
+                console.log("**************" + textStatus)
                 window.location =  $("#technicalDifficultiesRedirectUrl").val()
             }).done(function(){
                  checkProgress = true

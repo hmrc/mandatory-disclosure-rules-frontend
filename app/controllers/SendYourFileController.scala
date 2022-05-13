@@ -68,6 +68,7 @@ class SendYourFileController @Inject() (
       (request.userAnswers.get(ValidXMLPage), request.userAnswers.get(URLPage)) match {
         case (Some(ValidatedFileData(filename, _)), Some(fileUrl)) =>
           val xml = xmlHandler.load(fileUrl)
+          logger.warn(s"submissionConnector.submitDocument= $xml")
           submissionConnector.submitDocument(filename, request.subscriptionId, xml) flatMap {
             case Some(conversationId) =>
               for {
