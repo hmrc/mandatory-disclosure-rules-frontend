@@ -13,6 +13,7 @@ site.startAgain = Start again
 site.signIn = Sign in
 site.govuk = GOV.UK
 site.warning = Warning
+site.backToReportPage = Back to report cross-border arrangements
 
 no.phone = None
 
@@ -77,7 +78,6 @@ journeyRecovery.startAgain.guidance = [Add content to explain why the user needs
 
 signedOut.title = For your security, we signed you out
 signedOut.heading = For your security, we signed you out
-signedOut.back = Back to report cross-border arrangements
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
@@ -122,7 +122,6 @@ fileValidation.heading = fileValidation
 
 changeIndividualContactDetails.title = Your contact details
 changeIndividualContactDetails.heading = Your contact details
-changeIndividualContactDetails.landing-page.link = Back to report cross-border arrangements
 
 changeOrganisationContactDetails.title = Contact details at your organisation
 changeOrganisationContactDetails.heading = Contact details at your organisation
@@ -131,7 +130,6 @@ changeOrganisationContactDetails.secondary.heading = Second contact
 
 changeContactDetails.nowSendContactDetails = Now send your new contact details
 changeContactDetails.confirmingInformation = By sending these details, you are confirming that the information is correct and complete to the best of your knowledge.
-changeOrganisationContactDetails.landing-page.link = Back to report cross-border arrangements
 
 contactEmail.title.individual = What is your email address?
 contactEmail.title.organisation = What is their email address?
@@ -218,7 +216,6 @@ contactName.change.hidden = contact name
 detailsUpdated.title = Contact details updated
 detailsUpdated.heading = Contact details updated
 detailsUpdated.p1 = We will use your new details if we need to contact you.
-detailsUpdated.link = Back to report cross-border arrangements
 
 fileError.title = There is a problem with your file
 fileError.heading = There is a problem with your file
@@ -322,7 +319,6 @@ fileReceived.p1.5 = and {0}
 fileReceived.subheading = What happens next
 fileReceived.p2 = If we have any questions about your report, we will contact you.
 fileReceived.print = Print or save this page
-fileReceived.back = Back to report cross-border arrangements
 fileReceived.thoughts = What did you think of this service? (opens in new tab)
 
 fileStatus.title = Result of automatic checks
