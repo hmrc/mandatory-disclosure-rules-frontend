@@ -25,6 +25,7 @@ e.preventDefault();
                   timeout : 0
             }).fail(function(jqXHR, textStatus, errorThrown ){
                 console.log("**************" + jqXHR)
+                console.log(jqXHR)
                 console.log("**************" + textStatus)
                 window.location =  $("#technicalDifficultiesRedirectUrl").val()
             }).done(function(){
