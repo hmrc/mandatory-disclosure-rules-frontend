@@ -282,7 +282,7 @@ class FileRejectedViewModelSpec extends SpecBase {
             TableRow(Text("904"), None, "", None, None, Map("id" -> "code_904")),
             TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_904")),
             TableRow(
-              Text("Disclosing Capacity is not one of the allowed values for the MdrReport CrsAvoidance or OOS Reason provided"),
+              Text("MdrReport CrsAvoidance or OOS Reason is not one of the allowed values for the Disclosing Capacity provided"),
               None,
               "",
               None,
@@ -459,7 +459,7 @@ class FileRejectedViewModelSpec extends SpecBase {
             TableRow(Text("904"), None, "", None, None, Map("id" -> "code_904")),
             TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_904")),
             TableRow(
-              Text("Disclosing Capacity is not one of the allowed values for the MdrReport CrsAvoidance or OOS Reason provided"),
+              Text("MdrReport CrsAvoidance or OOS Reason is not one of the allowed values for the Disclosing Capacity provided"),
               None,
               "",
               None,
