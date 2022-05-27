@@ -8,7 +8,7 @@ e.preventDefault();
      var sendYourFileForm = this;
 
        function addSpinner(){
-           $("#processing").attr('hidden', false)
+           $("#processing").append('<h2 class="govuk-heading-m">'+$("#processingMessage").val()+'</h2><div><div class="ccms-loader"></div></div>')
        };
 
     function sendYourFile(form){
