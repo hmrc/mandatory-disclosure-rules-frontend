@@ -382,3 +382,10 @@ fileProblem.p1 = We have not accepted your file.
 fileProblem.p2 = You must email {0} so we can investigate the problem.
 fileProblem.link = enquiries.aeoi@hmrc.gov.uk
 
+
+contactUs.title = Contact us to access this service
+contactUs.heading = Contact us to access this service
+contactUs.p1 = Email us at {0} so we can arrange a suitable time for your to access this new service.
+contactUs.link = mdrdigital@hmrc.gov.uk
+contactUs.p2 = If your report is due soon, email us before the reporting deadline.
+contactUs.p3 = If we cannot arrange a time for you to access the service before the deadline, you will not be charged a late filing penalty as long as you can send us an email as soon as possible before the deadline has ended.
