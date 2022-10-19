@@ -93,7 +93,9 @@ object FileRejectedViewModel {
         error =>
           error.code match {
             case FileErrorCode.CustomError => handleCustomErrors(error.details, None)
-            case errorCode                 => (Messages(s"fileRejected.${errorCode.code}.key"), Text(Messages("label.file")), Messages(s"fileRejected.${errorCode.code}.value"))
+            case errorCode if Messages("label.file.exclusion.code") contains errorCode.code =>
+              (Messages(s"fileRejected.${errorCode.code}.key"), Text(Messages("label.file.NA")), Messages(s"fileRejected.${errorCode.code}.value"))
+            case errorCode => (Messages(s"fileRejected.${errorCode.code}.key"), Text(Messages("label.file")), Messages(s"fileRejected.${errorCode.code}.value"))
           }
       )
     )
