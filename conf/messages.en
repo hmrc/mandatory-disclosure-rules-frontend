@@ -284,8 +284,8 @@ fileRejected.911.value = Provide an issuedBy for every TIN that has a value othe
 fileRejected.912.value = The top level of the StructureChart must not have an Ownership or InvestAmount
 
 label.file = File
-label.file.exclusion.code = [509,510,910]
-label.file.NA = NA
+label.file.exclusion.code = [50009,50010,910]
+label.file.NA = N/A
 
 xml.defaultMessage = There is a problem with this line number
 xml.must.have.element.declaration = The {0} field must have an XML namespace (xmlns), which must be {1}
