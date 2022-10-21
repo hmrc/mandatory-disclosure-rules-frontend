@@ -355,7 +355,7 @@ class FileRejectedViewModelSpec extends SpecBase {
           ),
           List(
             TableRow(Text("910"), None, "", None, None, Map("id" -> "code_910")),
-            TableRow(HtmlContent("File"), None, "", None, None, Map("id" -> "docRefId_910")),
+            TableRow(HtmlContent("N/A"), None, "", None, None, Map("id" -> "docRefId_910")),
             TableRow(
               Text("MessageRefId must be 85 characters or less, start with your 15-character MDR ID and include up to 70 other characters of your choice"),
               None,
@@ -532,7 +532,7 @@ class FileRejectedViewModelSpec extends SpecBase {
           ),
           List(
             TableRow(Text("910"), None, "", None, None, Map("id" -> "code_910")),
-            TableRow(HtmlContent("File"), None, "", None, None, Map("id" -> "docRefId_910")),
+            TableRow(HtmlContent("N/A"), None, "", None, None, Map("id" -> "docRefId_910")),
             TableRow(
               Text("MessageRefId must be 85 characters or less, start with your 15-character MDR ID and include up to 70 other characters of your choice"),
               None,
@@ -586,7 +586,7 @@ class FileRejectedViewModelSpec extends SpecBase {
         List(
           List(
             TableRow(Text("910"), None, "", None, None, Map("id" -> "code_910")),
-            TableRow(HtmlContent("File"), None, "", None, None, Map("id" -> "docRefId_910")),
+            TableRow(HtmlContent("N/A"), None, "", None, None, Map("id" -> "docRefId_910")),
             TableRow(
               Text("MessageRefId must be 85 characters or less, start with your 15-character MDR ID and include up to 70 other characters of your choice"),
               None,
@@ -618,7 +618,6 @@ class FileRejectedViewModelSpec extends SpecBase {
       )
 
       val validationErrors = ValidationErrors(fileErrors, None)
-
       FileRejectedViewModel.createTable(validationErrors)(messages(app)) mustBe expectedTable
     }
   }

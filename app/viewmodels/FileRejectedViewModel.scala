@@ -79,7 +79,7 @@ object FileRejectedViewModel {
         ("908", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.908.value"))
       case error if error.contains(`error_details_909`) =>
         ("909", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.909.value"))
-      case error if error.contains(`error_details_910`) => ("910", HtmlContent(Messages("label.file")), Messages(s"fileRejected.910.value"))
+      case error if error.contains(`error_details_910`) => ("910", HtmlContent(Messages("label.file.NA")), Messages(s"fileRejected.910.value"))
       case error if error.contains(`error_details_911`) =>
         ("911", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.911.value"))
       case error if error.contains(`error_details_912`) =>
