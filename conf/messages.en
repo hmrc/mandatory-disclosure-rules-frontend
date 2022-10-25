@@ -284,6 +284,8 @@ fileRejected.911.value = Provide an issuedBy for every TIN that has a value othe
 fileRejected.912.value = The top level of the StructureChart must not have an Ownership or InvestAmount
 
 label.file = File
+label.file.exclusion.code = [50009,50010,910]
+label.file.NA = N/A
 
 xml.defaultMessage = There is a problem with this line number
 xml.must.have.element.declaration = The {0} field must have an XML namespace (xmlns), which must be {1}
@@ -389,3 +391,4 @@ contactUs.p1 = Email us at {0} so we can arrange a suitable time for your to acc
 contactUs.link = mdrdigital@hmrc.gov.uk
 contactUs.p2 = If your report is due soon, email us before the reporting deadline.
 contactUs.p3 = If we cannot arrange a time for you to access the service before the deadline, you will not be charged a late filing penalty as long as you can send us an email as soon as possible before the deadline has ended.
+

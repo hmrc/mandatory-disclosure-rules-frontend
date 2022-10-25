@@ -28,6 +28,7 @@ object FileErrorCode {
   case object FileContainsTestDataForProductionEnvironment extends FileErrorCode("50010")
   case object NotMeantToBeReceivedByTheIndicatedJurisdiction extends FileErrorCode("50012")
   case object CustomError extends FileErrorCode("99999")
+  case object Custom910Error extends FileErrorCode("910")
 
   case class UnknownFileErrorCode(override val code: String) extends FileErrorCode(code)
 

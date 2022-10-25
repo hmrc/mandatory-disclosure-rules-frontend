@@ -79,7 +79,7 @@ object FileRejectedViewModel {
         ("908", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.908.value"))
       case error if error.contains(`error_details_909`) =>
         ("909", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.909.value"))
-      case error if error.contains(`error_details_910`) => ("910", HtmlContent(Messages("label.file")), Messages(s"fileRejected.910.value"))
+      case error if error.contains(`error_details_910`) => ("910", HtmlContent(Messages("label.file.NA")), Messages(s"fileRejected.910.value"))
       case error if error.contains(`error_details_911`) =>
         ("911", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.911.value"))
       case error if error.contains(`error_details_912`) =>
@@ -93,7 +93,9 @@ object FileRejectedViewModel {
         error =>
           error.code match {
             case FileErrorCode.CustomError => handleCustomErrors(error.details, None)
-            case errorCode                 => (Messages(s"fileRejected.${errorCode.code}.key"), Text(Messages("label.file")), Messages(s"fileRejected.${errorCode.code}.value"))
+            case errorCode if Messages("label.file.exclusion.code") contains errorCode.code =>
+              (Messages(s"fileRejected.${errorCode.code}.key"), Text(Messages("label.file.NA")), Messages(s"fileRejected.${errorCode.code}.value"))
+            case errorCode => (Messages(s"fileRejected.${errorCode.code}.key"), Text(Messages("label.file")), Messages(s"fileRejected.${errorCode.code}.value"))
           }
       )
     )

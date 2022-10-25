@@ -61,7 +61,7 @@ class FileRejectedViewModelSpec extends SpecBase {
           List(
             List(
               TableRow(Text("509"), None, "", None, None, Map("id" -> "code_509")),
-              TableRow(Text("File"), None, "", None, None, Map("id" -> "docRefId_509")),
+              TableRow(Text("N/A"), None, "", None, None, Map("id" -> "docRefId_509")),
               TableRow(
                 Text("The MessageRefId has already been used in a file previously received, it must be unique"),
                 None,
@@ -73,7 +73,7 @@ class FileRejectedViewModelSpec extends SpecBase {
             ),
             List(
               TableRow(Text("510"), None, "", None, None, Map("id" -> "code_510")),
-              TableRow(Text("File"), None, "", None, None, Map("id" -> "docRefId_510")),
+              TableRow(Text("N/A"), None, "", None, None, Map("id" -> "docRefId_510")),
               TableRow(
                 Text("We cannot accept test data so each DocTypeIndic must have a value of either OECD0, OECD1, OECD2 or OECD3"),
                 None,
@@ -355,7 +355,7 @@ class FileRejectedViewModelSpec extends SpecBase {
           ),
           List(
             TableRow(Text("910"), None, "", None, None, Map("id" -> "code_910")),
-            TableRow(HtmlContent("File"), None, "", None, None, Map("id" -> "docRefId_910")),
+            TableRow(HtmlContent("N/A"), None, "", None, None, Map("id" -> "docRefId_910")),
             TableRow(
               Text("MessageRefId must be 85 characters or less, start with your 15-character MDR ID and include up to 70 other characters of your choice"),
               None,
@@ -532,7 +532,7 @@ class FileRejectedViewModelSpec extends SpecBase {
           ),
           List(
             TableRow(Text("910"), None, "", None, None, Map("id" -> "code_910")),
-            TableRow(HtmlContent("File"), None, "", None, None, Map("id" -> "docRefId_910")),
+            TableRow(HtmlContent("N/A"), None, "", None, None, Map("id" -> "docRefId_910")),
             TableRow(
               Text("MessageRefId must be 85 characters or less, start with your 15-character MDR ID and include up to 70 other characters of your choice"),
               None,
@@ -586,7 +586,7 @@ class FileRejectedViewModelSpec extends SpecBase {
         List(
           List(
             TableRow(Text("910"), None, "", None, None, Map("id" -> "code_910")),
-            TableRow(HtmlContent("File"), None, "", None, None, Map("id" -> "docRefId_910")),
+            TableRow(HtmlContent("N/A"), None, "", None, None, Map("id" -> "docRefId_910")),
             TableRow(
               Text("MessageRefId must be 85 characters or less, start with your 15-character MDR ID and include up to 70 other characters of your choice"),
               None,
@@ -598,7 +598,7 @@ class FileRejectedViewModelSpec extends SpecBase {
           ),
           List(
             TableRow(Text("510"), None, "", None, None, Map("id" -> "code_510")),
-            TableRow(Text("File"), None, "", None, None, Map("id" -> "docRefId_510")),
+            TableRow(Text("N/A"), None, "", None, None, Map("id" -> "docRefId_510")),
             TableRow(
               Text("We cannot accept test data so each DocTypeIndic must have a value of either OECD0, OECD1, OECD2 or OECD3"),
               None,
@@ -618,7 +618,6 @@ class FileRejectedViewModelSpec extends SpecBase {
       )
 
       val validationErrors = ValidationErrors(fileErrors, None)
-
       FileRejectedViewModel.createTable(validationErrors)(messages(app)) mustBe expectedTable
     }
   }
