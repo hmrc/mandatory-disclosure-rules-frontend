@@ -16,7 +16,6 @@
 
 package controllers
 
-import config.FrontendAppConfig
 import connectors.FileDetailsConnector
 import controllers.actions._
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -34,7 +33,6 @@ class FileStatusController @Inject() (
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
   fileConnector: FileDetailsConnector,
-  appConfig: FrontendAppConfig,
   val controllerComponents: MessagesControllerComponents,
   view: FileStatusView,
   errorView: ThereIsAProblemView
@@ -44,7 +42,7 @@ class FileStatusController @Inject() (
   def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
       fileConnector.getAllFileDetails map {
-        case Some(allFiles) => Ok(view(FileStatusViewModel.createStatusTable(allFiles), appConfig.homePageUrl))
+        case Some(allFiles) => Ok(view(FileStatusViewModel.createStatusTable(allFiles)))
         case _              => InternalServerError(errorView())
       }
   }

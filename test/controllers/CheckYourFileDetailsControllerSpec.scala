@@ -48,7 +48,7 @@ class CheckYourFileDetailsControllerSpec extends SpecBase {
           .withCssClass("govuk-!-margin-bottom-0")
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(list, action)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(list)(request, messages(application)).toString
       }
     }
   }

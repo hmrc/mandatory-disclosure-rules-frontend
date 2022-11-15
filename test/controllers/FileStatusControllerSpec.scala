@@ -24,6 +24,8 @@ import org.mockito.ArgumentMatchers.any
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import viewmodels.FileStatusViewModel
+import views.html.FileStatusView
 
 import java.time.LocalDateTime
 import scala.concurrent.Future
@@ -50,7 +52,11 @@ class FileStatusControllerSpec extends SpecBase {
 
         val result = route(application, request).value
 
+        val view = application.injector.instanceOf[FileStatusView]
+
         status(result) mustEqual OK
+        contentAsString(result) mustEqual
+          view(FileStatusViewModel.createStatusTable(fileDetails)(messages(application)))(request, messages(application)).toString
       }
     }
 

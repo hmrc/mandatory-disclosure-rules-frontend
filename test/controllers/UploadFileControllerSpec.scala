@@ -69,7 +69,7 @@ class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
       val request = FakeRequest(GET, routes.UploadFileController.getStatus().url)
 
-      def verifyResult(uploadStatus: UploadStatus, expectedStatus: Int = OK, expectedResult: Option[URL] = None): Unit = {
+      def verifyResult(uploadStatus: UploadStatus, expectedStatus: Int, expectedResult: Option[URL]): Unit = {
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
