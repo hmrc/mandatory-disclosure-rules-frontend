@@ -20,7 +20,7 @@
         govukButton: GovukButton
 )
 
-@(fileDetails: SummaryList, action: String)(implicit request: Request[_], messages: Messages)
+@(fileDetails: SummaryList)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("checkYourFileDetails.title"))) {
 
@@ -29,8 +29,8 @@
     @govukSummaryList(fileDetails)
     <hr>
 
-   @* ToDo link to correct page *@
    @govukButton(
-    ButtonViewModel(Text(messages("site.continue"))).withAttribute( "id" -> "submit").asLink(action).withCssClass("govuk-!-margin-top-7")
+    ButtonViewModel(Text(messages("site.continue"))).withAttribute( "id" -> "submit")
+            .asLink(routes.SendYourFileController.onPageLoad().url).withCssClass("govuk-!-margin-top-7")
    )
 }

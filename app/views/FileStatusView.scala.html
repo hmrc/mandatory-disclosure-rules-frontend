@@ -15,14 +15,17 @@
  *@
 
 @import uk.gov.hmrc.govukfrontend.views.viewmodels.table.Table
+@import config.FrontendAppConfig
 
 @this(
         layout: templates.Layout,
+        appConfig: FrontendAppConfig,
         govukButton: GovukButton,
         govukTable: GovukTable
 )
 
-@(table: Table, homePageUrl: String)(implicit request: Request[_], messages: Messages)
+
+@(table: Table)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("fileStatus.title"))) {
 
@@ -33,7 +36,7 @@
     @govukTable(table)
 
     <p class="govuk-!-padding-top-5 govuk-body">
-        <a class="govuk-link" href=@homePageUrl>@messages("site.backToReportPage")</a>
+        <a class="govuk-link" href=@{appConfig.homePageUrl}>@messages("site.backToReportPage")</a>
     </p>
 
 }

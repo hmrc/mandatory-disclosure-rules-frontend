@@ -26,7 +26,7 @@ import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
 
-class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityType)(implicit request: DataRequest[AnyContent], messages: Messages) {
+class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityType)(implicit messages: Messages) {
 
   def getPrimaryContactDetails: Seq[SummaryListRow] =
     Seq(contactNamePage(), contactEmailPage(), contactPhonePage()).flatten

@@ -27,6 +27,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import viewmodels.FileRejectedViewModel
 import views.html.FileRejectedView
 
 import java.time.LocalDateTime
@@ -76,6 +77,9 @@ class FileRejectedControllerSpec extends SpecBase with ModelGenerators with Scal
         val view = application.injector.instanceOf[FileRejectedView]
 
         status(result) mustEqual OK
+        contentAsString(result) mustEqual view(fileName, FileRejectedViewModel.createTable(validationErrors)(messages(application)))(request,
+                                                                                                                                     messages(application)
+        ).toString
       }
     }
 
