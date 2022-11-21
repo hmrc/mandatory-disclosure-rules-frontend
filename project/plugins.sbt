@@ -14,7 +14,7 @@ addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.8.18")
 
 addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0")
 
-addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.9.2")
+addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.9.3")
 
 addSbtPlugin("io.github.irundaia" % "sbt-sassify" % "1.5.2")
 

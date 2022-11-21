@@ -69,8 +69,17 @@ lazy val root = (project in file("."))
     uglify / includeFilter := GlobFilter("application.js")
   )
   .settings(
-    scalacOptions += "-Wconf:src=routes/.*:s",
-    scalacOptions += "-Wconf:cat=unused-imports&src=html/.*:s"
+    scalacOptions ++= Seq("-Ypatmat-exhaust-depth", "off"),
+    scalacOptions ++= Seq(
+    "-Wconf:cat=unused-imports&site=.*views\\.html.*:s",
+    "-Wconf:src=.+/test/.+:s",
+    "-Wconf:cat=deprecation&msg=\\.*()\\.*:s",
+    "-Wconf:cat=unused-imports&site=<empty>:s",
+    "-Wconf:cat=unused&src=.*RoutesPrefix\\.scala:s",
+    "-Wconf:cat=unused&src=.*Routes\\.scala:s",
+    "-Wconf:cat=unused&src=.*ReverseRoutes\\.scala:s",
+    "-Wconf:cat=unused&src=.*JavaScriptReverseRoutes\\.scala:s"
+    )
   )
 
 lazy val testSettings: Seq[Def.Setting[_]] = Seq(
