@@ -158,7 +158,7 @@ haveTelephone.title.individual = Can we contact you by telephone?
 haveTelephone.heading.organisation = Can we contact {0} by telephone?
 haveTelephone.heading.individual = Can we contact you by telephone?
 haveTelephone.checkYourAnswersLabel = Telephone number
-haveTelephone.hint = We will use this to keep in touch and if we have any questions about your reports.
+haveTelephone.hint = We will call if we have any questions about your reports.
 haveTelephone.error.required.individual = Select yes if we can contact you by telephone
 haveTelephone.error.required.organisation = Select yes if they can be contacted by telephone
 
@@ -183,7 +183,7 @@ secondContactEmail.change.hidden = second contact email address
 
 secondContactHavePhone.title = Can we contact them by telephone?
 secondContactHavePhone.heading = Can we contact {0} by telephone?
-secondContactHavePhone.hint = We will use this to keep in touch and if we have any questions about your reports.
+secondContactHavePhone.hint = We will call if we have any questions about your reports.
 secondContactHavePhone.error.required = Select yes if they can be contacted by telephone
 
 secondContactName.title = What is the name of the individual or team we should contact?
