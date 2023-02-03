@@ -226,7 +226,6 @@ fileError.bullet2 = View the errors on this page
 fileError.bullet3 = Refer to the {0} and use it to update your file
 fileError.bullet3.link = MDR technical guidance for XML files (opens in new tab)
 fileError.bullet4 = Upload your updated file
-fileError.p2 = Be aware there could be further problems with submitting your XML file because we have not checked it against our business rules.
 fileError.tableCaption = Errors
 fileError.tableHeading1 = Line
 fileError.tableHeading2 = Error
