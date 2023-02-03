@@ -23,11 +23,12 @@ import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
 
-class TestProcessEISResponseConnector @Inject() (httpClient: HttpClient, config: FrontendAppConfig) extends Logging {
+class TestProcessEISResponseConnector @Inject() (httpClient: HttpClient, config: FrontendAppConfig)(implicit
+  executionContext: ExecutionContext
+) extends Logging {
 
   val submitUrl = s"${config.mdrUrl}/mandatory-disclosure-rules/validation-result"
 

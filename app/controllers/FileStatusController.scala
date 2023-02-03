@@ -25,7 +25,7 @@ import viewmodels.FileStatusViewModel
 import views.html.{FileStatusView, ThereIsAProblemView}
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext
 
 class FileStatusController @Inject() (
   override val messagesApi: MessagesApi,
@@ -36,6 +36,8 @@ class FileStatusController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: FileStatusView,
   errorView: ThereIsAProblemView
+)(implicit
+  executionContext: ExecutionContext
 ) extends FrontendBaseController
     with I18nSupport {
 

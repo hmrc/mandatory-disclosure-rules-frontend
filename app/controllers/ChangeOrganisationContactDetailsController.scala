@@ -27,7 +27,7 @@ import viewmodels.govuk.summarylist._
 import views.html.{ChangeOrganisationContactDetailsView, ThereIsAProblemView}
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext
 
 class ChangeOrganisationContactDetailsController @Inject() (
   override val messagesApi: MessagesApi,
@@ -39,6 +39,8 @@ class ChangeOrganisationContactDetailsController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: ChangeOrganisationContactDetailsView,
   errorView: ThereIsAProblemView
+)(implicit
+  executionContext: ExecutionContext
 ) extends FrontendBaseController
     with I18nSupport {
 

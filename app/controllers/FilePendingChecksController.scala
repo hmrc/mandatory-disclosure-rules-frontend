@@ -29,8 +29,7 @@ import viewmodels.FileCheckViewModel
 import views.html.{FilePendingChecksView, ThereIsAProblemView}
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 class FilePendingChecksController @Inject() (
   override val messagesApi: MessagesApi,
@@ -41,6 +40,8 @@ class FilePendingChecksController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: FilePendingChecksView,
   errorView: ThereIsAProblemView
+)(implicit
+  executionContext: ExecutionContext
 ) extends FrontendBaseController
     with I18nSupport {
 
