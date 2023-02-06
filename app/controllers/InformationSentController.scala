@@ -17,33 +17,21 @@
 package controllers
 
 import controllers.actions._
-import pages.JourneyInProgressPage
+import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.DetailsUpdatedView
+import views.html.InformationSentView
 
-import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
-
-class DetailsUpdatedController @Inject() (
+class InformationSentController @Inject() (
   override val messagesApi: MessagesApi,
-  sessionRepository: SessionRepository,
-  identify: IdentifierAction,
-  getData: DataRetrievalAction,
-  requireData: DataRequiredAction,
   val controllerComponents: MessagesControllerComponents,
-  view: DetailsUpdatedView
-)(implicit ec: ExecutionContext)
-    extends FrontendBaseController
+  view: InformationSentView
+) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData).async {
+  def onPageLoad: Action[AnyContent] = Action {
     implicit request =>
-      for {
-        updatedAnswers <- Future.fromTry(request.userAnswers.remove(JourneyInProgressPage))
-        _              <- sessionRepository.set(updatedAnswers)
-      } yield Ok(view())
+      Ok(view())
   }
 }

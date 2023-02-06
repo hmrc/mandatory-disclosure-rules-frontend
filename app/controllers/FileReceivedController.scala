@@ -19,18 +19,22 @@ package controllers
 import connectors.FileDetailsConnector
 import controllers.actions._
 import models.ConversationId
+import models.fileDetails.FileDetails
+import pages.UploadIDPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.ContactEmailHelper.getContactEmails
 import utils.DateTimeFormatUtil._
 import views.html.{FileReceivedView, ThereIsAProblemView}
 
 import javax.inject.Inject
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 class FileReceivedController @Inject() (
   override val messagesApi: MessagesApi,
+  sessionRepository: SessionRepository,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
@@ -44,17 +48,18 @@ class FileReceivedController @Inject() (
 
   def onPageLoad(conversationId: ConversationId): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
-      fileDetailsConnector.getFileDetails(conversationId) map {
+      fileDetailsConnector.getFileDetails(conversationId) flatMap {
         fileDetails =>
-          (for {
-            emails  <- getContactEmails
-            details <- fileDetails
-          } yield {
-            val time = details.submitted.format(timeFormatter).toLowerCase
-            val date = details.submitted.format(dateFormatter)
-
-            Ok(view(details.messageRefId, time, date, emails.firstContact, emails.secondContact))
-          }).getOrElse(InternalServerError(errorView()))
+          (getContactEmails, fileDetails) match {
+            case (Some(emails), Some(details)) =>
+              val time = details.submitted.format(timeFormatter).toLowerCase
+              val date = details.submitted.format(dateFormatter)
+              for {
+                updatedAnswers <- Future.fromTry(request.userAnswers.remove(UploadIDPage))
+                _              <- sessionRepository.set(updatedAnswers)
+              } yield Ok(view(details.messageRefId, time, date, emails.firstContact, emails.secondContact))
+            case _ => Future.successful(InternalServerError(errorView()))
+          }
       }
   }
 }
