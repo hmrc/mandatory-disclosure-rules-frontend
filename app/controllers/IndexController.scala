@@ -47,28 +47,32 @@ class IndexController @Inject() (
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData.apply) async {
     implicit request =>
-      Future.fromTry(request.userAnswers.getOrElse(UserAnswers(request.userId)).set(JourneyInProgressPage, true)).flatMap {
+      setContactDetailsFlag(request.userAnswers.getOrElse(UserAnswers(request.userId))).flatMap {
         ua =>
-          sessionRepository.set(ua).flatMap {
-            _ =>
-              val changeDetailsUrl = request.userType match {
-                case Individual   => controllers.routes.ChangeIndividualContactDetailsController.onPageLoad().url
-                case Organisation => controllers.routes.ChangeOrganisationContactDetailsController.onPageLoad().url
-              }
-
-              subscriptionService.getContactDetails(ua) flatMap {
-                case Some(userAnswers) =>
-                  sessionRepository.set(userAnswers) flatMap {
-                    _ =>
-                      fileConnector.getAllFileDetails map {
-                        fileDetails =>
-                          Ok(view(request.subscriptionId, changeDetailsUrl, fileDetails.isDefined))
-                      }
+          val changeDetailsUrl = request.userType match {
+            case Individual => controllers.routes.ChangeIndividualContactDetailsController.onPageLoad().url
+            case Organisation => controllers.routes.ChangeOrganisationContactDetailsController.onPageLoad().url
+          }
+          subscriptionService.getContactDetails(ua) flatMap {
+            case Some(userAnswers) =>
+              sessionRepository.set(userAnswers) flatMap {
+                _ =>
+                  fileConnector.getAllFileDetails map {
+                    fileDetails =>
+                      Ok(view(request.subscriptionId, changeDetailsUrl, fileDetails.isDefined))
                   }
-                case _ =>
-                  Future.successful(Redirect(routes.ThereIsAProblemController.onPageLoad()))
               }
+            case _ =>
+              Future.successful(Redirect(routes.ThereIsAProblemController.onPageLoad()))
           }
       }
   }
+
+  private def setContactDetailsFlag(userAnswers: UserAnswers): Future[UserAnswers] =
+    Future.fromTry(userAnswers.set(JourneyInProgressPage, true)).flatMap {
+      ua =>
+        sessionRepository.set(ua).map {
+          _ => ua
+        }
+    }
 }
