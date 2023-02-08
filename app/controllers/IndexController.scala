@@ -50,7 +50,7 @@ class IndexController @Inject() (
       setContactDetailsFlag(request.userAnswers.getOrElse(UserAnswers(request.userId))).flatMap {
         ua =>
           val changeDetailsUrl = request.userType match {
-            case Individual => controllers.routes.ChangeIndividualContactDetailsController.onPageLoad().url
+            case Individual   => controllers.routes.ChangeIndividualContactDetailsController.onPageLoad().url
             case Organisation => controllers.routes.ChangeOrganisationContactDetailsController.onPageLoad().url
           }
           subscriptionService.getContactDetails(ua) flatMap {
