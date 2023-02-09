@@ -60,6 +60,7 @@ trait SpecBase
       .overrides(
         bind[DataRequiredAction].to[DataRequiredActionImpl],
         bind[IdentifierAction].to[FakeIdentifierAction],
+        bind[CheckForSubmissionAction].toInstance(new FakeCheckForSubmissionActionProvider),
         bind[DataRetrievalAction].toInstance(new FakeDataRetrievalActionProvider(userAnswers))
       )
 }

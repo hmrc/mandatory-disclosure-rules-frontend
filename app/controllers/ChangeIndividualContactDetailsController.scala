@@ -36,6 +36,7 @@ class ChangeIndividualContactDetailsController @Inject() (
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
   subscriptionService: SubscriptionService,
+  checkForSubmission: CheckForSubmissionAction,
   val controllerComponents: MessagesControllerComponents,
   view: ChangeIndividualContactDetailsView,
   errorView: ThereIsAProblemView
@@ -44,7 +45,7 @@ class ChangeIndividualContactDetailsController @Inject() (
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData).async {
+  def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData andThen checkForSubmission()).async {
     implicit request =>
       val checkUserAnswersHelper = CheckYourAnswersHelper(request.userAnswers)
 

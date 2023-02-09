@@ -18,7 +18,7 @@ package controllers
 
 import config.FrontendAppConfig
 import connectors.{FileDetailsConnector, SubmissionConnector}
-import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import controllers.actions.{CheckForSubmissionAction, DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import handlers.XmlHandler
 import models.fileDetails.{Pending, Rejected, ValidationErrors, Accepted => FileStatusAccepted}
 import models.upscan.URL
@@ -41,6 +41,7 @@ class SendYourFileController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
+  checkForSubmission: CheckForSubmissionAction,
   submissionConnector: SubmissionConnector,
   fileDetailsConnector: FileDetailsConnector,
   sessionRepository: SessionRepository,
@@ -53,7 +54,7 @@ class SendYourFileController @Inject() (
     with I18nSupport
     with Logging {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData).async {
+  def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData andThen checkForSubmission(true)).async {
     implicit request =>
       val displayWarning = request.userAnswers
         .get(ValidXMLPage)

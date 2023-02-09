@@ -19,6 +19,7 @@ package controllers
 import connectors.FileDetailsConnector
 import controllers.actions.{DataRetrievalAction, IdentifierAction}
 import models.UserAnswers
+import pages.JourneyInProgressPage
 import play.api.Logging
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -47,22 +48,32 @@ class IndexController @Inject() (
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData.apply) async {
     implicit request =>
-      val changeDetailsUrl = request.userType match {
-        case Individual   => controllers.routes.ChangeIndividualContactDetailsController.onPageLoad().url
-        case Organisation => controllers.routes.ChangeOrganisationContactDetailsController.onPageLoad().url
-      }
-
-      subscriptionService.getContactDetails(UserAnswers(request.userId)) flatMap {
-        case Some(userAnswers) =>
-          sessionRepository.set(userAnswers) flatMap {
-            _ =>
-              fileConnector.getAllFileDetails map {
-                fileDetails =>
-                  Ok(view(request.subscriptionId, changeDetailsUrl, fileDetails.isDefined))
-              }
+      setContactDetailsFlag(request.userAnswers.getOrElse(UserAnswers(request.userId))).flatMap {
+        ua =>
+          val changeDetailsUrl = request.userType match {
+            case Individual   => controllers.routes.ChangeIndividualContactDetailsController.onPageLoad().url
+            case Organisation => controllers.routes.ChangeOrganisationContactDetailsController.onPageLoad().url
           }
-        case _ =>
-          Future.successful(Redirect(routes.ThereIsAProblemController.onPageLoad()))
+          subscriptionService.getContactDetails(ua) flatMap {
+            case Some(userAnswers) =>
+              sessionRepository.set(userAnswers) flatMap {
+                _ =>
+                  fileConnector.getAllFileDetails map {
+                    fileDetails =>
+                      Ok(view(request.subscriptionId, changeDetailsUrl, fileDetails.isDefined))
+                  }
+              }
+            case _ =>
+              Future.successful(Redirect(routes.ThereIsAProblemController.onPageLoad()))
+          }
       }
   }
+
+  private def setContactDetailsFlag(userAnswers: UserAnswers): Future[UserAnswers] =
+    Future.fromTry(userAnswers.set(JourneyInProgressPage, true)).flatMap {
+      ua =>
+        sessionRepository.set(ua).map {
+          _ => ua
+        }
+    }
 }
