@@ -19,7 +19,6 @@ package controllers
 import connectors.FileDetailsConnector
 import controllers.actions._
 import models.ConversationId
-import models.fileDetails.FileDetails
 import pages.UploadIDPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
