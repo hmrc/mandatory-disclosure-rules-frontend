@@ -14,10 +14,13 @@
  * limitations under the License.
  *@
 
+@import config.FrontendAppConfig
+
 @this(
         layout: templates.Layout,
         printLink: components.PrintLink,
-        link: components.Link
+        link: components.Link,
+        appConfig: FrontendAppConfig
 )
 
 @(fileName: String)(implicit request: Request[_], messages: Messages)
@@ -36,7 +39,7 @@
         <li>@messages("invalidXMLFile.bullet3")</li>
     </ul>
 
-    <p class="govuk-body">@Html(messages("invalidXMLFile.p3", link("#", "invalidXMLFile.p3.link")))</p> @*Todo: update link href*@
+    <p class="govuk-body">@Html(messages("invalidXMLFile.p3", link(appConfig.mdrGuidanceUrl, "invalidXMLFile.p3.link", openInNewWindow = false)))</p>
 
     <ul class="govuk-list">
         <li>@printLink("invalidXMLFile.print")</li>
