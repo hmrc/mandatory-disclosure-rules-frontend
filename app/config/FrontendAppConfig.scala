@@ -33,10 +33,12 @@ class FrontendAppConfig @Inject() (configuration: Configuration, servicesConfig:
   def feedbackUrl(implicit request: RequestHeader): String =
     s"${contactFrontendConfig.baseUrl.get}/contact/beta-feedback?service=${contactFrontendConfig.serviceId.get}&backUrl=${SafeRedirectUrl(host + request.uri).encodedUrl}"
 
-  val loginUrl: String         = configuration.get[String]("urls.login")
-  val loginContinueUrl: String = configuration.get[String]("urls.loginContinue")
-  val signOutUrl: String       = configuration.get[String]("urls.signOut")
-  val registerUrl: String      = configuration.get[String]("urls.register")
+  val loginUrl: String                 = configuration.get[String]("urls.login")
+  val loginContinueUrl: String         = configuration.get[String]("urls.loginContinue")
+  val signOutUrl: String               = configuration.get[String]("urls.signOut")
+  val registerUrl: String              = configuration.get[String]("urls.register")
+  val mdrGuidanceUrl: String           = configuration.get[String]("urls.mdrGuidance")
+  val businessRulesGuidanceUrl: String = configuration.get[String]("urls.businessRulesGuidance")
 
   lazy val homePageUrl: String = configuration.get[String]("urls.homepage")
 
