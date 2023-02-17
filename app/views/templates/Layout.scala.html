@@ -16,11 +16,13 @@
 
 @import config.FrontendAppConfig
 @import uk.gov.hmrc.hmrcfrontend.views.config.StandardBetaBanner
+@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcStandardPage
+@import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage._
 @import views.html.helper.CSPNonce
 
 @this(
     appConfig: FrontendAppConfig,
-    hmrcLayout: HmrcLayout,
+    hmrcStandardPage: HmrcStandardPage,
     hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
     hmrcLanguageSelect: HmrcLanguageSelect,
     hmrcTimeoutDialog: HmrcTimeoutDialog,
@@ -59,14 +61,22 @@
     </div>
 }
 
-@hmrcLayout(
-    pageTitle   = Some(pageTitle),
-    additionalHeadBlock = if(timeout) Some(timeOutDialog) else None,
-    serviceUrl  = Some(routes.IndexController.onPageLoad.url),
-    signOutUrl  = if(showSignOut) Some(controllers.auth.routes.AuthController.signOut.url) else None,
-    phaseBanner = Some(standardBetaBanner(url = appConfig.feedbackUrl)),
-    isWelshTranslationAvailable = appConfig.languageTranslationEnabled,
-    nonce        = CSPNonce.get,
-    additionalScriptsBlock = Some(additionalScripts),
-    backLink = if(showBackLink) Some(BackLinkViewModel(href = "#").withCssClass("js-enabled govuk-!-display-none-print")) else None
+@hmrcStandardPage(
+    HmrcStandardPageParams(
+        serviceURLs = ServiceURLs(
+            serviceUrl = Some(routes.IndexController.onPageLoad.url),
+            signOutUrl = if(showSignOut) Some(controllers.auth.routes.AuthController.signOut.url) else None,
+        ),
+        banners = Banners(
+            phaseBanner = Some(standardBetaBanner(url = appConfig.feedbackUrl))
+        ),
+        pageTitle = Some(pageTitle),
+        cspNonce = CSPNonce.get,
+        templateOverrides = TemplateOverrides(
+            additionalHeadBlock = if(timeout) Some(timeOutDialog) else None,
+            additionalScriptsBlock = Some(additionalScripts)
+        ),
+        backLink = if(showBackLink) Some(BackLinkViewModel(href = "#").withCssClass("js-enabled govuk-!-display-none-print")) else None,
+        isWelshTranslationAvailable = appConfig.languageTranslationEnabled
+    )
 )(content)
