@@ -55,6 +55,7 @@ object AffinityType {
     string.toLowerCase match {
       case Individual.toString   => Individual
       case Organisation.toString => Organisation
+      case _                     => throw UnknownAffinityException()
     }
 
 }
