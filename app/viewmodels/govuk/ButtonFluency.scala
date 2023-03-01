@@ -38,7 +38,7 @@ trait ButtonFluency {
       Button(
         element = Some("a"),
         inputType = button.inputType,
-        href = Some("href"),
+        href = Some(href),
         name = button.name,
         value = button.value,
         disabled = button.disabled,
