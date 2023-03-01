@@ -53,6 +53,7 @@ class IndexController @Inject() (
           val changeDetailsUrl = request.userType match {
             case Individual   => controllers.routes.ChangeIndividualContactDetailsController.onPageLoad().url
             case Organisation => controllers.routes.ChangeOrganisationContactDetailsController.onPageLoad().url
+            case _            => controllers.routes.UnauthorisedController.onPageLoad.url
           }
           subscriptionService.getContactDetails(ua) flatMap {
             case Some(userAnswers) =>
