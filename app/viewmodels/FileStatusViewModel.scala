@@ -17,7 +17,7 @@
 package viewmodels
 
 import controllers.routes
-import models.ConversationId
+import models.{CheckMode, ConversationId}
 import models.fileDetails.FileDetails.localDateTimeOrdering
 import models.fileDetails._
 import play.api.i18n.Messages
@@ -42,11 +42,11 @@ object FileStatusViewModel {
     val action = fileStatus match {
       case Pending => "<p class='govuk-visually-hidden'>None</p>"
       case Accepted =>
-        s"<a href='${routes.FileReceivedController.onPageLoad(conversationId).url}' class='govuk-link'>${Messages("fileStatus.accepted")}</a>"
+        s"<a href='${routes.FileReceivedController.onPageLoad(CheckMode, conversationId).url}' class='govuk-link'>${Messages("fileStatus.accepted")}</a>"
       case Rejected(errors) if FileProblemHelper.isProblemStatus(errors) =>
         s"<a href='${routes.FileProblemController.onPageLoad().url}' class='govuk-link'>${Messages("fileStatus.problem")}</a>"
       case Rejected(_) =>
-        s"<a href='${routes.FileRejectedController.onPageLoad(conversationId).url}' class='govuk-link'>${Messages("fileStatus.rejected")}</a>"
+        s"<a href='${routes.FileRejectedController.onPageLoad(CheckMode, conversationId).url}' class='govuk-link'>${Messages("fileStatus.rejected")}</a>"
     }
 
     TableRow(HtmlContent(action), classes = "app-custom-class govuk-!-width-one-half")
