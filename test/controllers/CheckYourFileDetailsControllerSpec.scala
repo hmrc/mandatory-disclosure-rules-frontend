@@ -34,7 +34,6 @@ class CheckYourFileDetailsControllerSpec extends SpecBase {
       val vfd: ValidatedFileData = ValidatedFileData("test.xml", MessageSpecData("GDC99999999", MDR401))
       val ua: UserAnswers        = emptyUserAnswers.set(ValidXMLPage, vfd).success.value
       val application            = applicationBuilder(userAnswers = Some(ua)).build()
-      val action                 = routes.SendYourFileController.onPageLoad().url
 
       running(application) {
         val request = FakeRequest(GET, routes.CheckYourFileDetailsController.onPageLoad().url)
