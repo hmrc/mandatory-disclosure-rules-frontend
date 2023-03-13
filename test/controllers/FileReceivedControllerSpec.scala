@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import connectors.FileDetailsConnector
-import models.ConversationId
+import models.{ConversationId, NormalMode}
 import models.fileDetails.{Accepted, FileDetails}
 import org.mockito.ArgumentMatchers.any
 import pages.{ContactEmailPage, SecondContactEmailPage}
@@ -76,7 +76,7 @@ class FileReceivedControllerSpec extends SpecBase {
         )
 
       running(application) {
-        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoad(conversationId).url)
+        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoad(NormalMode, conversationId).url)
 
         val result = route(application, request).value
 

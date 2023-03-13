@@ -1,40 +1,41 @@
 # microservice specific routes
 
-->          /hmrc-frontend                                                   hmrcfrontend.Routes
+->          /hmrc-frontend                                                    hmrcfrontend.Routes
 
-GET         /                                                                controllers.IndexController.onPageLoad
+GET         /                                                                 controllers.IndexController.onPageLoad
 
-GET         /assets/*file                                                    controllers.Assets.versioned(path="/public", file: Asset)
+GET         /assets/*file                                                     controllers.Assets.versioned(path="/public", file: Asset)
 
-GET         /language/:lang                                                  controllers.LanguageSwitchController.switchToLanguage(lang: String)
+GET         /language/:lang                                                   controllers.LanguageSwitchController.switchToLanguage(lang: String)
 
-GET         /refresh-session                                                 controllers.KeepAliveController.keepAlive
+GET         /refresh-session                                                  controllers.KeepAliveController.keepAlive
 
-GET         /report/problem/there-is-a-problem                               controllers.ThereIsAProblemController.onPageLoad()
+GET         /report/problem/there-is-a-problem                                controllers.ThereIsAProblemController.onPageLoad()
 
-GET         /account/sign-out-survey                                         controllers.auth.AuthController.signOut
-GET         /account/sign-out                                                controllers.auth.AuthController.signOutNoSurvey
-GET         /account/signed-out                                              controllers.auth.SignedOutController.onPageLoad
+GET         /account/sign-out-survey                                          controllers.auth.AuthController.signOut
+GET         /account/sign-out                                                 controllers.auth.AuthController.signOutNoSurvey
+GET         /account/signed-out                                               controllers.auth.SignedOutController.onPageLoad
 
-GET         /unauthorised                                                    controllers.UnauthorisedController.onPageLoad
+GET         /unauthorised                                                     controllers.UnauthorisedController.onPageLoad
 
-GET         /report/upload-file                                              controllers.UploadFileController.onPageLoad()
+GET         /report/upload-file                                               controllers.UploadFileController.onPageLoad()
 
-GET         /report/status                                                   controllers.UploadFileController.getStatus()
+GET         /report/status                                                    controllers.UploadFileController.getStatus()
 
-GET         /report/error                                                    controllers.UploadFileController.showError(errorCode: String, errorMessage: String, errorRequestId: String)
+GET         /report/error                                                     controllers.UploadFileController.showError(errorCode: String, errorMessage: String, errorRequestId: String)
 
-GET         /report/problem/file-too-large                                   controllers.FileTooLargeController.onPageLoad()
+GET         /report/problem/file-too-large                                    controllers.FileTooLargeController.onPageLoad()
 
-GET         /report/problem/not-xml-file                                     controllers.NotXMLFileController.onPageLoad()
+GET         /report/problem/not-xml-file                                      controllers.NotXMLFileController.onPageLoad()
 
-GET         /report/problem/virus-file-found                                 controllers.VirusFileFoundController.onPageLoad()
+GET         /report/problem/virus-file-found                                  controllers.VirusFileFoundController.onPageLoad()
 
-GET         /report/problem/data-errors                                      controllers.InvalidXMLFileController.onPageLoad()
+GET         /report/problem/data-errors                                       controllers.InvalidXMLFileController.onPageLoad()
 
-GET         /report/problem/invalid-xml-file                                 controllers.FileErrorController.onPageLoad()
+GET         /report/problem/invalid-xml-file                                  controllers.FileErrorController.onPageLoad()
 
-GET         /report/problem/business-rule-errors/:conversationId             controllers.FileRejectedController.onPageLoad(conversationId: ConversationId)
+GET         /report/fast/problem/business-rule-errors/:conversationId         controllers.FileRejectedController.onPageLoad(mode: Mode = NormalMode, conversationId: ConversationId)
+GET         /report/problem/business-rule-errors/:conversationId              controllers.FileRejectedController.onPageLoad(mode: Mode = CheckMode, conversationId: ConversationId)
 
 GET         /report/file-validation                                           controllers.FileValidationController.onPageLoad()
 
@@ -73,7 +74,8 @@ POST        /report/change-contact/organisation/second-contact-phone          co
 
 GET         /report/change-contact/details-updated                            controllers.DetailsUpdatedController.onPageLoad()
 
-GET         /report/file-confirmation/:conversationId                         controllers.FileReceivedController.onPageLoad(conversationId: ConversationId)
+GET         /report/fast/file-confirmation/:conversationId                    controllers.FileReceivedController.onPageLoad(mode: Mode = NormalMode, conversationId: ConversationId)
+GET         /report/file-confirmation/:conversationId                         controllers.FileReceivedController.onPageLoad(mode: Mode = CheckMode, conversationId: ConversationId)
 
 GET         /report/result-of-automatic-checks                                controllers.FileStatusController.onPageLoad()
 
