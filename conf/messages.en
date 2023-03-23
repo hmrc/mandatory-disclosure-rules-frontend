@@ -386,10 +386,11 @@ fileProblem.link = enquiries.aeoi@hmrc.gov.uk
 
 contactUs.title = Contact us to access this service
 contactUs.heading = Contact us to access this service
-contactUs.p1 = Email us at {0} so we can arrange a suitable time for your to access this new service.
+contactUs.p1 = We are temporarily arranging sessions for uploading XML files through this new service.
+contactUs.p2 = Email {0} to arrange a suitable time for your session.
 contactUs.link = mdrdigital@hmrc.gov.uk
-contactUs.p2 = If your report is due soon, email us before the reporting deadline.
-contactUs.p3 = If we cannot arrange a time for you to access the service before the deadline, you will not be charged a late filing penalty as long as you can send us an email as soon as possible before the deadline has ended.
+contactUs.p3 = If your report is due soon, email us before the deadline.
+contactUs.p4 = We may not be able to arrange a time for you to access the service before the deadline. If this happens, you will not receive a late reporting penalty if you email us before the deadline.
 
 
 informationSent.title = Information sent
