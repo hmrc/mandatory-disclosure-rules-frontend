@@ -82,9 +82,13 @@ signedOut.heading = For your security, we signed you out
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
 
-fileTooLarge.title = There is a problem with your file
-fileTooLarge.heading = There is a problem with your file
-fileTooLarge.p1 = The selected file could not be uploaded. The file must be 20MB or less.
+fileTooLarge.title = We cannot accept files larger than 3MB yet
+fileTooLarge.heading = We cannot accept files larger than 3MB yet
+fileTooLarge.p1 = To avoid the risk of a penalty for reporting after the deadline, email {0} to let us know that you have tried to upload your file. We will contact you when you can send your file through this service.
+fileTooLarge.link = aeoi.enquiries@hmrc.gov.uk
+fileTooLarge.p2 = In your email tell us:
+fileTooLarge.b1 = your full name or, if you are reporting for an organisation, the organisation's registered name
+fileTooLarge.b2 = your MDR ID
 
 notXMLFile.title = There is a problem with your file
 notXMLFile.heading = There is a problem with your file

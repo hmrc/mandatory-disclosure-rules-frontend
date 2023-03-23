@@ -40,6 +40,8 @@ class FrontendAppConfig @Inject() (configuration: Configuration, servicesConfig:
   val mdrGuidanceUrl: String           = configuration.get[String]("urls.mdrGuidance")
   val businessRulesGuidanceUrl: String = configuration.get[String]("urls.businessRulesGuidance")
 
+  val enquireEmailLink: String = configuration.get[String]("urls.emailLink")
+
   lazy val homePageUrl: String = configuration.get[String]("urls.homepage")
 
   val upscanInitiateHost: String = servicesConfig.baseUrl("upscan")
