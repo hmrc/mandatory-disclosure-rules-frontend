@@ -26,10 +26,12 @@
 
     <h1 class="govuk-heading-l">@messages("contactUs.heading")</h1>
 
-    <p class="govuk-body">@Html(messages("contactUs.p1", link("mailto:mdrdigital@hmrc.gov.uk", "contactUs.link")))</p>
+    <p class="govuk-body">@messages("contactUs.p1")</p>
 
-    <p class="govuk-body">@messages("contactUs.p2")</p>
+    <p class="govuk-body">@Html(messages("contactUs.p2", link("mailto:mdrdigital@hmrc.gov.uk", "contactUs.link")))</p>
 
     <p class="govuk-body">@messages("contactUs.p3")</p>
+
+    <p class="govuk-body">@messages("contactUs.p4")</p>
 
 }

@@ -64,4 +64,5 @@ class FrontendAppConfig @Inject() (configuration: Configuration, servicesConfig:
 
   val spinnerCounter: Int = configuration.get[Int]("spinner.counter")
 
+  lazy val redirectUploadToContactUsToggle: Boolean = configuration.get[Boolean]("features.redirectUploadToContactUs")
 }
