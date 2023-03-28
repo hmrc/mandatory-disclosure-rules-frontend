@@ -269,7 +269,7 @@ fileRejected.80010.key = 810
 fileRejected.80010.value = The file cannot contain a combination of new information (DocTypeIndic = OECD1) and corrections or deletions (DocTypeIndic = OECD2 or OECD3) \
 <br > The MessageTypeIndic must be compatible with each DocTypeIndic in the file. \
 <br > If the MessageTypeIndic is MDR401 for new information, then every DocTypeIndic must be OECD1. \
-<br> If the MessageTypeIndic is MDR402 for corrections or deletions, then the DocTypeIndic values must be either OECD2, OECD3 or OECD0
+<br > If the MessageTypeIndic is MDR402 for corrections or deletions, then the DocTypeIndic values must be either OECD2, OECD3 or OECD0.
 fileRejected.80011.key = 811
 fileRejected.80011.value = A CorrDocRefId value must not be used more than once in the same file
 fileRejected.80013.key = 813
