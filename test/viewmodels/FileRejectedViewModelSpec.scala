@@ -164,7 +164,7 @@ class FileRejectedViewModelSpec extends SpecBase {
               TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_810")),
               TableRow(
                 Text(
-                  "The file cannot contain a combination of new information (DocTypeIndic = OECD1) and corrections or deletions (DocTypeIndic = OECD2 or OECD3)"
+                  "The file cannot contain a combination of new information (DocTypeIndic = OECD1) and corrections or deletions (DocTypeIndic = OECD2 or OECD3) <br > The MessageTypeIndic must be compatible with each DocTypeIndic in the file. <br > If the MessageTypeIndic is MDR401 for new information, then every DocTypeIndic must be OECD1. <br > If the MessageTypeIndic is MDR402 for corrections or deletions, then the DocTypeIndic values must be either OECD2, OECD3 or OECD0."
                 ),
                 None,
                 "",
