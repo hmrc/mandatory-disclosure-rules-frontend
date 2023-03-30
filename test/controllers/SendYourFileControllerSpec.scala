@@ -109,7 +109,7 @@ class SendYourFileControllerSpec extends SpecBase {
           )
           .build()
 
-        when(mockSubmissionConnector.submitDocument(any[String], any[String], any())(any[HeaderCarrier], any[ExecutionContext]))
+        when(mockSubmissionConnector.submitDocument(any[String], any[String], any(), any())(any[HeaderCarrier], any[ExecutionContext]))
           .thenReturn(Future.successful(Some(ConversationId("conversationId"))))
 
         when(mockXmlHandler.load(any[String]())).thenReturn(<test><value>Success</value></test>)
@@ -122,7 +122,7 @@ class SendYourFileControllerSpec extends SpecBase {
           status(result) mustEqual OK
 
           verify(mockSubmissionConnector, times(1))
-            .submitDocument(any(), any(), any())(any(), any())
+            .submitDocument(any(), any(), any(), any())(any(), any())
         }
       }
 
@@ -166,7 +166,7 @@ class SendYourFileControllerSpec extends SpecBase {
 
         when(mockXmlHandler.load(any[String]())).thenReturn(<test><value>Success</value></test>)
 
-        when(mockSubmissionConnector.submitDocument(any[String], any[String], any())(any[HeaderCarrier], any[ExecutionContext]))
+        when(mockSubmissionConnector.submitDocument(any[String], any[String], any(), any())(any[HeaderCarrier], any[ExecutionContext]))
           .thenReturn(Future.successful(None))
 
         running(application) {

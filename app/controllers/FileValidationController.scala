@@ -71,7 +71,7 @@ class FileValidationController @Inject() (
                         case Right(messageSpecData) =>
                           for {
                             updatedAnswers <- Future.fromTry(
-                              request.userAnswers.set(ValidXMLPage, ValidatedFileData(downloadDetails.name, downloadDetails.size, messageSpecData))
+                              request.userAnswers.set(ValidXMLPage, ValidatedFileData(downloadDetails.name, messageSpecData, downloadDetails.size))
                             )
                             updatedAnswersWithURL <- Future.fromTry(updatedAnswers.set(URLPage, downloadDetails.downloadUrl))
                             _                     <- sessionRepository.set(updatedAnswersWithURL)

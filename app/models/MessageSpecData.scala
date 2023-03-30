@@ -42,7 +42,7 @@ object MessageSpecData {
   implicit val format: OFormat[MessageSpecData] = Json.format[MessageSpecData]
 }
 
-case class ValidatedFileData(fileName: String, fileSize: Option[Long], messageSpecData: MessageSpecData)
+case class ValidatedFileData(fileName: String, messageSpecData: MessageSpecData, fileSize: Option[Long] = None)
 
 object ValidatedFileData {
   implicit val format: OFormat[ValidatedFileData] = Json.format[ValidatedFileData]
