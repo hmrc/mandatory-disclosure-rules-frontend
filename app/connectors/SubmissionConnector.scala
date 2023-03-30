@@ -33,18 +33,18 @@ class SubmissionConnector @Inject() (httpClient: HttpClient, config: FrontendApp
 
   val submitUrl = s"${config.mdrUrl}/mandatory-disclosure-rules/submit"
 
-  def submitDocument(fileName: String, enrolmentID: String, xmlDocument: NodeSeq)(implicit
+  def submitDocument(fileName: String, fileSize: Option[Long], enrolmentID: String, xmlDocument: NodeSeq)(implicit
     hc: HeaderCarrier,
     ec: ExecutionContext
   ): Future[Option[ConversationId]] =
-    httpClient.POSTString[HttpResponse](submitUrl, constructSubmission(fileName, enrolmentID, xmlDocument).toString(), headers) map {
+    httpClient.POSTString[HttpResponse](submitUrl, constructSubmission(fileName, fileSize, enrolmentID, xmlDocument).toString(), headers) map {
       case response if is2xx(response.status) => Some(response.json.as[ConversationId])
       case errorResponse =>
         logger.warn(s"Failed to submitDocument: revived the status: ${errorResponse.status} and message: ${errorResponse.body}")
         None
     }
 
-  private def constructSubmission(fileName: String, enrolmentID: String, document: NodeSeq): NodeSeq = {
+  private def constructSubmission(fileName: String, fileSize: Option[Long], enrolmentID: String, document: NodeSeq): NodeSeq = {
     val submission =
       <submission>
         <fileName>{fileName}</fileName>

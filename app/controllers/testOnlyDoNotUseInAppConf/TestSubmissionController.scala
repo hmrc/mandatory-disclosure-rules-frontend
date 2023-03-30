@@ -39,7 +39,7 @@ class TestSubmissionController @Inject() (
     implicit request =>
       logger.debug(s"inserting test submission: ${request.body}")
       connector
-        .submitDocument(fileName, request.subscriptionId, request.body)
+        .submitDocument(fileName, Some(100L), request.subscriptionId, request.body)
         .map {
           case Some(conversationId) => Ok(Json.toJson(conversationId))
           case _                    => InternalServerError
