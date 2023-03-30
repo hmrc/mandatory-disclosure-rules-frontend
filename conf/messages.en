@@ -51,7 +51,7 @@ index.bullet1 = view details about your recently sent files
 index.bullet2 = find out more about MDR XML files
 index.bullet3 = change your contact details
 index.p4 = If you’re having problems with the service, you can email {0}
-index.p4.link = enquiries.aeoi@hmrc.gov.uk
+index.p4.link = aeoi.enquiries@hmrc.gov.uk
 
 pageNotFound.title = Page not found
 pageNotFound.heading = Page not found
@@ -60,14 +60,14 @@ pageNotFound.bullet1 = the link or button you selected is for a page that does n
 pageNotFound.bullet2 = you’ve typed or copied a web address for a page that does not exist
 pageNotFound.bullet3 = you’ve typed or copied a web address incorrectly
 pageNotFound.p2 = If the web address is correct or you selected a link or button, and you have queries, you can email
-pageNotFound.email = enquiries.aeoi@hmrc.gov.uk
+pageNotFound.email = aeoi.enquiries@hmrc.gov.uk
 pageNotFound.p3 = Check you have entered the correct details.
 
 thereIsAProblem.title = Sorry, there is a problem with the service
 thereIsAProblem.heading = Sorry, there is a problem with the service
 thereIsAProblem.paragraph.1 = Try again later.
 thereIsAProblem.paragraph.2 = We have not saved any file you uploaded or any answers you entered. If you need to contact someone about your MDR reporting, you can email
-thereIsAProblem.emailAddress = enquiries.aeoi@hmrc.gov.uk
+thereIsAProblem.emailAddress = aeoi.enquiries@hmrc.gov.uk
 
 journeyRecovery.continue.title = Sorry, there is a problem with the service
 journeyRecovery.continue.heading = Sorry, there is a problem with the service
@@ -114,7 +114,7 @@ invalidXMLFile.uploadLink = Upload a different file
 invalidXMLFile.print = Print or save this page
 uploadFile.title = Upload an XML file
 uploadFile.heading = Upload an XML file
-uploadFile.p1 = We will run two sets of automatic checks to make sure your file meets the MDR XML requirements.
+uploadFile.p1 = We will automatically check the formatting of the file.
 uploadFile.error.file.invalid = The selected file must be an XML
 uploadFile.error.file.empty = Select a file to upload
 
@@ -388,7 +388,7 @@ fileProblem.title = Sorry, there is a problem with the service
 fileProblem.heading = Sorry, there is a problem with the service
 fileProblem.p1 = We have not accepted your file.
 fileProblem.p2 = You must email {0} so we can investigate the problem.
-fileProblem.link = enquiries.aeoi@hmrc.gov.uk
+fileProblem.link = aeoi.enquiries@hmrc.gov.uk
 
 
 contactUs.title = Contact us to access this service
