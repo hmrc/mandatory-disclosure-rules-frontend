@@ -41,16 +41,16 @@ error.number = Please enter a valid number
 error.required = Please enter a value
 error.summary.title = There is a problem
 
-index.title = Report cross-border arrangements for MDR
-index.heading = Report cross-border arrangements for MDR
-index.p1 = You can {0} to tell us about a cross-border arrangement.
-index.p1.link = upload an XML file
-index.p2 = The file must be 20MB or less and include your MDR ID, which is {0}
+index.title = Report cross-border arrangements for Mandatory Disclosure Rules (MDR)
+index.heading = Report cross-border arrangements for Mandatory Disclosure Rules (MDR)
+index.p1 = You can report new information, or corrections and deletions, by {0}.
+index.p1.link = uploading an XML file
+index.p2 = The file must include your MDR ID {0} and be 3MB or less.
 index.p3 = You can also:
-index.bullet1 = view details about your recently sent files
+index.bullet1 = view results of checks on your recently sent files
 index.bullet2 = find out more about MDR XML files
 index.bullet3 = change your contact details
-index.p4 = If you’re having problems with the service, you can email {0}
+index.p4 = Email {0} if you are having problems with the service.
 index.p4.link = aeoi.enquiries@hmrc.gov.uk
 
 pageNotFound.title = Page not found
