@@ -63,7 +63,7 @@ class FileRejectedViewModelSpec extends SpecBase {
               TableRow(Text("509"), None, "", None, None, Map("id" -> "code_509")),
               TableRow(Text("N/A"), None, "", None, None, Map("id" -> "docRefId_509")),
               TableRow(
-                Text("The MessageRefId has already been used in a file previously received, it must be unique"),
+                HtmlContent("The MessageRefId has already been used in a file previously received, it must be unique"),
                 None,
                 "",
                 None,
@@ -75,7 +75,7 @@ class FileRejectedViewModelSpec extends SpecBase {
               TableRow(Text("510"), None, "", None, None, Map("id" -> "code_510")),
               TableRow(Text("N/A"), None, "", None, None, Map("id" -> "docRefId_510")),
               TableRow(
-                Text("We cannot accept test data so each DocTypeIndic must have a value of either OECD0, OECD1, OECD2 or OECD3"),
+                HtmlContent("We cannot accept test data so each DocTypeIndic must have a value of either OECD0, OECD1, OECD2 or OECD3"),
                 None,
                 "",
                 None,
@@ -87,7 +87,7 @@ class FileRejectedViewModelSpec extends SpecBase {
               TableRow(Text("800"), None, "", None, None, Map("id" -> "code_800")),
               TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_800")),
               TableRow(
-                Text("The DocRefId has already been used in this file or a file previously received, it must be unique"),
+                HtmlContent("The DocRefId has already been used in this file or a file previously received, it must be unique"),
                 None,
                 "",
                 None,
@@ -98,12 +98,12 @@ class FileRejectedViewModelSpec extends SpecBase {
             List(
               TableRow(Text("802"), None, "", None, None, Map("id" -> "code_802")),
               TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_802")),
-              TableRow(Text("The CorrDocRefId does not match any DocRefId previously received"), None, "", None, None, Map("id" -> "errorMessage_802"))
+              TableRow(HtmlContent("The CorrDocRefId does not match any DocRefId previously received"), None, "", None, None, Map("id" -> "errorMessage_802"))
             ),
             List(
               TableRow(Text("803"), None, "", None, None, Map("id" -> "code_803")),
               TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_803")),
-              TableRow(Text("The CorrDocRefId is for a section that has already been corrected or deleted"),
+              TableRow(HtmlContent("The CorrDocRefId is for a section that has already been corrected or deleted"),
                        None,
                        "",
                        None,
@@ -114,7 +114,7 @@ class FileRejectedViewModelSpec extends SpecBase {
             List(
               TableRow(Text("804"), None, "", None, None, Map("id" -> "code_804")),
               TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_804")),
-              TableRow(Text("Sections that contain new or resent information must not have a CorrDocRefId"),
+              TableRow(HtmlContent("Sections that contain new or resent information must not have a CorrDocRefId"),
                        None,
                        "",
                        None,
@@ -125,7 +125,7 @@ class FileRejectedViewModelSpec extends SpecBase {
             List(
               TableRow(Text("805"), None, "", None, None, Map("id" -> "code_805")),
               TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_805")),
-              TableRow(Text("This section contains a correction or deletion so it must contain a CorrDocRefId"),
+              TableRow(HtmlContent("This section contains a correction or deletion so it must contain a CorrDocRefId"),
                        None,
                        "",
                        None,
@@ -137,7 +137,7 @@ class FileRejectedViewModelSpec extends SpecBase {
               TableRow(Text("808"), None, "", None, None, Map("id" -> "code_808")),
               TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_808")),
               TableRow(
-                Text(
+                HtmlContent(
                   "Resend option (OECD0) must only be used for the Disclosing element, not for the MdrReport element. Ensure the MdrReport DocTypeIndic contains one of the allowed values"
                 ),
                 None,
@@ -151,7 +151,7 @@ class FileRejectedViewModelSpec extends SpecBase {
               TableRow(Text("809"), None, "", None, None, Map("id" -> "code_809")),
               TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_809")),
               TableRow(
-                Text("This Disclosing section can only be deleted if the MdrReport section linked to it is also deleted"),
+                HtmlContent("This Disclosing section can only be deleted if the MdrReport section linked to it is also deleted"),
                 None,
                 "",
                 None,
@@ -163,8 +163,8 @@ class FileRejectedViewModelSpec extends SpecBase {
               TableRow(Text("810"), None, "", None, None, Map("id" -> "code_810")),
               TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_810")),
               TableRow(
-                Text(
-                  "The file cannot contain a combination of new information (DocTypeIndic = OECD1) and corrections or deletions (DocTypeIndic = OECD2 or OECD3) <br > The MessageTypeIndic must be compatible with each DocTypeIndic in the file. <br > If the MessageTypeIndic is MDR401 for new information, then every DocTypeIndic must be OECD1. <br > If the MessageTypeIndic is MDR402 for corrections or deletions, then the DocTypeIndic values must be either OECD2, OECD3 or OECD0."
+                HtmlContent(
+                  "The file cannot contain a combination of new information (DocTypeIndic = OECD1) and corrections or deletions (DocTypeIndic = OECD2 or OECD3).<p>The MessageTypeIndic must be compatible with each DocTypeIndic in the file.</p><p>If the MessageTypeIndic is MDR401 for new information, then every DocTypeIndic must be OECD1.</p><p class='remove-end-whitespace'>If the MessageTypeIndic is MDR402 for corrections or deletions, then the DocTypeIndic values must be either OECD2, OECD3 or OECD0.</p>"
                 ),
                 None,
                 "",
@@ -176,13 +176,19 @@ class FileRejectedViewModelSpec extends SpecBase {
             List(
               TableRow(Text("811"), None, "", None, None, Map("id" -> "code_811")),
               TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_811")),
-              TableRow(Text("A CorrDocRefId value must not be used more than once in the same file"), None, "", None, None, Map("id" -> "errorMessage_811"))
+              TableRow(HtmlContent("A CorrDocRefId value must not be used more than once in the same file"),
+                       None,
+                       "",
+                       None,
+                       None,
+                       Map("id" -> "errorMessage_811")
+              )
             ),
             List(
               TableRow(Text("813"), None, "", None, None, Map("id" -> "code_813")),
               TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_813")),
               TableRow(
-                Text(
+                HtmlContent(
                   "The Disclosing DocTypeIndic of OECD0 indicates this section contains resent information, but the DocRefId does not match any we have received"
                 ),
                 None,
@@ -196,7 +202,7 @@ class FileRejectedViewModelSpec extends SpecBase {
               TableRow(Text("814"), None, "", None, None, Map("id" -> "code_814")),
               TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_814")),
               TableRow(
-                Text(
+                HtmlContent(
                   "The Disclosing DocTypeIndic of OECD0 shows this section contains resent information, but the DocRefId is for information that has since been corrected or deleted. Provide the DocRefId of the section you want to correct"
                 ),
                 None,
@@ -244,7 +250,7 @@ class FileRejectedViewModelSpec extends SpecBase {
             TableRow(Text("901"), None, "", None, None, Map("id" -> "code_901")),
             TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_901")),
             TableRow(
-              Text(
+              HtmlContent(
                 "The CorrDocRefId does not match a DocRefId from the same type of section (either Disclosing or MdrReport). It must refer to the same element"
               ),
               None,
@@ -258,7 +264,7 @@ class FileRejectedViewModelSpec extends SpecBase {
             TableRow(Text("902"), None, "", None, None, Map("id" -> "code_902")),
             TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_902")),
             TableRow(
-              Text("The MdrReport CorrDocRefId does not refer to the same previously sent MdrBody as the Disclosing element"),
+              HtmlContent("The MdrReport CorrDocRefId does not refer to the same previously sent MdrBody as the Disclosing element"),
               None,
               "",
               None,
@@ -270,7 +276,7 @@ class FileRejectedViewModelSpec extends SpecBase {
             TableRow(Text("903"), None, "", None, None, Map("id" -> "code_903")),
             TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_903")),
             TableRow(
-              Text("The Disclosing section contains resent data (DocTypeIndic = OECD0) so it must not have a CorrDocRefId"),
+              HtmlContent("The Disclosing section contains resent data (DocTypeIndic = OECD0) so it must not have a CorrDocRefId"),
               None,
               "",
               None,
@@ -282,7 +288,7 @@ class FileRejectedViewModelSpec extends SpecBase {
             TableRow(Text("904"), None, "", None, None, Map("id" -> "code_904")),
             TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_904")),
             TableRow(
-              Text("MdrReport CrsAvoidance or OOS Reason is not one of the allowed values for the Disclosing Capacity provided"),
+              HtmlContent("MdrReport CrsAvoidance or OOS Reason is not one of the allowed values for the Disclosing Capacity provided"),
               None,
               "",
               None,
@@ -293,19 +299,22 @@ class FileRejectedViewModelSpec extends SpecBase {
           List(
             TableRow(Text("905"), None, "", None, None, Map("id" -> "code_905")),
             TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_905")),
-            TableRow(Text("Since the DocTypeIndic of Disclosing is OECD0, the DocTypeIndic of MdrReport must be OECD2"),
-                     None,
-                     "",
-                     None,
-                     None,
-                     Map("id" -> "errorMessage_905")
+            TableRow(
+              HtmlContent("Since the DocTypeIndic of Disclosing is OECD0, the DocTypeIndic of MdrReport must be OECD2"),
+              None,
+              "",
+              None,
+              None,
+              Map("id" -> "errorMessage_905")
             )
           ),
           List(
             TableRow(Text("906"), None, "", None, None, Map("id" -> "code_906")),
             TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_906")),
             TableRow(
-              Text("Since the MdrReport has a DocTypeIndic of OECD3, indicating this section must be deleted, this Disclosing section must be deleted too"),
+              HtmlContent(
+                "Since the MdrReport has a DocTypeIndic of OECD3, indicating this section must be deleted, this Disclosing section must be deleted too"
+              ),
               None,
               "",
               None,
@@ -317,7 +326,7 @@ class FileRejectedViewModelSpec extends SpecBase {
             TableRow(Text("907"), None, "", None, None, Map("id" -> "code_907")),
             TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_907")),
             TableRow(
-              Text(
+              HtmlContent(
                 "Since the MessageTypeIndic contains the value of MDR401 for new information, the Disclosing DocTypeIndic must contain the value of OECD1 for new information"
               ),
               None,
@@ -331,7 +340,7 @@ class FileRejectedViewModelSpec extends SpecBase {
             TableRow(Text("908"), None, "", None, None, Map("id" -> "code_908")),
             TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_908")),
             TableRow(
-              Text(
+              HtmlContent(
                 "Since the MessageTypeIndic contains the value of MDR401 for new information, an MdrReport section must be provided with a DocTypeIndic of OECD1 for new information"
               ),
               None,
@@ -345,7 +354,7 @@ class FileRejectedViewModelSpec extends SpecBase {
             TableRow(Text("909"), None, "", None, None, Map("id" -> "code_909")),
             TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_909")),
             TableRow(
-              Text("DocRefId must be 100 characters or less, start with your 15-character MDR ID and include up to 85 other characters of your choice"),
+              HtmlContent("DocRefId must be 100 characters or less, start with your 15-character MDR ID and include up to 85 other characters of your choice"),
               None,
               "",
               None,
@@ -357,7 +366,9 @@ class FileRejectedViewModelSpec extends SpecBase {
             TableRow(Text("910"), None, "", None, None, Map("id" -> "code_910")),
             TableRow(HtmlContent("N/A"), None, "", None, None, Map("id" -> "docRefId_910")),
             TableRow(
-              Text("MessageRefId must be 85 characters or less, start with your 15-character MDR ID and include up to 70 other characters of your choice"),
+              HtmlContent(
+                "MessageRefId must be 85 characters or less, start with your 15-character MDR ID and include up to 70 other characters of your choice"
+              ),
               None,
               "",
               None,
@@ -368,12 +379,12 @@ class FileRejectedViewModelSpec extends SpecBase {
           List(
             TableRow(Text("911"), None, "", None, None, Map("id" -> "code_911")),
             TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_911")),
-            TableRow(Text("Provide an issuedBy for every TIN that has a value other than NOTIN"), None, "", None, None, Map("id" -> "errorMessage_911"))
+            TableRow(HtmlContent("Provide an issuedBy for every TIN that has a value other than NOTIN"), None, "", None, None, Map("id" -> "errorMessage_911"))
           ),
           List(
             TableRow(Text("912"), None, "", None, None, Map("id" -> "code_912")),
             TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_912")),
-            TableRow(Text("The top level of the StructureChart must not have an Ownership or InvestAmount"),
+            TableRow(HtmlContent("The top level of the StructureChart must not have an Ownership or InvestAmount"),
                      None,
                      "",
                      None,
@@ -421,7 +432,7 @@ class FileRejectedViewModelSpec extends SpecBase {
             TableRow(Text("901"), None, "", None, None, Map("id" -> "code_901")),
             TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_901")),
             TableRow(
-              Text(
+              HtmlContent(
                 "The CorrDocRefId does not match a DocRefId from the same type of section (either Disclosing or MdrReport). It must refer to the same element"
               ),
               None,
@@ -435,7 +446,7 @@ class FileRejectedViewModelSpec extends SpecBase {
             TableRow(Text("902"), None, "", None, None, Map("id" -> "code_902")),
             TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_902")),
             TableRow(
-              Text("The MdrReport CorrDocRefId does not refer to the same previously sent MdrBody as the Disclosing element"),
+              HtmlContent("The MdrReport CorrDocRefId does not refer to the same previously sent MdrBody as the Disclosing element"),
               None,
               "",
               None,
@@ -447,7 +458,7 @@ class FileRejectedViewModelSpec extends SpecBase {
             TableRow(Text("903"), None, "", None, None, Map("id" -> "code_903")),
             TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_903")),
             TableRow(
-              Text("The Disclosing section contains resent data (DocTypeIndic = OECD0) so it must not have a CorrDocRefId"),
+              HtmlContent("The Disclosing section contains resent data (DocTypeIndic = OECD0) so it must not have a CorrDocRefId"),
               None,
               "",
               None,
@@ -459,7 +470,7 @@ class FileRejectedViewModelSpec extends SpecBase {
             TableRow(Text("904"), None, "", None, None, Map("id" -> "code_904")),
             TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_904")),
             TableRow(
-              Text("MdrReport CrsAvoidance or OOS Reason is not one of the allowed values for the Disclosing Capacity provided"),
+              HtmlContent("MdrReport CrsAvoidance or OOS Reason is not one of the allowed values for the Disclosing Capacity provided"),
               None,
               "",
               None,
@@ -470,19 +481,22 @@ class FileRejectedViewModelSpec extends SpecBase {
           List(
             TableRow(Text("905"), None, "", None, None, Map("id" -> "code_905")),
             TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_905")),
-            TableRow(Text("Since the DocTypeIndic of Disclosing is OECD0, the DocTypeIndic of MdrReport must be OECD2"),
-                     None,
-                     "",
-                     None,
-                     None,
-                     Map("id" -> "errorMessage_905")
+            TableRow(
+              HtmlContent("Since the DocTypeIndic of Disclosing is OECD0, the DocTypeIndic of MdrReport must be OECD2"),
+              None,
+              "",
+              None,
+              None,
+              Map("id" -> "errorMessage_905")
             )
           ),
           List(
             TableRow(Text("906"), None, "", None, None, Map("id" -> "code_906")),
             TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_906")),
             TableRow(
-              Text("Since the MdrReport has a DocTypeIndic of OECD3, indicating this section must be deleted, this Disclosing section must be deleted too"),
+              HtmlContent(
+                "Since the MdrReport has a DocTypeIndic of OECD3, indicating this section must be deleted, this Disclosing section must be deleted too"
+              ),
               None,
               "",
               None,
@@ -494,7 +508,7 @@ class FileRejectedViewModelSpec extends SpecBase {
             TableRow(Text("907"), None, "", None, None, Map("id" -> "code_907")),
             TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_907")),
             TableRow(
-              Text(
+              HtmlContent(
                 "Since the MessageTypeIndic contains the value of MDR401 for new information, the Disclosing DocTypeIndic must contain the value of OECD1 for new information"
               ),
               None,
@@ -508,7 +522,7 @@ class FileRejectedViewModelSpec extends SpecBase {
             TableRow(Text("908"), None, "", None, None, Map("id" -> "code_908")),
             TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_908")),
             TableRow(
-              Text(
+              HtmlContent(
                 "Since the MessageTypeIndic contains the value of MDR401 for new information, an MdrReport section must be provided with a DocTypeIndic of OECD1 for new information"
               ),
               None,
@@ -522,7 +536,7 @@ class FileRejectedViewModelSpec extends SpecBase {
             TableRow(Text("909"), None, "", None, None, Map("id" -> "code_909")),
             TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_909")),
             TableRow(
-              Text("DocRefId must be 100 characters or less, start with your 15-character MDR ID and include up to 85 other characters of your choice"),
+              HtmlContent("DocRefId must be 100 characters or less, start with your 15-character MDR ID and include up to 85 other characters of your choice"),
               None,
               "",
               None,
@@ -534,7 +548,9 @@ class FileRejectedViewModelSpec extends SpecBase {
             TableRow(Text("910"), None, "", None, None, Map("id" -> "code_910")),
             TableRow(HtmlContent("N/A"), None, "", None, None, Map("id" -> "docRefId_910")),
             TableRow(
-              Text("MessageRefId must be 85 characters or less, start with your 15-character MDR ID and include up to 70 other characters of your choice"),
+              HtmlContent(
+                "MessageRefId must be 85 characters or less, start with your 15-character MDR ID and include up to 70 other characters of your choice"
+              ),
               None,
               "",
               None,
@@ -545,12 +561,12 @@ class FileRejectedViewModelSpec extends SpecBase {
           List(
             TableRow(Text("911"), None, "", None, None, Map("id" -> "code_911")),
             TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_911")),
-            TableRow(Text("Provide an issuedBy for every TIN that has a value other than NOTIN"), None, "", None, None, Map("id" -> "errorMessage_911"))
+            TableRow(HtmlContent("Provide an issuedBy for every TIN that has a value other than NOTIN"), None, "", None, None, Map("id" -> "errorMessage_911"))
           ),
           List(
             TableRow(Text("912"), None, "", None, None, Map("id" -> "code_912")),
             TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_912")),
-            TableRow(Text("The top level of the StructureChart must not have an Ownership or InvestAmount"),
+            TableRow(HtmlContent("The top level of the StructureChart must not have an Ownership or InvestAmount"),
                      None,
                      "",
                      None,
@@ -588,7 +604,9 @@ class FileRejectedViewModelSpec extends SpecBase {
             TableRow(Text("910"), None, "", None, None, Map("id" -> "code_910")),
             TableRow(HtmlContent("N/A"), None, "", None, None, Map("id" -> "docRefId_910")),
             TableRow(
-              Text("MessageRefId must be 85 characters or less, start with your 15-character MDR ID and include up to 70 other characters of your choice"),
+              HtmlContent(
+                "MessageRefId must be 85 characters or less, start with your 15-character MDR ID and include up to 70 other characters of your choice"
+              ),
               None,
               "",
               None,
@@ -600,7 +618,7 @@ class FileRejectedViewModelSpec extends SpecBase {
             TableRow(Text("510"), None, "", None, None, Map("id" -> "code_510")),
             TableRow(Text("N/A"), None, "", None, None, Map("id" -> "docRefId_510")),
             TableRow(
-              Text("We cannot accept test data so each DocTypeIndic must have a value of either OECD0, OECD1, OECD2 or OECD3"),
+              HtmlContent("We cannot accept test data so each DocTypeIndic must have a value of either OECD0, OECD1, OECD2 or OECD3"),
               None,
               "",
               None,
