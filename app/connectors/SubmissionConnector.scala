@@ -46,9 +46,23 @@ class SubmissionConnector @Inject() (httpClient: HttpClient, config: FrontendApp
 
   private def constructSubmission(fileName: String, enrolmentID: String, document: NodeSeq, fileSize: Option[Long]): NodeSeq = {
     val submission =
-      <submission>
+      if (fileSize.isEmpty)
+        <submission>
         <fileName>{fileName}</fileName>
         <enrolmentID>{enrolmentID}</enrolmentID>
+        <file></file>
+      </submission>
+      else
+        <submission>
+        <fileName>
+          {fileName}
+        </fileName>
+        <fileSize>
+          {fileSize.get}
+        </fileSize>
+        <enrolmentID>
+          {enrolmentID}
+        </enrolmentID>
         <file></file>
       </submission>
 
