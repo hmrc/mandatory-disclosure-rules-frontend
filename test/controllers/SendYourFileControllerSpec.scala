@@ -40,6 +40,8 @@ class SendYourFileControllerSpec extends SpecBase {
 
   "SendYourFile Controller" - {
 
+    val fileSize: Long = 100293L
+
     "onPageLoad" - {
 
       "must return OK and the correct view with no warning text for a GET" in {
@@ -67,7 +69,7 @@ class SendYourFileControllerSpec extends SpecBase {
       "must return OK and the correct view with some warning text for a GET" in {
 
         val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402)))
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402), Some(fileSize)))
           .success
           .value
 
@@ -95,7 +97,7 @@ class SendYourFileControllerSpec extends SpecBase {
         val mockXmlHandler          = mock[XmlHandler]
 
         val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402)))
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402), Some(fileSize)))
           .success
           .value
           .set(URLPage, "url")

@@ -46,13 +46,17 @@ class SubmissionConnector @Inject() (httpClient: HttpClient, config: FrontendApp
 
   private def constructSubmission(fileName: String, enrolmentID: String, document: NodeSeq, fileSize: Option[Long]): NodeSeq = {
     val submission =
-      if (fileSize.isEmpty)
+      if (fileSize.isEmpty) {
         <submission>
-        <fileName>{fileName}</fileName>
-        <enrolmentID>{enrolmentID}</enrolmentID>
-        <file></file>
-      </submission>
-      else
+          <fileName>
+            {fileName}
+          </fileName>
+          <enrolmentID>
+            {enrolmentID}
+          </enrolmentID>
+          <file></file>
+        </submission>
+      } else {
         <submission>
         <fileName>
           {fileName}
@@ -65,6 +69,7 @@ class SubmissionConnector @Inject() (httpClient: HttpClient, config: FrontendApp
         </enrolmentID>
         <file></file>
       </submission>
+      }
 
     new RuleTransformer(new RewriteRule {
       override def transform(n: Node): Seq[Node] = n match {
