@@ -390,7 +390,7 @@ fileProblem.link = aeoi.enquiries@hmrc.gov.uk
 
 contactUs.title = Contact us to access this service
 contactUs.heading = Contact us to access this service
-contactUs.p1 = We are temporarily arranging sessions for uploading XML files through this new service.
+contactUs.p1 = You need to arrange a session to upload your XML file through this new service.
 contactUs.p2 = Email {0} to arrange a suitable time for your session.
 contactUs.link = mdrdigital@hmrc.gov.uk
 contactUs.p3 = If your report is due soon, email us before the deadline.
