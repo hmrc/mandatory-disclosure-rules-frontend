@@ -46,7 +46,6 @@ class SendYourFileController @Inject() (
   submissionConnector: SubmissionConnector,
   fileDetailsConnector: FileDetailsConnector,
   sessionRepository: SessionRepository,
-  xmlHandler: XmlHandler,
   appConfig: FrontendAppConfig,
   val controllerComponents: MessagesControllerComponents,
   view: SendYourFileView
