@@ -35,7 +35,8 @@ class TestSubmissionController @Inject() (
     extends FrontendBaseController
     with Logging {
 
-  def insertTestSubmission(fileName: String): Action[NodeSeq] = identifierAction(parse.xml).async {
+  /*
+ def insertTestSubmission(fileName: String): Action[NodeSeq] = identifierAction(parse.xml).async {
     implicit request =>
       logger.debug(s"inserting test submission: ${request.body}")
       connector
@@ -45,5 +46,6 @@ class TestSubmissionController @Inject() (
           case _                    => InternalServerError
         }
   }
+   */
 
 }

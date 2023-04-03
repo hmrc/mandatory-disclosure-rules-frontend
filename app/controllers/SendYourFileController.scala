@@ -21,6 +21,7 @@ import connectors.{FileDetailsConnector, SubmissionConnector}
 import controllers.actions.{CheckForSubmissionAction, DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import handlers.XmlHandler
 import models.fileDetails.{Pending, Rejected, ValidationErrors, Accepted => FileStatusAccepted}
+import models.submissions.SubmissionDetails
 import models.upscan.URL
 import models.{MDR402, NormalMode, ValidatedFileData}
 import pages.{ConversationIdPage, URLPage, ValidXMLPage}
@@ -68,9 +69,9 @@ class SendYourFileController @Inject() (
     implicit request =>
       (request.userAnswers.get(ValidXMLPage), request.userAnswers.get(URLPage)) match {
         case (Some(ValidatedFileData(filename, _, size)), Some(fileUrl)) =>
-          val xml = xmlHandler.load(fileUrl)
-          submissionConnector.submitDocument(filename, request.subscriptionId, xml, size) flatMap {
+          submissionConnector.submitDocument(SubmissionDetails(filename, request.subscriptionId, size, fileUrl)) flatMap {
             case Some(conversationId) =>
+              println(s"\n\n\n$conversationId\n\n\n")
               for {
                 userAnswers <- Future.fromTry(request.userAnswers.set(ConversationIdPage, conversationId))
                 _           <- sessionRepository.set(userAnswers)
