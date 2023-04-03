@@ -33,24 +33,43 @@ class SubmissionConnector @Inject() (httpClient: HttpClient, config: FrontendApp
 
   val submitUrl = s"${config.mdrUrl}/mandatory-disclosure-rules/submit"
 
-  def submitDocument(fileName: String, enrolmentID: String, xmlDocument: NodeSeq)(implicit
+  def submitDocument(fileName: String, enrolmentID: String, xmlDocument: NodeSeq, fileSize: Option[Long] = None)(implicit
     hc: HeaderCarrier,
     ec: ExecutionContext
   ): Future[Option[ConversationId]] =
-    httpClient.POSTString[HttpResponse](submitUrl, constructSubmission(fileName, enrolmentID, xmlDocument).toString(), headers) map {
+    httpClient.POSTString[HttpResponse](submitUrl, constructSubmission(fileName, enrolmentID, xmlDocument, fileSize).toString(), headers) map {
       case response if is2xx(response.status) => Some(response.json.as[ConversationId])
       case errorResponse =>
         logger.warn(s"Failed to submitDocument: revived the status: ${errorResponse.status} and message: ${errorResponse.body}")
         None
     }
 
-  private def constructSubmission(fileName: String, enrolmentID: String, document: NodeSeq): NodeSeq = {
+  private def constructSubmission(fileName: String, enrolmentID: String, document: NodeSeq, fileSize: Option[Long]): NodeSeq = {
     val submission =
-      <submission>
-        <fileName>{fileName}</fileName>
-        <enrolmentID>{enrolmentID}</enrolmentID>
+      if (fileSize.isEmpty) {
+        <submission>
+          <fileName>
+            {fileName}
+          </fileName>
+          <enrolmentID>
+            {enrolmentID}
+          </enrolmentID>
+          <file></file>
+        </submission>
+      } else {
+        <submission>
+        <fileName>
+          {fileName}
+        </fileName>
+        <fileSize>
+          {fileSize.get}
+        </fileSize>
+        <enrolmentID>
+          {enrolmentID}
+        </enrolmentID>
         <file></file>
       </submission>
+      }
 
     new RuleTransformer(new RewriteRule {
       override def transform(n: Node): Seq[Node] = n match {

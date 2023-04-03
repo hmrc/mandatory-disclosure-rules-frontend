@@ -40,6 +40,8 @@ class SendYourFileControllerSpec extends SpecBase {
 
   "SendYourFile Controller" - {
 
+    val fileSize: Long = 100293L
+
     "onPageLoad" - {
 
       "must return OK and the correct view with no warning text for a GET" in {
@@ -67,7 +69,7 @@ class SendYourFileControllerSpec extends SpecBase {
       "must return OK and the correct view with some warning text for a GET" in {
 
         val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402)))
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402), Some(fileSize)))
           .success
           .value
 
@@ -95,7 +97,7 @@ class SendYourFileControllerSpec extends SpecBase {
         val mockXmlHandler          = mock[XmlHandler]
 
         val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402)))
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402), Some(fileSize)))
           .success
           .value
           .set(URLPage, "url")
@@ -109,7 +111,7 @@ class SendYourFileControllerSpec extends SpecBase {
           )
           .build()
 
-        when(mockSubmissionConnector.submitDocument(any[String], any[String], any())(any[HeaderCarrier], any[ExecutionContext]))
+        when(mockSubmissionConnector.submitDocument(any[String], any[String], any(), any())(any[HeaderCarrier], any[ExecutionContext]))
           .thenReturn(Future.successful(Some(ConversationId("conversationId"))))
 
         when(mockXmlHandler.load(any[String]())).thenReturn(<test><value>Success</value></test>)
@@ -122,7 +124,7 @@ class SendYourFileControllerSpec extends SpecBase {
           status(result) mustEqual OK
 
           verify(mockSubmissionConnector, times(1))
-            .submitDocument(any(), any(), any())(any(), any())
+            .submitDocument(any(), any(), any(), any())(any(), any())
         }
       }
 
@@ -166,7 +168,7 @@ class SendYourFileControllerSpec extends SpecBase {
 
         when(mockXmlHandler.load(any[String]())).thenReturn(<test><value>Success</value></test>)
 
-        when(mockSubmissionConnector.submitDocument(any[String], any[String], any())(any[HeaderCarrier], any[ExecutionContext]))
+        when(mockSubmissionConnector.submitDocument(any[String], any[String], any(), any())(any[HeaderCarrier], any[ExecutionContext]))
           .thenReturn(Future.successful(None))
 
         running(application) {
