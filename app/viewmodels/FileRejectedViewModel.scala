@@ -53,68 +53,81 @@ object FileRejectedViewModel {
   //noinspection ScalaStyle
   private def handleCustomErrors(errorDetails: Option[String], docRefIDInError: Option[Seq[String]])(implicit
     messages: Messages
-  ): (String, HtmlContent, String) =
+  ): (String, HtmlContent, HtmlContent) =
     errorDetails.getOrElse("") match {
       case error if error.contains(`error_details_901`) =>
-        ("901", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.901.value"))
+        ("901", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), HtmlContent(Messages(s"fileRejected.901.value")))
       case error if error.contains(`error_details_902`) =>
-        ("902", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.902.value"))
+        ("902", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), HtmlContent(Messages(s"fileRejected.902.value")))
       case error if error.contains(`error_details_903`) =>
-        ("903", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.903.value"))
+        ("903", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), HtmlContent(Messages(s"fileRejected.903.value")))
       case error if error.contains(`error_details_904a`) =>
-        ("904", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.904.value"))
+        ("904", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), HtmlContent(Messages(s"fileRejected.904.value")))
       case error if error.contains(`error_details_904b`) =>
-        ("904", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.904.value"))
+        ("904", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), HtmlContent(Messages(s"fileRejected.904.value")))
       case error if error.contains(`error_details_904c`) =>
-        ("904", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.904.value"))
+        ("904", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), HtmlContent(Messages(s"fileRejected.904.value")))
       case error if error.contains(`error_details_904d`) =>
-        ("904", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.904.value"))
+        ("904", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), HtmlContent(Messages(s"fileRejected.904.value")))
       case error if error.contains(`error_details_905`) =>
-        ("905", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.905.value"))
+        ("905", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), HtmlContent(Messages(s"fileRejected.905.value")))
       case error if error.contains(`error_details_906`) =>
-        ("906", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.906.value"))
+        ("906", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), HtmlContent(Messages(s"fileRejected.906.value")))
       case error if error.contains(`error_details_907`) =>
-        ("907", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.907.value"))
+        ("907", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), HtmlContent(Messages(s"fileRejected.907.value")))
       case error if error.contains(`error_details_908`) =>
-        ("908", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.908.value"))
+        ("908", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), HtmlContent(Messages(s"fileRejected.908.value")))
       case error if error.contains(`error_details_909`) =>
-        ("909", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.909.value"))
-      case error if error.contains(`error_details_910`) => ("910", HtmlContent(Messages("label.file.NA")), Messages(s"fileRejected.910.value"))
+        ("909", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), HtmlContent(Messages(s"fileRejected.909.value")))
+      case error if error.contains(`error_details_910`) => ("910", HtmlContent(Messages("label.file.NA")), HtmlContent(Messages(s"fileRejected.910.value")))
       case error if error.contains(`error_details_911`) =>
-        ("911", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.911.value"))
+        ("911", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), HtmlContent(Messages(s"fileRejected.911.value")))
       case error if error.contains(`error_details_912`) =>
-        ("912", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), Messages(s"fileRejected.912.value"))
+        ("912", HtmlContent(docIdContent(docRefIDInError.getOrElse(Nil))), HtmlContent(Messages(s"fileRejected.912.value")))
       case error => throw new Exception(s"The received RecordError details: $error is not the expected error details")
     }
 
   private def createTableRow(validationErrors: ValidationErrors)(implicit messages: Messages): Seq[Seq[TableRow]] = {
-    val fileErrors: Option[Seq[(String, Content, String)]] = validationErrors.fileError.map(
+    val fileErrors: Option[Seq[(String, Content, HtmlContent)]] = validationErrors.fileError.map(
       _.map(
         error =>
           error.code match {
             case FileErrorCode.CustomError => handleCustomErrors(error.details, None)
             case errorCode if Messages("label.file.exclusion.code") contains errorCode.code =>
-              (Messages(s"fileRejected.${errorCode.code}.key"), Text(Messages("label.file.NA")), Messages(s"fileRejected.${errorCode.code}.value"))
-            case errorCode => (Messages(s"fileRejected.${errorCode.code}.key"), Text(Messages("label.file")), Messages(s"fileRejected.${errorCode.code}.value"))
+              (Messages(s"fileRejected.${errorCode.code}.key"), Text(Messages("label.file.NA")), HtmlContent(Messages(s"fileRejected.${errorCode.code}.value")))
+            case errorCode => // this is where the table entry is made
+              (Messages(s"fileRejected.${errorCode.code}.key"), Text(Messages("label.file")), HtmlContent(Messages(s"fileRejected.${errorCode.code}.value")))
           }
       )
     )
 
-    val recordErrors: Option[Seq[(String, Content, String)]] = validationErrors.recordError.map(
+    val recordErrors: Option[Seq[(String, Content, HtmlContent)]] = validationErrors.recordError.map(
       _.map(
         recordError =>
           recordError.code match {
             case RecordErrorCode.CustomError => handleCustomErrors(recordError.details, recordError.docRefIDInError)
+            case RecordErrorCode.MessageTypeIndic =>
+              (Messages(s"fileRejected.80010.key"),
+               HtmlContent(docIdContent(recordError.docRefIDInError.getOrElse(Nil))),
+               HtmlContent(
+                 Html(
+                   s"${Messages(s"fileRejected.80010.value1")}" +
+                     s"<p>${Messages(s"fileRejected.80010.value2")}</p>" +
+                     s"<p>${Messages(s"fileRejected.80010.value3")}</p>" +
+                     s"<p class='remove-end-whitespace'>${Messages(s"fileRejected.80010.value4")}</p>"
+                 )
+               )
+              )
             case errorCode =>
               (Messages(s"fileRejected.${errorCode.code}.key"),
                HtmlContent(docIdContent(recordError.docRefIDInError.getOrElse(Nil))),
-               Messages(s"fileRejected.${errorCode.code}.value")
+               HtmlContent(Html(Messages(s"fileRejected.${errorCode.code}.value")))
               )
           }
       )
     )
 
-    val errors: Seq[(String, Content, String)] = (fileErrors ++ recordErrors).flatten.toSeq
+    val errors: Seq[(String, Content, HtmlContent)] = (fileErrors ++ recordErrors).flatten.toSeq
 
     errors.map {
       case (code, docRefId, details) =>
