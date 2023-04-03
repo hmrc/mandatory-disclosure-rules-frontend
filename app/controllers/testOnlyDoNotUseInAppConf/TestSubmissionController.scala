@@ -19,6 +19,7 @@ package controllers.testOnlyDoNotUseInAppConf
 import com.google.inject.Inject
 import connectors.SubmissionConnector
 import controllers.actions.IdentifierAction
+import models.submissions.SubmissionDetails
 import play.api.Logging
 import play.api.libs.json.Json
 import play.api.mvc.{Action, MessagesControllerComponents}
@@ -35,17 +36,22 @@ class TestSubmissionController @Inject() (
     extends FrontendBaseController
     with Logging {
 
-  /*
- def insertTestSubmission(fileName: String): Action[NodeSeq] = identifierAction(parse.xml).async {
+
+  /*************************************************
+   * Will take a URL pointing to a file served from stubs
+   ***************************************************/
+ def insertTestSubmission(fileName: String) = identifierAction(parse.json).async {
     implicit request =>
+      //ToDo Get url from request body
+      val url = request.body.toString()
       logger.debug(s"inserting test submission: ${request.body}")
       connector
-        .submitDocument(fileName, request.subscriptionId, request.body)
+        .submitDocument(SubmissionDetails(fileName, request.subscriptionId, None, url))
         .map {
           case Some(conversationId) => Ok(Json.toJson(conversationId))
           case _                    => InternalServerError
         }
   }
-   */
+
 
 }
