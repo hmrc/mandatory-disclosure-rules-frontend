@@ -36,22 +36,22 @@ class TestSubmissionController @Inject() (
     extends FrontendBaseController
     with Logging {
 
+  /** ***********************************************
+    * Will take a URL pointing to a file served from stubs
+    * *************************************************
+    */
 
-  /*************************************************
-   * Will take a URL pointing to a file served from stubs
-   ***************************************************/
- def insertTestSubmission(fileName: String) = identifierAction(parse.json).async {
+  def insertTestSubmission(fileName: String) = identifierAction(parse.json).async {
     implicit request =>
       //ToDo Get url from request body
-      val url = request.body.toString()
+      val url = request.body.as[Url]
       logger.debug(s"inserting test submission: ${request.body}")
       connector
-        .submitDocument(SubmissionDetails(fileName, request.subscriptionId, None, url))
+        .submitDocument(SubmissionDetails(fileName, request.subscriptionId, None, url.url))
         .map {
           case Some(conversationId) => Ok(Json.toJson(conversationId))
           case _                    => InternalServerError
         }
   }
-
 
 }
