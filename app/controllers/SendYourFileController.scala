@@ -70,7 +70,6 @@ class SendYourFileController @Inject() (
         case (Some(ValidatedFileData(filename, _, size)), Some(fileUrl)) =>
           submissionConnector.submitDocument(SubmissionDetails(filename, request.subscriptionId, size, fileUrl)) flatMap {
             case Some(conversationId) =>
-              println(s"\n\n\n$conversationId\n\n\n")
               for {
                 userAnswers <- Future.fromTry(request.userAnswers.set(ConversationIdPage, conversationId))
                 _           <- sessionRepository.set(userAnswers)
