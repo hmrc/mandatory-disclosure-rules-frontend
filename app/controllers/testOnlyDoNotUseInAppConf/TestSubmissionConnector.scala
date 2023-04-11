@@ -30,18 +30,20 @@ import scala.xml.transform.{RewriteRule, RuleTransformer}
 
 class TestSubmissionConnector @Inject() (httpClient: HttpClient, config: FrontendAppConfig)(implicit ec: ExecutionContext) extends Logging {
 
-  val submitxmlUrl = s"${config.mdrUrl}/mandatory-disclosure-rules/submitxml"
+  val submitxmlUrl = s"${config.mdrUrl}/mandatory-disclosure-rules/test-only/submitxml"
 
   def submitxmlDocument(fileName: String, enrolmentID: String, xmlDocument: NodeSeq, fileSize: Option[Long] = None)(implicit
     hc: HeaderCarrier,
     ec: ExecutionContext
-  ): Future[Option[ConversationId]] =
+  ): Future[Option[ConversationId]] = {
+    println("\n\n\n\nMaking test post\n\n\n")
     httpClient.POSTString[HttpResponse](submitxmlUrl, constructSubmission(fileName, enrolmentID, xmlDocument, fileSize).toString(), headers) map {
       case response if is2xx(response.status) => Some(response.json.as[ConversationId])
       case errorResponse =>
         logger.warn(s"Failed to submitDocument: revived the status: ${errorResponse.status} and message: ${errorResponse.body}")
         None
     }
+  }
 
   private def constructSubmission(fileName: String, enrolmentID: String, document: NodeSeq, fileSize: Option[Long]): NodeSeq = {
     val submission =
