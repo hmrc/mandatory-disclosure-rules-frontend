@@ -72,38 +72,4 @@ class SubmissionConnectorSpec extends Connector {
 
   }
 
-  "SubmissionConnectorXML" - {
-
-    "must return a 200 on successful submission of xml" in {
-
-      stubPostResponse(submitxmlUrl, OK, Json.toJson(conversationId).toString())
-
-      val xml = <test></test>
-      whenReady(connector.submitxmlDocument("test-file.xml", "enrolmentID", xml, None)) {
-        result =>
-          result.value mustBe conversationId
-      }
-    }
-
-    "must return a 400 when submission of xml fails with BadRequest" in {
-      stubPostResponse(submitxmlUrl, BAD_REQUEST)
-
-      val xml = <test-bad></test-bad>
-      whenReady(connector.submitxmlDocument("test-bad-file.xml", "enrolmentID", xml)) {
-        result =>
-          result mustBe None
-      }
-    }
-
-    "must return a 500 when submission of xml fails with InternalServer Error" in {
-      stubPostResponse(submitxmlUrl, INTERNAL_SERVER_ERROR)
-
-      val xml = <test-error></test-error>
-      whenReady(connector.submitxmlDocument("test-file.xml", "enrolmentID", xml)) {
-        result =>
-          result mustBe None
-      }
-    }
-
-  }
 }

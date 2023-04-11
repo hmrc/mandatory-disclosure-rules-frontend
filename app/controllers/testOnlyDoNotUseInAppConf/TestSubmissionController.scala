@@ -29,7 +29,7 @@ import scala.xml.NodeSeq
 
 class TestSubmissionController @Inject() (
   identifierAction: IdentifierAction,
-  connector: SubmissionConnector,
+  connector: TestSubmissionConnector,
   override val controllerComponents: MessagesControllerComponents
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
