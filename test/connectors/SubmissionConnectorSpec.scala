@@ -36,6 +36,9 @@ class SubmissionConnectorSpec extends Connector {
   lazy val connector: SubmissionConnector = app.injector.instanceOf[SubmissionConnector]
   val conversationId: ConversationId      = ConversationId("UUID")
   val submitUrl                           = "/mandatory-disclosure-rules/submit"
+  val submitxmlUrl                        = "/mandatory-disclosure-rules/submitxml"
+
+  val fileSize = 1000L
 
   "SubmissionConnector" - {
 
@@ -43,7 +46,7 @@ class SubmissionConnectorSpec extends Connector {
 
       stubPostResponse(submitUrl, OK, Json.toJson(conversationId).toString())
 
-      whenReady(connector.submitDocument(SubmissionDetails("test-file.xml", "enrolmentID", Some(1000L), "dummyURL"))) {
+      whenReady(connector.submitDocument(SubmissionDetails("test-file.xml", "enrolmentID", Some(fileSize), "dummyURL"))) {
         result =>
           result.value mustBe conversationId
       }
@@ -52,7 +55,7 @@ class SubmissionConnectorSpec extends Connector {
     "must return a 400 when submission of xml fails with BadRequest" in {
       stubPostResponse(submitUrl, BAD_REQUEST)
 
-      whenReady(connector.submitDocument(SubmissionDetails("test-bad-file.xml", "enrolmentID", Some(100L), "dummyUrl"))) {
+      whenReady(connector.submitDocument(SubmissionDetails("test-bad-file.xml", "enrolmentID", Some(fileSize), "dummyUrl"))) {
         result =>
           result mustBe None
       }
@@ -61,7 +64,7 @@ class SubmissionConnectorSpec extends Connector {
     "must return a 500 when submission of xml fails with InternalServer Error" in {
       stubPostResponse(submitUrl, INTERNAL_SERVER_ERROR)
 
-      whenReady(connector.submitDocument(SubmissionDetails("test-file.xml", "enrolmentID", Some(1000L), "dummyURL"))) {
+      whenReady(connector.submitDocument(SubmissionDetails("test-file.xml", "enrolmentID", Some(fileSize), "dummyURL"))) {
         result =>
           result mustBe None
       }
@@ -69,4 +72,38 @@ class SubmissionConnectorSpec extends Connector {
 
   }
 
+  "SubmissionConnectorXML" - {
+
+    "must return a 200 on successful submission of xml" in {
+
+      stubPostResponse(submitxmlUrl, OK, Json.toJson(conversationId).toString())
+
+      val xml = <test></test>
+      whenReady(connector.submitxmlDocument("test-file.xml", "enrolmentID", xml, None)) {
+        result =>
+          result.value mustBe conversationId
+      }
+    }
+
+    "must return a 400 when submission of xml fails with BadRequest" in {
+      stubPostResponse(submitxmlUrl, BAD_REQUEST)
+
+      val xml = <test-bad></test-bad>
+      whenReady(connector.submitxmlDocument("test-bad-file.xml", "enrolmentID", xml)) {
+        result =>
+          result mustBe None
+      }
+    }
+
+    "must return a 500 when submission of xml fails with InternalServer Error" in {
+      stubPostResponse(submitxmlUrl, INTERNAL_SERVER_ERROR)
+
+      val xml = <test-error></test-error>
+      whenReady(connector.submitxmlDocument("test-file.xml", "enrolmentID", xml)) {
+        result =>
+          result mustBe None
+      }
+    }
+
+  }
 }
