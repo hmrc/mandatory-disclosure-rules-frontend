@@ -35,15 +35,13 @@ class TestSubmissionConnector @Inject() (httpClient: HttpClient, config: Fronten
   def submitxmlDocument(fileName: String, enrolmentID: String, xmlDocument: NodeSeq, fileSize: Option[Long] = None)(implicit
     hc: HeaderCarrier,
     ec: ExecutionContext
-  ): Future[Option[ConversationId]] = {
-    println("\n\n\n\nMaking test post\n\n\n")
+  ): Future[Option[ConversationId]] =
     httpClient.POSTString[HttpResponse](submitxmlUrl, constructSubmission(fileName, enrolmentID, xmlDocument, fileSize).toString(), headers) map {
       case response if is2xx(response.status) => Some(response.json.as[ConversationId])
       case errorResponse =>
         logger.warn(s"Failed to submitDocument: revived the status: ${errorResponse.status} and message: ${errorResponse.body}")
         None
     }
-  }
 
   private def constructSubmission(fileName: String, enrolmentID: String, document: NodeSeq, fileSize: Option[Long]): NodeSeq = {
     val submission =
