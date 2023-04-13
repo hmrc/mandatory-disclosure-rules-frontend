@@ -36,7 +36,6 @@ class SubmissionConnectorSpec extends Connector {
   lazy val connector: SubmissionConnector = app.injector.instanceOf[SubmissionConnector]
   val conversationId: ConversationId      = ConversationId("UUID")
   val submitUrl                           = "/mandatory-disclosure-rules/submit"
-  val submitxmlUrl                        = "/mandatory-disclosure-rules/submitxml"
 
   val fileSize = 1000L
 
