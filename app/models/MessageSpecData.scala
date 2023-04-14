@@ -25,6 +25,7 @@ case object MultipleCorrectionsDeletions extends ReportType
 case object SingleNewInformation extends ReportType
 case object SingleCorrection extends ReportType
 case object SingleDeletion extends ReportType
+case object SingleOther extends ReportType
 
 object ReportType {
 
@@ -34,6 +35,7 @@ object ReportType {
     case "SINGLENEWINFORMATION"         => SingleNewInformation
     case "SINGLECORRECTION"             => SingleCorrection
     case "SINGLEDELETION"               => SingleDeletion
+    case "SINGLEOTHER"                  => SingleOther
     case _                              => throw new NoSuchElementException
   }
 
@@ -43,6 +45,7 @@ object ReportType {
     case SingleNewInformation         => JsString("SingleNewInformation")
     case SingleCorrection             => JsString("SingleCorrection")
     case SingleDeletion               => JsString("SingleDeletion")
+    case SingleOther                  => JsString("SingleOther")
   }
 
   implicit val reads: Reads[ReportType] = Reads[ReportType] {
@@ -51,6 +54,7 @@ object ReportType {
     case JsString("SingleNewInformation")         => JsSuccess(SingleNewInformation)
     case JsString("SingleCorrection")             => JsSuccess(SingleCorrection)
     case JsString("SingleDeletion")               => JsSuccess(SingleDeletion)
+    case JsString("SingleOther")                  => JsSuccess(SingleOther)
     case value                                    => JsError(s"Unexpected value of _type: $value")
   }
 }
