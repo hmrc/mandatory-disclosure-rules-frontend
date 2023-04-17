@@ -17,7 +17,7 @@
 package controllers
 
 import base.SpecBase
-import models.{CheckMode, ConversationId, MDR401, MessageSpecData, ValidatedFileData}
+import models.{CheckMode, ConversationId, MDR401, MessageSpecData, MultipleNewInformation, ValidatedFileData}
 import pages.{ConversationIdPage, ValidXMLPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -31,7 +31,7 @@ class FileFailedChecksControllerSpec extends SpecBase {
     "must return OK and the correct view for a GET" in {
 
       val conversationId  = ConversationId("conversationId")
-      val validXmlDetails = ValidatedFileData("name", MessageSpecData("messageRefId", MDR401))
+      val validXmlDetails = ValidatedFileData("name", MessageSpecData("messageRefId", MDR401, 2, MultipleNewInformation))
 
       val userAnswers = emptyUserAnswers
         .set(ValidXMLPage, validXmlDetails)

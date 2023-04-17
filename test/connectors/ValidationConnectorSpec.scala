@@ -17,7 +17,7 @@
 package connectors
 
 import models.upscan.UpscanURL
-import models.{GenericError, InvalidXmlError, MDR401, Message, MessageSpecData, NonFatalErrors, ValidationErrors}
+import models.{GenericError, InvalidXmlError, MDR401, Message, MessageSpecData, MultipleNewInformation, NonFatalErrors, ValidationErrors}
 import play.api.Application
 import play.api.http.Status.{BAD_REQUEST, OK}
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -41,13 +41,14 @@ class ValidationConnectorSpec extends Connector {
 
     "must return a 200 and a Success Object when passing validation" in {
 
-      val expectedBody = """{"messageSpecData": {"messageRefId":"XDSG111111","messageTypeIndic":"MDR401"}}"""
-      val upscanURL    = UpscanURL("someUrl")
+      val expectedBody =
+        """{"messageSpecData": {"messageRefId":"XDSG111111","messageTypeIndic":"MDR401","mdrBodyCount":2,"reportType":"MultipleNewInformation"}}"""
+      val upscanURL = UpscanURL("someUrl")
 
       stubPostResponse(validationUrl, OK, expectedBody)
 
       val result = connector.sendForValidation(upscanURL)
-      result.futureValue mustBe Right(MessageSpecData("XDSG111111", MDR401))
+      result.futureValue mustBe Right(MessageSpecData("XDSG111111", MDR401, 2, MultipleNewInformation))
     }
 
     "must return a 200 and a Failure Object when failing validation" in {

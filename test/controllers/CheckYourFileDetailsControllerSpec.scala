@@ -17,7 +17,7 @@
 package controllers
 
 import base.SpecBase
-import models.{MDR401, MessageSpecData, UserAnswers, ValidatedFileData}
+import models.{MDR401, MessageSpecData, MultipleNewInformation, UserAnswers, ValidatedFileData}
 import pages.ValidXMLPage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -31,7 +31,7 @@ class CheckYourFileDetailsControllerSpec extends SpecBase {
 
     "must return OK and the correct view for a GET" in {
 
-      val vfd: ValidatedFileData = ValidatedFileData("test.xml", MessageSpecData("GDC99999999", MDR401))
+      val vfd: ValidatedFileData = ValidatedFileData("test.xml", MessageSpecData("GDC99999999", MDR401, 2, MultipleNewInformation))
       val ua: UserAnswers        = emptyUserAnswers.set(ValidXMLPage, vfd).success.value
       val application            = applicationBuilder(userAnswers = Some(ua)).build()
 
