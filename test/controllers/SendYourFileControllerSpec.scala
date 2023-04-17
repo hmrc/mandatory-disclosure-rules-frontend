@@ -96,9 +96,8 @@ class SendYourFileControllerSpec extends SpecBase {
 
         val mockSubmissionConnector = mock[SubmissionConnector]
 
-
         val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402), Some(fileSize)))
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 2, MultipleCorrectionsDeletions), Some(fileSize)))
           .success
           .value
           .set(URLPage, "url")
@@ -129,7 +128,7 @@ class SendYourFileControllerSpec extends SpecBase {
       "redirect to there is a problem page if userAnswers missing" in {
 
         val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402)))
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 2, MultipleCorrectionsDeletions)))
           .success
           .value
 
@@ -148,9 +147,8 @@ class SendYourFileControllerSpec extends SpecBase {
       "redirect to there is a problem page on failing to submitDocument" in {
         val mockSubmissionConnector = mock[SubmissionConnector]
 
-
         val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402)))
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 2, MultipleCorrectionsDeletions)))
           .success
           .value
           .set(URLPage, "url")
