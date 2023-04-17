@@ -17,6 +17,7 @@
 package connectors
 
 import models.ConversationId
+import models.submissions.SubmissionDetails
 import play.api.Application
 import play.api.http.Status.{BAD_REQUEST, INTERNAL_SERVER_ERROR, OK}
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -36,14 +37,15 @@ class SubmissionConnectorSpec extends Connector {
   val conversationId: ConversationId      = ConversationId("UUID")
   val submitUrl                           = "/mandatory-disclosure-rules/submit"
 
+  val fileSize = 1000L
+
   "SubmissionConnector" - {
 
     "must return a 200 on successful submission of xml" in {
 
       stubPostResponse(submitUrl, OK, Json.toJson(conversationId).toString())
 
-      val xml = <test></test>
-      whenReady(connector.submitDocument("test-file.xml", "enrolmentID", xml)) {
+      whenReady(connector.submitDocument(SubmissionDetails("test-file.xml", "enrolmentID", Some(fileSize), "dummyURL"))) {
         result =>
           result.value mustBe conversationId
       }
@@ -52,8 +54,7 @@ class SubmissionConnectorSpec extends Connector {
     "must return a 400 when submission of xml fails with BadRequest" in {
       stubPostResponse(submitUrl, BAD_REQUEST)
 
-      val xml = <test-bad></test-bad>
-      whenReady(connector.submitDocument("test-bad-file.xml", "enrolmentID", xml)) {
+      whenReady(connector.submitDocument(SubmissionDetails("test-bad-file.xml", "enrolmentID", Some(fileSize), "dummyUrl"))) {
         result =>
           result mustBe None
       }
@@ -62,8 +63,7 @@ class SubmissionConnectorSpec extends Connector {
     "must return a 500 when submission of xml fails with InternalServer Error" in {
       stubPostResponse(submitUrl, INTERNAL_SERVER_ERROR)
 
-      val xml = <test-error></test-error>
-      whenReady(connector.submitDocument("test-file.xml", "enrolmentID", xml)) {
+      whenReady(connector.submitDocument(SubmissionDetails("test-file.xml", "enrolmentID", Some(fileSize), "dummyURL"))) {
         result =>
           result mustBe None
       }

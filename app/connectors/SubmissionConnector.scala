@@ -18,69 +18,28 @@ package connectors
 
 import config.FrontendAppConfig
 import models.ConversationId
+import models.submissions.SubmissionDetails
 import play.api.Logging
-import play.api.http.HeaderNames
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.HttpReads.is2xx
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import scala.xml.transform.{RewriteRule, RuleTransformer}
-import scala.xml.{Elem, Node, NodeSeq}
 
 class SubmissionConnector @Inject() (httpClient: HttpClient, config: FrontendAppConfig) extends Logging {
 
   val submitUrl = s"${config.mdrUrl}/mandatory-disclosure-rules/submit"
 
-  def submitDocument(fileName: String, enrolmentID: String, xmlDocument: NodeSeq, fileSize: Option[Long] = None)(implicit
+  def submitDocument(submissionDetails: SubmissionDetails)(implicit
     hc: HeaderCarrier,
     ec: ExecutionContext
   ): Future[Option[ConversationId]] =
-    httpClient.POSTString[HttpResponse](submitUrl, constructSubmission(fileName, enrolmentID, xmlDocument, fileSize).toString(), headers) map {
+    httpClient.POST[SubmissionDetails, HttpResponse](submitUrl, submissionDetails) map {
       case response if is2xx(response.status) => Some(response.json.as[ConversationId])
       case errorResponse =>
         logger.warn(s"Failed to submitDocument: revived the status: ${errorResponse.status} and message: ${errorResponse.body}")
         None
     }
 
-  private def constructSubmission(fileName: String, enrolmentID: String, document: NodeSeq, fileSize: Option[Long]): NodeSeq = {
-    val submission =
-      if (fileSize.isEmpty) {
-        <submission>
-          <fileName>
-            {fileName}
-          </fileName>
-          <enrolmentID>
-            {enrolmentID}
-          </enrolmentID>
-          <file></file>
-        </submission>
-      } else {
-        <submission>
-        <fileName>
-          {fileName}
-        </fileName>
-        <fileSize>
-          {fileSize.get}
-        </fileSize>
-        <enrolmentID>
-          {enrolmentID}
-        </enrolmentID>
-        <file></file>
-      </submission>
-      }
-
-    new RuleTransformer(new RewriteRule {
-      override def transform(n: Node): Seq[Node] = n match {
-        case elem: Elem if elem.label == "file" =>
-          elem.copy(child = document)
-        case other => other
-      }
-    }).transform(submission).head
-  }
-
-  private val headers = Seq(
-    HeaderNames.CONTENT_TYPE -> "application/xml"
-  )
 }

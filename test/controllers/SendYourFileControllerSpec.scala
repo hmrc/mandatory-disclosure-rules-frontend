@@ -23,6 +23,7 @@ import handlers.XmlHandler
 import models.fileDetails.FileErrorCode.FailedSchemaValidation
 import models.fileDetails.RecordErrorCode.DocRefIDFormat
 import models.fileDetails._
+import models.submissions.SubmissionDetails
 import models.{ConversationId, MDR401, MDR402, MessageSpecData, MultipleCorrectionsDeletions, MultipleNewInformation, UserAnswers, ValidatedFileData}
 import org.mockito.ArgumentMatchers.any
 import pages.{ConversationIdPage, URLPage, ValidXMLPage}
@@ -94,10 +95,10 @@ class SendYourFileControllerSpec extends SpecBase {
       "redirect to file received page" in {
 
         val mockSubmissionConnector = mock[SubmissionConnector]
-        val mockXmlHandler          = mock[XmlHandler]
+
 
         val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 2, MultipleCorrectionsDeletions), Some(fileSize)))
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402), Some(fileSize)))
           .success
           .value
           .set(URLPage, "url")
@@ -106,15 +107,12 @@ class SendYourFileControllerSpec extends SpecBase {
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
-            bind[SubmissionConnector].toInstance(mockSubmissionConnector),
-            bind[XmlHandler].toInstance(mockXmlHandler)
+            bind[SubmissionConnector].toInstance(mockSubmissionConnector)
           )
           .build()
 
-        when(mockSubmissionConnector.submitDocument(any[String], any[String], any(), any())(any[HeaderCarrier], any[ExecutionContext]))
+        when(mockSubmissionConnector.submitDocument(any[SubmissionDetails])(any[HeaderCarrier], any[ExecutionContext]))
           .thenReturn(Future.successful(Some(ConversationId("conversationId"))))
-
-        when(mockXmlHandler.load(any[String]())).thenReturn(<test><value>Success</value></test>)
 
         running(application) {
           val request = FakeRequest(POST, routes.SendYourFileController.onSubmit().url)
@@ -124,14 +122,14 @@ class SendYourFileControllerSpec extends SpecBase {
           status(result) mustEqual OK
 
           verify(mockSubmissionConnector, times(1))
-            .submitDocument(any(), any(), any(), any())(any(), any())
+            .submitDocument(any())(any(), any())
         }
       }
 
       "redirect to there is a problem page if userAnswers missing" in {
 
         val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 2, MultipleCorrectionsDeletions)))
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402)))
           .success
           .value
 
@@ -149,10 +147,10 @@ class SendYourFileControllerSpec extends SpecBase {
 
       "redirect to there is a problem page on failing to submitDocument" in {
         val mockSubmissionConnector = mock[SubmissionConnector]
-        val mockXmlHandler          = mock[XmlHandler]
+
 
         val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 2, MultipleCorrectionsDeletions)))
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402)))
           .success
           .value
           .set(URLPage, "url")
@@ -161,14 +159,11 @@ class SendYourFileControllerSpec extends SpecBase {
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
-            bind[SubmissionConnector].toInstance(mockSubmissionConnector),
-            bind[XmlHandler].toInstance(mockXmlHandler)
+            bind[SubmissionConnector].toInstance(mockSubmissionConnector)
           )
           .build()
 
-        when(mockXmlHandler.load(any[String]())).thenReturn(<test><value>Success</value></test>)
-
-        when(mockSubmissionConnector.submitDocument(any[String], any[String], any(), any())(any[HeaderCarrier], any[ExecutionContext]))
+        when(mockSubmissionConnector.submitDocument(any[SubmissionDetails])(any[HeaderCarrier], any[ExecutionContext]))
           .thenReturn(Future.successful(None))
 
         running(application) {

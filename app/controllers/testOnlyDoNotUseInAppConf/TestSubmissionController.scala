@@ -29,7 +29,7 @@ import scala.xml.NodeSeq
 
 class TestSubmissionController @Inject() (
   identifierAction: IdentifierAction,
-  connector: SubmissionConnector,
+  connector: TestSubmissionConnector,
   override val controllerComponents: MessagesControllerComponents
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
@@ -39,7 +39,7 @@ class TestSubmissionController @Inject() (
     implicit request =>
       logger.debug(s"inserting test submission: ${request.body}")
       connector
-        .submitDocument(fileName, request.subscriptionId, request.body)
+        .submitxmlDocument(fileName, request.subscriptionId, request.body)
         .map {
           case Some(conversationId) => Ok(Json.toJson(conversationId))
           case _                    => InternalServerError
