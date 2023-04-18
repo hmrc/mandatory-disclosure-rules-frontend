@@ -48,7 +48,7 @@ class FileValidationController @Inject() (
     with I18nSupport
     with Logging {
 
-  private case class ExtractedFileStatus(name: String, downloadUrl: String, size: Option[Long])
+  private case class ExtractedFileStatus(name: String, downloadUrl: String, size: Option[Long], checkSum: String)
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
@@ -71,7 +71,9 @@ class FileValidationController @Inject() (
                         case Right(messageSpecData) =>
                           for {
                             updatedAnswers <- Future.fromTry(
-                              request.userAnswers.set(ValidXMLPage, ValidatedFileData(downloadDetails.name, messageSpecData, downloadDetails.size))
+                              request.userAnswers.set(ValidXMLPage,
+                                                      ValidatedFileData(downloadDetails.name, messageSpecData, downloadDetails.size, downloadDetails.checkSum)
+                              )
                             )
                             updatedAnswersWithURL <- Future.fromTry(updatedAnswers.set(URLPage, downloadDetails.downloadUrl))
                             _                     <- sessionRepository.set(updatedAnswersWithURL)
@@ -103,8 +105,8 @@ class FileValidationController @Inject() (
     uploadSessions match {
       case Some(uploadDetails) =>
         uploadDetails.status match {
-          case UploadedSuccessfully(name, downloadUrl, size) => Some(ExtractedFileStatus(name, downloadUrl, size))
-          case _                                             => None
+          case UploadedSuccessfully(name, downloadUrl, size, checkSum) => Some(ExtractedFileStatus(name, downloadUrl, size, checkSum))
+          case _                                                       => None
         }
       case _ => None
     }

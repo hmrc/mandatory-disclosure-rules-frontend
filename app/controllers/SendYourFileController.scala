@@ -67,7 +67,7 @@ class SendYourFileController @Inject() (
   def onSubmit: Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
       (request.userAnswers.get(ValidXMLPage), request.userAnswers.get(URLPage)) match {
-        case (Some(ValidatedFileData(filename, _, size)), Some(fileUrl)) =>
+        case (Some(ValidatedFileData(filename, _, size, _)), Some(fileUrl)) =>
           submissionConnector.submitDocument(SubmissionDetails(filename, request.subscriptionId, size, fileUrl)) flatMap {
             case Some(conversationId) =>
               for {
