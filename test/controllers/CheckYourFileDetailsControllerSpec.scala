@@ -31,7 +31,7 @@ class CheckYourFileDetailsControllerSpec extends SpecBase {
 
     "must return OK and the correct view for a GET" in {
 
-      val vfd: ValidatedFileData = ValidatedFileData("test.xml", MessageSpecData("GDC99999999", MDR401, 2, MultipleNewInformation))
+      val vfd: ValidatedFileData = ValidatedFileData("test.xml", MessageSpecData("GDC99999999", MDR401, 2, MultipleNewInformation), None, "1234")
       val ua: UserAnswers        = emptyUserAnswers.set(ValidXMLPage, vfd).success.value
       val application            = applicationBuilder(userAnswers = Some(ua)).build()
 

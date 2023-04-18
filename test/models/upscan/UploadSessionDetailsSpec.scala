@@ -170,7 +170,8 @@ class UploadSessionDetailsSpec extends SpecBase {
           |"status": {
           |     "_type": "UploadedSuccessfully",
           |     "name": "name",
-          |     "downloadUrl": "downloadUrl"
+          |     "downloadUrl": "downloadUrl",
+          |     "checkSum": "1234"
           |   }
           |}""".stripMargin
 
@@ -178,7 +179,7 @@ class UploadSessionDetailsSpec extends SpecBase {
         objectId,
         UploadId("121"),
         Reference("ref"),
-        UploadedSuccessfully("name", "downloadUrl")
+        UploadedSuccessfully("name", "downloadUrl", None, "1234")
       )
 
       Json.toJson(uploadSessionDetails) mustBe Json.parse(expectedUploadSessionDetails)
@@ -193,7 +194,8 @@ class UploadSessionDetailsSpec extends SpecBase {
           |"status": {
           |     "_type": "UploadedSuccessfully",
           |     "name": "name",
-          |     "downloadUrl": "downloadUrl"
+          |     "downloadUrl": "downloadUrl",
+          |     "checkSum": "1234"
           |   }
           |}""".stripMargin
 
@@ -201,7 +203,7 @@ class UploadSessionDetailsSpec extends SpecBase {
         objectId,
         UploadId("121"),
         Reference("ref"),
-        UploadedSuccessfully("name", "downloadUrl")
+        UploadedSuccessfully("name", "downloadUrl", None, "1234")
       )
 
       Json.parse(json).as[UploadSessionDetails] mustBe expectedUploadSessionDetails

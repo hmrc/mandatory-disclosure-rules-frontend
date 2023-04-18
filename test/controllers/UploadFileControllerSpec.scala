@@ -94,7 +94,7 @@ class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
         Some(URL("/report-under-mandatory-disclosure-rules/report/problem/not-xml-file"))
       )
       verifyResult(Failed, OK, Some(URL("/report-under-mandatory-disclosure-rules/report/problem/there-is-a-problem")))
-      verifyResult(UploadedSuccessfully("name", "downloadUrl"), OK, Some(URL("/report-under-mandatory-disclosure-rules/report/file-validation")))
+      verifyResult(UploadedSuccessfully("name", "downloadUrl", None, "1234"), OK, Some(URL("/report-under-mandatory-disclosure-rules/report/file-validation")))
 
     }
 

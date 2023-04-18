@@ -19,7 +19,6 @@ package controllers
 import base.SpecBase
 import config.FrontendAppConfig
 import connectors.{FileDetailsConnector, SubmissionConnector}
-import handlers.XmlHandler
 import models.fileDetails.FileErrorCode.FailedSchemaValidation
 import models.fileDetails.RecordErrorCode.DocRefIDFormat
 import models.fileDetails._
@@ -48,7 +47,7 @@ class SendYourFileControllerSpec extends SpecBase {
       "must return OK and the correct view with no warning text for a GET" in {
 
         val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR401, 2, MultipleNewInformation)))
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR401, 2, MultipleNewInformation), None, "1234"))
           .success
           .value
 
@@ -70,7 +69,7 @@ class SendYourFileControllerSpec extends SpecBase {
       "must return OK and the correct view with some warning text for a GET" in {
 
         val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 2, MultipleCorrectionsDeletions), Some(fileSize)))
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 2, MultipleCorrectionsDeletions), Some(fileSize), "1234"))
           .success
           .value
 
@@ -97,7 +96,7 @@ class SendYourFileControllerSpec extends SpecBase {
         val mockSubmissionConnector = mock[SubmissionConnector]
 
         val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 2, MultipleCorrectionsDeletions), Some(fileSize)))
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 2, MultipleCorrectionsDeletions), Some(fileSize), "1234"))
           .success
           .value
           .set(URLPage, "url")
@@ -128,7 +127,7 @@ class SendYourFileControllerSpec extends SpecBase {
       "redirect to there is a problem page if userAnswers missing" in {
 
         val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 2, MultipleCorrectionsDeletions)))
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 2, MultipleCorrectionsDeletions), None, "1234"))
           .success
           .value
 
@@ -148,7 +147,7 @@ class SendYourFileControllerSpec extends SpecBase {
         val mockSubmissionConnector = mock[SubmissionConnector]
 
         val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 2, MultipleCorrectionsDeletions)))
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 2, MultipleCorrectionsDeletions), None, "1234"))
           .success
           .value
           .set(URLPage, "url")
