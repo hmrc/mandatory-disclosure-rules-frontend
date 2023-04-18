@@ -42,13 +42,13 @@ class ValidationConnectorSpec extends Connector {
     "must return a 200 and a Success Object when passing validation" in {
 
       val expectedBody =
-        """{"messageSpecData": {"messageRefId":"XDSG111111","messageTypeIndic":"MDR401","mdrBodyCount":2,"reportType":"MultipleNewInformation"}}"""
+        """{"messageSpecData": {"messageRefId":"XDSG111111","messageTypeIndic":"MDR401","mdrBodyCount":2,"docTypeIndic":"OECD1","reportType":"MultipleNewInformation"}}"""
       val upscanURL = UpscanURL("someUrl")
 
       stubPostResponse(validationUrl, OK, expectedBody)
 
       val result = connector.sendForValidation(upscanURL)
-      result.futureValue mustBe Right(MessageSpecData("XDSG111111", MDR401, 2, MultipleNewInformation))
+      result.futureValue mustBe Right(MessageSpecData("XDSG111111", MDR401, 2, "OECD1", MultipleNewInformation))
     }
 
     "must return a 200 and a Failure Object when failing validation" in {

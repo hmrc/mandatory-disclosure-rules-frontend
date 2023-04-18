@@ -77,13 +77,13 @@ object MessageTypeIndic {
   }
 }
 
-case class MessageSpecData(messageRefId: String, messageTypeIndic: MessageTypeIndic, mdrBodyCount: Int, reportType: ReportType)
+case class MessageSpecData(messageRefId: String, messageTypeIndic: MessageTypeIndic, mdrBodyCount: Int, docTypeIndic: String, reportType: ReportType)
 
 object MessageSpecData {
   implicit val format: OFormat[MessageSpecData] = Json.format[MessageSpecData]
 }
 
-case class ValidatedFileData(fileName: String, messageSpecData: MessageSpecData, fileSize: Option[Long] = None)
+case class ValidatedFileData(fileName: String, messageSpecData: MessageSpecData, fileSize: Long, checkSum: String)
 
 object ValidatedFileData {
   implicit val format: OFormat[ValidatedFileData] = Json.format[ValidatedFileData]

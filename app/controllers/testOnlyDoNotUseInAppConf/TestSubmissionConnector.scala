@@ -32,7 +32,7 @@ class TestSubmissionConnector @Inject() (httpClient: HttpClient, config: Fronten
 
   val submitxmlUrl = s"${config.mdrUrl}/mandatory-disclosure-rules/test-only/submitxml"
 
-  def submitxmlDocument(fileName: String, enrolmentID: String, xmlDocument: NodeSeq, fileSize: Option[Long] = None)(implicit
+  def submitxmlDocument(fileName: String, enrolmentID: String, xmlDocument: NodeSeq, fileSize: Long)(implicit
     hc: HeaderCarrier,
     ec: ExecutionContext
   ): Future[Option[ConversationId]] =
@@ -43,32 +43,20 @@ class TestSubmissionConnector @Inject() (httpClient: HttpClient, config: Fronten
         None
     }
 
-  private def constructSubmission(fileName: String, enrolmentID: String, document: NodeSeq, fileSize: Option[Long]): NodeSeq = {
+  private def constructSubmission(fileName: String, enrolmentID: String, document: NodeSeq, fileSize: Long): NodeSeq = {
     val submission =
-      if (fileSize.isEmpty) {
-        <submission>
-          <fileName>
-            {fileName}
-          </fileName>
-          <enrolmentID>
-            {enrolmentID}
-          </enrolmentID>
-          <file></file>
-        </submission>
-      } else {
-        <submission>
+      <submission>
           <fileName>
             {fileName}
           </fileName>
           <fileSize>
-            {fileSize.get}
+            {fileSize}
           </fileSize>
           <enrolmentID>
             {enrolmentID}
           </enrolmentID>
           <file></file>
         </submission>
-      }
 
     new RuleTransformer(new RewriteRule {
       override def transform(n: Node): Seq[Node] = n match {
