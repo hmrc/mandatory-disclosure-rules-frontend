@@ -16,12 +16,21 @@
 
 package viewmodels
 
+import viewmodels.govuk.summarylist._
 import controllers.routes
-import models.{MDR401, MDR402, MessageTypeIndic, ValidatedFileData}
+import models.{
+  MultipleCorrectionsDeletions,
+  MultipleNewInformation,
+  ReportType,
+  SingleCorrection,
+  SingleDeletion,
+  SingleNewInformation,
+  SingleOther,
+  ValidatedFileData
+}
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
-import viewmodels.govuk.summarylist._
 
 object CheckYourFileDetailsViewModel {
 
@@ -39,19 +48,23 @@ object CheckYourFileDetailsViewModel {
       ),
       SummaryListRowViewModel(
         key = "checkYourFileDetails.messageTypeIndic",
-        value = ValueViewModel(HtmlFormat.escape(s"${displayTypeIndictator(vfd.messageSpecData.messageTypeIndic)}").toString),
+        value = ValueViewModel(HtmlFormat.escape(s"${displayTypeIndicator(vfd.messageSpecData.reportType)}").toString),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.UploadFileController.onPageLoad().url)
+          ActionItemViewModel("checkYourFileDetails.changeFile", routes.UploadFileController.onPageLoad().url)
             .withAttribute(("id", "your-file"))
             .withVisuallyHiddenText(messages("checkYourFileDetails.uploadedFile.change.hidden"))
         )
       )
     )
 
-  private def displayTypeIndictator(typeIndic: MessageTypeIndic)(implicit messages: Messages) =
+  private def displayTypeIndicator(typeIndic: ReportType)(implicit messages: Messages) =
     typeIndic match {
-      case MDR401 => messages("checkYourFileDetails.messageTypeIndic.MDR401")
-      case MDR402 => messages("checkYourFileDetails.messageTypeIndic.MDR402")
+      case MultipleNewInformation       => messages("checkYourFileDetails.messageTypeIndic.MultipleNewInformation")
+      case MultipleCorrectionsDeletions => messages("checkYourFileDetails.messageTypeIndic.MultipleCorrectionsDeletions")
+      case SingleNewInformation         => messages("checkYourFileDetails.messageTypeIndic.SingleNewInformation")
+      case SingleCorrection             => messages("checkYourFileDetails.messageTypeIndic.SingleCorrection")
+      case SingleDeletion               => messages("checkYourFileDetails.messageTypeIndic.SingleDeletion")
+      case SingleOther                  => messages("checkYourFileDetails.messageTypeIndic.SingleOther")
     }
 
 }
