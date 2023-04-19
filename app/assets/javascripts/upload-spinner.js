@@ -20,16 +20,20 @@ if(fileLength === 0){
          window.location = errorUrl
     };
 
+    function disableFileUpload(){
+        $("#file-upload").attr('disabled', 'disabled')
+    };
+
    function addSpinner(){
        $(".govuk-form-group--error").removeClass("govuk-form-group--error")
        $("#file-upload-error").remove()
        $("#error-summary").remove()
        $("#processing").append('<h2 class="govuk-heading-m">'+$("#processingMessage").val()+'</h2><div><div class="ccms-loader"></div></div>')
-       $("#file-upload").attr('disabled', 'disabled')
    };
 
     function fileUpload(form){
         if (inProgress === false) {
+            addSpinner();
                 $.ajax({
                   url: form.action,
                   type: "POST",
@@ -42,7 +46,7 @@ if(fileLength === 0){
             }).done(function(){
                 // Disable UI
                  inProgress = true
-                 addSpinner();
+                 disableFileUpload();
                  refreshPage();
             });
         }
