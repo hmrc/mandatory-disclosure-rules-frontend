@@ -45,7 +45,7 @@ class SubmissionConnectorSpec extends Connector {
 
       stubPostResponse(submitUrl, OK, Json.toJson(conversationId).toString())
 
-      whenReady(connector.submitDocument(SubmissionDetails("test-file.xml", "enrolmentID", Some(fileSize), "dummyURL"))) {
+      whenReady(connector.submitDocument(SubmissionDetails("test-file.xml", "enrolmentID", fileSize, "dummyURL", "1234"))) {
         result =>
           result.value mustBe conversationId
       }
@@ -54,7 +54,7 @@ class SubmissionConnectorSpec extends Connector {
     "must return a 400 when submission of xml fails with BadRequest" in {
       stubPostResponse(submitUrl, BAD_REQUEST)
 
-      whenReady(connector.submitDocument(SubmissionDetails("test-bad-file.xml", "enrolmentID", Some(fileSize), "dummyUrl"))) {
+      whenReady(connector.submitDocument(SubmissionDetails("test-bad-file.xml", "enrolmentID", fileSize, "dummyUrl", "1234"))) {
         result =>
           result mustBe None
       }
@@ -63,7 +63,7 @@ class SubmissionConnectorSpec extends Connector {
     "must return a 500 when submission of xml fails with InternalServer Error" in {
       stubPostResponse(submitUrl, INTERNAL_SERVER_ERROR)
 
-      whenReady(connector.submitDocument(SubmissionDetails("test-file.xml", "enrolmentID", Some(fileSize), "dummyURL"))) {
+      whenReady(connector.submitDocument(SubmissionDetails("test-file.xml", "enrolmentID", fileSize, "dummyURL", "1234"))) {
         result =>
           result mustBe None
       }

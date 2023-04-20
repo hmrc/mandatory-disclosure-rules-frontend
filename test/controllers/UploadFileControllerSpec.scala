@@ -37,6 +37,7 @@ import scala.concurrent.Future
 
 class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
+  val fileSize                                 = 1000L
   val fakeUpscanConnector: FakeUpscanConnector = app.injector.instanceOf[FakeUpscanConnector]
 
   val userAnswers: UserAnswers = UserAnswers(userAnswersId)
@@ -94,7 +95,10 @@ class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
         Some(URL("/report-under-mandatory-disclosure-rules/report/problem/not-xml-file"))
       )
       verifyResult(Failed, OK, Some(URL("/report-under-mandatory-disclosure-rules/report/problem/there-is-a-problem")))
-      verifyResult(UploadedSuccessfully("name", "downloadUrl", None, "1234"), OK, Some(URL("/report-under-mandatory-disclosure-rules/report/file-validation")))
+      verifyResult(UploadedSuccessfully("name", "downloadUrl", fileSize, "1234"),
+                   OK,
+                   Some(URL("/report-under-mandatory-disclosure-rules/report/file-validation"))
+      )
 
     }
 

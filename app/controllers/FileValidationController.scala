@@ -48,7 +48,7 @@ class FileValidationController @Inject() (
     with I18nSupport
     with Logging {
 
-  private case class ExtractedFileStatus(name: String, downloadUrl: String, size: Option[Long], checkSum: String)
+  private case class ExtractedFileStatus(name: String, downloadUrl: String, size: Long, checkSum: String)
 
   def onPageLoad(): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>

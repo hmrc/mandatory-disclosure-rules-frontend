@@ -26,6 +26,8 @@ import uk.gov.hmrc.http.UpstreamErrorResponse
 
 class UpscanConnectorSpec extends Connector {
 
+  val fileSize = 100L
+
   override def fakeApplication(): Application = new GuiceApplicationBuilder()
     .configure(
       "microservice.services.upscan.port"                     -> server.port(),
@@ -85,7 +87,7 @@ class UpscanConnectorSpec extends Connector {
         val body = UploadSessionDetails(_id = ObjectId.get(),
                                         uploadId = UploadId("12345"),
                                         reference = Reference("Reference"),
-                                        status = UploadedSuccessfully("name", "downloadUrl", None, "1234")
+                                        status = UploadedSuccessfully("name", "downloadUrl", fileSize, "1234")
         )
 
         stubGetResponse("/mandatory-disclosure-rules/upscan/details/12345", OK, Json.toJson(body).toString())
@@ -119,6 +121,7 @@ class UpscanConnectorSpec extends Connector {
             | "_type": "UploadedSuccessfully",
             | "name": "name",
             | "downloadUrl": "downloadUrl",
+            | "size": 100,
             | "checkSum":"1234"
             | }
             |""".stripMargin
@@ -127,7 +130,7 @@ class UpscanConnectorSpec extends Connector {
 
         whenReady(connector.getUploadStatus(UploadId("12345"))) {
           result =>
-            result mustBe Some(UploadedSuccessfully("name", "downloadUrl", None, "1234"))
+            result mustBe Some(UploadedSuccessfully("name", "downloadUrl", fileSize, "1234"))
         }
       }
 

@@ -37,6 +37,7 @@ import scala.concurrent.{ExecutionContextExecutor, Future}
 
 class FileValidationControllerSpec extends SpecBase with BeforeAndAfterEach {
 
+  val fileSize                                     = 1000L
   val mockValidationConnector: ValidationConnector = mock[ValidationConnector]
 
   implicit val ec: ExecutionContextExecutor = scala.concurrent.ExecutionContext.global
@@ -62,7 +63,7 @@ class FileValidationControllerSpec extends SpecBase with BeforeAndAfterEach {
       new ObjectId(),
       UploadId("123"),
       Reference("123"),
-      UploadedSuccessfully("afile", downloadURL, None, "1234")
+      UploadedSuccessfully("afile", downloadURL, fileSize, "1234")
     )
 
     "must redirect to Check your answers and present the correct view for a GET" in {
@@ -70,7 +71,7 @@ class FileValidationControllerSpec extends SpecBase with BeforeAndAfterEach {
       val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
       val messageSpecData                                = MessageSpecData("XBG1999999", MDR401, 2, MultipleNewInformation)
       val expectedData: JsObject =
-        Json.obj("uploadID" -> UploadId("123"), "validXML" -> ValidatedFileData("afile", messageSpecData, None, "1234"), "url" -> downloadURL)
+        Json.obj("uploadID" -> UploadId("123"), "validXML" -> ValidatedFileData("afile", messageSpecData, fileSize, "1234"), "url" -> downloadURL)
 
       when(mockValidationConnector.sendForValidation(any())(any(), any())).thenReturn(Future.successful(Right(messageSpecData)))
       when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))

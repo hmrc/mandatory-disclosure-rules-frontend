@@ -27,11 +27,12 @@ import views.html.CheckYourFileDetailsView
 
 class CheckYourFileDetailsControllerSpec extends SpecBase {
 
+  val fileSize = 100L
   "CheckYourFileDetails Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val vfd: ValidatedFileData = ValidatedFileData("test.xml", MessageSpecData("GDC99999999", MDR401, 2, MultipleNewInformation), None, "1234")
+      val vfd: ValidatedFileData = ValidatedFileData("test.xml", MessageSpecData("GDC99999999", MDR401, 2, MultipleNewInformation), fileSize, "1234")
       val ua: UserAnswers        = emptyUserAnswers.set(ValidXMLPage, vfd).success.value
       val application            = applicationBuilder(userAnswers = Some(ua)).build()
 

@@ -33,6 +33,7 @@ class UploadSessionDetailsSpec extends SpecBase {
   }
 
   val objectId: ObjectId = new ObjectId(str2Hex("111111111111111111111111"))
+  val fileSize           = 1000L
 
   "Upload Session Details" - {
     "must be able to be marshalled correctly for status: NotStarted" in {
@@ -171,6 +172,7 @@ class UploadSessionDetailsSpec extends SpecBase {
           |     "_type": "UploadedSuccessfully",
           |     "name": "name",
           |     "downloadUrl": "downloadUrl",
+          |     "size": 1000,
           |     "checkSum": "1234"
           |   }
           |}""".stripMargin
@@ -179,7 +181,7 @@ class UploadSessionDetailsSpec extends SpecBase {
         objectId,
         UploadId("121"),
         Reference("ref"),
-        UploadedSuccessfully("name", "downloadUrl", None, "1234")
+        UploadedSuccessfully("name", "downloadUrl", fileSize, "1234")
       )
 
       Json.toJson(uploadSessionDetails) mustBe Json.parse(expectedUploadSessionDetails)
@@ -195,6 +197,7 @@ class UploadSessionDetailsSpec extends SpecBase {
           |     "_type": "UploadedSuccessfully",
           |     "name": "name",
           |     "downloadUrl": "downloadUrl",
+          |     "size": 1000,
           |     "checkSum": "1234"
           |   }
           |}""".stripMargin
@@ -203,7 +206,7 @@ class UploadSessionDetailsSpec extends SpecBase {
         objectId,
         UploadId("121"),
         Reference("ref"),
-        UploadedSuccessfully("name", "downloadUrl", None, "1234")
+        UploadedSuccessfully("name", "downloadUrl", fileSize, "1234")
       )
 
       Json.parse(json).as[UploadSessionDetails] mustBe expectedUploadSessionDetails
