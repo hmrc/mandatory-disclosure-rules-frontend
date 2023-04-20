@@ -318,7 +318,7 @@ xml.optional.field.empty = If provided, {0} must have a value
 xml.addressFix.error = AddressFix must be placed before AddressFree
 
 fileReceived.title = Your file passed our automatic checks
-fileReceived.heading = Your file passed our automatic checks
+fileReceived.heading = File successfully sent
 fileReceived.messageRefId.key = File MessageRefId
 fileReceived.ChecksCompleted.key = Checks completed
 fileReceived.ChecksCompleted.time = {0} at {1}
