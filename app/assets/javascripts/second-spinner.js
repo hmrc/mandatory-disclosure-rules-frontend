@@ -15,6 +15,7 @@ e.preventDefault();
         var formData = new FormData(form);
         formData.append("", ""); //IE 11 fix to avoid empty form
         if (checkProgress === false) {
+        addSpinner();
             $.ajax({
                   url: form.action,
                   type: "POST",
@@ -26,7 +27,6 @@ e.preventDefault();
                 window.location =  $("#technicalDifficultiesRedirectUrl").val()
             }).done(function(){
                  checkProgress = true
-                 addSpinner();
                  refreshToCheckStatusPage();
             });
         }
