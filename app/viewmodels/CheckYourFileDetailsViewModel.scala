@@ -52,7 +52,6 @@ object CheckYourFileDetailsViewModel {
         actions = Seq(
           ActionItemViewModel("checkYourFileDetails.changeFile", routes.UploadFileController.onPageLoad().url)
             .withAttribute(("id", "your-file"))
-            .withVisuallyHiddenText(messages("checkYourFileDetails.uploadedFile.change.hidden"))
         )
       )
     )
