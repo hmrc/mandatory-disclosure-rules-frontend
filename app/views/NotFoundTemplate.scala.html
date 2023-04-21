@@ -15,7 +15,8 @@
  *@
 
 @this(
-    layout: templates.Layout
+    layout: templates.Layout,
+    link: components.Link,
 )
 
 @()(implicit request: Request[_], messages: Messages)
@@ -25,16 +26,8 @@
     <h1 class="govuk-heading-l">@messages("pageNotFound.heading")</h1>
 
     <p class="govuk-body">@messages("pageNotFound.p1")</p>
+    <p class="govuk-body">@messages("pageNotFound.p2")</p>
 
-    <ul class="govuk-list govuk-list--bullet" style="padding-left:20px;list-style-type:disc">
-     <li>@messages("pageNotFound.bullet1")</li>
-     <li>@messages("pageNotFound.bullet2")</li>
-     <li>@messages("pageNotFound.bullet3")</li>
-    </ul>
+    <p class="govuk-body">@Html(messages("pageNotFound.p3", link("mailto:aeoi.enquiries@hmrc.gov.uk", "pageNotFound.email")))</p>
 
-    <p class="govuk-body">@messages("pageNotFound.p2")
-     <a href="mailto:{{emailAddress}}" class="govuk-link">@messages("thereIsAProblem.emailAddress")</a>
-    </p>
-
-    <p class="govuk-body bottom-margin">@messages("pageNotFound.p3")</p>
 }
