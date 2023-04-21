@@ -33,7 +33,7 @@ class FileFailedChecksControllerSpec extends SpecBase {
     "must return OK and the correct view for a GET" in {
 
       val conversationId  = ConversationId("conversationId")
-      val validXmlDetails = ValidatedFileData("name", MessageSpecData("messageRefId", MDR401, 2, MultipleNewInformation), fileSize, "1234")
+      val validXmlDetails = ValidatedFileData("name", MessageSpecData("messageRefId", MDR401, 2, "OECD1", MultipleNewInformation), fileSize, "1234")
 
       val userAnswers = emptyUserAnswers
         .set(ValidXMLPage, validXmlDetails)

@@ -69,7 +69,7 @@ class FileValidationControllerSpec extends SpecBase with BeforeAndAfterEach {
     "must redirect to Check your answers and present the correct view for a GET" in {
 
       val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
-      val messageSpecData                                = MessageSpecData("XBG1999999", MDR401, 2, MultipleNewInformation)
+      val messageSpecData                                = MessageSpecData("XBG1999999", MDR401, 2, "OECD1", MultipleNewInformation)
       val expectedData: JsObject =
         Json.obj("uploadID" -> UploadId("123"), "validXML" -> ValidatedFileData("afile", messageSpecData, fileSize, "1234"), "url" -> downloadURL)
 
