@@ -23,7 +23,7 @@
         govukButton: GovukButton
 )
 
-@(displayWarning:  Boolean, appConfig: FrontendAppConfig)(implicit request: Request[_], messages: Messages)
+@(warningKey:  Option[String], appConfig: FrontendAppConfig)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("sendYourFile.title"))) {
 
@@ -40,10 +40,10 @@
         <p class="govuk-body" id ="information" >@messages("sendYourFile.p1")</p>
         <p class="govuk-body">@messages("sendYourFile.p2")</p>
 
-        @if(displayWarning){
+        @warningKey.map{ key =>
             @govukWarningText(WarningText(
                 iconFallbackText = "site.warning",
-                content = Text(messages("sendYourFile.warning"))
+                content = Text(messages(s"sendYourFile.warning.$key"))
             ))
         }
 
