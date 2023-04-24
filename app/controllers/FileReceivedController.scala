@@ -18,17 +18,7 @@ package controllers
 
 import connectors.FileDetailsConnector
 import controllers.actions._
-import models.{
-  ConversationId,
-  Mode,
-  MultipleCorrectionsDeletions,
-  MultipleNewInformation,
-  ReportType,
-  SingleCorrection,
-  SingleDeletion,
-  SingleNewInformation,
-  SingleOther
-}
+import models.{ConversationId, Mode, MultipleCorrectionsDeletions, MultipleNewInformation, ReportType, SingleCorrection, SingleDeletion, SingleNewInformation, SingleOther}
 import pages.{UploadIDPage, ValidXMLPage}
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -38,6 +28,8 @@ import utils.ContactEmailHelper.getContactEmails
 import utils.DateTimeFormatUtil._
 import viewmodels.FileReceivedViewModel
 import viewmodels.govuk.summarylist._
+import play.api.Logging
+import play.api.i18n.Lang.logger
 import views.html.{FileReceivedView, ThereIsAProblemView}
 
 import javax.inject.Inject
@@ -71,7 +63,9 @@ class FileReceivedController @Inject() (
                     updatedAnswers <- Future.fromTry(request.userAnswers.remove(UploadIDPage))
                     _              <- sessionRepository.set(updatedAnswers)
                   } yield Ok(view(detailsList, emails.firstContact, emails.secondContact))
-                case _ => Future.successful(InternalServerError(errorView()))
+                case _ =>
+                  logger.warn("FileReceivedController: Unable to retrieve XML information from UserAnswers")
+                  Future.successful(InternalServerError(errorView()))
               }
           }
       }
