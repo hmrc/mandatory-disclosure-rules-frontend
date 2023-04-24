@@ -18,7 +18,17 @@ package controllers
 
 import connectors.FileDetailsConnector
 import controllers.actions._
-import models.{ConversationId, Mode, MultipleCorrectionsDeletions, MultipleNewInformation, ReportType, SingleCorrection, SingleDeletion, SingleNewInformation, SingleOther}
+import models.{
+  ConversationId,
+  Mode,
+  MultipleCorrectionsDeletions,
+  MultipleNewInformation,
+  ReportType,
+  SingleCorrection,
+  SingleDeletion,
+  SingleNewInformation,
+  SingleOther
+}
 import pages.{UploadIDPage, ValidXMLPage}
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -62,11 +72,12 @@ class FileReceivedController @Inject() (
                     Future.successful(InternalServerError(errorView()))
                   } else {
                     val detailsList =
-                      SummaryListViewModel(
-                        FileReceivedViewModel.getSummaryRows(details, vfd.messageSpecData.reportType)).withoutBorders().withCssClass("govuk-!-margin-bottom-0")
+                      SummaryListViewModel(FileReceivedViewModel.getSummaryRows(details, vfd.messageSpecData.reportType))
+                        .withoutBorders()
+                        .withCssClass("govuk-!-margin-bottom-0")
                     for {
                       updatedAnswers <- Future.fromTry(request.userAnswers.remove(UploadIDPage))
-                      _ <- sessionRepository.set(updatedAnswers)
+                      _              <- sessionRepository.set(updatedAnswers)
                     } yield Ok(view(detailsList, emails.firstContact, emails.secondContact))
                   }
                 case _ =>

@@ -16,27 +16,13 @@
 
 package viewmodels
 
-import controllers.routes
 import models.fileDetails.FileDetails
-import models.{
-  MultipleCorrectionsDeletions,
-  MultipleNewInformation,
-  ReportType,
-  SingleCorrection,
-  SingleDeletion,
-  SingleNewInformation,
-  SingleOther,
-  UserAnswers,
-  ValidatedFileData
-}
-import pages.ValidXMLPage
+import models.{MultipleCorrectionsDeletions, MultipleNewInformation, ReportType, SingleCorrection, SingleNewInformation}
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
-import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{Key, SummaryListRow}
+import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import utils.DateTimeFormatUtil.{dateFormatter, timeFormatter}
 import viewmodels.govuk.summarylist._
-
-import scala.concurrent.Future
 
 object FileReceivedViewModel {
 
@@ -68,9 +54,9 @@ object FileReceivedViewModel {
     typeIndic match {
       case MultipleNewInformation       => messages("fileReceived.messageTypeIndic.MultipleNewInformation")
       case MultipleCorrectionsDeletions => messages("fileReceived.messageTypeIndic.MultipleCorrectionsDeletions")
-      case SingleNewInformation         => messages("fileReceived.messageTypeIndic.SingleNewInformation")
-      case SingleCorrection             => messages("fileReceived.messageTypeIndic.SingleCorrection")
-      case _                            => messages("fileReceived.messageTypeIndic.SingleDeletion")
+      case SingleNewInformation         => messages("fileReceived.messageTypeIndic.SingleNewInformation") // oecd1
+      case SingleCorrection             => messages("fileReceived.messageTypeIndic.SingleCorrection") // oecd0 || oecd2
+      case _                            => messages("fileReceived.messageTypeIndic.SingleDeletion") // oecc3
     }
 
 }
