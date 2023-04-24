@@ -40,7 +40,7 @@ import scala.concurrent.Future
 
 object FileReceivedViewModel {
 
-  def getSummaryRows(details: FileDetails, vfd: ValidatedFileData)(implicit messages: Messages): Seq[SummaryListRow] = {
+  def getSummaryRows(details: FileDetails, reportType: ReportType)(implicit messages: Messages): Seq[SummaryListRow] = {
 
     val time = details.submitted.format(timeFormatter).toLowerCase
     val date = details.submitted.format(dateFormatter)
@@ -57,7 +57,7 @@ object FileReceivedViewModel {
       ),
       SummaryListRowViewModel(
         key = "fileReceived.messageTypeIndic",
-        value = ValueViewModel(HtmlFormat.escape(s"${displayTypeIndicator(vfd.messageSpecData.reportType)}").toString),
+        value = ValueViewModel(HtmlFormat.escape(s"${displayTypeIndicator(reportType)}").toString),
         actions = Seq()
       )
     )
@@ -70,8 +70,7 @@ object FileReceivedViewModel {
       case MultipleCorrectionsDeletions => messages("fileReceived.messageTypeIndic.MultipleCorrectionsDeletions")
       case SingleNewInformation         => messages("fileReceived.messageTypeIndic.SingleNewInformation")
       case SingleCorrection             => messages("fileReceived.messageTypeIndic.SingleCorrection")
-      case SingleDeletion               => messages("fileReceived.messageTypeIndic.SingleDeletion")
-      case _                            => messages("fileReceived.messageTypeIndic.SingleOther")
+      case _                            => messages("fileReceived.messageTypeIndic.SingleDeletion")
     }
 
 }

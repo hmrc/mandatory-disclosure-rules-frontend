@@ -57,12 +57,18 @@ class FileReceivedController @Inject() (
             vfd =>
               (getContactEmails, fileDetails) match {
                 case (Some(emails), Some(details)) =>
-                  val detailsList =
-                    SummaryListViewModel(FileReceivedViewModel.getSummaryRows(details, vfd)).withoutBorders().withCssClass("govuk-!-margin-bottom-0")
-                  for {
-                    updatedAnswers <- Future.fromTry(request.userAnswers.remove(UploadIDPage))
-                    _              <- sessionRepository.set(updatedAnswers)
-                  } yield Ok(view(detailsList, emails.firstContact, emails.secondContact))
+                  if (vfd.messageSpecData.reportType == SingleOther) {
+                    logger.warn("FileReceivedController: Test data submitted but successful outcome")
+                    Future.successful(InternalServerError(errorView()))
+                  } else {
+                    val detailsList =
+                      SummaryListViewModel(
+                        FileReceivedViewModel.getSummaryRows(details, vfd.messageSpecData.reportType)).withoutBorders().withCssClass("govuk-!-margin-bottom-0")
+                    for {
+                      updatedAnswers <- Future.fromTry(request.userAnswers.remove(UploadIDPage))
+                      _ <- sessionRepository.set(updatedAnswers)
+                    } yield Ok(view(detailsList, emails.firstContact, emails.secondContact))
+                  }
                 case _ =>
                   logger.warn("FileReceivedController: Unable to retrieve XML information from UserAnswers")
                   Future.successful(InternalServerError(errorView()))
@@ -71,5 +77,3 @@ class FileReceivedController @Inject() (
       }
   }
 }
-
-
