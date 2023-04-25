@@ -16,15 +16,21 @@
 
 package controllers
 
-import base.SpecBase
 import connectors.FileDetailsConnector
-import models.{ConversationId, MDR401, MessageSpecData, MultipleNewInformation, NormalMode, ValidatedFileData}
+import base.SpecBase
+import models.{ConversationId, MDR401, MessageSpecData, MultipleNewInformation, NormalMode, UserAnswers, ValidatedFileData}
 import models.fileDetails.{Accepted, FileDetails}
+
 import org.mockito.ArgumentMatchers.any
 import pages.{ContactEmailPage, SecondContactEmailPage, ValidXMLPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import uk.gov.hmrc.govukfrontend.views.Aliases.HtmlContent
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
+import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{Key, SummaryListRow}
+import utils.DateTimeFormatUtil.{dateFormatter, timeFormatter}
+import viewmodels.govuk.summarylist._
 import views.html.FileReceivedView
 
 import java.time.LocalDateTime
@@ -34,26 +40,49 @@ class FileReceivedControllerSpec extends SpecBase {
 
   val mockFileDetailsConnector: FileDetailsConnector = mock[FileDetailsConnector]
 
+  val messageRefId = "messageRefId"
+  val conversationId = ConversationId("conversationId")
+  val time = "10:30am"
+  val date = "1 January 2022"
+  val firstContactEmail = "first@email.com"
+  val secondContactEmail = "second@email.com"
+
+  val localTimeDate = LocalDateTime.parse("2022-01-01T10:30:00.000")
+
+  val baseUserAnswers = UserAnswers("Id")
+    .set(ContactEmailPage, firstContactEmail)
+    .success
+    .value
+    .set(SecondContactEmailPage, secondContactEmail)
+    .success
+    .value
+
+  def summaryRow(msg: String) = SummaryListViewModel(Seq(
+    SummaryListRow(
+      key = Key(Text("File ID (MessageRefId)")),
+      value = ValueViewModel(HtmlContent(messageRefId)),
+      actions = None
+    ),
+    SummaryListRow(
+      key = Key(Text("Checks completed")),
+      value = ValueViewModel(Text(s"${localTimeDate.format(dateFormatter)} at ${localTimeDate.format(timeFormatter)}"))
+    ),
+    SummaryListRow(
+      key = Key(Text("File information")),
+      value = ValueViewModel(Text(msg)),
+      actions = None
+    )
+  )).withoutBorders()
+    .withCssClass("govuk-!-margin-bottom-0")
+
+
   "FileReceived Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
       val vfd: ValidatedFileData = ValidatedFileData("fileName", MessageSpecData("messageRef", MDR401, 2, MultipleNewInformation))
 
-      val messageRefId       = "messageRefId"
-      val conversationId     = ConversationId("conversationId")
-      val time               = "10:30am"
-      val date               = "1 January 2022"
-      val firstContactEmail  = "first@email.com"
-      val secondContactEmail = "second@email.com"
-
-      val userAnswers = emptyUserAnswers
-        .set(ContactEmailPage, firstContactEmail)
-        .success
-        .value
-        .set(SecondContactEmailPage, secondContactEmail)
-        .success
-        .value
+      val userAnswers = baseUserAnswers
         .set(ValidXMLPage, vfd)
         .success
         .value
@@ -71,8 +100,8 @@ class FileReceivedControllerSpec extends SpecBase {
               FileDetails(
                 "name",
                 messageRefId,
-                LocalDateTime.parse("2022-01-01T10:30:00.000"),
-                LocalDateTime.parse("2022-01-01T10:30:00.000"),
+                localTimeDate,
+                localTimeDate,
                 Accepted,
                 conversationId
               )
@@ -87,8 +116,10 @@ class FileReceivedControllerSpec extends SpecBase {
 
         val view = application.injector.instanceOf[FileReceivedView]
 
+        val list = summaryRow("New information in multiple reports")
+
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(fileDetails, firstContactEmail, Some(secondContactEmail))(request, messages(application)).toString
+        contentAsString(result) mustBe view(list, firstContactEmail, Some(secondContactEmail))(request, messages(application)).toString
       }
     }
   }
