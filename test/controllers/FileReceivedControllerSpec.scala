@@ -18,7 +18,18 @@ package controllers
 
 import connectors.FileDetailsConnector
 import base.SpecBase
-import models.{ConversationId, MDR401, MessageSpecData, MultipleCorrectionsDeletions, MultipleNewInformation, NormalMode, UserAnswers, ValidatedFileData}
+import models.{
+  ConversationId,
+  MDR401,
+  MDR402,
+  MessageSpecData,
+  MultipleCorrectionsDeletions,
+  MultipleNewInformation,
+  NormalMode,
+  SingleNewInformation,
+  UserAnswers,
+  ValidatedFileData
+}
 import models.fileDetails.{Accepted, FileDetails}
 import org.mockito.ArgumentMatchers.any
 import pages.{ContactEmailPage, SecondContactEmailPage, ValidXMLPage}
@@ -167,7 +178,6 @@ class FileReceivedControllerSpec extends SpecBase {
         contentAsString(result) mustBe view(list, firstContactEmail, Some(secondContactEmail))(request, messages(application)).toString
       }
     }
-
 
 
 
