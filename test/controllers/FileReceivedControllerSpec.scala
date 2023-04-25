@@ -78,7 +78,7 @@ class FileReceivedControllerSpec extends SpecBase {
 
   "FileReceived Controller" - {
 
-    "must return OK and the correct view for a GET" in {
+    "must return OK and the correct view for a GET with MultipleNewInformation" in {
 
       val vfd: ValidatedFileData = ValidatedFileData("fileName", MessageSpecData("messageRef", MDR401, 2, MultipleNewInformation))
 
