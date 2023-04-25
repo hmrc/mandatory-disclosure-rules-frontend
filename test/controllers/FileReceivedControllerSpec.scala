@@ -29,6 +29,7 @@ import models.{
   SingleCorrection,
   SingleDeletion,
   SingleNewInformation,
+  SingleOther,
   UserAnswers,
   ValidatedFileData
 }
