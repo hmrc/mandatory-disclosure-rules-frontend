@@ -27,6 +27,7 @@ import models.{
   MultipleNewInformation,
   NormalMode,
   SingleCorrection,
+  SingleDeletion,
   SingleNewInformation,
   UserAnswers,
   ValidatedFileData
@@ -264,6 +265,51 @@ class FileReceivedControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[FileReceivedView]
 
         val list = summaryRow("Corrections in one report")
+
+        status(result) mustEqual OK
+        contentAsString(result) mustBe view(list, firstContactEmail, Some(secondContactEmail))(request, messages(application)).toString
+      }
+    }
+
+    "must return OK and the correct view for a GET with SingleDeletion" in {
+
+      val vfd: ValidatedFileData = ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 1, SingleDeletion))
+
+      val userAnswers = baseUserAnswers
+        .set(ValidXMLPage, vfd)
+        .success
+        .value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(
+          bind[FileDetailsConnector].toInstance(mockFileDetailsConnector)
+        )
+        .build()
+
+      when(mockFileDetailsConnector.getFileDetails(any())(any(), any()))
+        .thenReturn(
+          Future.successful(
+            Some(
+              FileDetails(
+                "name",
+                messageRefId,
+                localTimeDate,
+                localTimeDate,
+                Accepted,
+                conversationId
+              )
+            )
+          )
+        )
+
+      running(application) {
+        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoad(NormalMode, conversationId).url)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[FileReceivedView]
+
+        val list = summaryRow("Deletion of a previous report")
 
         status(result) mustEqual OK
         contentAsString(result) mustBe view(list, firstContactEmail, Some(secondContactEmail))(request, messages(application)).toString
