@@ -18,10 +18,10 @@ package controllers
 
 import base.SpecBase
 import connectors.FileDetailsConnector
-import models.{ConversationId, NormalMode}
+import models.{ConversationId, MDR401, MessageSpecData, MultipleNewInformation, NormalMode, ValidatedFileData}
 import models.fileDetails.{Accepted, FileDetails}
 import org.mockito.ArgumentMatchers.any
-import pages.{ContactEmailPage, SecondContactEmailPage}
+import pages.{ContactEmailPage, SecondContactEmailPage, ValidXMLPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -38,6 +38,8 @@ class FileReceivedControllerSpec extends SpecBase {
 
     "must return OK and the correct view for a GET" in {
 
+      val vfd: ValidatedFileData = ValidatedFileData("fileName", MessageSpecData("messageRef", MDR401, 2, MultipleNewInformation))
+
       val messageRefId       = "messageRefId"
       val conversationId     = ConversationId("conversationId")
       val time               = "10:30am"
@@ -50,6 +52,9 @@ class FileReceivedControllerSpec extends SpecBase {
         .success
         .value
         .set(SecondContactEmailPage, secondContactEmail)
+        .success
+        .value
+        .set(ValidXMLPage, vfd)
         .success
         .value
 
@@ -83,7 +88,7 @@ class FileReceivedControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[FileReceivedView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(messageRefId, time, date, firstContactEmail, Some(secondContactEmail))(request, messages(application)).toString
+        contentAsString(result) mustEqual view(fileDetails, firstContactEmail, Some(secondContactEmail))(request, messages(application)).toString
       }
     }
   }
