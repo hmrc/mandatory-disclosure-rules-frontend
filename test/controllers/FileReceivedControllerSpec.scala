@@ -179,7 +179,50 @@ class FileReceivedControllerSpec extends SpecBase {
       }
     }
 
+    "must return OK and the correct view for a GET with SingleNewInformation" in {
 
+      val vfd: ValidatedFileData = ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 1, SingleNewInformation))
+
+      val userAnswers = baseUserAnswers
+        .set(ValidXMLPage, vfd)
+        .success
+        .value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(
+          bind[FileDetailsConnector].toInstance(mockFileDetailsConnector)
+        )
+        .build()
+
+      when(mockFileDetailsConnector.getFileDetails(any())(any(), any()))
+        .thenReturn(
+          Future.successful(
+            Some(
+              FileDetails(
+                "name",
+                messageRefId,
+                localTimeDate,
+                localTimeDate,
+                Accepted,
+                conversationId
+              )
+            )
+          )
+        )
+
+      running(application) {
+        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoad(NormalMode, conversationId).url)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[FileReceivedView]
+
+        val list = summaryRow("New information in one report")
+
+        status(result) mustEqual OK
+        contentAsString(result) mustBe view(list, firstContactEmail, Some(secondContactEmail))(request, messages(application)).toString
+      }
+    }
 
   }
 }
