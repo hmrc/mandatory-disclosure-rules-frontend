@@ -76,7 +76,7 @@ class FileReceivedControllerSpec extends SpecBase {
       ),
       SummaryListRow(
         key = Key(Text("Checks completed")),
-        value = ValueViewModel(Text(s"${localTimeDate.format(dateFormatter)} at ${localTimeDate.format(timeFormatter)}"))
+        value = ValueViewModel(Text(s"${localTimeDate.format(dateFormatter)} at ${localTimeDate.format(timeFormatter).toLowerCase}"))
       ),
       SummaryListRow(
         key = Key(Text("File information")),
