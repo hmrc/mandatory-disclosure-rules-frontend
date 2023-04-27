@@ -17,7 +17,7 @@
 package viewmodels
 
 import base.SpecBase
-import models.ConversationId
+import models.{ConversationId, SingleNewInformation}
 import models.fileDetails.FileErrorCode.{fileErrorCodesForProblemStatus, CustomError => FileCustomError}
 import models.fileDetails.RecordErrorCode.CustomError
 import models.fileDetails._
@@ -88,9 +88,33 @@ class FileStatusViewModelSpec extends SpecBase {
 
       val fileDetails =
         Seq(
-          FileDetails("name1.xml", "messageRefId1", LocalDateTime.parse("2022-03-18T08:10:00.324"), LocalDateTime.now(), Pending, ConversationId("id")),
-          FileDetails("name2.xml", "messageRefId2", LocalDateTime.parse("2022-03-18T10:15:00.324"), LocalDateTime.now(), Accepted, ConversationId("id")),
-          FileDetails("name3.xml", "messageRefId3", LocalDateTime.parse("2022-03-18T11:10:00.324"), LocalDateTime.now(), rejected, ConversationId("id"))
+          FileDetails(
+            "name1.xml",
+            "messageRefId1",
+            Some(SingleNewInformation),
+            LocalDateTime.parse("2022-03-18T08:10:00.324"),
+            LocalDateTime.now(),
+            Pending,
+            ConversationId("id")
+          ),
+          FileDetails(
+            "name2.xml",
+            "messageRefId2",
+            Some(SingleNewInformation),
+            LocalDateTime.parse("2022-03-18T10:15:00.324"),
+            LocalDateTime.now(),
+            Accepted,
+            ConversationId("id")
+          ),
+          FileDetails(
+            "name3.xml",
+            "messageRefId3",
+            Some(SingleNewInformation),
+            LocalDateTime.parse("2022-03-18T11:10:00.324"),
+            LocalDateTime.now(),
+            rejected,
+            ConversationId("id")
+          )
         )
 
       FileStatusViewModel.createStatusTable(fileDetails)(messages(app)) mustBe expectedTable
@@ -134,8 +158,24 @@ class FileStatusViewModelSpec extends SpecBase {
 
       val fileDetails =
         Seq(
-          FileDetails("name1.xml", "messageRefId1", LocalDateTime.parse("2022-03-19T11:16:19.324"), LocalDateTime.now(), Pending, ConversationId("id")),
-          FileDetails("name2.xml", "messageRefId4", LocalDateTime.parse("2022-03-18T11:09:10.324"), LocalDateTime.now(), rejected, ConversationId("id"))
+          FileDetails(
+            "name1.xml",
+            "messageRefId1",
+            Some(SingleNewInformation),
+            LocalDateTime.parse("2022-03-19T11:16:19.324"),
+            LocalDateTime.now(),
+            Pending,
+            ConversationId("id")
+          ),
+          FileDetails(
+            "name2.xml",
+            "messageRefId4",
+            Some(SingleNewInformation),
+            LocalDateTime.parse("2022-03-18T11:09:10.324"),
+            LocalDateTime.now(),
+            rejected,
+            ConversationId("id")
+          )
         )
 
       FileStatusViewModel.createStatusTable(fileDetails)(messages(app)) mustBe expectedTable
@@ -190,9 +230,33 @@ class FileStatusViewModelSpec extends SpecBase {
 
       val fileDetails =
         Seq(
-          FileDetails("name1.xml", "messageRefId1", LocalDateTime.parse("2022-03-19T11:16:19.324"), LocalDateTime.now(), Pending, ConversationId("id1")),
-          FileDetails("name2.xml", "messageRefId4", LocalDateTime.parse("2022-03-18T11:09:10.324"), LocalDateTime.now(), rejected, ConversationId("id2")),
-          FileDetails("name3.xml", "messageRefId4", LocalDateTime.parse("2022-03-17T11:09:10.324"), LocalDateTime.now(), fileRejected, ConversationId("id3"))
+          FileDetails(
+            "name1.xml",
+            "messageRefId1",
+            Some(SingleNewInformation),
+            LocalDateTime.parse("2022-03-19T11:16:19.324"),
+            LocalDateTime.now(),
+            Pending,
+            ConversationId("id1")
+          ),
+          FileDetails(
+            "name2.xml",
+            "messageRefId4",
+            Some(SingleNewInformation),
+            LocalDateTime.parse("2022-03-18T11:09:10.324"),
+            LocalDateTime.now(),
+            rejected,
+            ConversationId("id2")
+          ),
+          FileDetails(
+            "name3.xml",
+            "messageRefId4",
+            Some(SingleNewInformation),
+            LocalDateTime.parse("2022-03-17T11:09:10.324"),
+            LocalDateTime.now(),
+            fileRejected,
+            ConversationId("id3")
+          )
         )
 
       FileStatusViewModel.createStatusTable(fileDetails)(messages(app)) mustBe expectedTable

@@ -16,8 +16,9 @@
 
 package controllers
 
-import connectors.FileDetailsConnector
 import base.SpecBase
+import connectors.FileDetailsConnector
+import models.fileDetails.{Accepted, FileDetails}
 import models.{
   ConversationId,
   MDR401,
@@ -29,11 +30,9 @@ import models.{
   SingleCorrection,
   SingleDeletion,
   SingleNewInformation,
-  SingleOther,
   UserAnswers,
   ValidatedFileData
 }
-import models.fileDetails.{Accepted, FileDetails}
 import org.mockito.ArgumentMatchers.any
 import pages.{ContactEmailPage, SecondContactEmailPage, ValidXMLPage}
 import play.api.inject.bind
@@ -62,7 +61,7 @@ class FileReceivedControllerSpec extends SpecBase {
 
   val localTimeDate = LocalDateTime.parse("2022-01-01T10:30:00.000")
 
-  val baseUserAnswers = UserAnswers("Id")
+  val userAnswers = UserAnswers("Id")
     .set(ContactEmailPage, firstContactEmail)
     .success
     .value
@@ -94,13 +93,6 @@ class FileReceivedControllerSpec extends SpecBase {
 
     "must return OK and the correct view for a GET with MultipleNewInformation" in {
 
-      val vfd: ValidatedFileData = ValidatedFileData("fileName", MessageSpecData("messageRef", MDR401, 2, MultipleNewInformation))
-
-      val userAnswers = baseUserAnswers
-        .set(ValidXMLPage, vfd)
-        .success
-        .value
-
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
           bind[FileDetailsConnector].toInstance(mockFileDetailsConnector)
@@ -114,6 +106,7 @@ class FileReceivedControllerSpec extends SpecBase {
               FileDetails(
                 "name",
                 messageRefId,
+                Some(MultipleNewInformation),
                 localTimeDate,
                 localTimeDate,
                 Accepted,
@@ -139,13 +132,6 @@ class FileReceivedControllerSpec extends SpecBase {
 
     "must return OK and the correct view for a GET with MultipleCorrectionsDeletions" in {
 
-      val vfd: ValidatedFileData = ValidatedFileData("fileName", MessageSpecData("messageRef", MDR401, 2, MultipleCorrectionsDeletions))
-
-      val userAnswers = baseUserAnswers
-        .set(ValidXMLPage, vfd)
-        .success
-        .value
-
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
           bind[FileDetailsConnector].toInstance(mockFileDetailsConnector)
@@ -159,6 +145,7 @@ class FileReceivedControllerSpec extends SpecBase {
               FileDetails(
                 "name",
                 messageRefId,
+                Some(MultipleCorrectionsDeletions),
                 localTimeDate,
                 localTimeDate,
                 Accepted,
@@ -184,13 +171,6 @@ class FileReceivedControllerSpec extends SpecBase {
 
     "must return OK and the correct view for a GET with SingleNewInformation" in {
 
-      val vfd: ValidatedFileData = ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 1, SingleNewInformation))
-
-      val userAnswers = baseUserAnswers
-        .set(ValidXMLPage, vfd)
-        .success
-        .value
-
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
           bind[FileDetailsConnector].toInstance(mockFileDetailsConnector)
@@ -204,6 +184,7 @@ class FileReceivedControllerSpec extends SpecBase {
               FileDetails(
                 "name",
                 messageRefId,
+                Some(SingleNewInformation),
                 localTimeDate,
                 localTimeDate,
                 Accepted,
@@ -229,13 +210,6 @@ class FileReceivedControllerSpec extends SpecBase {
 
     "must return OK and the correct view for a GET with SingleCorrection" in {
 
-      val vfd: ValidatedFileData = ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 1, SingleCorrection))
-
-      val userAnswers = baseUserAnswers
-        .set(ValidXMLPage, vfd)
-        .success
-        .value
-
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
           bind[FileDetailsConnector].toInstance(mockFileDetailsConnector)
@@ -249,6 +223,7 @@ class FileReceivedControllerSpec extends SpecBase {
               FileDetails(
                 "name",
                 messageRefId,
+                Some(SingleCorrection),
                 localTimeDate,
                 localTimeDate,
                 Accepted,
@@ -274,13 +249,6 @@ class FileReceivedControllerSpec extends SpecBase {
 
     "must return OK and the correct view for a GET with SingleDeletion" in {
 
-      val vfd: ValidatedFileData = ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 1, SingleDeletion))
-
-      val userAnswers = baseUserAnswers
-        .set(ValidXMLPage, vfd)
-        .success
-        .value
-
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(
           bind[FileDetailsConnector].toInstance(mockFileDetailsConnector)
@@ -294,6 +262,7 @@ class FileReceivedControllerSpec extends SpecBase {
               FileDetails(
                 "name",
                 messageRefId,
+                Some(SingleDeletion),
                 localTimeDate,
                 localTimeDate,
                 Accepted,
@@ -311,6 +280,58 @@ class FileReceivedControllerSpec extends SpecBase {
         val view = application.injector.instanceOf[FileReceivedView]
 
         val list = summaryRow("Deletion of a previous report")
+
+        status(result) mustEqual OK
+        contentAsString(result) mustBe view(list, firstContactEmail, Some(secondContactEmail))(request, messages(application)).toString
+      }
+    }
+
+    "must return OK and the correct view for a GET when report type is unavailable" in {
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(
+          bind[FileDetailsConnector].toInstance(mockFileDetailsConnector)
+        )
+        .build()
+
+      when(mockFileDetailsConnector.getFileDetails(any())(any(), any()))
+        .thenReturn(
+          Future.successful(
+            Some(
+              FileDetails(
+                "name",
+                messageRefId,
+                None,
+                localTimeDate,
+                localTimeDate,
+                Accepted,
+                conversationId
+              )
+            )
+          )
+        )
+
+      running(application) {
+        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoad(NormalMode, conversationId).url)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[FileReceivedView]
+
+        val list = SummaryListViewModel(
+          Seq(
+            SummaryListRow(
+              key = Key(Text("File ID (MessageRefId)")),
+              value = ValueViewModel(HtmlContent(messageRefId)),
+              actions = None
+            ),
+            SummaryListRow(
+              key = Key(Text("Checks completed")),
+              value = ValueViewModel(Text(s"${localTimeDate.format(dateFormatter)} at ${localTimeDate.format(timeFormatter).toLowerCase}"))
+            )
+          )
+        ).withoutBorders()
+          .withCssClass("govuk-!-margin-bottom-0")
 
         status(result) mustEqual OK
         contentAsString(result) mustBe view(list, firstContactEmail, Some(secondContactEmail))(request, messages(application)).toString

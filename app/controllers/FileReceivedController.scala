@@ -18,28 +18,16 @@ package controllers
 
 import connectors.FileDetailsConnector
 import controllers.actions._
-import models.{
-  ConversationId,
-  Mode,
-  MultipleCorrectionsDeletions,
-  MultipleNewInformation,
-  ReportType,
-  SingleCorrection,
-  SingleDeletion,
-  SingleNewInformation,
-  SingleOther
-}
-import pages.{UploadIDPage, ValidXMLPage}
-import play.api.i18n.{I18nSupport, Messages, MessagesApi}
+import models.{ConversationId, Mode, SingleOther}
+import pages.UploadIDPage
+import play.api.i18n.Lang.logger
+import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.ContactEmailHelper.getContactEmails
-import utils.DateTimeFormatUtil._
 import viewmodels.FileReceivedViewModel
 import viewmodels.govuk.summarylist._
-import play.api.Logging
-import play.api.i18n.Lang.logger
 import views.html.{FileReceivedView, ThereIsAProblemView}
 
 import javax.inject.Inject
@@ -63,27 +51,24 @@ class FileReceivedController @Inject() (
     implicit request =>
       fileDetailsConnector.getFileDetails(conversationId) flatMap {
         fileDetails =>
-          request.userAnswers.get(ValidXMLPage).fold(Future.successful(InternalServerError(errorView()))) {
-            vfd =>
-              (getContactEmails, fileDetails) match {
-                case (Some(emails), Some(details)) =>
-                  if (vfd.messageSpecData.reportType == SingleOther) {
-                    logger.warn("FileReceivedController: Test data submitted but successful outcome")
-                    Future.successful(InternalServerError(errorView()))
-                  } else {
-                    val detailsList =
-                      SummaryListViewModel(FileReceivedViewModel.getSummaryRows(details, vfd.messageSpecData.reportType))
-                        .withoutBorders()
-                        .withCssClass("govuk-!-margin-bottom-0")
-                    for {
-                      updatedAnswers <- Future.fromTry(request.userAnswers.remove(UploadIDPage))
-                      _              <- sessionRepository.set(updatedAnswers)
-                    } yield Ok(view(detailsList, emails.firstContact, emails.secondContact))
-                  }
-                case _ =>
-                  logger.warn("FileReceivedController: Unable to retrieve XML information from UserAnswers")
-                  Future.successful(InternalServerError(errorView()))
+          (getContactEmails, fileDetails) match {
+            case (Some(emails), Some(details)) =>
+              if (details.reportType.contains(SingleOther)) {
+                logger.warn("FileReceivedController: Test data submitted but successful outcome")
+                Future.successful(InternalServerError(errorView()))
+              } else {
+                val detailsList =
+                  SummaryListViewModel(FileReceivedViewModel.getSummaryRows(details, details.reportType))
+                    .withoutBorders()
+                    .withCssClass("govuk-!-margin-bottom-0")
+                for {
+                  updatedAnswers <- Future.fromTry(request.userAnswers.remove(UploadIDPage))
+                  _              <- sessionRepository.set(updatedAnswers)
+                } yield Ok(view(detailsList, emails.firstContact, emails.secondContact))
               }
+            case _ =>
+              logger.warn("FileReceivedController: Unable to retrieve XML information from UserAnswers")
+              Future.successful(InternalServerError(errorView()))
           }
       }
   }

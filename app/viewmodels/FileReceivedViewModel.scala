@@ -26,10 +26,18 @@ import viewmodels.govuk.summarylist._
 
 object FileReceivedViewModel {
 
-  def getSummaryRows(details: FileDetails, reportType: ReportType)(implicit messages: Messages): Seq[SummaryListRow] = {
+  def getSummaryRows(details: FileDetails, reportType: Option[ReportType])(implicit messages: Messages): Seq[SummaryListRow] = {
 
     val time = details.submitted.format(timeFormatter).toLowerCase
     val date = details.submitted.format(dateFormatter)
+    val reportTypeRow: Option[SummaryListRow] = reportType.map {
+      report =>
+        SummaryListRowViewModel(
+          key = "fileReceived.messageTypeIndic",
+          value = ValueViewModel(HtmlFormat.escape(s"${displayTypeIndicator(report)}").toString),
+          actions = Seq()
+        )
+    }
 
     Seq(
       SummaryListRowViewModel(
@@ -40,14 +48,8 @@ object FileReceivedViewModel {
       SummaryListRowViewModel(
         key = "fileReceived.ChecksCompleted.key",
         value = ValueViewModel(messages("fileReceived.ChecksCompleted.time", date, time))
-      ),
-      SummaryListRowViewModel(
-        key = "fileReceived.messageTypeIndic",
-        value = ValueViewModel(HtmlFormat.escape(s"${displayTypeIndicator(reportType)}").toString),
-        actions = Seq()
       )
-    )
-
+    ) ++ reportTypeRow
   }
 
   private def displayTypeIndicator(typeIndic: ReportType)(implicit messages: Messages) =
