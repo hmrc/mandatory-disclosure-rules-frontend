@@ -19,11 +19,10 @@ package controllers
 import config.FrontendAppConfig
 import connectors.{FileDetailsConnector, SubmissionConnector}
 import controllers.actions.{CheckForSubmissionAction, DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import handlers.XmlHandler
 import models.fileDetails.{Pending, Rejected, ValidationErrors, Accepted => FileStatusAccepted}
 import models.submissions.SubmissionDetails
 import models.upscan.URL
-import models.{MDR402, NormalMode, ValidatedFileData}
+import models.{MultipleCorrectionsDeletions, NormalMode, SingleCorrection, SingleDeletion, SingleOther, ValidatedFileData}
 import pages.{ConversationIdPage, URLPage, ValidXMLPage}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -56,12 +55,18 @@ class SendYourFileController @Inject() (
 
   def onPageLoad: Action[AnyContent] = (identify andThen getData() andThen requireData andThen checkForSubmission(true)).async {
     implicit request =>
-      val displayWarning = request.userAnswers
+      val warningKey = request.userAnswers
         .get(ValidXMLPage)
-        .fold(false)(
-          validatedFileData => validatedFileData.messageSpecData.messageTypeIndic.equals(MDR402)
-        )
-      Future.successful(Ok(view(displayWarning, appConfig)))
+        .map(_.messageSpecData.reportType)
+        .flatMap {
+          case MultipleCorrectionsDeletions => Some("multipleCorrectionsDeletions")
+          case SingleCorrection             => Some("singleCorrection")
+          case SingleDeletion               => Some("singleDeletion")
+          case SingleOther                  => Some("singleOther")
+          case _                            => None
+        }
+
+      Future.successful(Ok(view(warningKey, appConfig)))
   }
 
   def onSubmit: Action[AnyContent] = (identify andThen getData() andThen requireData).async {

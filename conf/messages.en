@@ -55,19 +55,16 @@ index.p4.link = aeoi.enquiries@hmrc.gov.uk
 
 pageNotFound.title = Page not found
 pageNotFound.heading = Page not found
-pageNotFound.p1 = This may be because:
-pageNotFound.bullet1 = the link or button you selected is for a page that does not exist
-pageNotFound.bullet2 = you’ve typed or copied a web address for a page that does not exist
-pageNotFound.bullet3 = you’ve typed or copied a web address incorrectly
-pageNotFound.p2 = If the web address is correct or you selected a link or button, and you have queries, you can email
+pageNotFound.p1 = If you typed the web address, check it is correct.
+pageNotFound.p2 = If you pasted the web address, check you copied the entire address.
+pageNotFound.p3 = You can email {0} if you have any questions about this service.
 pageNotFound.email = aeoi.enquiries@hmrc.gov.uk
-pageNotFound.p3 = Check you have entered the correct details.
 
 thereIsAProblem.title = Sorry, there is a problem with the service
 thereIsAProblem.heading = Sorry, there is a problem with the service
 thereIsAProblem.paragraph.1 = Try again later.
-thereIsAProblem.paragraph.2 = We have not saved any file you uploaded or any answers you entered. If you need to contact someone about your MDR reporting, you can email
-thereIsAProblem.emailAddress = aeoi.enquiries@hmrc.gov.uk
+thereIsAProblem.paragraph.2 = We have not saved any file you uploaded or any answers you entered. If you need to contact someone about your MDR reporting, you can email {0}
+thereIsAProblem.email = aeoi.enquiries@hmrc.gov.uk
 
 journeyRecovery.continue.title = Sorry, there is a problem with the service
 journeyRecovery.continue.heading = Sorry, there is a problem with the service
@@ -373,7 +370,11 @@ sendYourFile.title = Send your file
 sendYourFile.heading = Send your file
 sendYourFile.p1 = We will now automatically check your file for record errors. This could take a few minutes.
 sendYourFile.p2 = By sending this file, you are confirming that the information is correct and complete to the best of your knowledge.
-sendYourFile.warning = This will permanently change your reported information.
+sendYourFile.warning.multipleCorrectionsDeletions = This will permanently change reported information marked as a correction. It will also delete all previously reported information if marked for deletion.
+sendYourFile.warning.singleCorrection = This will permanently change your reported information.
+sendYourFile.warning.singleDeletion = This will permanently delete all of the information you have reported for this arrangement.
+sendYourFile.warning.singleOther = This file contains test data and will not be accepted. You can still send the file to check for record errors.
+
 sendYourFile.status.heading = We are checking your file
 
 filePassedChecks.title = Your file has passed our checks

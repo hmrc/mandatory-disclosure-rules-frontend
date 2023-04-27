@@ -19,12 +19,24 @@ package controllers
 import base.SpecBase
 import config.FrontendAppConfig
 import connectors.{FileDetailsConnector, SubmissionConnector}
-import handlers.XmlHandler
 import models.fileDetails.FileErrorCode.FailedSchemaValidation
 import models.fileDetails.RecordErrorCode.DocRefIDFormat
 import models.fileDetails._
 import models.submissions.SubmissionDetails
-import models.{ConversationId, MDR401, MDR402, MessageSpecData, MultipleCorrectionsDeletions, MultipleNewInformation, UserAnswers, ValidatedFileData}
+import models.{
+  ConversationId,
+  MDR401,
+  MDR402,
+  MessageSpecData,
+  MultipleCorrectionsDeletions,
+  MultipleNewInformation,
+  SingleCorrection,
+  SingleDeletion,
+  SingleNewInformation,
+  SingleOther,
+  UserAnswers,
+  ValidatedFileData
+}
 import org.mockito.ArgumentMatchers.any
 import pages.{ConversationIdPage, URLPage, ValidXMLPage}
 import play.api.inject.bind
@@ -45,7 +57,7 @@ class SendYourFileControllerSpec extends SpecBase {
 
     "onPageLoad" - {
 
-      "must return OK and the correct view with no warning text for a GET" in {
+      "must return OK and the correct view for MultipleNewInformation with no warning text for a GET" in {
 
         val userAnswers = UserAnswers("Id")
           .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR401, 2, MultipleNewInformation)))
@@ -63,11 +75,33 @@ class SendYourFileControllerSpec extends SpecBase {
           val view = application.injector.instanceOf[SendYourFileView]
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(displayWarning = false, appConfig)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(None, appConfig)(request, messages(application)).toString
         }
       }
 
-      "must return OK and the correct view with some warning text for a GET" in {
+      "must return OK and the correct view for SingleNewInformation with no warning text for a GET" in {
+
+        val userAnswers = UserAnswers("Id")
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR401, 1, SingleNewInformation), Some(fileSize)))
+          .success
+          .value
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        running(application) {
+          val request   = FakeRequest(GET, routes.SendYourFileController.onPageLoad().url)
+          val appConfig = application.injector.instanceOf[FrontendAppConfig]
+
+          val result = route(application, request).value
+
+          val view = application.injector.instanceOf[SendYourFileView]
+
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual view(None, appConfig)(request, messages(application)).toString
+        }
+      }
+
+      "must return OK and the correct view with MultipleCorrectionsDeletions warning text for a GET" in {
 
         val userAnswers = UserAnswers("Id")
           .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 2, MultipleCorrectionsDeletions), Some(fileSize)))
@@ -85,7 +119,73 @@ class SendYourFileControllerSpec extends SpecBase {
           val view = application.injector.instanceOf[SendYourFileView]
 
           status(result) mustEqual OK
-          contentAsString(result) mustEqual view(displayWarning = true, appConfig)(request, messages(application)).toString
+          contentAsString(result) mustEqual view(Some("multipleCorrectionsDeletions"), appConfig)(request, messages(application)).toString
+        }
+      }
+
+      "must return OK and the correct view with singleCorrection warning text for a GET" in {
+
+        val userAnswers = UserAnswers("Id")
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 1, SingleCorrection), Some(fileSize)))
+          .success
+          .value
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        running(application) {
+          val request   = FakeRequest(GET, routes.SendYourFileController.onPageLoad().url)
+          val appConfig = application.injector.instanceOf[FrontendAppConfig]
+
+          val result = route(application, request).value
+
+          val view = application.injector.instanceOf[SendYourFileView]
+
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual view(Some("singleCorrection"), appConfig)(request, messages(application)).toString
+        }
+      }
+
+      "must return OK and the correct view with singleDeletion warning text for a GET" in {
+
+        val userAnswers = UserAnswers("Id")
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 1, SingleDeletion), Some(fileSize)))
+          .success
+          .value
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        running(application) {
+          val request   = FakeRequest(GET, routes.SendYourFileController.onPageLoad().url)
+          val appConfig = application.injector.instanceOf[FrontendAppConfig]
+
+          val result = route(application, request).value
+
+          val view = application.injector.instanceOf[SendYourFileView]
+
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual view(Some("singleDeletion"), appConfig)(request, messages(application)).toString
+        }
+      }
+
+      "must return OK and the correct view with singleOther warning text for a GET" in {
+
+        val userAnswers = UserAnswers("Id")
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 1, SingleOther), Some(fileSize)))
+          .success
+          .value
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        running(application) {
+          val request   = FakeRequest(GET, routes.SendYourFileController.onPageLoad().url)
+          val appConfig = application.injector.instanceOf[FrontendAppConfig]
+
+          val result = route(application, request).value
+
+          val view = application.injector.instanceOf[SendYourFileView]
+
+          status(result) mustEqual OK
+          contentAsString(result) mustEqual view(Some("singleOther"), appConfig)(request, messages(application)).toString
         }
       }
     }

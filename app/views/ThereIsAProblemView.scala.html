@@ -14,9 +14,13 @@
  * limitations under the License.
  *@
 
+@import config.FrontendAppConfig
+
 @this(
         layout: templates.Layout,
-        govukButton: GovukButton
+        govukButton: GovukButton,
+        link: components.Link,
+        appConfig: FrontendAppConfig
 )
 
 @()(implicit request: Request[_], messages: Messages)
@@ -27,7 +31,5 @@
 
     <p class="govuk-body">@messages("thereIsAProblem.paragraph.1")</p>
 
-    <p class="govuk-body">@messages("thereIsAProblem.paragraph.2")
-        <a href="mailto:{{emailAddress}}" class="govuk-link">@messages("thereIsAProblem.emailAddress")</a>
-    </p>
+    <p class="govuk-body">@Html(messages("thereIsAProblem.paragraph.2", link(s"mailto:${appConfig.enquireEmailLink}", "thereIsAProblem.email")))</p>
 }
