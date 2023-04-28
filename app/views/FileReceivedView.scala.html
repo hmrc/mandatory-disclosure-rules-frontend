@@ -29,10 +29,6 @@
 
 @(fileDetails: SummaryList, firstContactEmail: String, secondContactEmail:Option[String])(implicit request: Request[_], messages: Messages)
 
-@secondContactMessage = {
-    @if(secondContactEmail.isDefined){@messages("fileReceived.p1.5", secondContactEmail.get)}
-}
-
 @layout(pageTitle = titleNoForm(messages("fileReceived.title")), showBackLink = false) {
 
     @govukPanel(Panel(
@@ -43,7 +39,12 @@
     <hr>
 
 
-    <p class="govuk-body">@messages("fileReceived.p1", firstContactEmail, secondContactMessage)</p>
+
+    @if(secondContactEmail.isDefined) {
+        <p class="govuk-body">@messages("fileReceived.p1twoEmail", firstContactEmail, secondContactEmail.get)</p>
+    } else {
+        <p class="govuk-body">@messages("fileReceived.p1oneEmail", firstContactEmail)</p>
+    }
 
     <h2 class="govuk-heading-m">@messages("fileReceived.subheading")</h2>
 
