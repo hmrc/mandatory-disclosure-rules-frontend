@@ -19,7 +19,7 @@ package controllers
 import base.SpecBase
 import connectors.FileDetailsConnector
 import models.fileDetails.{Accepted, FileDetails}
-import models.{ConversationId, UserAnswers}
+import models.{ConversationId, SingleNewInformation, UserAnswers}
 import org.mockito.ArgumentMatchers.any
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -58,7 +58,18 @@ class IndexControllerSpec extends SpecBase {
         when(mockFileConnector.getAllFileDetails(any[HeaderCarrier], any[ExecutionContext]))
           .thenReturn(
             Future.successful(
-              Some(Seq(FileDetails("FileName", "messageRefId", LocalDateTime.now(), LocalDateTime.now(), Accepted, ConversationId("conversationId"))))
+              Some(
+                Seq(
+                  FileDetails("FileName",
+                              "messageRefId",
+                              Some(SingleNewInformation),
+                              LocalDateTime.now(),
+                              LocalDateTime.now(),
+                              Accepted,
+                              ConversationId("conversationId")
+                  )
+                )
+              )
             )
           )
 

@@ -316,14 +316,21 @@ xml.optional.field.empty = If provided, {0} must have a value
 xml.addressFix.error = AddressFix must be placed before AddressFree
 
 fileReceived.title = Your file passed our automatic checks
-fileReceived.heading = Your file passed our automatic checks
-fileReceived.messageRefId.key = File MessageRefId
+fileReceived.heading = File successfully sent
+fileReceived.messageRefId.key = File ID (MessageRefId)
 fileReceived.ChecksCompleted.key = Checks completed
 fileReceived.ChecksCompleted.time = {0} at {1}
-fileReceived.p1 = We have sent a confirmation email to {0}{1} to show the file has passed our automatic checks.
-fileReceived.p1.5 = and {0}
+fileReceived.messageTypeIndic = File information
+fileReceived.messageTypeIndic.MultipleNewInformation = New information in multiple reports
+fileReceived.messageTypeIndic.MultipleCorrectionsDeletions = Corrections or deletions for multiple reports
+fileReceived.messageTypeIndic.SingleNewInformation = New information in one report
+fileReceived.messageTypeIndic.SingleCorrection = Corrections in one report
+fileReceived.messageTypeIndic.SingleDeletion = Deletion of a previous report
+fileReceived.messageTypeIndic.SingleOther = Test data in one report
+fileReceived.p1oneEmail = We have sent a confirmation email to {0}.
+fileReceived.p1twoEmail = We have sent a confirmation email to {0} and {1}.
 fileReceived.subheading = What happens next
-fileReceived.p2 = If we have any questions about your report, we will contact you.
+fileReceived.p2 = We will contact you if we have any questions about your report.
 fileReceived.print = Print or save this page
 fileReceived.thoughts = What did you think of this service? (opens in new tab)
 

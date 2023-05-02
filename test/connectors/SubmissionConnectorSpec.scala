@@ -16,7 +16,7 @@
 
 package connectors
 
-import models.ConversationId
+import models.{ConversationId, MDR401, MessageSpecData, MultipleNewInformation}
 import models.submissions.SubmissionDetails
 import play.api.Application
 import play.api.http.Status.{BAD_REQUEST, INTERNAL_SERVER_ERROR, OK}
@@ -36,6 +36,7 @@ class SubmissionConnectorSpec extends Connector {
   lazy val connector: SubmissionConnector = app.injector.instanceOf[SubmissionConnector]
   val conversationId: ConversationId      = ConversationId("UUID")
   val submitUrl                           = "/mandatory-disclosure-rules/submit"
+  val messageSpec                         = MessageSpecData("x9999", MDR401, 2, MultipleNewInformation)
 
   val fileSize = 1000L
 
@@ -45,7 +46,7 @@ class SubmissionConnectorSpec extends Connector {
 
       stubPostResponse(submitUrl, OK, Json.toJson(conversationId).toString())
 
-      whenReady(connector.submitDocument(SubmissionDetails("test-file.xml", "enrolmentID", Some(fileSize), "dummyURL"))) {
+      whenReady(connector.submitDocument(SubmissionDetails("test-file.xml", "enrolmentID", Some(fileSize), "dummyURL", messageSpec))) {
         result =>
           result.value mustBe conversationId
       }
@@ -54,7 +55,7 @@ class SubmissionConnectorSpec extends Connector {
     "must return a 400 when submission of xml fails with BadRequest" in {
       stubPostResponse(submitUrl, BAD_REQUEST)
 
-      whenReady(connector.submitDocument(SubmissionDetails("test-bad-file.xml", "enrolmentID", Some(fileSize), "dummyUrl"))) {
+      whenReady(connector.submitDocument(SubmissionDetails("test-bad-file.xml", "enrolmentID", Some(fileSize), "dummyUrl", messageSpec))) {
         result =>
           result mustBe None
       }
@@ -63,7 +64,7 @@ class SubmissionConnectorSpec extends Connector {
     "must return a 500 when submission of xml fails with InternalServer Error" in {
       stubPostResponse(submitUrl, INTERNAL_SERVER_ERROR)
 
-      whenReady(connector.submitDocument(SubmissionDetails("test-file.xml", "enrolmentID", Some(fileSize), "dummyURL"))) {
+      whenReady(connector.submitDocument(SubmissionDetails("test-file.xml", "enrolmentID", Some(fileSize), "dummyURL", messageSpec))) {
         result =>
           result mustBe None
       }

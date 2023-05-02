@@ -27,11 +27,7 @@
         appConfig: FrontendAppConfig
 )
 
-@(messageRefId: String, timeSubmitted: String, dateSubmitted: String, firstContactEmail: String, secondContactEmail:Option[String])(implicit request: Request[_], messages: Messages)
-
-@secondContactMessage = {
-    @if(secondContactEmail.isDefined){@messages("fileReceived.p1.5", secondContactEmail.get)}
-}
+@(fileDetails: SummaryList, firstContactEmail: String, secondContactEmail:Option[String])(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = titleNoForm(messages("fileReceived.title")), showBackLink = false) {
 
@@ -39,22 +35,16 @@
         title = Text(messages("fileReceived.heading"))
     ))
 
-    @govukSummaryList(
-        SummaryList(
-            Seq(
-                SummaryListRow(
-                    key = Key(messages("fileReceived.messageRefId.key")),
-                    value = Value(messageRefId)
-                ),
-                SummaryListRow(
-                    key = Key(messages("fileReceived.ChecksCompleted.key")),
-                    value = Value(messages("fileReceived.ChecksCompleted.time", dateSubmitted, timeSubmitted))
-                )
-            )
-        )
-    )
+    @govukSummaryList(fileDetails)
+    <hr>
 
-    <p class="govuk-body">@messages("fileReceived.p1", firstContactEmail, secondContactMessage)</p>
+
+
+    @if(secondContactEmail.isDefined) {
+        <p class="govuk-body">@messages("fileReceived.p1twoEmail", firstContactEmail, secondContactEmail.get)</p>
+    } else {
+        <p class="govuk-body">@messages("fileReceived.p1oneEmail", firstContactEmail)</p>
+    }
 
     <h2 class="govuk-heading-m">@messages("fileReceived.subheading")</h2>
 
