@@ -84,7 +84,7 @@ class SendYourFileControllerSpec extends SpecBase {
       "must return OK and the correct view for SingleNewInformation with no warning text for a GET" in {
 
         val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR401, 1, SingleNewInformation), Some(fileSize)))
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR401, 1, "OECD1", SingleNewInformation), fileSize, "1234"))
           .success
           .value
 
@@ -128,7 +128,7 @@ class SendYourFileControllerSpec extends SpecBase {
       "must return OK and the correct view with singleCorrection warning text for a GET" in {
 
         val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 1, SingleCorrection), Some(fileSize)))
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 1, "OECD1", SingleCorrection), fileSize, "1234"))
           .success
           .value
 
@@ -150,7 +150,7 @@ class SendYourFileControllerSpec extends SpecBase {
       "must return OK and the correct view with singleDeletion warning text for a GET" in {
 
         val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 1, SingleDeletion), Some(fileSize)))
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 1, "OECD1", SingleDeletion), fileSize, "1234"))
           .success
           .value
 
@@ -172,7 +172,7 @@ class SendYourFileControllerSpec extends SpecBase {
       "must return OK and the correct view with singleOther warning text for a GET" in {
 
         val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 1, SingleOther), Some(fileSize)))
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 1, "OECD1", SingleOther), fileSize, "1234"))
           .success
           .value
 
