@@ -23,6 +23,7 @@ import pages._
 import play.api.i18n.Messages
 import play.api.mvc.AnyContent
 import play.twirl.api.HtmlFormat
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
 
@@ -40,9 +41,15 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
         key = "contactName.checkYourAnswersLabel",
         value = ValueViewModel(HtmlFormat.escape(s"$x").toString),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.ContactNameController.onPageLoad().url)
-            .withAttribute(("id", "contact-name"))
-            .withVisuallyHiddenText(messages("contactName.change.hidden"))
+          ActionItemViewModel(
+            content = HtmlContent(
+              s"""
+                 |<span aria-hidden="true">${messages("site.change")}</span>
+                 |<span class="govuk-visually-hidden">${messages("contactName.change.hidden")}</span>
+                 |""".stripMargin
+            ),
+            href = routes.ContactNameController.onPageLoad().url
+          ).withAttribute(("id", "contact-name"))
         )
       )
   }
@@ -53,9 +60,15 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
         key = "contactEmail.checkYourAnswersLabel",
         value = ValueViewModel(HtmlFormat.escape(s"$x").toString),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.ContactEmailController.onPageLoad(affinityType).url)
-            .withAttribute(("id", "contact-email"))
-            .withVisuallyHiddenText(messages("contactEmail.change.hidden"))
+          ActionItemViewModel(
+            content = HtmlContent(
+              s"""
+                 |<span aria-hidden="true">${messages("site.change")}</span>
+                 |<span class="govuk-visually-hidden">${messages("contactEmail.change.hidden")}</span>
+                 |""".stripMargin
+            ),
+            href = routes.ContactEmailController.onPageLoad(affinityType).url
+          ).withAttribute(("id", "contact-email"))
         )
       )
   }
@@ -66,9 +79,15 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
         key = "contactPhone.checkYourAnswersLabel",
         value = ValueViewModel(HtmlFormat.escape(value).toString),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.HaveTelephoneController.onPageLoad(affinityType).url)
-            .withAttribute(("id", "contact-phone"))
-            .withVisuallyHiddenText(messages("contactPhone.change.hidden"))
+          ActionItemViewModel(
+            content = HtmlContent(
+              s"""
+                 |<span aria-hidden="true">${messages("site.change")}</span>
+                 |<span class="govuk-visually-hidden">${messages("contactPhone.change.hidden")}</span>
+                 |""".stripMargin
+            ),
+            href = routes.HaveTelephoneController.onPageLoad(affinityType).url
+          ).withAttribute(("id", "contact-phone"))
         )
       )
 
@@ -86,9 +105,15 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
         key = "haveSecondContact.checkYourAnswersLabel",
         value = ValueViewModel(HtmlFormat.escape(s"${messages(yesNo)}").toString),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.HaveSecondContactController.onPageLoad().url)
-            .withAttribute(("id", "second-contact"))
-            .withVisuallyHiddenText(messages("haveSecondContact.change.hidden"))
+          ActionItemViewModel(
+            content = HtmlContent(
+              s"""
+                 |<span aria-hidden="true">${messages("site.change")}</span>
+                 |<span class="govuk-visually-hidden">${messages("haveSecondContact.change.hidden")}</span>
+                 |""".stripMargin
+            ),
+            href = routes.HaveSecondContactController.onPageLoad().url
+          ).withAttribute(("id", "second-contact"))
         )
       )
     Some(userAnswers.get(HaveSecondContactPage) match {
@@ -111,9 +136,15 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
         key = "secondContactName.checkYourAnswersLabel",
         value = ValueViewModel(HtmlFormat.escape(s"$x").toString),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.SecondContactNameController.onPageLoad().url)
-            .withAttribute(("id", "snd-contact-name"))
-            .withVisuallyHiddenText(messages("secondContactName.change.hidden"))
+          ActionItemViewModel(
+            content = HtmlContent(
+              s"""
+                 |<span aria-hidden="true">${messages("site.change")}</span>
+                 |<span class="govuk-visually-hidden">${messages("secondContactName.change.hidden")}</span>
+                 |""".stripMargin
+            ),
+            href = routes.SecondContactNameController.onPageLoad().url
+          ).withAttribute(("id", "snd-contact-name"))
         )
       )
   }
@@ -124,9 +155,15 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
         key = "secondContactEmail.checkYourAnswersLabel",
         value = ValueViewModel(HtmlFormat.escape(s"$x").toString),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.SecondContactEmailController.onPageLoad().url)
-            .withAttribute(("id", "snd-contact-email"))
-            .withVisuallyHiddenText(messages("secondContactEmail.change.hidden"))
+          ActionItemViewModel(
+            content = HtmlContent(
+              s"""
+                 |<span aria-hidden="true">${messages("site.change")}</span>
+                 |<span class="govuk-visually-hidden">${messages("secondContactEmail.change.hidden")}</span>
+                 |""".stripMargin
+            ),
+            href = routes.SecondContactEmailController.onPageLoad().url
+          ).withAttribute(("id", "snd-contact-email"))
         )
       )
   }
@@ -137,9 +174,15 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
         key = "secondContactPhone.checkYourAnswersLabel",
         value = ValueViewModel(HtmlFormat.escape(value).toString),
         actions = Seq(
-          ActionItemViewModel("site.change", routes.SecondContactHavePhoneController.onPageLoad().url)
-            .withAttribute(("id", "snd-contact-phone"))
-            .withVisuallyHiddenText(messages("secondContactPhone.change.hidden"))
+          ActionItemViewModel(
+            content = HtmlContent(
+              s"""
+                 |<span aria-hidden="true">${messages("site.change")}</span>
+                 |<span class="govuk-visually-hidden">${messages("secondContactPhone.change.hidden")}</span>
+                 |""".stripMargin
+            ),
+            href = routes.SecondContactHavePhoneController.onPageLoad().url
+          ).withAttribute(("id", "snd-contact-phone"))
         )
       )
 
