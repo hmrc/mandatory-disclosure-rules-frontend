@@ -49,6 +49,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class SendYourFileControllerSpec extends SpecBase {
 
+  val fileSize = 1000L
+
   private val conversationId: ConversationId = ConversationId("conversationId")
 
   "SendYourFile Controller" - {
@@ -60,7 +62,7 @@ class SendYourFileControllerSpec extends SpecBase {
       "must return OK and the correct view for MultipleNewInformation with no warning text for a GET" in {
 
         val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR401, 2, MultipleNewInformation)))
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR401, 2, "OECD1", MultipleNewInformation), fileSize, "1234"))
           .success
           .value
 
@@ -82,7 +84,7 @@ class SendYourFileControllerSpec extends SpecBase {
       "must return OK and the correct view for SingleNewInformation with no warning text for a GET" in {
 
         val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR401, 1, SingleNewInformation), Some(fileSize)))
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR401, 1, "OECD1", SingleNewInformation), fileSize, "1234"))
           .success
           .value
 
@@ -104,7 +106,7 @@ class SendYourFileControllerSpec extends SpecBase {
       "must return OK and the correct view with MultipleCorrectionsDeletions warning text for a GET" in {
 
         val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 2, MultipleCorrectionsDeletions), Some(fileSize)))
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 2, "OECD1", MultipleCorrectionsDeletions), fileSize, "1234"))
           .success
           .value
 
@@ -126,7 +128,7 @@ class SendYourFileControllerSpec extends SpecBase {
       "must return OK and the correct view with singleCorrection warning text for a GET" in {
 
         val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 1, SingleCorrection), Some(fileSize)))
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 1, "OECD1", SingleCorrection), fileSize, "1234"))
           .success
           .value
 
@@ -148,7 +150,7 @@ class SendYourFileControllerSpec extends SpecBase {
       "must return OK and the correct view with singleDeletion warning text for a GET" in {
 
         val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 1, SingleDeletion), Some(fileSize)))
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 1, "OECD1", SingleDeletion), fileSize, "1234"))
           .success
           .value
 
@@ -170,7 +172,7 @@ class SendYourFileControllerSpec extends SpecBase {
       "must return OK and the correct view with singleOther warning text for a GET" in {
 
         val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 1, SingleOther), Some(fileSize)))
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 1, "OECD1", SingleOther), fileSize, "1234"))
           .success
           .value
 
@@ -197,7 +199,7 @@ class SendYourFileControllerSpec extends SpecBase {
         val mockSubmissionConnector = mock[SubmissionConnector]
 
         val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 2, MultipleCorrectionsDeletions), Some(fileSize)))
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 2, "OECD1", MultipleCorrectionsDeletions), fileSize, "1234"))
           .success
           .value
           .set(URLPage, "url")
@@ -228,7 +230,7 @@ class SendYourFileControllerSpec extends SpecBase {
       "redirect to there is a problem page if userAnswers missing" in {
 
         val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 2, MultipleCorrectionsDeletions)))
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 2, "OECD1", MultipleCorrectionsDeletions), fileSize, "1234"))
           .success
           .value
 
@@ -248,7 +250,7 @@ class SendYourFileControllerSpec extends SpecBase {
         val mockSubmissionConnector = mock[SubmissionConnector]
 
         val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 2, MultipleCorrectionsDeletions)))
+          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 2, "OECD1", MultipleCorrectionsDeletions), fileSize, "1234"))
           .success
           .value
           .set(URLPage, "url")
