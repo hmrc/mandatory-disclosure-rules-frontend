@@ -22,6 +22,7 @@ import play.api.libs.json.{JsError, Json}
 
 class UploadStatusSpec extends AnyWordSpec with Matchers {
 
+  val fileSize                     = 1000L
   val statuses: List[UploadStatus] = List(NotStarted, Failed, InProgress, Quarantined)
 
   "UploadStatus json Reads" must {
@@ -40,8 +41,10 @@ class UploadStatusSpec extends AnyWordSpec with Matchers {
       "_type is UploadedSuccessfully" in {
         val expectedName     = "fileName"
         val expectedUrl      = "downloadUrl"
-        val json             = s"""{"_type": "UploadedSuccessfully", "name": "$expectedName", "downloadUrl": "$expectedUrl"}"""
-        val expectedResponse = UploadedSuccessfully(expectedName, expectedUrl)
+        val expectedCheckSum = "1234"
+        val json =
+          s"""{"_type": "UploadedSuccessfully", "name": "$expectedName", "downloadUrl": "$expectedUrl", "size" : 1000, "checkSum": "$expectedCheckSum"}"""
+        val expectedResponse = UploadedSuccessfully(expectedName, expectedUrl, fileSize, "1234")
         Json.parse(json).as[UploadStatus] mustBe expectedResponse
       }
     }
@@ -73,11 +76,12 @@ class UploadStatusSpec extends AnyWordSpec with Matchers {
 
       "set _type as UploadedSuccessfully with name, downloadUrl and noOfRows in json" when {
         "status is UploadedSuccessfully" in {
-          val expectedName = "fileName"
-          val expectedUrl  = "downloadUrl"
+          val expectedName     = "fileName"
+          val expectedUrl      = "downloadUrl"
+          val expectedCheckSum = "1234"
           val expectedJson =
-            s"""{"name":"$expectedName","downloadUrl":"$expectedUrl","_type":"UploadedSuccessfully"}"""
-          val uploadStatus: UploadStatus = UploadedSuccessfully(expectedName, expectedUrl)
+            s"""{"name":"$expectedName","downloadUrl":"$expectedUrl","size":1000,"checkSum":"$expectedCheckSum","_type":"UploadedSuccessfully"}"""
+          val uploadStatus: UploadStatus = UploadedSuccessfully(expectedName, expectedUrl, fileSize, "1234")
           Json.toJson(uploadStatus).toString() mustBe expectedJson
         }
       }

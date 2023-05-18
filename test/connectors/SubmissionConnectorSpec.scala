@@ -36,7 +36,7 @@ class SubmissionConnectorSpec extends Connector {
   lazy val connector: SubmissionConnector = app.injector.instanceOf[SubmissionConnector]
   val conversationId: ConversationId      = ConversationId("UUID")
   val submitUrl                           = "/mandatory-disclosure-rules/submit"
-  val messageSpec                         = MessageSpecData("x9999", MDR401, 2, MultipleNewInformation)
+  val messageSpec                         = MessageSpecData("x9999", MDR401, 2, "OECD1", MultipleNewInformation)
 
   val fileSize = 1000L
 
@@ -46,7 +46,7 @@ class SubmissionConnectorSpec extends Connector {
 
       stubPostResponse(submitUrl, OK, Json.toJson(conversationId).toString())
 
-      whenReady(connector.submitDocument(SubmissionDetails("test-file.xml", "enrolmentID", Some(fileSize), "dummyURL", messageSpec))) {
+      whenReady(connector.submitDocument(SubmissionDetails("test-file.xml", "enrolmentID", fileSize, "dummyURL", "1234", messageSpec))) {
         result =>
           result.value mustBe conversationId
       }
@@ -55,7 +55,7 @@ class SubmissionConnectorSpec extends Connector {
     "must return a 400 when submission of xml fails with BadRequest" in {
       stubPostResponse(submitUrl, BAD_REQUEST)
 
-      whenReady(connector.submitDocument(SubmissionDetails("test-bad-file.xml", "enrolmentID", Some(fileSize), "dummyUrl", messageSpec))) {
+      whenReady(connector.submitDocument(SubmissionDetails("test-bad-file.xml", "enrolmentID", fileSize, "dummyUrl", "1234", messageSpec))) {
         result =>
           result mustBe None
       }
@@ -64,7 +64,7 @@ class SubmissionConnectorSpec extends Connector {
     "must return a 500 when submission of xml fails with InternalServer Error" in {
       stubPostResponse(submitUrl, INTERNAL_SERVER_ERROR)
 
-      whenReady(connector.submitDocument(SubmissionDetails("test-file.xml", "enrolmentID", Some(fileSize), "dummyURL", messageSpec))) {
+      whenReady(connector.submitDocument(SubmissionDetails("test-file.xml", "enrolmentID", fileSize, "dummyURL", "1234", messageSpec))) {
         result =>
           result mustBe None
       }
