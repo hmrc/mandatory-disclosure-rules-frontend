@@ -22,7 +22,7 @@ import pages.{ConversationIdPage, ValidXMLPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import viewmodels.FileCheckViewModel
-import views.html.FilePassedChecksView
+import views.html.{FilePassedChecksView, ThereIsAProblemView}
 
 class FilePassedChecksControllerSpec extends SpecBase {
 
@@ -55,6 +55,21 @@ class FilePassedChecksControllerSpec extends SpecBase {
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(fileSummaryList, action)(request, messages(application)).toString
+      }
+    }
+
+    "must throw an internal server error when no file data is found" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      running(application) {
+
+        val request = FakeRequest(GET, routes.FilePassedChecksController.onPageLoad().url)
+        val result  = route(application, request).value
+        val view    = application.injector.instanceOf[ThereIsAProblemView]
+
+        status(result) mustEqual INTERNAL_SERVER_ERROR
+        contentAsString(result) mustEqual view()(request, messages(application)).toString
       }
     }
   }

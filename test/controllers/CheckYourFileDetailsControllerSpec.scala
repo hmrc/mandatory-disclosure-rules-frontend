@@ -23,7 +23,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import viewmodels.CheckYourFileDetailsViewModel
 import viewmodels.govuk.summarylist._
-import views.html.CheckYourFileDetailsView
+import views.html.{CheckYourFileDetailsView, ThereIsAProblemView}
 
 class CheckYourFileDetailsControllerSpec extends SpecBase {
 
@@ -49,6 +49,22 @@ class CheckYourFileDetailsControllerSpec extends SpecBase {
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(list)(request, messages(application)).toString
+      }
+    }
+
+    "must throw an internal server error when validXML is not set" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      running(application) {
+        val request = FakeRequest(GET, routes.CheckYourFileDetailsController.onPageLoad().url)
+
+        val view = application.injector.instanceOf[ThereIsAProblemView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual INTERNAL_SERVER_ERROR
+        contentAsString(result) mustEqual view()(request, messages(application)).toString
       }
     }
   }
