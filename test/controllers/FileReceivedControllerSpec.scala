@@ -30,6 +30,7 @@ import models.{
   SingleCorrection,
   SingleDeletion,
   SingleNewInformation,
+  SingleOther,
   UserAnswers,
   ValidatedFileData
 }
@@ -43,7 +44,7 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{Key, SummaryListRow}
 import utils.DateTimeFormatUtil.{dateFormatter, timeFormatter}
 import viewmodels.govuk.summarylist._
-import views.html.FileReceivedView
+import views.html.{FileReceivedView, ThereIsAProblemView}
 
 import java.time.LocalDateTime
 import scala.concurrent.Future
@@ -127,6 +128,43 @@ class FileReceivedControllerSpec extends SpecBase {
 
         status(result) mustEqual OK
         contentAsString(result) mustBe view(list, firstContactEmail, Some(secondContactEmail))(request, messages(application)).toString
+      }
+    }
+
+    "must return INTERNAL_SERVER_ERROR and the correct view for a GET with SingleOther" in {
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(
+          bind[FileDetailsConnector].toInstance(mockFileDetailsConnector)
+        )
+        .build()
+
+      when(mockFileDetailsConnector.getFileDetails(any())(any(), any()))
+        .thenReturn(
+          Future.successful(
+            Some(
+              FileDetails(
+                "name",
+                messageRefId,
+                Some(SingleOther),
+                localTimeDate,
+                localTimeDate,
+                Accepted,
+                conversationId
+              )
+            )
+          )
+        )
+
+      running(application) {
+        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoad(NormalMode, conversationId).url)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[ThereIsAProblemView]
+
+        status(result) mustEqual INTERNAL_SERVER_ERROR
+        contentAsString(result) mustEqual view()(request, messages(application)).toString
       }
     }
 
@@ -335,6 +373,42 @@ class FileReceivedControllerSpec extends SpecBase {
 
         status(result) mustEqual OK
         contentAsString(result) mustBe view(list, firstContactEmail, Some(secondContactEmail))(request, messages(application)).toString
+      }
+    }
+    "must return INTERNAL_SERVER_ERROR and the correct view for a GET with no user answers" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+        .overrides(
+          bind[FileDetailsConnector].toInstance(mockFileDetailsConnector)
+        )
+        .build()
+
+      when(mockFileDetailsConnector.getFileDetails(any())(any(), any()))
+        .thenReturn(
+          Future.successful(
+            Some(
+              FileDetails(
+                "name",
+                messageRefId,
+                Some(SingleOther),
+                localTimeDate,
+                localTimeDate,
+                Accepted,
+                conversationId
+              )
+            )
+          )
+        )
+
+      running(application) {
+        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoad(NormalMode, conversationId).url)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[ThereIsAProblemView]
+
+        status(result) mustEqual INTERNAL_SERVER_ERROR
+        contentAsString(result) mustEqual view()(request, messages(application)).toString
       }
     }
 

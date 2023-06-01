@@ -28,7 +28,7 @@ import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import viewmodels.FileCheckViewModel
-import views.html.FilePendingChecksView
+import views.html.{FilePendingChecksView, ThereIsAProblemView}
 
 import scala.concurrent.Future
 
@@ -71,6 +71,36 @@ class FilePendingChecksControllerSpec extends SpecBase {
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(fileSummaryList, action, "conversationId")(request, messages(application)).toString
+      }
+    }
+
+    "must redirect to ThereIsAProblem page when file status is invalid" in {
+
+      val validXmlDetails = ValidatedFileData("name", MessageSpecData("messageRefId", MDR401, 2, "OECD1", MultipleNewInformation), fileSize, "1234")
+      val userAnswers: UserAnswers = emptyUserAnswers
+        .set(ConversationIdPage, conversationId)
+        .success
+        .value
+        .set(ValidXMLPage, validXmlDetails)
+        .success
+        .value
+
+      when(mockFileDetailsConnector.getStatus(any())(any(), any())).thenReturn(Future.successful(None))
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(
+          bind[FileDetailsConnector].toInstance(mockFileDetailsConnector)
+        )
+        .build()
+
+      running(application) {
+
+        val request = FakeRequest(GET, routes.FilePendingChecksController.onPageLoad().url)
+        val result  = route(application, request).value
+        val view    = application.injector.instanceOf[ThereIsAProblemView]
+
+        status(result) mustEqual INTERNAL_SERVER_ERROR
+        contentAsString(result) mustEqual view()(request, messages(application)).toString
       }
     }
 
@@ -164,6 +194,21 @@ class FilePendingChecksControllerSpec extends SpecBase {
 
         status(result) mustEqual SEE_OTHER
         redirectLocation(result).value mustEqual routes.FilePassedChecksController.onPageLoad().url
+      }
+    }
+
+    "must throw an internal server error when no file data is found" in {
+
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      running(application) {
+
+        val request = FakeRequest(GET, routes.FilePendingChecksController.onPageLoad().url)
+        val result  = route(application, request).value
+        val view    = application.injector.instanceOf[ThereIsAProblemView]
+
+        status(result) mustEqual INTERNAL_SERVER_ERROR
+        contentAsString(result) mustEqual view()(request, messages(application)).toString
       }
     }
   }
