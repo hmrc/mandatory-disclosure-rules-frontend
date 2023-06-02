@@ -71,6 +71,7 @@ lazy val root = (project in file("."))
   .settings(
     scalacOptions ++= Seq("-Ypatmat-exhaust-depth", "off"),
     scalacOptions ++= Seq(
+    "-Wconf:src=routes/.*:s",
     "-Wconf:cat=unused-imports&site=.*views\\.html.*:s",
     "-Wconf:src=.+/test/.+:s",
     "-Wconf:cat=deprecation&msg=\\.*()\\.*:s",
