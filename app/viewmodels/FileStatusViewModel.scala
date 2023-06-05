@@ -17,7 +17,7 @@
 package viewmodels
 
 import controllers.routes
-import models.{CheckMode, ConversationId}
+import models.{fileDetails, CheckMode, ConversationId}
 import models.fileDetails.FileDetails.localDateTimeOrdering
 import models.fileDetails._
 import play.api.i18n.Messages
@@ -32,6 +32,8 @@ object FileStatusViewModel {
   private def htmlStatus(fileStatus: FileStatus)(implicit messages: Messages): Content = {
     val (cssClass, status): (String, String) = fileStatus match {
       case Rejected(errors) if FileProblemHelper.isProblemStatus(errors) => (Messages(s"cssColour.Problem"), Messages(s"status.Problem"))
+      case RejectedSDES                                                  => (Messages(s"cssColour.Problem"), Messages(s"status.Problem"))
+      case RejectedSDESVirus                                             => (Messages(s"cssColour.Rejected"), Messages(s"status.Rejected"))
       case _ =>
         (Messages(s"cssColour.${fileStatus.toString}"), Messages(s"status.${fileStatus.toString}"))
     }
@@ -45,6 +47,10 @@ object FileStatusViewModel {
         s"<a href='${routes.FileReceivedController.onPageLoad(CheckMode, conversationId).url}' class='govuk-link'>${Messages("fileStatus.accepted")}</a>"
       case Rejected(errors) if FileProblemHelper.isProblemStatus(errors) =>
         s"<a href='${routes.FileProblemController.onPageLoad().url}' class='govuk-link'>${Messages("fileStatus.problem")}</a>"
+      case RejectedSDES =>
+        s"<a href='${routes.UploadFileController.onPageLoad().url}' class='govuk-link'>${Messages("fileStatus.problemSDES")}</a>"
+      case RejectedSDESVirus =>
+        s"<a href='${routes.VirusFileFoundController.onPageLoad().url}' class='govuk-link'>${Messages("fileStatus.problemSDESVirus")}</a>"
       case Rejected(_) =>
         s"<a href='${routes.FileRejectedController.onPageLoad(CheckMode, conversationId).url}' class='govuk-link'>${Messages("fileStatus.rejected")}</a>"
     }
