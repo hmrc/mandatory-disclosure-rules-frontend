@@ -92,8 +92,8 @@ notXMLFile.heading = There is a problem with your file
 notXMLFile.p1 = The selected file could not be uploaded. The file type must be XML.
 
 virusFileFound.title = There is a problem with your file
-virusFileFound.heading = There is a problem with your file
-virusFileFound.p1 = The selected file could not be uploaded. It contains a virus.
+virusFileFound.heading = There is a virus in your file
+virusFileFound.p1 = We cannot accept your file as it contains a virus.
 
 problemPage.uploadLink = Upload a different file
 problemPage.MDR.guidanceLink = Read the MDR technical guidance for XML files
