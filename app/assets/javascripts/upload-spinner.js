@@ -10,7 +10,7 @@ $("#uploadForm").submit(function(e){
         window.location = errorUrl
     } else {
         function disableFileUpload(){
-            $("#file-upload").after().attr('disabled', 'disabled')
+            $("#file-upload").attr('disabled', 'disabled')
         };
 
         function addUploadSpinner(){
