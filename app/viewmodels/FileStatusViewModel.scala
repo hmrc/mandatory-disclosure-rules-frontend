@@ -55,7 +55,7 @@ object FileStatusViewModel {
         s"<a href='${routes.FileRejectedController.onPageLoad(CheckMode, conversationId).url}' class='govuk-link'>${Messages("fileStatus.rejected")}</a>"
     }
 
-    TableRow(HtmlContent(action), classes = "app-custom-class govuk-!-width-one-half")
+    TableRow(HtmlContent(action), classes = "app-custom-class mdr-width-next")
   }
 
   def createStatusTable(allFileDetails: Seq[FileDetails])(implicit messages: Messages): Table = {
@@ -72,10 +72,10 @@ object FileStatusViewModel {
 
     val header = Some(
       Seq(
-        HeadCell(Text(Messages("fileStatus.file")), classes = "app-custom-class govuk-!-width-one-half"),
-        HeadCell(Text(Messages("fileStatus.uploaded")), classes = "app-custom-class govuk-!-width-one-half"),
-        HeadCell(Text(Messages("fileStatus.result")), classes = "app-custom-class"),
-        HeadCell(Text(Messages("fileStatus.nextSteps")), classes = "app-custom-class")
+        HeadCell(Text(Messages("fileStatus.file")), classes = "app-custom-class mdr-width-file"),
+        HeadCell(Text(Messages("fileStatus.uploaded")), classes = "app-custom-class mdr-width-uploaded"),
+        HeadCell(Text(Messages("fileStatus.result")), classes = "app-custom-class mdr-width-result"),
+        HeadCell(Text(Messages("fileStatus.nextSteps")), classes = "app-custom-class mdr-width-next")
       )
     )
     Table(

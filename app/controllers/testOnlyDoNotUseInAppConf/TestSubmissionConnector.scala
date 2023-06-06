@@ -25,10 +25,10 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
-import scala.xml.{Elem, Node, NodeSeq}
 import scala.xml.transform.{RewriteRule, RuleTransformer}
+import scala.xml.{Elem, Node, NodeSeq}
 
-class TestSubmissionConnector @Inject() (httpClient: HttpClient, config: FrontendAppConfig)(implicit ec: ExecutionContext) extends Logging {
+class TestSubmissionConnector @Inject() (httpClient: HttpClient, config: FrontendAppConfig) extends Logging {
 
   val submitxmlUrl = s"${config.mdrUrl}/mandatory-disclosure-rules/test-only/submitxml"
 
