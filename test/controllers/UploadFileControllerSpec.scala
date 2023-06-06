@@ -88,13 +88,10 @@ class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
       }
 
       verifyResult(InProgress, Some(routes.UploadFileController.getStatus(uploadId).url))
-      verifyResult(Quarantined, Some("/report-under-mandatory-disclosure-rules/report/problem/virus-file-found"))
-      verifyResult(
-        UploadRejected(ErrorDetails("REJECTED", "message")),
-        Some("/report-under-mandatory-disclosure-rules/report/problem/not-xml-file")
-      )
-      verifyResult(Failed, Some("/report-under-mandatory-disclosure-rules/report/problem/there-is-a-problem"))
-      verifyResult(UploadedSuccessfully("name", "downloadUrl", fileSize, "1234"), Some("/report-under-mandatory-disclosure-rules/report/file-validation"))
+      verifyResult(Quarantined, Some(routes.VirusFileFoundController.onPageLoad().url))
+      verifyResult(UploadRejected(ErrorDetails("REJECTED", "message")), Some(routes.NotXMLFileController.onPageLoad().url))
+      verifyResult(Failed, Some(routes.ThereIsAProblemController.onPageLoad().url))
+      verifyResult(UploadedSuccessfully("name", "downloadUrl", fileSize, "1234"), Some(routes.FileValidationController.onPageLoad().url))
 
     }
 
