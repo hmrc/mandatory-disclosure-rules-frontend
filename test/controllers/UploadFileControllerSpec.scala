@@ -38,6 +38,7 @@ import scala.concurrent.Future
 class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   val fileSize                                 = 1000L
+  val uploadId: UploadId                       = UploadId("12345")
   val fakeUpscanConnector: FakeUpscanConnector = app.injector.instanceOf[FakeUpscanConnector]
 
   val userAnswers: UserAnswers = UserAnswers(userAnswersId)
@@ -68,9 +69,9 @@ class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
     "must read the progress of the upload from the backend" in {
 
-      val request = FakeRequest(GET, routes.UploadFileController.getStatus().url)
+      val request = FakeRequest(GET, routes.UploadFileController.getStatus(uploadId).url)
 
-      def verifyResult(uploadStatus: UploadStatus, expectedStatus: Int, expectedResult: Option[URL]): Unit = {
+      def verifyResult(uploadStatus: UploadStatus, expectedResult: Option[String]): Unit = {
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(
@@ -81,24 +82,19 @@ class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
         fakeUpscanConnector.setStatus(uploadStatus)
         val result = route(application, request).value
 
-        status(result) mustBe expectedStatus
-        val actualResult = Option(contentAsString(result)).collect { case x if x.trim.nonEmpty => x }.map(Json.parse(_).as[URL])
-        actualResult mustBe expectedResult
+        status(result) mustBe SEE_OTHER
+        redirectLocation(result) mustBe expectedResult
         application.stop()
       }
 
-      verifyResult(InProgress, CONTINUE, None)
-      verifyResult(Quarantined, OK, Some(URL("/report-under-mandatory-disclosure-rules/report/problem/virus-file-found")))
+      verifyResult(InProgress, Some(routes.UploadFileController.getStatus(uploadId).url))
+      verifyResult(Quarantined, Some("/report-under-mandatory-disclosure-rules/report/problem/virus-file-found"))
       verifyResult(
         UploadRejected(ErrorDetails("REJECTED", "message")),
-        OK,
-        Some(URL("/report-under-mandatory-disclosure-rules/report/problem/not-xml-file"))
+        Some("/report-under-mandatory-disclosure-rules/report/problem/not-xml-file")
       )
-      verifyResult(Failed, OK, Some(URL("/report-under-mandatory-disclosure-rules/report/problem/there-is-a-problem")))
-      verifyResult(UploadedSuccessfully("name", "downloadUrl", fileSize, "1234"),
-                   OK,
-                   Some(URL("/report-under-mandatory-disclosure-rules/report/file-validation"))
-      )
+      verifyResult(Failed, Some("/report-under-mandatory-disclosure-rules/report/problem/there-is-a-problem"))
+      verifyResult(UploadedSuccessfully("name", "downloadUrl", fileSize, "1234"), Some("/report-under-mandatory-disclosure-rules/report/file-validation"))
 
     }
 

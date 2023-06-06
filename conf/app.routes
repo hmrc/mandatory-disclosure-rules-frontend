@@ -20,7 +20,7 @@ GET         /unauthorised                                                     co
 
 GET         /report/upload-file                                               controllers.UploadFileController.onPageLoad()
 
-GET         /report/status                                                    controllers.UploadFileController.getStatus()
+GET         /report/status                                                    controllers.UploadFileController.getStatus(uploadId: upscan.UploadId)
 
 GET         /report/error                                                     controllers.UploadFileController.showError(errorCode: String, errorMessage: String, errorRequestId: String)
 
