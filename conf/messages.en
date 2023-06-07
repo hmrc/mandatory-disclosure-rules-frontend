@@ -403,7 +403,8 @@ fileFailedChecks.warning = You may be fined if you do not send another version.
 fileProblem.title = Sorry, there is a problem with the service
 fileProblem.heading = Sorry, there is a problem with the service
 fileProblem.p1 = Try again later.
-fileProblem.p2 = We have not saved any file you uploaded or any answers you entered.If you need to contact someone about your MDR reporting, you can email {0}
+fileProblem.p2 = We have not saved any file you uploaded or any answers you entered. If you need to contact someone about your MDR reporting, you can email {0}
+fileProblem.link = aeoi.enquiries@hmrc.gov.uk
 
 contactUs.title = Contact us to access this service
 contactUs.heading = Contact us to access this service
