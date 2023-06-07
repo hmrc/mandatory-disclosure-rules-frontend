@@ -23,6 +23,7 @@ import models.fileDetails.FileErrorCode.FailedSchemaValidation
 import models.fileDetails.RecordErrorCode.DocRefIDFormat
 import models.fileDetails._
 import models.submissions.SubmissionDetails
+import models.upscan.URL
 import models.{
   ConversationId,
   MDR401,
@@ -38,8 +39,10 @@ import models.{
   ValidatedFileData
 }
 import org.mockito.ArgumentMatchers.any
+import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import pages.{ConversationIdPage, URLPage, ValidXMLPage}
 import play.api.inject.bind
+import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HeaderCarrier
@@ -329,6 +332,64 @@ class SendYourFileControllerSpec extends SpecBase {
           val result = route(application, request).value
 
           status(result) mustEqual NO_CONTENT
+        }
+      }
+
+      "must return NoContent when the file status is 'RejectedSDES'" in {
+
+        val mockFileDetailsConnector = mock[FileDetailsConnector]
+
+        val userAnswers = UserAnswers("Id")
+          .set(ConversationIdPage, conversationId)
+          .success
+          .value
+
+        when(mockFileDetailsConnector.getStatus(any[ConversationId]())(any[HeaderCarrier](), any[ExecutionContext]()))
+          .thenReturn(Future.successful(Some(RejectedSDES)))
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[FileDetailsConnector].toInstance(mockFileDetailsConnector)
+          )
+          .build()
+
+        running(application) {
+          val request = FakeRequest(GET, routes.SendYourFileController.getStatus().url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual OK
+
+          contentAsJson(result) shouldBe Json.toJson(URL(routes.FileProblemController.onPageLoad().url))
+        }
+      }
+
+      "must return NoContent when the file status is 'RejectedSDESVirus'" in {
+
+        val mockFileDetailsConnector = mock[FileDetailsConnector]
+
+        val userAnswers = UserAnswers("Id")
+          .set(ConversationIdPage, conversationId)
+          .success
+          .value
+
+        when(mockFileDetailsConnector.getStatus(any[ConversationId]())(any[HeaderCarrier](), any[ExecutionContext]()))
+          .thenReturn(Future.successful(Some(RejectedSDESVirus)))
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[FileDetailsConnector].toInstance(mockFileDetailsConnector)
+          )
+          .build()
+
+        running(application) {
+          val request = FakeRequest(GET, routes.SendYourFileController.getStatus().url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual OK
+          contentAsJson(result) shouldBe Json.toJson(URL(routes.VirusFileFoundController.onPageLoad().url))
+
         }
       }
 
