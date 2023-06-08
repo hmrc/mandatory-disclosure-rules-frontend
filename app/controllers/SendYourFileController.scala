@@ -99,11 +99,11 @@ class SendYourFileController @Inject() (
                 Future.successful(Ok(Json.toJson(URL(routes.FileRejectedController.onPageLoad(NormalMode, conversationId).url))))
               )
 
-            case Some(RejectedSDES) =>
-              Future.successful(Ok(Json.toJson(URL(routes.FileProblemController.onPageLoad().url))))
-
             case Some(RejectedSDESVirus) =>
               Future.successful(Ok(Json.toJson(URL(routes.VirusFileFoundController.onPageLoad().url))))
+
+            case Some(RejectedSDES) =>
+              Future.successful(Ok(Json.toJson(URL(routes.FileProblemController.onPageLoad().url))))
 
             case Some(Pending) =>
               Future.successful(NoContent)
