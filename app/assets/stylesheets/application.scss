@@ -21,6 +21,10 @@ body:not(.js-enabled) .js-enabled {
         height: 0;
 }
 
+.mdr-table-filename {
+  word-break: break-all;
+}
+
 .mdr-width-file {
   width: 40%;
 }
