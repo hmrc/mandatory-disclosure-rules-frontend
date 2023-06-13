@@ -340,7 +340,7 @@ class SendYourFileControllerSpec extends SpecBase {
         val mockFileDetailsConnector = mock[FileDetailsConnector]
 
         val userAnswers = UserAnswers("Id")
-          .set(ConversationIdPage, conversationId)q
+          .set(ConversationIdPage, conversationId)
           .success
           .value
 
