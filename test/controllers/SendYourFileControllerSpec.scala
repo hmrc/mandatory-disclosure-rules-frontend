@@ -335,12 +335,12 @@ class SendYourFileControllerSpec extends SpecBase {
         }
       }
 
-      "must return NoContent when the file status is 'RejectedSDES'" in {
+      "must return OK and load the 'FileProblem' page when the file status is 'RejectedSDES'" in {
 
         val mockFileDetailsConnector = mock[FileDetailsConnector]
 
         val userAnswers = UserAnswers("Id")
-          .set(ConversationIdPage, conversationId)
+          .set(ConversationIdPage, conversationId)q
           .success
           .value
 
@@ -364,7 +364,7 @@ class SendYourFileControllerSpec extends SpecBase {
         }
       }
 
-      "must return NoContent when the file status is 'RejectedSDESVirus'" in {
+      "must return OK and load the 'VirusFileFound' page when the file status is 'RejectedSDESVirus'" in {
 
         val mockFileDetailsConnector = mock[FileDetailsConnector]
 
