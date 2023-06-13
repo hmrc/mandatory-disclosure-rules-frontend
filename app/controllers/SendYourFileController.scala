@@ -19,7 +19,7 @@ package controllers
 import config.FrontendAppConfig
 import connectors.{FileDetailsConnector, SubmissionConnector}
 import controllers.actions.{CheckForSubmissionAction, DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import models.fileDetails.{Pending, Rejected, ValidationErrors, Accepted => FileStatusAccepted}
+import models.fileDetails.{Pending, Rejected, RejectedSDES, RejectedSDESVirus, ValidationErrors, Accepted => FileStatusAccepted}
 import models.submissions.SubmissionDetails
 import models.upscan.URL
 import models.{MultipleCorrectionsDeletions, NormalMode, SingleCorrection, SingleDeletion, SingleOther, ValidatedFileData}
@@ -98,6 +98,13 @@ class SendYourFileController @Inject() (
                 errors,
                 Future.successful(Ok(Json.toJson(URL(routes.FileRejectedController.onPageLoad(NormalMode, conversationId).url))))
               )
+
+            case Some(RejectedSDESVirus) =>
+              Future.successful(Ok(Json.toJson(URL(routes.VirusFileFoundController.onPageLoad().url))))
+
+            case Some(RejectedSDES) =>
+              Future.successful(Ok(Json.toJson(URL(routes.FileProblemController.onPageLoad().url))))
+
             case Some(Pending) =>
               Future.successful(NoContent)
             case None =>
