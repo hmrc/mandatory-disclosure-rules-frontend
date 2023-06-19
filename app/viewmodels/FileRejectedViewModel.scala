@@ -150,9 +150,13 @@ object FileRejectedViewModel {
   val error_details_906  = "If DocTypeIndic of MdrReport is OECD3 the DocTypeIndic of Disclosing must be OECD3"
   val error_details_907  = "If MessageTypeIndic is MDR401, Disclosing DocTypeIndic can only be OECD1"
   val error_details_908  = "If MessageTypeIndic is MDR401 and Diclosing DocTypeIndic is OECD1, the MdrReport must be present and have DocTypeIndic of OECD1"
-  val error_details_909  = "The DocRefId format does not match the prescribed format. It must start with your MDR ID (15 characters), then include up to 85 characters to make the reference unique. You can find your MDR ID by signing in to the MDR service."
-  val error_details_910  = "The MessageRefId format does not match the prescribed format. It must start with your MDR ID (15 characters), then include up to 70 characters to make the reference unique. You can find your MDR ID by signing in to the MDR service."
-  val error_details_911  = """TIN issuedby must be provided where a TIN has been reported. The only exception is where "NOTIN" has been reported"""
+
+  val error_details_909 =
+    "The DocRefId format does not match the prescribed format. It must start with your MDR ID (15 characters), then include up to 85 characters to make the reference unique. You can find your MDR ID by signing in to the MDR service."
+
+  val error_details_910 =
+    "The MessageRefId format does not match the prescribed format. It must start with your MDR ID (15 characters), then include up to 70 characters to make the reference unique. You can find your MDR ID by signing in to the MDR service."
+  val error_details_911 = """TIN issuedby must be provided where a TIN has been reported. The only exception is where "NOTIN" has been reported"""
 
   val error_details_912 =
     "The top level of the structure chart must not include the elements: mdr:ownership and mdr:InvestAmount. These should only be provided in the  mdr:ListChilds tag"
@@ -172,6 +176,5 @@ object FileRejectedViewModel {
     error_details_909,
     error_details_911,
     error_details_912
-
   )
 }

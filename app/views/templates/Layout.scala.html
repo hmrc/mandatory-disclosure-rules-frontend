@@ -71,7 +71,6 @@
             phaseBanner = Some(standardBetaBanner(url = appConfig.feedbackUrl))
         ),
         pageTitle = Some(pageTitle),
-        cspNonce = CSPNonce.get,
         templateOverrides = TemplateOverrides(
             additionalHeadBlock = if(timeout) Some(timeOutDialog) else None,
             additionalScriptsBlock = Some(additionalScripts)
