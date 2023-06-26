@@ -96,3 +96,9 @@ GET        /report/file-not-accepted                                          co
 GET        /problem/contact-us                                                controllers.ContactUsController.onPageLoad()
 
 GET        /problem/information-sent                                          controllers.InformationSentController.onPageLoad()
+
+GET        /registered-address-in-uk                                          controllers.RegisteredAddressInUKController.onPageLoad(mode: Mode = NormalMode)
+POST       /registered-address-in-uk                                          controllers.RegisteredAddressInUKController.onSubmit(mode: Mode = NormalMode)
+
+GET        /registered-address-in-uk                                          controllers.RegisteredAddressInUKController.onPageLoad(mode: Mode = CheckMode)
+POST       /registered-address-in-uk                                          controllers.RegisteredAddressInUKController.onSubmit(mode: Mode = CheckMode)
