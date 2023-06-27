@@ -32,7 +32,7 @@ trait SummaryListFluency {
   implicit class FluentSummaryList(list: SummaryList) {
 
     def withoutBorders(): SummaryList =
-      list copy (classes = s"${list.classes} govuk-!-margin-bottom-5")
+      list copy (classes = s"${list.classes} govuk-summary-list--no-border")
 
     def withCssClass(className: String): SummaryList =
       list copy (classes = s"${list.classes} $className")

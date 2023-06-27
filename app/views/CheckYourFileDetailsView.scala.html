@@ -27,6 +27,7 @@
     <h1 class="govuk-heading-l">@messages("checkYourFileDetails.heading")</h1>
 
     @govukSummaryList(fileDetails)
+    <hr aria-hidden="true">
 
    @govukButton(
     ButtonViewModel(Text(messages("site.continue"))).withAttribute( "id" -> "submit")
