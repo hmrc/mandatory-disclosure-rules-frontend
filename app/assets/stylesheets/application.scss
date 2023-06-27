@@ -20,3 +20,23 @@ body:not(.js-enabled) .js-enabled {
         width: 0;
         height: 0;
 }
+
+.mdr-table-filename {
+  word-break: break-all;
+}
+
+.mdr-width-file {
+  width: 40%;
+}
+
+.mdr-width-uploaded {
+  width: 20%;
+}
+
+.mdr-width-result {
+  width: 18%;
+}
+
+.mdr-width-next {
+  width: 22%;
+}

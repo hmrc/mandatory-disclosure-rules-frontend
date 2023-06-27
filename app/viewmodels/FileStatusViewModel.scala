@@ -17,7 +17,7 @@
 package viewmodels
 
 import controllers.routes
-import models.{CheckMode, ConversationId}
+import models.{fileDetails, CheckMode, ConversationId}
 import models.fileDetails.FileDetails.localDateTimeOrdering
 import models.fileDetails._
 import play.api.i18n.Messages
@@ -32,6 +32,8 @@ object FileStatusViewModel {
   private def htmlStatus(fileStatus: FileStatus)(implicit messages: Messages): Content = {
     val (cssClass, status): (String, String) = fileStatus match {
       case Rejected(errors) if FileProblemHelper.isProblemStatus(errors) => (Messages(s"cssColour.Problem"), Messages(s"status.Problem"))
+      case RejectedSDES                                                  => (Messages(s"cssColour.Problem"), Messages(s"status.Problem"))
+      case RejectedSDESVirus                                             => (Messages(s"cssColour.Rejected"), Messages(s"status.Rejected"))
       case _ =>
         (Messages(s"cssColour.${fileStatus.toString}"), Messages(s"status.${fileStatus.toString}"))
     }
@@ -45,11 +47,15 @@ object FileStatusViewModel {
         s"<a href='${routes.FileReceivedController.onPageLoad(CheckMode, conversationId).url}' class='govuk-link'>${Messages("fileStatus.accepted")}</a>"
       case Rejected(errors) if FileProblemHelper.isProblemStatus(errors) =>
         s"<a href='${routes.FileProblemController.onPageLoad().url}' class='govuk-link'>${Messages("fileStatus.problem")}</a>"
+      case RejectedSDES =>
+        s"<a href='${routes.UploadFileController.onPageLoad().url}' class='govuk-link'>${Messages("fileStatus.problemSDES")}</a>"
+      case RejectedSDESVirus =>
+        s"<a href='${routes.VirusFileFoundController.onPageLoad().url}' class='govuk-link'>${Messages("fileStatus.problemSDESVirus")}</a>"
       case Rejected(_) =>
         s"<a href='${routes.FileRejectedController.onPageLoad(CheckMode, conversationId).url}' class='govuk-link'>${Messages("fileStatus.rejected")}</a>"
     }
 
-    TableRow(HtmlContent(action), classes = "app-custom-class govuk-!-width-one-half")
+    TableRow(HtmlContent(action), classes = "app-custom-class mdr-width-next")
   }
 
   def createStatusTable(allFileDetails: Seq[FileDetails])(implicit messages: Messages): Table = {
@@ -57,7 +63,7 @@ object FileStatusViewModel {
     val tableRow: Seq[Seq[TableRow]] = allFileDetails.sortBy(_.submitted)(Ordering[LocalDateTime].reverse) map {
       fileDetails =>
         Seq(
-          TableRow(Text(fileDetails.name)),
+          TableRow(content = Text(fileDetails.name), classes = "mdr-table-filename"),
           TableRow(Text(DateTimeFormatUtil.dateFormatted(fileDetails.submitted))),
           TableRow(htmlStatus(fileDetails.status)),
           buildTableRow(fileDetails.status, fileDetails.conversationId)
@@ -66,10 +72,10 @@ object FileStatusViewModel {
 
     val header = Some(
       Seq(
-        HeadCell(Text(Messages("fileStatus.file")), classes = "app-custom-class govuk-!-width-one-half"),
-        HeadCell(Text(Messages("fileStatus.uploaded")), classes = "app-custom-class govuk-!-width-one-half"),
-        HeadCell(Text(Messages("fileStatus.result")), classes = "app-custom-class"),
-        HeadCell(Text(Messages("fileStatus.nextSteps")), classes = "app-custom-class")
+        HeadCell(Text(Messages("fileStatus.file")), classes = "app-custom-class mdr-width-file"),
+        HeadCell(Text(Messages("fileStatus.uploaded")), classes = "app-custom-class mdr-width-uploaded"),
+        HeadCell(Text(Messages("fileStatus.result")), classes = "app-custom-class mdr-width-result"),
+        HeadCell(Text(Messages("fileStatus.nextSteps")), classes = "app-custom-class mdr-width-next")
       )
     )
     Table(

@@ -12,7 +12,6 @@ lazy val root = (project in file("."))
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(DefaultBuildSettings.scalaSettings: _*)
   .settings(DefaultBuildSettings.defaultSettings(): _*)
-  .settings(SbtDistributablesPlugin.publishingSettings: _*)
   .settings(inConfig(Test)(testSettings): _*)
   .configs(IntegrationTest)
   .settings(inConfig(IntegrationTest)(itSettings): _*)
@@ -71,6 +70,7 @@ lazy val root = (project in file("."))
   .settings(
     scalacOptions ++= Seq("-Ypatmat-exhaust-depth", "off"),
     scalacOptions ++= Seq(
+    "-Wconf:src=routes/.*:s",
     "-Wconf:cat=unused-imports&site=.*views\\.html.*:s",
     "-Wconf:src=.+/test/.+:s",
     "-Wconf:cat=deprecation&msg=\\.*()\\.*:s",

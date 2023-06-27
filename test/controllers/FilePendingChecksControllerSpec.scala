@@ -167,6 +167,70 @@ class FilePendingChecksControllerSpec extends SpecBase {
       }
     }
 
+    "must redirect to virus Page when RejectedSDESVirus status returned with regular errors" in {
+
+      val validXmlDetails = ValidatedFileData("name", MessageSpecData("messageRefId", MDR401, 2, "OECD1", MultipleNewInformation), fileSize, "1234")
+      val validationErrors =
+        ValidationErrors(Some(Seq(FileErrors(MessageRefIDHasAlreadyBeenUsed, None))), Some(Seq(RecordError(MissingCorrDocRefId, None, None))))
+
+      val userAnswers: UserAnswers = emptyUserAnswers
+        .set(ConversationIdPage, conversationId)
+        .success
+        .value
+        .set(ValidXMLPage, validXmlDetails)
+        .success
+        .value
+
+      when(mockFileDetailsConnector.getStatus(any())(any(), any())).thenReturn(Future.successful(Some(RejectedSDESVirus)))
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(
+          bind[FileDetailsConnector].toInstance(mockFileDetailsConnector)
+        )
+        .build()
+
+      running(application) {
+
+        val request = FakeRequest(GET, routes.FilePendingChecksController.onPageLoad().url)
+        val result  = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.VirusFileFoundController.onPageLoad().url
+      }
+    }
+
+    "must redirect to problem Page when RejectedSDES status returned with regular errors" in {
+
+      val validXmlDetails = ValidatedFileData("name", MessageSpecData("messageRefId", MDR401, 2, "OECD1", MultipleNewInformation), fileSize, "1234")
+      val validationErrors =
+        ValidationErrors(Some(Seq(FileErrors(MessageRefIDHasAlreadyBeenUsed, None))), Some(Seq(RecordError(MissingCorrDocRefId, None, None))))
+
+      val userAnswers: UserAnswers = emptyUserAnswers
+        .set(ConversationIdPage, conversationId)
+        .success
+        .value
+        .set(ValidXMLPage, validXmlDetails)
+        .success
+        .value
+
+      when(mockFileDetailsConnector.getStatus(any())(any(), any())).thenReturn(Future.successful(Some(RejectedSDES)))
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(
+          bind[FileDetailsConnector].toInstance(mockFileDetailsConnector)
+        )
+        .build()
+
+      running(application) {
+
+        val request = FakeRequest(GET, routes.FilePendingChecksController.onPageLoad().url)
+        val result  = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.FileProblemController.onPageLoad().url
+      }
+    }
+
     "must redirect to File Passed Checks Page when ACCEPTED status returned" in {
 
       val validXmlDetails = ValidatedFileData("name", MessageSpecData("messageRefId", MDR401, 2, "OECD1", MultipleNewInformation), fileSize, "1234")

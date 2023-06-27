@@ -87,7 +87,7 @@ class FileReceivedControllerSpec extends SpecBase {
         actions = None
       )
     )
-  ).withoutBorders()
+  ).withMargin()
     .withCssClass("govuk-!-margin-bottom-0")
 
   "FileReceived Controller" - {
@@ -368,7 +368,7 @@ class FileReceivedControllerSpec extends SpecBase {
               value = ValueViewModel(Text(s"${localTimeDate.format(dateFormatter)} at ${localTimeDate.format(timeFormatter).toLowerCase}"))
             )
           )
-        ).withoutBorders()
+        ).withMargin()
           .withCssClass("govuk-!-margin-bottom-0")
 
         status(result) mustEqual OK

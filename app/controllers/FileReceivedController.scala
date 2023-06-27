@@ -59,7 +59,7 @@ class FileReceivedController @Inject() (
               } else {
                 val detailsList =
                   SummaryListViewModel(FileReceivedViewModel.getSummaryRows(details, details.reportType))
-                    .withoutBorders()
+                    .withMargin()
                     .withCssClass("govuk-!-margin-bottom-0")
                 for {
                   updatedAnswers <- Future.fromTry(request.userAnswers.remove(UploadIDPage))

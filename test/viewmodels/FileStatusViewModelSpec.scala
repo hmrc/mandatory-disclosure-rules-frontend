@@ -33,10 +33,10 @@ class FileStatusViewModelSpec extends SpecBase {
   "FileStatusViewModel" - {
     val header: Option[List[HeadCell]] = Some(
       List(
-        HeadCell(Text("File"), None, "app-custom-class govuk-!-width-one-half", None, None, Map()),
-        HeadCell(Text("Uploaded"), None, "app-custom-class govuk-!-width-one-half", None, None, Map()),
-        HeadCell(Text("Result"), None, "app-custom-class", None, None, Map()),
-        HeadCell(Text("Next steps"), None, "app-custom-class", None, None, Map())
+        HeadCell(Text("File"), None, "app-custom-class mdr-width-file", None, None, Map()),
+        HeadCell(Text("Uploaded"), None, "app-custom-class mdr-width-uploaded", None, None, Map()),
+        HeadCell(Text("Result"), None, "app-custom-class mdr-width-result", None, None, Map()),
+        HeadCell(Text("Next step"), None, "app-custom-class mdr-width-next", None, None, Map())
       )
     )
 
@@ -44,36 +44,36 @@ class FileStatusViewModelSpec extends SpecBase {
       val expectedTable = Table(
         List(
           List(
-            TableRow(Text("name3.xml"), None, "", None, None, Map()),
+            TableRow(Text("name3.xml"), None, "mdr-table-filename", None, None, Map()),
             TableRow(Text("18 Mar 2022 11:10am"), None, "", None, None, Map()),
             TableRow(HtmlContent("<strong class='govuk-tag govuk-tag--red'>Failed</strong>"), None, "", None, None, Map()),
             TableRow(
               HtmlContent("<a href='/report-under-mandatory-disclosure-rules/report/problem/business-rule-errors/id' class='govuk-link'>Check errors</a>"),
               None,
-              "app-custom-class govuk-!-width-one-half",
+              "app-custom-class mdr-width-next",
               None,
               None,
               Map()
             )
           ),
           List(
-            TableRow(Text("name2.xml"), None, "", None, None, Map()),
+            TableRow(Text("name2.xml"), None, "mdr-table-filename", None, None, Map()),
             TableRow(Text("18 Mar 2022 10:15am"), None, "", None, None, Map()),
             TableRow(HtmlContent("<strong class='govuk-tag govuk-tag--green'>Passed</strong>"), None, "", None, None, Map()),
             TableRow(
               HtmlContent("<a href='/report-under-mandatory-disclosure-rules/report/file-confirmation/id' class='govuk-link'>Go to confirmation</a>"),
               None,
-              "app-custom-class govuk-!-width-one-half",
+              "app-custom-class mdr-width-next",
               None,
               None,
               Map()
             )
           ),
           List(
-            TableRow(Text("name1.xml"), None, "", None, None, Map()),
+            TableRow(Text("name1.xml"), None, "mdr-table-filename", None, None, Map()),
             TableRow(Text("18 Mar 2022 8:10am"), None, "", None, None, Map()),
             TableRow(HtmlContent("<strong class='govuk-tag govuk-tag--yellow'>Pending</strong>"), None, "", None, None, Map()),
-            TableRow(HtmlContent("<p class='govuk-visually-hidden'>None</p>"), None, "app-custom-class govuk-!-width-one-half", None, None, Map())
+            TableRow(HtmlContent("<p class='govuk-visually-hidden'>None</p>"), None, "app-custom-class mdr-width-next", None, None, Map())
           )
         ),
         header,
@@ -125,19 +125,19 @@ class FileStatusViewModelSpec extends SpecBase {
       val expectedTable = Table(
         List(
           List(
-            TableRow(Text("name1.xml"), None, "", None, None, Map()),
+            TableRow(Text("name1.xml"), None, "mdr-table-filename", None, None, Map()),
             TableRow(Text("19 Mar 2022 11:16am"), None, "", None, None, Map()),
             TableRow(HtmlContent("<strong class='govuk-tag govuk-tag--yellow'>Pending</strong>"), None, "", None, None, Map()),
-            TableRow(HtmlContent("<p class='govuk-visually-hidden'>None</p>"), None, "app-custom-class govuk-!-width-one-half", None, None, Map())
+            TableRow(HtmlContent("<p class='govuk-visually-hidden'>None</p>"), None, "app-custom-class mdr-width-next", None, None, Map())
           ),
           List(
-            TableRow(Text("name2.xml"), None, "", None, None, Map()),
+            TableRow(Text("name2.xml"), None, "mdr-table-filename", None, None, Map()),
             TableRow(Text("18 Mar 2022 11:09am"), None, "", None, None, Map()),
             TableRow(HtmlContent("<strong class='govuk-tag govuk-tag--purple'>Problem</strong>"), None, "", None, None, Map()),
             TableRow(
               HtmlContent("<a href='/report-under-mandatory-disclosure-rules/report/file-not-accepted' class='govuk-link'>Contact us</a>"),
               None,
-              "app-custom-class govuk-!-width-one-half",
+              "app-custom-class mdr-width-next",
               None,
               None,
               Map()
@@ -185,32 +185,32 @@ class FileStatusViewModelSpec extends SpecBase {
       val expectedTable = Table(
         List(
           List(
-            TableRow(Text("name1.xml"), None, "", None, None, Map()),
+            TableRow(Text("name1.xml"), None, "mdr-table-filename", None, None, Map()),
             TableRow(Text("19 Mar 2022 11:16am"), None, "", None, None, Map()),
             TableRow(HtmlContent("<strong class='govuk-tag govuk-tag--yellow'>Pending</strong>"), None, "", None, None, Map()),
-            TableRow(HtmlContent("<p class='govuk-visually-hidden'>None</p>"), None, "app-custom-class govuk-!-width-one-half", None, None, Map())
+            TableRow(HtmlContent("<p class='govuk-visually-hidden'>None</p>"), None, "app-custom-class mdr-width-next", None, None, Map())
           ),
           List(
-            TableRow(Text("name2.xml"), None, "", None, None, Map()),
+            TableRow(Text("name2.xml"), None, "mdr-table-filename", None, None, Map()),
             TableRow(Text("18 Mar 2022 11:09am"), None, "", None, None, Map()),
             TableRow(HtmlContent("<strong class='govuk-tag govuk-tag--purple'>Problem</strong>"), None, "", None, None, Map()),
             TableRow(
               HtmlContent("<a href='/report-under-mandatory-disclosure-rules/report/file-not-accepted' class='govuk-link'>Contact us</a>"),
               None,
-              "app-custom-class govuk-!-width-one-half",
+              "app-custom-class mdr-width-next",
               None,
               None,
               Map()
             )
           ),
           List(
-            TableRow(Text("name3.xml"), None, "", None, None, Map()),
+            TableRow(Text("name3.xml"), None, "mdr-table-filename", None, None, Map()),
             TableRow(Text("17 Mar 2022 11:09am"), None, "", None, None, Map()),
             TableRow(HtmlContent("<strong class='govuk-tag govuk-tag--purple'>Problem</strong>"), None, "", None, None, Map()),
             TableRow(
               HtmlContent("<a href='/report-under-mandatory-disclosure-rules/report/file-not-accepted' class='govuk-link'>Contact us</a>"),
               None,
-              "app-custom-class govuk-!-width-one-half",
+              "app-custom-class mdr-width-next",
               None,
               None,
               Map()
