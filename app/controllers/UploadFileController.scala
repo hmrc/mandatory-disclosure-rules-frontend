@@ -16,6 +16,8 @@
 
 package controllers
 
+import akka.actor.ActorSystem
+import config.FrontendAppConfig
 import connectors.UpscanConnector
 import controllers.actions._
 import forms.UploadFileFormProvider
@@ -25,7 +27,6 @@ import pages.UploadIDPage
 import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
 import uk.gov.hmrc.http.HeaderCarrier
@@ -33,6 +34,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.UploadFileView
 
 import javax.inject.Inject
+import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 
 class UploadFileController @Inject() (
@@ -43,6 +45,8 @@ class UploadFileController @Inject() (
   upscanConnector: UpscanConnector,
   formProvider: UploadFileFormProvider,
   sessionRepository: SessionRepository,
+  config: FrontendAppConfig,
+  actorSystem: ActorSystem,
   val controllerComponents: MessagesControllerComponents,
   view: UploadFileView
 )(implicit ec: ExecutionContext)
@@ -57,10 +61,11 @@ class UploadFileController @Inject() (
       toResponse(form)
   }
 
-  private def toResponse(preparedForm: Form[String])(implicit request: DataRequest[AnyContent], hc: HeaderCarrier): Future[Result] =
+  private def toResponse(preparedForm: Form[String])(implicit request: DataRequest[AnyContent], hc: HeaderCarrier): Future[Result] = {
+    val uploadId: UploadId = UploadId.generate
     (for {
-      upscanInitiateResponse <- upscanConnector.getUpscanFormData
-      uploadId               <- upscanConnector.requestUpload(upscanInitiateResponse.fileReference)
+      upscanInitiateResponse <- upscanConnector.getUpscanFormData(uploadId)
+      uploadId               <- upscanConnector.requestUpload(uploadId, upscanInitiateResponse.fileReference)
       updatedAnswers         <- Future.fromTry(request.userAnswers.set(UploadIDPage, uploadId))
       _                      <- sessionRepository.set(updatedAnswers)
     } yield Ok(view(preparedForm, upscanInitiateResponse)))
@@ -69,6 +74,7 @@ class UploadFileController @Inject() (
           logger.warn(s"UploadFileController: An exception occurred when contacting Upscan: $e")
           Redirect(routes.ThereIsAProblemController.onPageLoad())
       }
+  }
 
   def showError(errorCode: String, errorMessage: String, errorRequestId: String): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
@@ -84,33 +90,31 @@ class UploadFileController @Inject() (
       }
   }
 
-  def getStatus: Action[AnyContent] = (identify andThen getData() andThen requireData).async {
+  def getStatus(uploadId: UploadId): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
-      request.userAnswers.get(UploadIDPage) match {
-        case Some(uploadId) =>
-          upscanConnector.getUploadStatus(uploadId) flatMap {
-            case Some(_: UploadedSuccessfully) =>
-              Future.successful(Ok(Json.toJson(URL(routes.FileValidationController.onPageLoad().url))))
-            case Some(r: UploadRejected) =>
-              if (r.details.message.contains("octet-stream")) {
-                logger.warn(s"Show errorForm on rejection $r")
-                val errorReason = r.details.failureReason
-                Future.successful(Ok(Json.toJson(URL(routes.UploadFileController.showError("OctetStream", errorReason, "").url))))
-              } else {
-                logger.warn(s"Upload rejected. Error details: ${r.details}")
-                Future.successful(Ok(Json.toJson(URL(routes.NotXMLFileController.onPageLoad().url))))
-              }
-            case Some(Quarantined) =>
-              Future.successful(Ok(Json.toJson(URL(routes.VirusFileFoundController.onPageLoad().url))))
-            case Some(Failed) =>
-              Future.successful(Ok(Json.toJson(URL(routes.ThereIsAProblemController.onPageLoad().url))))
-            case Some(_) =>
-              Future.successful(Continue)
-            case None =>
-              Future.successful(Ok(Json.toJson(URL(routes.ThereIsAProblemController.onPageLoad().url))))
-          }
-        case None =>
-          Future.successful(Ok(Json.toJson(URL(routes.ThereIsAProblemController.onPageLoad().url))))
+      // Delay the call to make sure the backend db has been populated by the upscan callback first
+      akka.pattern.after(config.upscanCallbackDelayInSeconds.seconds, actorSystem.scheduler) {
+        upscanConnector.getUploadStatus(uploadId) map {
+          case Some(_: UploadedSuccessfully) =>
+            Redirect(routes.FileValidationController.onPageLoad().url)
+          case Some(r: UploadRejected) =>
+            if (r.details.message.contains("octet-stream")) {
+              logger.warn(s"Show errorForm on rejection $r")
+              val errorReason = r.details.failureReason
+              Redirect(routes.UploadFileController.showError("OctetStream", errorReason, "").url)
+            } else {
+              logger.warn(s"Upload rejected. Error details: ${r.details}")
+              Redirect(routes.NotXMLFileController.onPageLoad().url)
+            }
+          case Some(Quarantined) =>
+            Redirect(routes.VirusFileFoundController.onPageLoad().url)
+          case Some(Failed) =>
+            Redirect(routes.ThereIsAProblemController.onPageLoad().url)
+          case Some(_) =>
+            Redirect(routes.UploadFileController.getStatus(uploadId).url)
+          case None =>
+            Redirect(routes.ThereIsAProblemController.onPageLoad().url)
+        }
       }
   }
 }

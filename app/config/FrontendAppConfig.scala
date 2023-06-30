@@ -45,6 +45,8 @@ class FrontendAppConfig @Inject() (configuration: Configuration, servicesConfig:
   lazy val homePageUrl: String = configuration.get[String]("urls.homepage")
 
   val upscanInitiateHost: String = servicesConfig.baseUrl("upscan")
+  val upscanRedirectBase: String = configuration.get[String]("microservice.services.upscan.redirect-base")
+  val upscanCallbackDelayInSeconds: Int = configuration.get[Int]("microservice.services.upscan.callbackDelayInSeconds")
   val upscanMaxFileSize: Int     = configuration.get[Int]("microservice.services.upscan.max-file-size-in-mb")
 
   val mdrUrl: String = servicesConfig.baseUrl("mandatory-disclosure-rules")
