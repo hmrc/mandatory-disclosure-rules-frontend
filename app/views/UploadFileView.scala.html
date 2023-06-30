@@ -43,7 +43,7 @@
    <input type="hidden" name="@key" value="@value" />
   }
   <input type="hidden" id="upScanErrorRedirectUrl" value="/report-under-mandatory-disclosure-rules/report/error" />
-  <input type="hidden" id="processingMessage" value="@messages("fileCheck.heading")" />
+  <p class="govuk-visually-hidden" id="processingMessage" >@messages("fileCheck.p1")</p>
   <div id="file-upload-container" class="js-visible mt-3">
 
   @govukFileUpload(
