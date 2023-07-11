@@ -18,6 +18,7 @@ package connectors
 
 import models.{ConversationId, MDR401, MessageSpecData, MultipleNewInformation}
 import models.submissions.SubmissionDetails
+import models.upscan.UploadId
 import play.api.Application
 import play.api.http.Status.{BAD_REQUEST, INTERNAL_SERVER_ERROR, OK}
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -37,8 +38,8 @@ class SubmissionConnectorSpec extends Connector {
   val conversationId: ConversationId      = ConversationId("UUID")
   val submitUrl                           = "/mandatory-disclosure-rules/submit"
   val messageSpec                         = MessageSpecData("x9999", MDR401, 2, "OECD1", MultipleNewInformation)
-
-  val fileSize = 1000L
+  val uploadId                            = UploadId("uploadId")
+  val fileSize                            = 1000L
 
   "SubmissionConnector" - {
 
@@ -46,7 +47,7 @@ class SubmissionConnectorSpec extends Connector {
 
       stubPostResponse(submitUrl, OK, Json.toJson(conversationId).toString())
 
-      whenReady(connector.submitDocument(SubmissionDetails("test-file.xml", "enrolmentID", fileSize, "dummyURL", "1234", messageSpec))) {
+      whenReady(connector.submitDocument(SubmissionDetails("test-file.xml", uploadId, "enrolmentID", fileSize, "dummyURL", "1234", messageSpec))) {
         result =>
           result.value mustBe conversationId
       }
@@ -55,7 +56,7 @@ class SubmissionConnectorSpec extends Connector {
     "must return a 400 when submission of xml fails with BadRequest" in {
       stubPostResponse(submitUrl, BAD_REQUEST)
 
-      whenReady(connector.submitDocument(SubmissionDetails("test-bad-file.xml", "enrolmentID", fileSize, "dummyUrl", "1234", messageSpec))) {
+      whenReady(connector.submitDocument(SubmissionDetails("test-bad-file.xml", uploadId, "enrolmentID", fileSize, "dummyUrl", "1234", messageSpec))) {
         result =>
           result mustBe None
       }
@@ -64,7 +65,7 @@ class SubmissionConnectorSpec extends Connector {
     "must return a 500 when submission of xml fails with InternalServer Error" in {
       stubPostResponse(submitUrl, INTERNAL_SERVER_ERROR)
 
-      whenReady(connector.submitDocument(SubmissionDetails("test-file.xml", "enrolmentID", fileSize, "dummyURL", "1234", messageSpec))) {
+      whenReady(connector.submitDocument(SubmissionDetails("test-file.xml", uploadId, "enrolmentID", fileSize, "dummyURL", "1234", messageSpec))) {
         result =>
           result mustBe None
       }
