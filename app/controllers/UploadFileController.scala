@@ -21,14 +21,18 @@ import config.FrontendAppConfig
 import connectors.UpscanConnector
 import controllers.actions._
 import forms.UploadFileFormProvider
+import models.ConversationId
+import models.audit.{AuditFileUpload, AuditType}
 import models.requests.DataRequest
 import models.upscan._
 import pages.UploadIDPage
 import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
+import services.audit.AuditService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.UploadFileView
@@ -47,6 +51,7 @@ class UploadFileController @Inject() (
   sessionRepository: SessionRepository,
   config: FrontendAppConfig,
   actorSystem: ActorSystem,
+  auditService: AuditService,
   val controllerComponents: MessagesControllerComponents,
   view: UploadFileView
 )(implicit ec: ExecutionContext)
@@ -95,20 +100,24 @@ class UploadFileController @Inject() (
       // Delay the call to make sure the backend db has been populated by the upscan callback first
       akka.pattern.after(config.upscanCallbackDelayInSeconds.seconds, actorSystem.scheduler) {
         upscanConnector.getUploadStatus(uploadId) map {
-          case Some(_: UploadedSuccessfully) =>
+          case Some(file: UploadedSuccessfully) =>
+            sendAuditEvent(uploadId, file)
             Redirect(routes.FileValidationController.onPageLoad().url)
-          case Some(r: UploadRejected) =>
-            if (r.details.message.contains("octet-stream")) {
-              logger.warn(s"Show errorForm on rejection $r")
-              val errorReason = r.details.failureReason
+          case Some(rejected: UploadRejected) =>
+            sendAuditEvent(uploadId, rejected)
+            if (rejected.details.message.contains("octet-stream")) {
+              logger.warn(s"Show errorForm on rejection $rejected")
+              val errorReason = rejected.details.failureReason
               Redirect(routes.UploadFileController.showError("OctetStream", errorReason, "").url)
             } else {
-              logger.warn(s"Upload rejected. Error details: ${r.details}")
+              logger.warn(s"Upload rejected. Error details: ${rejected.details}")
               Redirect(routes.NotXMLFileController.onPageLoad().url)
             }
           case Some(Quarantined) =>
+            sendAuditEvent(uploadId, Quarantined)
             Redirect(routes.VirusFileFoundController.onPageLoad().url)
           case Some(Failed) =>
+            sendAuditEvent(uploadId, Failed)
             Redirect(routes.ThereIsAProblemController.onPageLoad().url)
           case Some(_) =>
             Redirect(routes.UploadFileController.getStatus(uploadId).url)
@@ -117,4 +126,10 @@ class UploadFileController @Inject() (
         }
       }
   }
+
+  private def sendAuditEvent(uploadId: UploadId, uploadStatus: UploadStatus)(implicit request: DataRequest[_]): Unit =
+    auditService.sendAuditEvent(
+      AuditType.fileUpload,
+      Json.toJson(AuditFileUpload(uploadStatus, request.subscriptionId, uploadId))
+    )
 }

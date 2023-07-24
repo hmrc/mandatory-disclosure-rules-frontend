@@ -23,7 +23,7 @@ import models.fileDetails.FileErrorCode.FailedSchemaValidation
 import models.fileDetails.RecordErrorCode.DocRefIDFormat
 import models.fileDetails._
 import models.submissions.SubmissionDetails
-import models.upscan.URL
+import models.upscan.{URL, UploadId}
 import models.{
   ConversationId,
   MDR401,
@@ -40,7 +40,7 @@ import models.{
 }
 import org.mockito.ArgumentMatchers.any
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
-import pages.{ConversationIdPage, URLPage, ValidXMLPage}
+import pages.{ConversationIdPage, URLPage, UploadIDPage, ValidXMLPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
@@ -206,6 +206,9 @@ class SendYourFileControllerSpec extends SpecBase {
           .success
           .value
           .set(URLPage, "url")
+          .success
+          .value
+          .set(UploadIDPage, UploadId("uploadId"))
           .success
           .value
 

@@ -14,21 +14,8 @@
  * limitations under the License.
  */
 
-package models.submissions
+package models.audit
 
-import models.MessageSpecData
-import models.upscan.UploadId
-import play.api.libs.json.Json
-
-case class SubmissionDetails(fileName: String,
-                             uploadId: UploadId,
-                             enrolmentId: String,
-                             fileSize: Long,
-                             documentUrl: String,
-                             checkSum: String,
-                             messageSpecData: MessageSpecData
-)
-
-object SubmissionDetails {
-  implicit val format = Json.format[SubmissionDetails]
+object AuditType {
+  val fileUpload = "MandatoryDisclosureRulesFileUpload"
 }

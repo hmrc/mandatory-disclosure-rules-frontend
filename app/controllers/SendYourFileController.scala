@@ -23,7 +23,7 @@ import models.fileDetails.{Pending, Rejected, RejectedSDES, RejectedSDESVirus, V
 import models.submissions.SubmissionDetails
 import models.upscan.URL
 import models.{MultipleCorrectionsDeletions, NormalMode, SingleCorrection, SingleDeletion, SingleOther, ValidatedFileData}
-import pages.{ConversationIdPage, URLPage, ValidXMLPage}
+import pages.{ConversationIdPage, URLPage, UploadIDPage, ValidXMLPage}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.Json
@@ -71,9 +71,9 @@ class SendYourFileController @Inject() (
 
   def onSubmit: Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
-      (request.userAnswers.get(ValidXMLPage), request.userAnswers.get(URLPage)) match {
-        case (Some(ValidatedFileData(filename, msd, size, checksum)), Some(fileUrl)) =>
-          submissionConnector.submitDocument(SubmissionDetails(filename, request.subscriptionId, size, fileUrl, checksum, msd)) flatMap {
+      (request.userAnswers.get(ValidXMLPage), request.userAnswers.get(URLPage), request.userAnswers.get(UploadIDPage)) match {
+        case (Some(ValidatedFileData(filename, msd, size, checksum)), Some(fileUrl), Some(uploadId)) =>
+          submissionConnector.submitDocument(SubmissionDetails(filename, uploadId, request.subscriptionId, size, fileUrl, checksum, msd)) flatMap {
             case Some(conversationId) =>
               for {
                 userAnswers <- Future.fromTry(request.userAnswers.set(ConversationIdPage, conversationId))
