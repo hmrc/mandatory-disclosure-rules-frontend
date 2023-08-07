@@ -98,14 +98,15 @@ virusFileFound.p1 = We cannot accept your file as it contains a virus.
 problemPage.uploadLink = Upload a different file
 problemPage.MDR.guidanceLink = Read the MDR technical guidance for XML files
 
-invalidXMLFile.title = There is a problem with your file
-invalidXMLFile.heading = There is a problem with your file
-invalidXMLFile.p1 = We cannot accept the file {0} because it has not been formatted correctly.
+invalidXMLFile.title = There is a problem with the formatting of your file
+invalidXMLFile.heading = There is a problem with the formatting of your file
+invalidXMLFile.p1 = We cannot accept the file {0} because there is a problem with its formatting.
 invalidXMLFile.p2 = Check that:
-invalidXMLFile.bullet1 = if provided, the <?xml> element only has an attribute of version="1.0" and, optionally, encoding and standalone attributes with valid values
-invalidXMLFile.bullet2 = all elements have an opening and a closing tag
+invalidXMLFile.bullet1 = all element names are correct
+invalidXMLFile.bullet2 = all elements in your file have an opening and a closing tag
 invalidXMLFile.bullet3 = all tags are correctly nested
-invalidXMLFile.p3 = To ensure your XML is structured correctly, {0}.
+invalidXMLFile.bullet4 = if provided, the <?xml> element only has an attribute of version="1.0" and, optionally, encoding and standalone attributes with valid values
+invalidXMLFile.p3 = To make sure your XML is formatted correctly, {0}.
 invalidXMLFile.p3.link = read the MDR technical guidance for XML files
 invalidXMLFile.uploadLink = Upload a different file
 invalidXMLFile.print = Print this page
