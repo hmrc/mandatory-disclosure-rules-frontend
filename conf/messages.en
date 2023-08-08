@@ -107,7 +107,7 @@ invalidXMLFile.bullet2 = all elements in your file have an opening and a closing
 invalidXMLFile.bullet3 = all tags are correctly nested
 invalidXMLFile.bullet4 = if provided, the <?xml> element only has an attribute of version="1.0" and, optionally, encoding and standalone attributes with valid values
 invalidXMLFile.p3 = To make sure your XML is formatted correctly, {0}.
-invalidXMLFile.p3.link = read the MDR technical guidance for XML files
+invalidXMLFile.p3.link = refer to the MDR technical guidance for XML files
 invalidXMLFile.uploadLink = Upload a different file
 invalidXMLFile.print = Print this page
 uploadFile.title = Upload an XML file
