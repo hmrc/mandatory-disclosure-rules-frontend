@@ -34,7 +34,8 @@ class ContactDetailsNavigator @Inject() () {
     case (ContactPhonePage, Individual)   => _ => routes.ChangeIndividualContactDetailsController.onPageLoad()
     case (ContactPhonePage, Organisation) => _ => routes.ChangeOrganisationContactDetailsController.onPageLoad()
     case (HaveTelephonePage, affinity)    => ua => haveTelephoneRoutes(CheckMode, affinity)(ua)
-    case (ContactNamePage, affinity)      => _ => routes.ContactEmailController.onPageLoad(affinity)
+    case (ContactNamePage, Individual)    => _ => routes.ContactEmailController.onPageLoad()
+    case (ContactNamePage, Organisation)  => _ => routes.OrganisationContactEmailController.onPageLoad()
     case (ContactEmailPage, affinity)     => _ => routes.HaveTelephoneController.onPageLoad(affinity)
     case (HaveSecondContactPage, Organisation) =>
       ua =>

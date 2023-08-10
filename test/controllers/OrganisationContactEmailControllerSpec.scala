@@ -17,7 +17,7 @@
 package controllers
 
 import base.SpecBase
-import forms.ContactEmailFormProvider
+import forms.OrganisationContactEmailFormProvider
 import models.{AffinityType, NormalMode, UserAnswers}
 import navigation.{ContactDetailsNavigator, FakeContactDetailsNavigator}
 import org.mockito.ArgumentMatchers.any
@@ -28,24 +28,24 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
 import uk.gov.hmrc.auth.core.AffinityGroup.{Individual, Organisation}
-import views.html.ContactEmailView
+import views.html.OrganisationContactEmailView
 
 import scala.concurrent.Future
 
-class ContactEmailControllerSpec extends SpecBase {
+class OrganisationContactEmailControllerSpec extends SpecBase {
 
   override def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new ContactEmailFormProvider()
+  val formProvider = new OrganisationContactEmailFormProvider()
   val form         = formProvider()
   val organisation = AffinityType(Organisation)
   val individual   = AffinityType(Individual)
   val name         = "name"
 
-  lazy val contactEmailRoute = routes.ContactEmailController.onPageLoad().url
-  lazy val havePhonelRoute   = routes.HaveTelephoneController.onPageLoad(individual).url
+  lazy val contactEmailRoute = routes.OrganisationContactEmailController.onPageLoad().url
+  lazy val havePhonelRoute   = routes.OrganisationContactEmailController.onPageLoad().url
 
-  "ContactEmail Controller" - {
+  "OrgansisationContactEmail Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
@@ -61,10 +61,10 @@ class ContactEmailControllerSpec extends SpecBase {
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[ContactEmailView]
+        val view = application.injector.instanceOf[OrganisationContactEmailView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, individual, name, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, name, NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -83,12 +83,12 @@ class ContactEmailControllerSpec extends SpecBase {
       running(application) {
         val request = FakeRequest(GET, contactEmailRoute)
 
-        val view = application.injector.instanceOf[ContactEmailView]
+        val view = application.injector.instanceOf[OrganisationContactEmailView]
 
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill("answer"), individual, name, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill("answer"), name, NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -132,12 +132,12 @@ class ContactEmailControllerSpec extends SpecBase {
 
         val boundForm = form.bind(Map("value" -> ""))
 
-        val view = application.injector.instanceOf[ContactEmailView]
+        val view = application.injector.instanceOf[OrganisationContactEmailView]
 
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, individual, name, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, name, NormalMode)(request, messages(application)).toString
       }
     }
 

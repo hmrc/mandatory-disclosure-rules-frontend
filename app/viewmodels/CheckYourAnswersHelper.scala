@@ -67,7 +67,26 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
                  |<span class="govuk-visually-hidden">${messages("contactEmail.change.hidden")}</span>
                  |""".stripMargin
             ),
-            href = routes.ContactEmailController.onPageLoad(affinityType).url
+            href = routes.ContactEmailController.onPageLoad().url
+          ).withAttribute(("id", "contact-email"))
+        )
+      )
+  }
+
+  def organisationContactEmailPage(): Option[SummaryListRow] = userAnswers.get(ContactEmailPage) map {
+    x =>
+      SummaryListRowViewModel(
+        key = "contactEmail.checkYourAnswersLabel",
+        value = ValueViewModel(HtmlFormat.escape(s"$x").toString),
+        actions = Seq(
+          ActionItemViewModel(
+            content = HtmlContent(
+              s"""
+                 |<span aria-hidden="true">${messages("site.change")}</span>
+                 |<span class="govuk-visually-hidden">${messages("contactEmail.change.hidden")}</span>
+                 |""".stripMargin
+            ),
+            href = routes.OrganisationContactEmailController.onPageLoad().url
           ).withAttribute(("id", "contact-email"))
         )
       )

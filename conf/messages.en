@@ -143,6 +143,9 @@ contactEmail.checkYourAnswersLabel = Email address
 contactEmail.error.required = Enter an email address
 contactEmail.error.length = Email address must be 132 characters or less
 contactEmail.error.invalid = Enter an email address in the correct format, like name@example.com
+contactEmail.organistaion.error.required = Enter an email address
+contactEmail.organistaion.error.length = Email address must be 132 characters or less
+contactEmail.organistaion.error.invalid = Enter an email address in the correct format, like name@example.com
 contactEmail.change.hidden = Change email address
 
 contactPhone.checkYourAnswersLabel = Telephone number

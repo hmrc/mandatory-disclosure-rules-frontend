@@ -69,7 +69,7 @@ class ContactDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks
           answers =>
             navigator
               .nextPage(ContactNamePage, organisation, CheckMode, answers)
-              .mustBe(routes.ContactEmailController.onPageLoad(organisation))
+              .mustBe(routes.OrganisationContactEmailController.onPageLoad())
         }
       }
 
