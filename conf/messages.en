@@ -135,18 +135,21 @@ changeContactDetails.nowSendContactDetails = Now send your new contact details
 changeContactDetails.confirmingInformation = By sending these details, you are confirming that the information is correct and complete to the best of your knowledge.
 
 contactEmail.title.individual = What is your email address?
-contactEmail.title.organisation = What is their email address?
 contactEmail.heading.individual = What is your email address?
-contactEmail.heading.organisation = What is the email address for {0}?
-contactEmail.hint = We will use this to send confirmation of your reports or if we have any questions about them.
-contactEmail.checkYourAnswersLabel = Email address
 contactEmail.error.required = Enter an email address
 contactEmail.error.length = Email address must be 132 characters or less
 contactEmail.error.invalid = Enter an email address in the correct format, like name@example.com
-contactEmail.organistaion.error.required = Enter an email address
-contactEmail.organistaion.error.length = Email address must be 132 characters or less
-contactEmail.organistaion.error.invalid = Enter an email address in the correct format, like name@example.com
+contactEmail.hint = We will use this to send confirmation of your reports or if we have any questions about them.
+contactEmail.checkYourAnswersLabel = Email address
 contactEmail.change.hidden = Change email address
+
+organisationContactEmail.title = What is their email address?
+organisationContactEmail.heading = What is the email address for {0}?
+organisationContactEmail.error.required = Enter an email address
+organisationContactEmail.error.length = Email address must be 132 characters or less
+organisationContactEmail.error.invalid = Enter an email address in the correct format, like name@example.com
+organisationContactEmail.checkYourAnswersLabel = Email address
+organisationContactEmail.change.hidden = Change email address
 
 contactPhone.checkYourAnswersLabel = Telephone number
 contactPhone.title.organisation = What is their telephone number?
