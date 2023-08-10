@@ -140,6 +140,7 @@ contactEmail.error.required = Enter an email address
 contactEmail.error.length = Email address must be 132 characters or less
 contactEmail.error.invalid = Enter an email address in the correct format, like name@example.com
 contactEmail.hint = We will use this to send confirmation of your reports or if we have any questions about them.
+
 contactEmail.checkYourAnswersLabel = Email address
 contactEmail.change.hidden = Change email address
 
@@ -148,8 +149,7 @@ organisationContactEmail.heading = What is the email address for {0}?
 organisationContactEmail.error.required = Enter an email address
 organisationContactEmail.error.length = Email address must be 132 characters or less
 organisationContactEmail.error.invalid = Enter an email address in the correct format, like name@example.com
-organisationContactEmail.checkYourAnswersLabel = Email address
-organisationContactEmail.change.hidden = Change email address
+
 
 contactPhone.checkYourAnswersLabel = Telephone number
 contactPhone.title.organisation = What is their telephone number?
