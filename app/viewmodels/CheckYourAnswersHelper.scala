@@ -89,7 +89,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
                  |<span class="govuk-visually-hidden">${messages("contactEmail.change.hidden")}</span>
                  |""".stripMargin
             ),
-            href = routes.OrganisationContactEmailController.onPageLoad().url
+            href = routes.ContactEmailOrganisationController.onPageLoad().url
           ).withAttribute(("id", "contact-email"))
         )
       )

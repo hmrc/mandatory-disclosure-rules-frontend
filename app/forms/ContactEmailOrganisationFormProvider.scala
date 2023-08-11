@@ -22,7 +22,7 @@ import utils.RegExConstants
 
 import javax.inject.Inject
 
-class OrganisationContactEmailFormProvider @Inject() extends Mappings with RegExConstants {
+class ContactEmailOrganisationFormProvider @Inject() extends Mappings with RegExConstants {
 
   private val maxLength = 132
 

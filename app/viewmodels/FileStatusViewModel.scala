@@ -17,9 +17,9 @@
 package viewmodels
 
 import controllers.routes
-import models.{fileDetails, CheckMode, ConversationId}
 import models.fileDetails.FileDetails.localDateTimeOrdering
 import models.fileDetails._
+import models.{CheckMode, ConversationId}
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, HtmlContent, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.{HeadCell, Table, TableRow}

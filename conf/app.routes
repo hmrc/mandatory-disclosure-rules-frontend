@@ -48,8 +48,8 @@ POST        /report/change-contact/organisation/details                       co
 GET         /report/change-contact/individual/email                        controllers.ContactEmailController.onPageLoad(mode: Mode = CheckMode, affinityType: models.AffinityType = Individual)
 POST        /report/change-contact/individual/email                        controllers.ContactEmailController.onSubmit(mode: Mode = CheckMode, affinityType: models.AffinityType = Individual)
 
-GET         /report/change-contact/organisation/email                        controllers.OrganisationContactEmailController.onPageLoad(mode: Mode = CheckMode)
-POST        /report/change-contact/organisation/email                        controllers.OrganisationContactEmailController.onSubmit(mode: Mode = CheckMode)
+GET         /report/change-contact/organisation/email                        controllers.ContactEmailOrganisationController.onPageLoad(mode: Mode = CheckMode)
+POST        /report/change-contact/organisation/email                        controllers.ContactEmailOrganisationController.onSubmit(mode: Mode = CheckMode)
 
 GET         /report/change-contact/:affinityType/phone                        controllers.ContactPhoneController.onPageLoad(mode: Mode = CheckMode, affinityType: models.AffinityType)
 POST        /report/change-contact/:affinityType/phone                        controllers.ContactPhoneController.onSubmit(mode: Mode = CheckMode, affinityType: models.AffinityType)

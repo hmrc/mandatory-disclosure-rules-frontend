@@ -17,7 +17,7 @@
 package controllers
 
 import controllers.actions._
-import forms.{ContactEmailFormProvider, OrganisationContactEmailFormProvider}
+import forms.ContactEmailOrganisationFormProvider
 import models.{AffinityType, Mode, Organisation, UserAnswers}
 import navigation.ContactDetailsNavigator
 import pages.{ContactEmailPage, ContactNamePage}
@@ -25,21 +25,21 @@ import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.OrganisationContactEmailView
+import views.html.ContactEmailOrganisationView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class OrganisationContactEmailController @Inject() (
+class ContactEmailOrganisationController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: ContactDetailsNavigator,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
-  formProvider: OrganisationContactEmailFormProvider,
+  formProvider: ContactEmailOrganisationFormProvider,
   val controllerComponents: MessagesControllerComponents,
-  view: OrganisationContactEmailView
+  view: ContactEmailOrganisationView
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport {

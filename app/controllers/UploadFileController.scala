@@ -21,7 +21,6 @@ import config.FrontendAppConfig
 import connectors.UpscanConnector
 import controllers.actions._
 import forms.UploadFileFormProvider
-import models.ConversationId
 import models.audit.{AuditFileUpload, AuditType}
 import models.requests.DataRequest
 import models.upscan._
