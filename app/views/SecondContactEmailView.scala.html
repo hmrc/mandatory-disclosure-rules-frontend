@@ -38,9 +38,11 @@
             InputViewModel(
                 field = form("value"),
                 label = LabelViewModel(messages("secondContactEmail.heading", SecondContactName)).asPageHeading()
-            ).withHint(HintViewModel(Text(messages("secondContactEmail.hint"))))
+            )
             .withWidth(Full)
         )
+
+        <p class="govuk-body">@messages("secondContactEmail.p1")</p>
 
         @govukButton(
             ButtonViewModel(messages("site.continue")).withAttribute("id" -> "submit")

@@ -144,11 +144,12 @@ contactEmail.hint = We will use this to send confirmation of your reports or if 
 contactEmail.checkYourAnswersLabel = Email address
 contactEmail.change.hidden = Change email address
 
-organisationContactEmail.title = What is their email address?
+organisationContactEmail.title = What is the email address for the first contact?
 organisationContactEmail.heading = What is the email address for {0}?
-organisationContactEmail.error.required = Enter an email address
-organisationContactEmail.error.length = Email address must be 132 characters or less
-organisationContactEmail.error.invalid = Enter an email address in the correct format, like name@example.com
+organisationContactEmail.p1 = We will use this email address to send confirmation of your reports or if we have any questions about them.
+organisationContactEmail.error.required = Enter an email address for the first contact
+organisationContactEmail.error.length = The email address must be 132 characters or less
+organisationContactEmail.error.invalid = Enter an email address in the right format, like yourname@example.com
 
 
 contactPhone.checkYourAnswersLabel = Telephone number
@@ -181,13 +182,13 @@ haveSecondContact.checkYourAnswersLabel = Do you have a second contact?
 haveSecondContact.error.required = Select yes if there is someone else we can contact
 haveSecondContact.change.hidden = Change if you have a second contact
 
-secondContactEmail.title = What is their email address?
+secondContactEmail.title = WWhat is the email address for the second contact?
 secondContactEmail.heading = What is the email address for {0}?
-secondContactEmail.hint = We will use this to send confirmation of your reports and if we have any questions about them.
+secondContactEmail.p1 = We will use this email address to send confirmation of your reports or if we have any questions about them.
 secondContactEmail.checkYourAnswersLabel = Second contact email address
-secondContactEmail.error.required = Enter an email address
-secondContactEmail.error.length = Email address must be 132 characters or less
-secondContactEmail.error.invalid = Enter an email address in the correct format, like name@example.com
+secondContactEmail.error.required = Enter an email address for the second contact
+secondContactEmail.error.length = The email address must be 132 characters or less
+secondContactEmail.error.invalid = Enter an email address in the right format, like yourname@example.com
 secondContactEmail.change.hidden = Change second contact email address
 
 secondContactHavePhone.title = Can we contact them by telephone?
