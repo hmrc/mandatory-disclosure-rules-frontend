@@ -151,7 +151,6 @@ contactEmailOrganisation.error.required = Enter an email address for the first c
 contactEmailOrganisation.error.length = The email address must be 132 characters or less
 contactEmailOrganisation.error.invalid = Enter an email address in the right format, like yourname@example.com
 
-
 contactPhone.checkYourAnswersLabel = Telephone number
 contactPhone.title.organisation = What is their telephone number?
 contactPhone.title.individual = Can we contact you by telephone?

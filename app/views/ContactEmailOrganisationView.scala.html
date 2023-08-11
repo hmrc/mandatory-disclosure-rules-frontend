@@ -36,15 +36,18 @@
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
+        <h1 class="govuk-heading-l">@messages(s"contactEmailOrganisation.heading", contactName)</h1>
+
+        <p class="govuk-body">@messages("contactEmailOrganisation.p1")</p>
+
         @govukInput(
             InputViewModel(
                 field = form("value"),
-                label = LabelViewModel(Text(messages(s"contactEmailOrganisation.heading", contactName))).asPageHeading()
+                label = LabelViewModel(Text(messages(s"contactEmailOrganisation.heading", contactName))).withCssClass( "govuk-visually-hidden")
             )
             .withWidth(Full)
         )
 
-        <p class="govuk-body">@messages("contactEmailOrganisation.p1")</p>
 
         @govukButton(
             ButtonViewModel(Text(messages("site.continue"))).withAttribute( "id" -> "submit")
