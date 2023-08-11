@@ -28,9 +28,9 @@ class ContactEmailOrganisationFormProvider @Inject() extends Mappings with RegEx
 
   def apply(): Form[String] =
     Form(
-      "value" -> validatedText("organisationContactEmail.error.required",
-                               "organisationContactEmail.error.invalid",
-                               "organisationContactEmail.error.length",
+      "value" -> validatedText("contactEmailOrganisation.error.required",
+                               "contactEmailOrganisation.error.invalid",
+                               "contactEmailOrganisation.error.length",
                                emailRegex,
                                maxLength
       )

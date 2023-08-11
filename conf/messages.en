@@ -145,11 +145,11 @@ contactEmail.checkYourAnswersLabel = Email address
 contactEmail.change.hidden = Change email address
 
 organisationContactEmail.title = What is the email address for the first contact?
-organisationContactEmail.heading = What is the email address for {0}?
-organisationContactEmail.p1 = We will use this email address to send confirmation of your reports or if we have any questions about them.
-organisationContactEmail.error.required = Enter an email address for the first contact
-organisationContactEmail.error.length = The email address must be 132 characters or less
-organisationContactEmail.error.invalid = Enter an email address in the right format, like yourname@example.com
+contactEmailOrganisation.heading = What is the email address for {0}?
+contactEmailOrganisation.p1 = We will use this email address to send confirmation of your reports or if we have any questions about them.
+contactEmailOrganisation.error.required = Enter an email address for the first contact
+contactEmailOrganisation.error.length = The email address must be 132 characters or less
+contactEmailOrganisation.error.invalid = Enter an email address in the right format, like yourname@example.com
 
 
 contactPhone.checkYourAnswersLabel = Telephone number
