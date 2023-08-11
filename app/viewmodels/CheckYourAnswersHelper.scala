@@ -32,6 +32,9 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
   def getPrimaryContactDetails: Seq[SummaryListRow] =
     Seq(contactNamePage(), contactEmailPage(), contactPhonePage()).flatten
 
+  def getPrimaryOrganisationContactDetails: Seq[SummaryListRow] =
+    Seq(contactNamePage(), organisationContactEmailPage(), contactPhonePage()).flatten
+
   def getSecondaryContactDetails: Seq[SummaryListRow] =
     Seq(hasSecondContactPage(), secondaryContactNamePage(), secondaryContactEmailPage(), secondaryContactPhonePage()).flatten
 

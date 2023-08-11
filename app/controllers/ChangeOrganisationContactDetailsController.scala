@@ -50,7 +50,7 @@ class ChangeOrganisationContactDetailsController @Inject() (
       val checkUserAnswersHelper = CheckYourAnswersHelper(request.userAnswers)
 
       val primaryContactList = SummaryListViewModel(
-        rows = checkUserAnswersHelper.getPrimaryContactDetails
+        rows = checkUserAnswersHelper.getPrimaryOrganisationContactDetails
       )
 
       val secondaryContactList = SummaryListViewModel(

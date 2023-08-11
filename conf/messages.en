@@ -182,7 +182,7 @@ haveSecondContact.checkYourAnswersLabel = Do you have a second contact?
 haveSecondContact.error.required = Select yes if there is someone else we can contact
 haveSecondContact.change.hidden = Change if you have a second contact
 
-secondContactEmail.title = WWhat is the email address for the second contact?
+secondContactEmail.title = What is the email address for the second contact?
 secondContactEmail.heading = What is the email address for {0}?
 secondContactEmail.p1 = We will use this email address to send confirmation of your reports or if we have any questions about them.
 secondContactEmail.checkYourAnswersLabel = Second contact email address
