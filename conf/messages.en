@@ -144,7 +144,7 @@ contactEmail.hint = We will use this to send confirmation of your reports or if 
 contactEmail.checkYourAnswersLabel = Email address
 contactEmail.change.hidden = Change email address
 
-organisationContactEmail.title = What is the email address for the first contact?
+contactEmailOrganisation.title = What is the email address for the first contact?
 contactEmailOrganisation.heading = What is the email address for {0}?
 contactEmailOrganisation.p1 = We will use this email address to send confirmation of your reports or if we have any questions about them.
 contactEmailOrganisation.error.required = Enter an email address for the first contact
