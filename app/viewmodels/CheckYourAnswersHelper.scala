@@ -32,6 +32,9 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
   def getPrimaryContactDetails: Seq[SummaryListRow] =
     Seq(contactNamePage(), contactEmailPage(), contactPhonePage()).flatten
 
+  def getPrimaryOrganisationContactDetails: Seq[SummaryListRow] =
+    Seq(contactNamePage(), organisationContactEmailPage(), contactPhonePage()).flatten
+
   def getSecondaryContactDetails: Seq[SummaryListRow] =
     Seq(hasSecondContactPage(), secondaryContactNamePage(), secondaryContactEmailPage(), secondaryContactPhonePage()).flatten
 
@@ -67,7 +70,26 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
                  |<span class="govuk-visually-hidden">${messages("contactEmail.change.hidden")}</span>
                  |""".stripMargin
             ),
-            href = routes.ContactEmailController.onPageLoad(affinityType).url
+            href = routes.ContactEmailController.onPageLoad().url
+          ).withAttribute(("id", "contact-email"))
+        )
+      )
+  }
+
+  def organisationContactEmailPage(): Option[SummaryListRow] = userAnswers.get(ContactEmailPage) map {
+    x =>
+      SummaryListRowViewModel(
+        key = "contactEmail.checkYourAnswersLabel",
+        value = ValueViewModel(HtmlFormat.escape(s"$x").toString),
+        actions = Seq(
+          ActionItemViewModel(
+            content = HtmlContent(
+              s"""
+                 |<span aria-hidden="true">${messages("site.change")}</span>
+                 |<span class="govuk-visually-hidden">${messages("contactEmail.change.hidden")}</span>
+                 |""".stripMargin
+            ),
+            href = routes.ContactEmailOrganisationController.onPageLoad().url
           ).withAttribute(("id", "contact-email"))
         )
       )

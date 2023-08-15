@@ -135,15 +135,21 @@ changeContactDetails.nowSendContactDetails = Now send your new contact details
 changeContactDetails.confirmingInformation = By sending these details, you are confirming that the information is correct and complete to the best of your knowledge.
 
 contactEmail.title.individual = What is your email address?
-contactEmail.title.organisation = What is their email address?
 contactEmail.heading.individual = What is your email address?
-contactEmail.heading.organisation = What is the email address for {0}?
-contactEmail.hint = We will use this to send confirmation of your reports or if we have any questions about them.
-contactEmail.checkYourAnswersLabel = Email address
 contactEmail.error.required = Enter an email address
 contactEmail.error.length = Email address must be 132 characters or less
 contactEmail.error.invalid = Enter an email address in the correct format, like name@example.com
+contactEmail.hint = We will use this to send confirmation of your reports or if we have any questions about them.
+
+contactEmail.checkYourAnswersLabel = Email address
 contactEmail.change.hidden = Change email address
+
+contactEmailOrganisation.title = What is the email address for the first contact?
+contactEmailOrganisation.heading = What is the email address for {0}?
+contactEmailOrganisation.p1 = We will use this email address to send confirmation of your reports or if we have any questions about them.
+contactEmailOrganisation.error.required = Enter an email address for the first contact
+contactEmailOrganisation.error.length = The email address must be 132 characters or less
+contactEmailOrganisation.error.invalid = Enter an email address in the right format, like yourname@example.com
 
 contactPhone.checkYourAnswersLabel = Telephone number
 contactPhone.title.organisation = What is their telephone number?
@@ -175,13 +181,13 @@ haveSecondContact.checkYourAnswersLabel = Do you have a second contact?
 haveSecondContact.error.required = Select yes if there is someone else we can contact
 haveSecondContact.change.hidden = Change if you have a second contact
 
-secondContactEmail.title = What is their email address?
+secondContactEmail.title = What is the email address for the second contact?
 secondContactEmail.heading = What is the email address for {0}?
-secondContactEmail.hint = We will use this to send confirmation of your reports and if we have any questions about them.
+secondContactEmail.p1 = We will use this email address to send confirmation of your reports or if we have any questions about them.
 secondContactEmail.checkYourAnswersLabel = Second contact email address
-secondContactEmail.error.required = Enter an email address
-secondContactEmail.error.length = Email address must be 132 characters or less
-secondContactEmail.error.invalid = Enter an email address in the correct format, like name@example.com
+secondContactEmail.error.required = Enter an email address for the second contact
+secondContactEmail.error.length = The email address must be 132 characters or less
+secondContactEmail.error.invalid = Enter an email address in the right format, like yourname@example.com
 secondContactEmail.change.hidden = Change second contact email address
 
 secondContactHavePhone.title = Can we contact them by telephone?
