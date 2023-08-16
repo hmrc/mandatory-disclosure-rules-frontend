@@ -134,7 +134,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
     x =>
       SummaryListRowViewModel(
         key = "secondContactName.checkYourAnswersLabel",
-        value = ValueViewModel(HtmlFormat.escape(s"$x").toString),
+        value = ValueViewModel(Html(s"$x").toString),
         actions = Seq(
           ActionItemViewModel(
             content = HtmlContent(
