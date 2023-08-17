@@ -22,7 +22,7 @@ import models.{AffinityType, UserAnswers}
 import pages._
 import play.api.i18n.Messages
 import play.api.mvc.AnyContent
-import play.twirl.api.HtmlFormat
+import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryListRow
 import viewmodels.govuk.summarylist._
@@ -42,7 +42,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
     x =>
       SummaryListRowViewModel(
         key = "contactName.checkYourAnswersLabel",
-        value = ValueViewModel(HtmlFormat.escape(s"$x").toString),
+        value = ValueViewModel(Html(s"$x").toString),
         actions = Seq(
           ActionItemViewModel(
             content = HtmlContent(
@@ -156,7 +156,7 @@ class CheckYourAnswersHelper(userAnswers: UserAnswers, affinityType: AffinityTyp
     x =>
       SummaryListRowViewModel(
         key = "secondContactName.checkYourAnswersLabel",
-        value = ValueViewModel(HtmlFormat.escape(s"$x").toString),
+        value = ValueViewModel(Html(s"$x").toString),
         actions = Seq(
           ActionItemViewModel(
             content = HtmlContent(
