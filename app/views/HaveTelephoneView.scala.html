@@ -38,7 +38,7 @@
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages(s"haveTelephone.heading.$affinityType", contactName))
+                legend = LegendViewModel(messages(s"haveTelephone.heading.$affinityType", contactName)).withCssClass("govuk-visually-hidden")
             )
         )
 
