@@ -37,7 +37,7 @@
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages("secondContactHavePhone.heading", SecondContactName))
+                legend = LegendViewModel(messages("secondContactHavePhone.heading", SecondContactName)).withCssClass("govuk-visually-hidden")
             )
         )
 
