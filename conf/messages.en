@@ -162,12 +162,12 @@ contactPhone.error.invalid = Enter a telephone number in the correct format
 contactPhone.error.length = Telephone number must be 24 characters or less
 contactPhone.change.hidden = Change telephone number
 
-haveTelephone.title.organisation = Can we contact them by telephone?
+haveTelephone.title.organisation = Can we contact your first contact by telephone?
 haveTelephone.title.individual = Can we contact you by telephone?
 haveTelephone.heading.organisation = Can we contact {0} by telephone?
 haveTelephone.heading.individual = Can we contact you by telephone?
 haveTelephone.checkYourAnswersLabel = Telephone number
-haveTelephone.hint = We will call if we have any questions about your reports.
+haveTelephone.p1 = We will call if we have any questions about your reports.
 haveTelephone.error.required.individual = Select yes if we can contact you by telephone
 haveTelephone.error.required.organisation = Select yes if they can be contacted by telephone
 
@@ -190,9 +190,9 @@ secondContactEmail.error.length = The email address must be 132 characters or le
 secondContactEmail.error.invalid = Enter an email address in the right format, like yourname@example.com
 secondContactEmail.change.hidden = Change second contact email address
 
-secondContactHavePhone.title = Can we contact them by telephone?
+secondContactHavePhone.title = Can we contact your second contact by telephone?
 secondContactHavePhone.heading = Can we contact {0} by telephone?
-secondContactHavePhone.hint = We will call if we have any questions about your reports.
+secondContactHavePhone.p1 = We will call if we have any questions about your reports.
 secondContactHavePhone.error.required = Select yes if they can be contacted by telephone
 
 secondContactName.title = What is the name of the person or team we should contact?
