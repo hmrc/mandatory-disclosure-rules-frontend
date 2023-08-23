@@ -136,10 +136,10 @@ changeContactDetails.confirmingInformation = By sending these details, you are c
 
 contactEmail.title.individual = What is your email address?
 contactEmail.heading.individual = What is your email address?
-contactEmail.error.required = Enter an email address
-contactEmail.error.length = Email address must be 132 characters or less
-contactEmail.error.invalid = Enter an email address in the correct format, like name@example.com
-contactEmail.hint = We will use this to send confirmation of your reports or if we have any questions about them.
+contactEmail.error.required = Enter your email address
+contactEmail.error.length = The email address must be 132 characters or less
+contactEmail.error.invalid = Enter an email address in the right format, like yourname@example.com
+contactEmail.p1 = We will use this email address to send confirmation of your reports or if we have any questions about them.
 
 contactEmail.checkYourAnswersLabel = Email address
 contactEmail.change.hidden = Change email address

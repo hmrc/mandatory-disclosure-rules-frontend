@@ -36,12 +36,14 @@
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
+        <h1 class="govuk-heading-l">@messages(s"contactEmail.heading.$affinityType")</h1>
+        <p class="govuk-body">@messages("contactEmail.p1")</p>
+
         @govukInput(
             InputViewModel(
                 field = form("value"),
-                label = LabelViewModel(Text(messages(s"contactEmail.heading.$affinityType", contactName))).asPageHeading()
-            ).withHint(HintViewModel(Text(messages("contactEmail.hint"))))
-            .withWidth(Full)
+                label = LabelViewModel(Text(messages(s"contactEmail.heading.$affinityType", contactName))).withCssClass("govuk-visually-hidden")
+            ).withWidth(Full)
         )
 
         @govukButton(
