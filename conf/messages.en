@@ -158,7 +158,7 @@ contactPhone.heading.organisation = What is the telephone number for {0}?
 contactPhone.heading.individual = What is your telephone number?
 contactPhone.hint = For international numbers, include the country code.
 contactPhone.error.required = Enter a telephone number for the first contact
-contactPhone.error.invalid = The telephone number must only include numbers 0 to 9 and a plus sign, like&nbsp;01632&nbsp;960&nbsp;001, 07700&nbsp;900&nbsp;982 or +44&nbsp;808&nbsp;157&nbsp;0192
+contactPhone.error.invalid = The telephone number must only include numbers 0 to 9 and a plus sign, like 01632 960 001, 07700 900 982 or +44 808 157 0192
 contactPhone.error.length = Telephone number must be 24 characters or less
 contactPhone.change.hidden = Change telephone number
 
@@ -209,7 +209,7 @@ secondContactPhone.heading = What is the telephone number for {0}?
 secondContactPhone.hint =  For international numbers, include the country code.
 secondContactPhone.checkYourAnswersLabel = Second contact telephone number
 secondContactPhone.error.required = Enter a telephone number for the second contact
-secondContactPhone.error.invalid = The telephone number must only include numbers 0 to 9 and a plus sign, like&nbsp;01632&nbsp;960&nbsp;001, 07700&nbsp;900&nbsp;982 or +44&nbsp;808&nbsp;157&nbsp;0192
+secondContactPhone.error.invalid = The telephone number mustThe telephone number must only include numbers 0 to 9 and a plus sign, like 01632 960 001, 07700 900 982 or +44 808 157 0192
 secondContactPhone.error.length = Telephone number must be 24 characters or less
 secondContactPhone.change.hidden = Change second contact telephone number
 
