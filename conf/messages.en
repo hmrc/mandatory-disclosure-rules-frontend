@@ -176,7 +176,7 @@ default.secondContact.name = your second contact
 
 haveSecondContact.title = Is there someone else we can contact if your first contact is not available?
 haveSecondContact.heading = Is there someone else we can contact if {0} is not available?
-haveSecondContact.hint = This can be a team mailbox or another contact.
+haveSecondContact.p1 = This can be a team mailbox or another contact.
 haveSecondContact.checkYourAnswersLabel = Do you have a second contact?
 haveSecondContact.error.required = Select yes if there is someone else we can contact
 haveSecondContact.change.hidden = Change if you have a second contact
