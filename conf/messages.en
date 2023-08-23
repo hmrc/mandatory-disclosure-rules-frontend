@@ -159,7 +159,7 @@ contactPhone.heading.individual = What is your telephone number?
 contactPhone.hint = For international numbers, include the country code.
 contactPhone.error.required = Enter a telephone number for the first contact
 contactPhone.error.invalid = The telephone number must only include numbers 0 to 9 and a plus sign, like 01632 960 001, 07700 900 982 or +44 808 157 0192
-contactPhone.error.length = Telephone number must be 24 characters or less
+contactPhone.error.length = The telephone number must be 24 characters or less
 contactPhone.change.hidden = Change telephone number
 
 haveTelephone.title.organisation = Can we contact them by telephone?
@@ -210,7 +210,7 @@ secondContactPhone.hint =  For international numbers, include the country code.
 secondContactPhone.checkYourAnswersLabel = Second contact telephone number
 secondContactPhone.error.required = Enter a telephone number for the second contact
 secondContactPhone.error.invalid = The telephone number must only include numbers 0 to 9 and a plus sign, like 01632 960 001, 07700 900 982 or +44 808 157 0192
-secondContactPhone.error.length = Telephone number must be 24 characters or less
+secondContactPhone.error.length = The telephone number must be 24 characters or less
 secondContactPhone.change.hidden = Change second contact telephone number
 
 contactName.title = What is the name of the person or team we should contact?
