@@ -32,11 +32,14 @@
             @govukErrorSummary(ErrorSummaryViewModel(form))
         }
 
+        <h1 class="govuk-heading-l">@messages(s"haveTelephone.heading.$affinityType", contactName)</h1>
+        <p class="govuk-body">@messages("haveTelephone.p1")</p>
+
         @govukRadios(
             RadiosViewModel.yesNo(
                 field = form("value"),
-                legend = LegendViewModel(messages(s"haveTelephone.heading.$affinityType", contactName)).asPageHeading()
-            ).withHint(HintViewModel(Text(messages("haveTelephone.hint"))))
+                legend = LegendViewModel(messages(s"haveTelephone.heading.$affinityType", contactName)).withCssClass("govuk-visually-hidden")
+            )
         )
 
         @govukButton(
