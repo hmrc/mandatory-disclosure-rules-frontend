@@ -160,10 +160,10 @@ contactPhoneOrganisation.error.required = Enter a telephone number for the first
 contactPhoneOrganisation.error.invalid = The telephone number must only include numbers 0 to 9 and a plus sign, like 01632 960 001, 07700 900 982 or +44 808 157 0192
 contactPhoneOrganisation.error.length = The telephone number must be 24 characters or less
 
-contactPhoneIndividual.title = Can we contact you by telephone?
+contactPhoneIndividual.title = What is your telephone number?
 contactPhoneIndividual.heading = What is your telephone number?
 contactPhoneIndividual.hint = For international numbers, include the country code.
-contactPhoneIndividual.error.required = Enter a telephone number for the first contact
+contactPhoneIndividual.error.required = Enter your telephone number
 contactPhoneIndividual.error.invalid = The telephone number must only include numbers 0 to 9 and a plus sign, like 01632 960 001, 07700 900 982 or +44 808 157 0192
 contactPhoneIndividual.error.length = The telephone number must be 24 characters or less
 
