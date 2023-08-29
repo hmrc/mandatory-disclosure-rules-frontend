@@ -62,7 +62,7 @@ class ContactDetailsNavigator @Inject() () {
   private def haveTelephoneRoutes(mode: Mode, affinityType: AffinityType)(ua: UserAnswers): Call =
     ua.get(HaveTelephonePage) match {
       case Some(hasPhone) if hasPhone =>
-        routes.ContactPhoneOrganisationController.onPageLoad(affinityType)
+        routes.ContactPhoneOrganisationController.onPageLoad()
       case _ =>
         nextPage(ContactPhonePage, affinityType, mode, ua)
     }

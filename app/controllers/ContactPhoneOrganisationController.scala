@@ -46,7 +46,7 @@ class ContactPhoneOrganisationController @Inject() (
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode, affinityType: AffinityType): Action[AnyContent] = (identify andThen getData() andThen requireData) {
+  def onPageLoad(mode: Mode, affinityType: AffinityType = Organisation): Action[AnyContent] = (identify andThen getData() andThen requireData) {
     implicit request =>
       val preparedForm = request.userAnswers.get(ContactPhonePage) match {
         case None        => form
@@ -62,7 +62,7 @@ class ContactPhoneOrganisationController @Inject() (
       case _                                 => ""
     }
 
-  def onSubmit(mode: Mode, affinityType: AffinityType): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
+  def onSubmit(mode: Mode, affinityType: AffinityType = Organisation): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
       form
         .bindFromRequest()
