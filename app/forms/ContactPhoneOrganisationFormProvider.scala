@@ -22,16 +22,16 @@ import utils.RegExConstants
 
 import javax.inject.Inject
 
-class ContactPhoneFormProvider @Inject() extends Mappings with RegExConstants {
+class ContactPhoneOrganisationFormProvider @Inject() extends Mappings with RegExConstants {
 
   val maxlength = 24
 
   def apply(): Form[String] =
     Form(
       "value" -> validatedText(
-        "contactPhone.error.required",
-        "contactPhone.error.invalid",
-        "contactPhone.error.length",
+        "contactPhoneOrganisation.error.required",
+        "contactPhoneOrganisation.error.invalid",
+        "contactPhoneOrganisation.error.length",
         phoneRegex,
         maxlength
       )

@@ -17,7 +17,7 @@
 package controllers
 
 import base.SpecBase
-import forms.ContactPhoneFormProvider
+import forms.ContactPhoneOrganisationFormProvider
 import models.{NormalMode, Organisation, UserAnswers}
 import navigation.{ContactDetailsNavigator, FakeContactDetailsNavigator}
 import org.mockito.ArgumentMatchers.any
@@ -36,7 +36,7 @@ class ContactPhoneOrganisationControllerSpec extends SpecBase with MockitoSugar 
 
   override def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new ContactPhoneFormProvider()
+  val formProvider = new ContactPhoneOrganisationFormProvider()
   val form         = formProvider()
 
   lazy val contactPhoneRoute = routes.ContactPhoneOrganisationController.onPageLoad(Organisation).url

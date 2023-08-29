@@ -17,7 +17,7 @@
 package controllers
 
 import controllers.actions._
-import forms.ContactPhoneFormProvider
+import forms.ContactPhoneOrganisationFormProvider
 import models.{AffinityType, Mode, Organisation, UserAnswers}
 import navigation.ContactDetailsNavigator
 import pages.{ContactNamePage, ContactPhonePage}
@@ -37,7 +37,7 @@ class ContactPhoneOrganisationController @Inject() (
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
-  formProvider: ContactPhoneFormProvider,
+  formProvider: ContactPhoneOrganisationFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: ContactPhoneView
 )(implicit ec: ExecutionContext)
