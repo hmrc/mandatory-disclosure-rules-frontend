@@ -18,7 +18,7 @@ package controllers
 
 import controllers.actions._
 import forms.ContactPhoneOrganisationFormProvider
-import models.{AffinityType, Mode, Organisation, UserAnswers}
+import models.{Mode, Organisation, UserAnswers}
 import navigation.ContactDetailsNavigator
 import pages.{ContactNamePage, ContactPhonePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -46,33 +46,33 @@ class ContactPhoneOrganisationController @Inject() (
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode, affinityType: AffinityType = Organisation): Action[AnyContent] = (identify andThen getData() andThen requireData) {
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData() andThen requireData) {
     implicit request =>
       val preparedForm = request.userAnswers.get(ContactPhonePage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, getContactName(request.userAnswers, affinityType), mode))
+      Ok(view(preparedForm, getContactName(request.userAnswers), mode))
   }
 
-  private def getContactName(userAnswers: UserAnswers, affinityType: AffinityType): String =
-    (userAnswers.get(ContactNamePage), affinityType) match {
-      case (Some(contactName), Organisation) => contactName
-      case _                                 => ""
+  private def getContactName(userAnswers: UserAnswers): String =
+    userAnswers.get(ContactNamePage) match {
+      case Some(contactName) => contactName
+      case _                 => ""
     }
 
-  def onSubmit(mode: Mode, affinityType: AffinityType = Organisation): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, getContactName(request.userAnswers, affinityType), mode))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, getContactName(request.userAnswers), mode))),
           value =>
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(ContactPhonePage, value))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(ContactPhonePage, affinityType, mode, updatedAnswers))
+            } yield Redirect(navigator.nextPage(ContactPhonePage, Organisation, mode, updatedAnswers))
         )
   }
 }
