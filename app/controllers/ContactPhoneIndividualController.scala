@@ -18,9 +18,9 @@ package controllers
 
 import controllers.actions._
 import forms.ContactPhoneIndividualFormProvider
-import models.{AffinityType, Individual, Mode, Organisation, UserAnswers}
+import models.{Individual, Mode}
 import navigation.ContactDetailsNavigator
-import pages.{ContactNamePage, ContactPhonePage}
+import pages.ContactPhonePage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -46,33 +46,27 @@ class ContactPhoneIndividualController @Inject() (
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode, affinityType: AffinityType = Individual): Action[AnyContent] = (identify andThen getData() andThen requireData) {
+  def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData() andThen requireData) {
     implicit request =>
       val preparedForm = request.userAnswers.get(ContactPhonePage) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, getContactName(request.userAnswers, affinityType), mode))
+      Ok(view(preparedForm, mode))
   }
 
-  private def getContactName(userAnswers: UserAnswers, affinityType: AffinityType): String =
-    (userAnswers.get(ContactNamePage), affinityType) match {
-      case (Some(contactName), Organisation) => contactName
-      case _                                 => ""
-    }
-
-  def onSubmit(mode: Mode, affinityType: AffinityType = Individual): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
+  def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, getContactName(request.userAnswers, affinityType), mode))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, mode))),
           value =>
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(ContactPhonePage, value))
               _              <- sessionRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(ContactPhonePage, affinityType, mode, updatedAnswers))
+            } yield Redirect(navigator.nextPage(ContactPhonePage, Individual, mode, updatedAnswers))
         )
   }
 }
