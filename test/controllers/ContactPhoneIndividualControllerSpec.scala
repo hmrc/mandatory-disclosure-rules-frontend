@@ -17,8 +17,8 @@
 package controllers
 
 import base.SpecBase
-import forms.ContactPhoneOrganisationFormProvider
-import models.{NormalMode, Organisation, UserAnswers}
+import forms.ContactPhoneIndividualFormProvider
+import models.{NormalMode, UserAnswers}
 import navigation.{ContactDetailsNavigator, FakeContactDetailsNavigator}
 import org.mockito.ArgumentMatchers.any
 import org.scalatestplus.mockito.MockitoSugar
@@ -36,10 +36,10 @@ class ContactPhoneIndividualControllerSpec extends SpecBase with MockitoSugar {
 
   override def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new ContactPhoneOrganisationFormProvider()
+  val formProvider = new ContactPhoneIndividualFormProvider()
   val form         = formProvider()
 
-  lazy val contactPhoneRoute = routes.ContactPhoneOrganisationController.onPageLoad().url
+  lazy val contactPhoneRoute = routes.ContactPhoneIndividualController.onPageLoad().url
 
   "ContactPhone Individual Controller" - {
 
@@ -55,7 +55,7 @@ class ContactPhoneIndividualControllerSpec extends SpecBase with MockitoSugar {
         val view = application.injector.instanceOf[ContactPhoneIndividualView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, Organisation, "", NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, "", NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -73,7 +73,7 @@ class ContactPhoneIndividualControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill("answer"), Organisation, "", NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill("answer"), "", NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -117,7 +117,7 @@ class ContactPhoneIndividualControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, Organisation, "", NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, "", NormalMode)(request, messages(application)).toString
       }
     }
 

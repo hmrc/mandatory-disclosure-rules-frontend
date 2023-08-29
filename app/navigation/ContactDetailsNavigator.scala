@@ -64,7 +64,7 @@ class ContactDetailsNavigator @Inject() () {
       case Some(hasPhone) if hasPhone =>
         affinityType match {
           case Organisation => routes.ContactPhoneOrganisationController.onPageLoad()
-          case Individual => routes.ContactPhoneIndividualController.onPageLoad()
+          case Individual   => routes.ContactPhoneIndividualController.onPageLoad()
         }
       case _ =>
         nextPage(ContactPhonePage, affinityType, mode, ua)

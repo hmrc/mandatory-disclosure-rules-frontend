@@ -24,9 +24,9 @@
     govukButton: GovukButton
 )
 
-@(form: Form[_], affinityType: AffinityType = Organisation, contactName: String = "", mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], contactName: String = "", mode: Mode)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = title(form, messages(s"contactPhone.title.$affinityType"))) {
+@layout(pageTitle = title(form, messages(s"contactPhoneOrganisation.title"))) {
 
     @formHelper(action = routes.ContactPhoneOrganisationController.onSubmit()) {
 
@@ -37,8 +37,8 @@
         @govukInput(
             InputViewModel(
                 field = form("value"),
-                label = LabelViewModel(messages(s"contactPhone.heading.$affinityType", contactName)).asPageHeading()
-            ).withHint(HintViewModel(HtmlContent(messages("contactPhone.hint"))))
+                label = LabelViewModel(messages(s"contactPhoneOrganisation.heading", contactName)).asPageHeading()
+            ).withHint(HintViewModel(HtmlContent(messages("contactPhoneOrganisation.hint"))))
         )
 
         @govukButton(

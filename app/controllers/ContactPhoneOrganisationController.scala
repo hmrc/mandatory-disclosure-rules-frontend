@@ -53,7 +53,7 @@ class ContactPhoneOrganisationController @Inject() (
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, affinityType, getContactName(request.userAnswers, affinityType), mode))
+      Ok(view(preparedForm, getContactName(request.userAnswers, affinityType), mode))
   }
 
   private def getContactName(userAnswers: UserAnswers, affinityType: AffinityType): String =
@@ -67,7 +67,7 @@ class ContactPhoneOrganisationController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          formWithErrors => Future.successful(BadRequest(view(formWithErrors, affinityType, getContactName(request.userAnswers, affinityType), mode))),
+          formWithErrors => Future.successful(BadRequest(view(formWithErrors, getContactName(request.userAnswers, affinityType), mode))),
           value =>
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(ContactPhonePage, value))
