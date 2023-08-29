@@ -28,11 +28,11 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.ContactPhoneOrganisationView
+import views.html.ContactPhoneIndividualView
 
 import scala.concurrent.Future
 
-class ContactPhoneOrganisationControllerSpec extends SpecBase with MockitoSugar {
+class ContactPhoneIndividualControllerSpec extends SpecBase with MockitoSugar {
 
   override def onwardRoute = Call("GET", "/foo")
 
@@ -41,7 +41,7 @@ class ContactPhoneOrganisationControllerSpec extends SpecBase with MockitoSugar 
 
   lazy val contactPhoneRoute = routes.ContactPhoneOrganisationController.onPageLoad().url
 
-  "ContactPhone Organisation Controller" - {
+  "ContactPhone Individual Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
@@ -52,7 +52,7 @@ class ContactPhoneOrganisationControllerSpec extends SpecBase with MockitoSugar 
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[ContactPhoneOrganisationView]
+        val view = application.injector.instanceOf[ContactPhoneIndividualView]
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(form, Organisation, "", NormalMode)(request, messages(application)).toString
@@ -68,7 +68,7 @@ class ContactPhoneOrganisationControllerSpec extends SpecBase with MockitoSugar 
       running(application) {
         val request = FakeRequest(GET, contactPhoneRoute)
 
-        val view = application.injector.instanceOf[ContactPhoneOrganisationView]
+        val view = application.injector.instanceOf[ContactPhoneIndividualView]
 
         val result = route(application, request).value
 
@@ -112,7 +112,7 @@ class ContactPhoneOrganisationControllerSpec extends SpecBase with MockitoSugar 
 
         val boundForm = form.bind(Map("value" -> ""))
 
-        val view = application.injector.instanceOf[ContactPhoneOrganisationView]
+        val view = application.injector.instanceOf[ContactPhoneIndividualView]
 
         val result = route(application, request).value
 
