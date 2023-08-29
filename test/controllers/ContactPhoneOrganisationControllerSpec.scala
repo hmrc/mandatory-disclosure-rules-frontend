@@ -32,14 +32,14 @@ import views.html.ContactPhoneView
 
 import scala.concurrent.Future
 
-class ContactPhoneControllerSpec extends SpecBase with MockitoSugar {
+class ContactPhoneOrganisationControllerSpec extends SpecBase with MockitoSugar {
 
   override def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new ContactPhoneFormProvider()
   val form         = formProvider()
 
-  lazy val contactPhoneRoute = routes.ContactPhoneController.onPageLoad(Organisation).url
+  lazy val contactPhoneRoute = routes.ContactPhoneOrganisationController.onPageLoad(Organisation).url
 
   "ContactPhone Controller" - {
 

@@ -30,7 +30,7 @@ import views.html.ContactPhoneView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ContactPhoneController @Inject() (
+class ContactPhoneOrganisationController @Inject() (
   override val messagesApi: MessagesApi,
   sessionRepository: SessionRepository,
   navigator: ContactDetailsNavigator,
