@@ -19,14 +19,14 @@ package forms
 import forms.behaviours.StringFieldBehaviours
 import play.api.data.FormError
 
-class ContactPhoneFormProviderSpec extends StringFieldBehaviours {
+class ContactPhoneOrganisationFormProviderSpec extends StringFieldBehaviours {
 
-  val requiredKey = "contactPhone.error.required"
-  val invalidKey  = "contactPhone.error.invalid"
-  val lengthKey   = "contactPhone.error.length"
+  val requiredKey = "contactPhoneOrganisation.error.required"
+  val invalidKey  = "contactPhoneOrganisation.error.invalid"
+  val lengthKey   = "contactPhoneOrganisation.error.length"
   val maxLength   = 24
 
-  val form = new ContactPhoneFormProvider()()
+  val form = new ContactPhoneOrganisationFormProvider()()
 
   ".value" - {
 

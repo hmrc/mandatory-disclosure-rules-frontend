@@ -17,8 +17,8 @@
 package controllers
 
 import base.SpecBase
-import forms.ContactPhoneFormProvider
-import models.{NormalMode, Organisation, UserAnswers}
+import forms.ContactPhoneIndividualFormProvider
+import models.{NormalMode, UserAnswers}
 import navigation.{ContactDetailsNavigator, FakeContactDetailsNavigator}
 import org.mockito.ArgumentMatchers.any
 import org.scalatestplus.mockito.MockitoSugar
@@ -28,20 +28,20 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
-import views.html.ContactPhoneView
+import views.html.ContactPhoneIndividualView
 
 import scala.concurrent.Future
 
-class ContactPhoneControllerSpec extends SpecBase with MockitoSugar {
+class ContactPhoneIndividualControllerSpec extends SpecBase with MockitoSugar {
 
   override def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new ContactPhoneFormProvider()
+  val formProvider = new ContactPhoneIndividualFormProvider()
   val form         = formProvider()
 
-  lazy val contactPhoneRoute = routes.ContactPhoneController.onPageLoad(Organisation).url
+  lazy val contactPhoneRoute = routes.ContactPhoneIndividualController.onPageLoad().url
 
-  "ContactPhone Controller" - {
+  "ContactPhone Individual Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
@@ -52,10 +52,10 @@ class ContactPhoneControllerSpec extends SpecBase with MockitoSugar {
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[ContactPhoneView]
+        val view = application.injector.instanceOf[ContactPhoneIndividualView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form, Organisation, "", NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form, NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -68,12 +68,12 @@ class ContactPhoneControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request = FakeRequest(GET, contactPhoneRoute)
 
-        val view = application.injector.instanceOf[ContactPhoneView]
+        val view = application.injector.instanceOf[ContactPhoneIndividualView]
 
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill("answer"), Organisation, "", NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill("answer"), NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -112,12 +112,12 @@ class ContactPhoneControllerSpec extends SpecBase with MockitoSugar {
 
         val boundForm = form.bind(Map("value" -> ""))
 
-        val view = application.injector.instanceOf[ContactPhoneView]
+        val view = application.injector.instanceOf[ContactPhoneIndividualView]
 
         val result = route(application, request).value
 
         status(result) mustEqual BAD_REQUEST
-        contentAsString(result) mustEqual view(boundForm, Organisation, "", NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(boundForm, NormalMode)(request, messages(application)).toString
       }
     }
 

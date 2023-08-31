@@ -152,14 +152,21 @@ contactEmailOrganisation.error.length = The email address must be 132 characters
 contactEmailOrganisation.error.invalid = Enter an email address in the right format, like yourname@example.com
 
 contactPhone.checkYourAnswersLabel = Telephone number
-contactPhone.title.organisation = What is the telephone number for the first contact?
-contactPhone.title.individual = Can we contact you by telephone?
-contactPhone.heading.organisation = What is the telephone number for {0}?
-contactPhone.heading.individual = What is your telephone number?
-contactPhone.hint = For international numbers, include the country code.
-contactPhone.error.required = Enter a telephone number for the first contact
-contactPhone.error.invalid = The telephone number must only include numbers 0 to 9 and a plus sign, like 01632 960 001, 07700 900 982 or +44 808 157 0192
-contactPhone.error.length = The telephone number must be 24 characters or less
+
+contactPhoneOrganisation.title = What is the telephone number for the first contact?
+contactPhoneOrganisation.heading = What is the telephone number for {0}?
+contactPhoneOrganisation.hint = For international numbers, include the country code.
+contactPhoneOrganisation.error.required = Enter a telephone number for the first contact
+contactPhoneOrganisation.error.invalid = The telephone number must only include numbers 0 to 9 and a plus sign, like 01632 960 001, 07700 900 982 or +44 808 157 0192
+contactPhoneOrganisation.error.length = The telephone number must be 24 characters or less
+
+contactPhoneIndividual.title = What is your telephone number?
+contactPhoneIndividual.heading = What is your telephone number?
+contactPhoneIndividual.hint = For international numbers, include the country code.
+contactPhoneIndividual.error.required = Enter your telephone number
+contactPhoneIndividual.error.invalid = The telephone number must only include numbers 0 to 9 and a plus sign, like 01632 960 001, 07700 900 982 or +44 808 157 0192
+contactPhoneIndividual.error.length = The telephone number must be 24 characters or less
+
 contactPhone.change.hidden = Change telephone number
 
 haveTelephone.title.organisation = Can we contact your first contact by telephone?
