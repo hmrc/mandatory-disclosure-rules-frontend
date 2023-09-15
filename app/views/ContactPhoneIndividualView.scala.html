@@ -39,6 +39,7 @@
                 field = form("value"),
                 label = LabelViewModel(messages(s"contactPhoneIndividual.heading")).asPageHeading()
             ).withHint(HintViewModel(HtmlContent(messages("contactPhoneIndividual.hint"))))
+             .withCssClass("govuk-input--width-20")
         )
 
         @govukButton(
