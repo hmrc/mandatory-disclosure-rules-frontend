@@ -429,6 +429,6 @@ contactUs.p3 = If your report is due soon, email us before the deadline.
 contactUs.p4 = We may not be able to arrange a time for you to access the service before the deadline. If this happens, you will not receive a late reporting penalty if you email us before the deadline.
 
 
-informationSent.title = Information sent
-informationSent.heading = Information sent
+informationSent.title = You have already sent this information
+informationSent.heading = You have already sent this information
 informationSent.p1 = We will contact you if we have any questions about the details you have provided.
