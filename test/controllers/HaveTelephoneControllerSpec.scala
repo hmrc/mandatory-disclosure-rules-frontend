@@ -102,7 +102,7 @@ class HaveTelephoneControllerSpec extends SpecBase with MockitoSugar {
       }
     }
 
-    "must redirect to the next page when false data is submitted" in {
+    "must redirect to the next page when telephone number is submitted as false" in {
 
       when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
 
