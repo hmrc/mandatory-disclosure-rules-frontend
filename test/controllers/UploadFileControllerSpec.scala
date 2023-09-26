@@ -28,7 +28,6 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.UploadIDPage
 import play.api.Application
 import play.api.inject.bind
-import play.api.libs.json.Json
 import java.time.Instant
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{status, _}
