@@ -21,7 +21,7 @@ import org.scalacheck.Gen
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import play.api.data.validation.{Invalid, Valid}
+import play.api.data.validation.{Constraint, Invalid, Valid}
 
 import java.time.LocalDate
 
@@ -180,6 +180,54 @@ class ConstraintsSpec extends AnyFreeSpec with Matchers with ScalaCheckPropertyC
         case (min, date) =>
           val result = minDate(min, "error.past", "foo")(date)
           result mustEqual Invalid("error.past", "foo")
+      }
+    }
+
+    "nonEmptySet" - {
+
+      "must return Valid when provided a nonEmptySet" in {
+        val result = nonEmptySet("error.nonEmpty")(Set("test"))
+        result mustEqual Valid
+      }
+
+      "must return Invalid when provided an empty set" in {
+        val result = nonEmptySet("error.invalid")(Set())
+        result mustEqual Invalid("error.invalid")
+      }
+    }
+
+    "inRange" - {
+      "return Valid if input is within the range" in {
+        val min                         = 1
+        val max                         = 10
+        val constraint: Constraint[Int] = inRange(min, max, "errorKey")
+
+        val validInput       = 5
+        val validationResult = constraint(validInput)
+
+        validationResult mustEqual Valid
+      }
+
+      "return Invalid if input is below the minimum" in {
+        val min                         = 1
+        val max                         = 10
+        val constraint: Constraint[Int] = inRange(min, max, "errorKey")
+
+        val invalidInput     = 0
+        val validationResult = constraint(invalidInput)
+
+        validationResult mustEqual Invalid("errorKey", min, max)
+      }
+
+      "return Invalid if input is above the maximum" in {
+        val min                         = 1
+        val max                         = 10
+        val constraint: Constraint[Int] = inRange(min, max, "errorKey")
+
+        val invalidInput     = 11
+        val validationResult = constraint(invalidInput)
+
+        validationResult mustEqual Invalid("errorKey", min, max)
       }
     }
   }

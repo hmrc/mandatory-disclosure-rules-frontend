@@ -28,7 +28,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.UploadIDPage
 import play.api.Application
 import play.api.inject.bind
-import play.api.libs.json.Json
+import java.time.Instant
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{status, _}
 import views.html.UploadFileView
@@ -111,6 +111,36 @@ class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(controllers.routes.FileTooLargeController.onPageLoad().url)
+    }
+
+    "must show errorForm when rejected upload has 'octet-stream' in message" in {
+      val rejectedDetails = UploadDetails(
+        Instant.now(),
+        "1234",
+        "application/octet-stream",
+        "file-name" // Simulate a rejected octet-stream
+      )
+      val rejected = UploadRejected(ErrorDetails("REJECTED", "message"))
+
+      fakeUpscanConnector.setStatus(rejected)
+
+      val request = FakeRequest(GET, routes.UploadFileController.getStatus(uploadId).url)
+      val result  = route(application, request).value
+
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result) mustBe Some(routes.NotXMLFileController.onPageLoad().url)
+    }
+
+    "must redirect to ThereIsAProblemController on other rejection errors" in {
+      val otherRejected = UploadRejected(ErrorDetails("REJECTED", "other-error-message"))
+
+      fakeUpscanConnector.setStatus(otherRejected)
+
+      val request = FakeRequest(GET, routes.UploadFileController.getStatus(uploadId).url)
+      val result  = route(application, request).value
+
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result) mustBe Some(routes.NotXMLFileController.onPageLoad().url)
     }
 
   }

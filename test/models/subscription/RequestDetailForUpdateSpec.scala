@@ -166,6 +166,49 @@ class RequestDetailForUpdateSpec extends AnyFreeSpec with Matchers with TryValue
 
       }
 
+      "must return RequestDetailForUpdate when responseDetails haveContactNumber value false is overridden in UserAnswers" in {
+
+        val updatedResponseDetail: ResponseDetail = responseDetail.copy(secondaryContact = None)
+
+        val expectedRequestDetails: RequestDetailForUpdate = RequestDetailForUpdate(
+          IDType = "MDR",
+          IDNumber = "IDNumber",
+          tradingName = Some("Trading Name"),
+          isGBUser = true,
+          primaryContact = ContactInformation(IndividualDetails("firstName", Some("middleName"), "lastName"), "test@email.com", None, None),
+          secondaryContact = Some(ContactInformation(OrganisationDetails("SecContactName"), "test1@email.com", Some("+3311211212"), None))
+        )
+
+        val userAnswers = UserAnswers("id")
+          .set(ContactEmailPage, "test@email.com")
+          .success
+          .value
+          .set(HaveTelephonePage, false)
+          .success
+          .value
+          .set(ContactPhonePage, "+4411223344")
+          .success
+          .value
+          .set(HaveSecondContactPage, true)
+          .success
+          .value
+          .set(SecondContactNamePage, "SecContactName")
+          .success
+          .value
+          .set(SecondContactEmailPage, "test1@email.com")
+          .success
+          .value
+          .set(SecondContactHavePhonePage, true)
+          .success
+          .value
+          .set(SecondContactPhonePage, "+3311211212")
+          .success
+          .value
+
+        RequestDetailForUpdate.convertToRequestDetails(updatedResponseDetail, userAnswers).value mustBe expectedRequestDetails
+
+      }
+
     }
   }
 }
