@@ -17,6 +17,7 @@
 package controllers
 
 import base.SpecBase
+import scala.concurrent.ExecutionContext
 import forms.HaveTelephoneFormProvider
 import models.{NormalMode, Organisation, UserAnswers}
 import navigation.{ContactDetailsNavigator, FakeContactDetailsNavigator}
@@ -29,6 +30,9 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.HaveTelephoneView
+import pages.ContactPhonePage
+import play.api.mvc.{Result}
+import org.scalatest.concurrent.ScalaFutures
 
 import scala.concurrent.Future
 
@@ -90,6 +94,30 @@ class HaveTelephoneControllerSpec extends SpecBase with MockitoSugar {
         val request =
           FakeRequest(POST, haveTelephoneRoute)
             .withFormUrlEncodedBody(("value", "true"))
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual onwardRoute.url
+      }
+    }
+
+    "must redirect to the next page when false data is submitted" in {
+
+      when(mockSessionRepository.set(any())) thenReturn Future.successful(true)
+
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers))
+          .overrides(
+            bind[ContactDetailsNavigator].toInstance(new FakeContactDetailsNavigator(onwardRoute)),
+            bind[SessionRepository].toInstance(mockSessionRepository)
+          )
+          .build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, haveTelephoneRoute)
+            .withFormUrlEncodedBody(("value", "false"))
 
         val result = route(application, request).value
 
