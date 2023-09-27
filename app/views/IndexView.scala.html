@@ -31,7 +31,7 @@
 
     <h1 class="govuk-heading-l">@messages("index.heading")</h1>
 
-    <p class="govuk-body">@Html(messages("index.p1", link(if (appConfig.redirectUploadToContactUsToggle) routes.ContactUsController.onPageLoad().url else routes.UploadFileController.onPageLoad().url, "index.p1.link")))</p>
+    <p class="govuk-body">@Html(messages("index.p1", link(routes.UploadFileController.onPageLoad().url, "index.p1.link")))</p>
 
     <p class="govuk-body">@messages("index.p2", mdrID)</p>
 
