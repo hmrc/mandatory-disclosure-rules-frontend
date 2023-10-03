@@ -21,9 +21,6 @@ import connectors.FileDetailsConnector
 import models.fileDetails.{Accepted, FileDetails}
 import models.{
   ConversationId,
-  MDR401,
-  MDR402,
-  MessageSpecData,
   MultipleCorrectionsDeletions,
   MultipleNewInformation,
   NormalMode,
@@ -31,11 +28,10 @@ import models.{
   SingleDeletion,
   SingleNewInformation,
   SingleOther,
-  UserAnswers,
-  ValidatedFileData
+  UserAnswers
 }
 import org.mockito.ArgumentMatchers.any
-import pages.{ContactEmailPage, SecondContactEmailPage, ValidXMLPage}
+import pages.{ContactEmailPage, SecondContactEmailPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -118,7 +114,7 @@ class FileReceivedControllerSpec extends SpecBase {
         )
 
       running(application) {
-        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoad(NormalMode, conversationId).url)
+        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoadFast(conversationId).url)
 
         val result = route(application, request).value
 
@@ -157,7 +153,7 @@ class FileReceivedControllerSpec extends SpecBase {
         )
 
       running(application) {
-        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoad(NormalMode, conversationId).url)
+        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoadFast(conversationId).url)
 
         val result = route(application, request).value
 
@@ -194,7 +190,7 @@ class FileReceivedControllerSpec extends SpecBase {
         )
 
       running(application) {
-        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoad(NormalMode, conversationId).url)
+        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoadFast(conversationId).url)
 
         val result = route(application, request).value
 
@@ -233,7 +229,7 @@ class FileReceivedControllerSpec extends SpecBase {
         )
 
       running(application) {
-        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoad(NormalMode, conversationId).url)
+        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoadFast(conversationId).url)
 
         val result = route(application, request).value
 
@@ -272,7 +268,7 @@ class FileReceivedControllerSpec extends SpecBase {
         )
 
       running(application) {
-        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoad(NormalMode, conversationId).url)
+        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoadFast(conversationId).url)
 
         val result = route(application, request).value
 
@@ -311,7 +307,7 @@ class FileReceivedControllerSpec extends SpecBase {
         )
 
       running(application) {
-        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoad(NormalMode, conversationId).url)
+        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoadFast(conversationId).url)
 
         val result = route(application, request).value
 
@@ -350,7 +346,7 @@ class FileReceivedControllerSpec extends SpecBase {
         )
 
       running(application) {
-        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoad(NormalMode, conversationId).url)
+        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoadFast(conversationId).url)
 
         val result = route(application, request).value
 
@@ -401,7 +397,7 @@ class FileReceivedControllerSpec extends SpecBase {
         )
 
       running(application) {
-        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoad(NormalMode, conversationId).url)
+        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoadFast(conversationId).url)
 
         val result = route(application, request).value
 

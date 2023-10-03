@@ -17,7 +17,6 @@
 package controllers
 
 import controllers.actions._
-import models.CheckMode
 import pages.{ConversationIdPage, ValidXMLPage}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -44,7 +43,7 @@ class FilePassedChecksController @Inject() (
     implicit request =>
       (request.userAnswers.get(ValidXMLPage), request.userAnswers.get(ConversationIdPage)) match {
         case (Some(xmlDetails), Some(conversationId)) =>
-          val action  = routes.FileReceivedController.onPageLoad(CheckMode, conversationId).url
+          val action  = routes.FileReceivedController.onPageLoadSlow(conversationId).url
           val summary = FileCheckViewModel.createFileSummary(xmlDetails.fileName, "Accepted")
           Ok(view(summary, action))
 

@@ -34,8 +34,8 @@ GET         /report/problem/data-errors                                       co
 
 GET         /report/problem/invalid-xml-file                                  controllers.FileErrorController.onPageLoad()
 
-GET         /report/fast/problem/business-rule-errors/:conversationId         controllers.FileRejectedController.onPageLoad(mode: Mode = NormalMode, conversationId: ConversationId)
-GET         /report/problem/business-rule-errors/:conversationId              controllers.FileRejectedController.onPageLoad(mode: Mode = CheckMode, conversationId: ConversationId)
+GET         /report/fast/problem/business-rule-errors/:conversationId         controllers.FileRejectedController.onPageLoadFast(conversationId: ConversationId)
+GET         /report/problem/business-rule-errors/:conversationId              controllers.FileRejectedController.onPageLoadSlow(conversationId: ConversationId)
 
 GET         /report/file-validation                                           controllers.FileValidationController.onPageLoad()
 
@@ -80,8 +80,8 @@ POST        /report/change-contact/organisation/second-contact-phone          co
 
 GET         /report/change-contact/details-updated                            controllers.DetailsUpdatedController.onPageLoad()
 
-GET         /report/fast/file-confirmation/:conversationId                    controllers.FileReceivedController.onPageLoad(mode: Mode = NormalMode, conversationId: ConversationId)
-GET         /report/file-confirmation/:conversationId                         controllers.FileReceivedController.onPageLoad(mode: Mode = CheckMode, conversationId: ConversationId)
+GET         /report/fast/file-confirmation/:conversationId                    controllers.FileReceivedController.onPageLoadFast(conversationId: ConversationId)
+GET         /report/file-confirmation/:conversationId                         controllers.FileReceivedController.onPageLoadSlow(conversationId: ConversationId)
 
 GET         /report/result-of-automatic-checks                                controllers.FileStatusController.onPageLoad()
 

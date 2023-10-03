@@ -170,8 +170,6 @@ class FilePendingChecksControllerSpec extends SpecBase {
     "must redirect to virus Page when RejectedSDESVirus status returned with regular errors" in {
 
       val validXmlDetails = ValidatedFileData("name", MessageSpecData("messageRefId", MDR401, 2, "OECD1", MultipleNewInformation), fileSize, "1234")
-      val validationErrors =
-        ValidationErrors(Some(Seq(FileErrors(MessageRefIDHasAlreadyBeenUsed, None))), Some(Seq(RecordError(MissingCorrDocRefId, None, None))))
 
       val userAnswers: UserAnswers = emptyUserAnswers
         .set(ConversationIdPage, conversationId)
@@ -202,8 +200,6 @@ class FilePendingChecksControllerSpec extends SpecBase {
     "must redirect to problem Page when RejectedSDES status returned with regular errors" in {
 
       val validXmlDetails = ValidatedFileData("name", MessageSpecData("messageRefId", MDR401, 2, "OECD1", MultipleNewInformation), fileSize, "1234")
-      val validationErrors =
-        ValidationErrors(Some(Seq(FileErrors(MessageRefIDHasAlreadyBeenUsed, None))), Some(Seq(RecordError(MissingCorrDocRefId, None, None))))
 
       val userAnswers: UserAnswers = emptyUserAnswers
         .set(ConversationIdPage, conversationId)
