@@ -19,8 +19,8 @@ package controllers
 import base.SpecBase
 import connectors.FileDetailsConnector
 import generators.ModelGenerators
-import models.{ConversationId, NormalMode, SingleNewInformation}
 import models.fileDetails.{Accepted, FileDetails, Rejected, ValidationErrors}
+import models.{ConversationId, SingleNewInformation}
 import org.mockito.ArgumentMatchers.any
 import org.scalacheck.Arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -71,7 +71,7 @@ class FileRejectedControllerSpec extends SpecBase with ModelGenerators with Scal
         )
 
       running(application) {
-        val request = FakeRequest(GET, routes.FileRejectedController.onPageLoad(NormalMode, conversationId).url)
+        val request = FakeRequest(GET, routes.FileRejectedController.onPageLoadFast(conversationId).url)
 
         val result = route(application, request).value
 
@@ -95,7 +95,7 @@ class FileRejectedControllerSpec extends SpecBase with ModelGenerators with Scal
       when(mockFileDetailsConnector.getFileDetails(any())(any(), any())).thenReturn(Future.successful(None))
 
       running(application) {
-        val request = FakeRequest(GET, routes.FileRejectedController.onPageLoad(NormalMode, conversationId).url)
+        val request = FakeRequest(GET, routes.FileRejectedController.onPageLoadFast(conversationId).url)
 
         val result = route(application, request).value
 
@@ -129,7 +129,7 @@ class FileRejectedControllerSpec extends SpecBase with ModelGenerators with Scal
         )
 
       running(application) {
-        val request = FakeRequest(GET, routes.FileRejectedController.onPageLoad(NormalMode, conversationId).url)
+        val request = FakeRequest(GET, routes.FileRejectedController.onPageLoadFast(conversationId).url)
 
         val result = route(application, request).value
 

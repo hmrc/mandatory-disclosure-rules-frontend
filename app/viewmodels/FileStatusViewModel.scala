@@ -17,9 +17,9 @@
 package viewmodels
 
 import controllers.routes
+import models.ConversationId
 import models.fileDetails.FileDetails.localDateTimeOrdering
 import models.fileDetails._
-import models.{CheckMode, ConversationId}
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{Content, HtmlContent, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.{HeadCell, Table, TableRow}
@@ -44,7 +44,7 @@ object FileStatusViewModel {
     val action = fileStatus match {
       case Pending => "<p class='govuk-visually-hidden'>None</p>"
       case Accepted =>
-        s"<a href='${routes.FileReceivedController.onPageLoad(CheckMode, conversationId).url}' class='govuk-link'>${Messages("fileStatus.accepted")}</a>"
+        s"<a href='${routes.FileReceivedController.onPageLoadSlow(conversationId).url}' class='govuk-link'>${Messages("fileStatus.accepted")}</a>"
       case Rejected(errors) if FileProblemHelper.isProblemStatus(errors) =>
         s"<a href='${routes.FileProblemController.onPageLoad().url}' class='govuk-link'>${Messages("fileStatus.problem")}</a>"
       case RejectedSDES =>
@@ -52,7 +52,7 @@ object FileStatusViewModel {
       case RejectedSDESVirus =>
         s"<a href='${routes.VirusFileFoundController.onPageLoad().url}' class='govuk-link'>${Messages("fileStatus.problemSDESVirus")}</a>"
       case Rejected(_) =>
-        s"<a href='${routes.FileRejectedController.onPageLoad(CheckMode, conversationId).url}' class='govuk-link'>${Messages("fileStatus.rejected")}</a>"
+        s"<a href='${routes.FileRejectedController.onPageLoadSlow(conversationId).url}' class='govuk-link'>${Messages("fileStatus.rejected")}</a>"
     }
 
     TableRow(HtmlContent(action), classes = "app-custom-class mdr-width-next")

@@ -22,7 +22,7 @@ import controllers.actions.{CheckForSubmissionAction, DataRequiredAction, DataRe
 import models.fileDetails.{Pending, Rejected, RejectedSDES, RejectedSDESVirus, ValidationErrors, Accepted => FileStatusAccepted}
 import models.submissions.SubmissionDetails
 import models.upscan.URL
-import models.{MultipleCorrectionsDeletions, NormalMode, SingleCorrection, SingleDeletion, SingleOther, ValidatedFileData}
+import models.{MultipleCorrectionsDeletions, SingleCorrection, SingleDeletion, SingleOther, ValidatedFileData}
 import pages.{ConversationIdPage, URLPage, UploadIDPage, ValidXMLPage}
 import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -92,11 +92,11 @@ class SendYourFileController @Inject() (
         case Some(conversationId) =>
           fileDetailsConnector.getStatus(conversationId) flatMap {
             case Some(FileStatusAccepted) =>
-              Future.successful(Ok(Json.toJson(URL(routes.FileReceivedController.onPageLoad(NormalMode, conversationId).url))))
+              Future.successful(Ok(Json.toJson(URL(routes.FileReceivedController.onPageLoadFast(conversationId).url))))
             case Some(Rejected(errors)) =>
               fastJourneyErrorRoute(
                 errors,
-                Future.successful(Ok(Json.toJson(URL(routes.FileRejectedController.onPageLoad(NormalMode, conversationId).url))))
+                Future.successful(Ok(Json.toJson(URL(routes.FileRejectedController.onPageLoadFast(conversationId).url))))
               )
 
             case Some(RejectedSDESVirus) =>

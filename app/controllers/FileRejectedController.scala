@@ -18,7 +18,7 @@ package controllers
 
 import connectors.FileDetailsConnector
 import controllers.actions._
-import models.{ConversationId, Mode}
+import models.ConversationId
 import models.fileDetails.Rejected
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -42,7 +42,7 @@ class FileRejectedController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad(mode: Mode, conversationId: ConversationId): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
+  private def load(conversationId: ConversationId): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
       fileDetailsConnector.getFileDetails(conversationId) map {
         case Some(details) =>
@@ -54,4 +54,7 @@ class FileRejectedController @Inject() (
         case _ => InternalServerError(errorView())
       }
   }
+  def onPageLoadFast(conversationId: ConversationId): Action[AnyContent] = load(conversationId)
+  def onPageLoadSlow(conversationId: ConversationId): Action[AnyContent] = load(conversationId)
+
 }
