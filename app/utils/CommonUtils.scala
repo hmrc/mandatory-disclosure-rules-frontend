@@ -28,4 +28,5 @@ object CommonUtils {
   val singleCorrection = "singleCorrection"
   val singleDeletion = "singleDeletion"
   val singleOther = "singleOther"
+  val value = "value"
 }

@@ -18,20 +18,23 @@ package forms
 
 import forms.mappings.Mappings
 import play.api.data.Form
-import utils.RegExConstants
+import utils.{CommonUtils, RegExConstants}
 
 import javax.inject.Inject
 
 class SecondContactEmailFormProvider @Inject() extends Mappings with RegExConstants {
 
   private val maxLength = 132
+  val requiredKey = "secondContactEmail.error.required"
+  val invalidKey = "secondContactEmail.error.invalid"
+  val lengthKey = "secondContactEmail.error.length"
 
   def apply(): Form[String] =
     Form(
-      "value" -> validatedText(
-        "secondContactEmail.error.required",
-        "secondContactEmail.error.invalid",
-        "secondContactEmail.error.length",
+      CommonUtils.value -> validatedText(
+        requiredKey,
+        invalidKey,
+        lengthKey,
         emailRegex,
         maxLength
       )

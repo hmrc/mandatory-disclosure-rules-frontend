@@ -18,6 +18,7 @@ package forms
 
 import forms.mappings.Mappings
 import play.api.data.Form
+import utils.{CommonUtils, FileUploadUtils}
 
 import javax.inject.Inject
 
@@ -25,6 +26,6 @@ class UploadFileFormProvider @Inject() extends Mappings {
 
   def apply(): Form[String] =
     Form(
-      "file-upload" -> text()
+      FileUploadUtils.fileUpload -> text()
     )
 }
