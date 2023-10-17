@@ -17,7 +17,8 @@
 package controllers
 
 import base.SpecBase
-import models.{CheckMode, ConversationId, MDR401, MessageSpecData, MultipleNewInformation, ValidatedFileData}
+import models.fileDetails.{FileStatus}
+import models.{ConversationId, MDR401, MessageSpecData, MultipleNewInformation, ValidatedFileData}
 import pages.{ConversationIdPage, ValidXMLPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -47,7 +48,7 @@ class FilePassedChecksControllerSpec extends SpecBase {
 
       running(application) {
 
-        val fileSummaryList = FileCheckViewModel.createFileSummary(validXmlDetails.fileName, "Accepted")(messages(application))
+        val fileSummaryList = FileCheckViewModel.createFileSummary(validXmlDetails.fileName, FileStatus.ACCEPTED)(messages(application))
         val action          = routes.FileReceivedController.onPageLoadSlow(conversationId).url
         val request         = FakeRequest(GET, routes.FilePassedChecksController.onPageLoad().url)
         val result          = route(application, request).value

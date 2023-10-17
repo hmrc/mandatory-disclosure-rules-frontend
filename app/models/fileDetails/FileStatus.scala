@@ -32,4 +32,5 @@ case class Rejected(error: ValidationErrors) extends FileStatus {
 
 object FileStatus {
   implicit val format: OFormat[FileStatus] = derived.oformat()
+  val ACCEPTED                             = "Accepted"
 }

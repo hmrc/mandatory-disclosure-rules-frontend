@@ -17,6 +17,7 @@
 package viewmodels
 
 import base.SpecBase
+import models.fileDetails.{FileStatus}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{HtmlContent, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{Key, SummaryListRow, Value}
 
@@ -41,7 +42,7 @@ class FileCheckViewModelSpec extends SpecBase {
         SummaryListRow(Key(Text("Result of automatic checks")), Value(HtmlContent("<strong class='govuk-tag govuk-tag--green'>Passed</strong>")), "", None)
       )
 
-      FileCheckViewModel.createFileSummary("name1.xml", "Accepted")(messages(app)) mustBe expectedSummary
+      FileCheckViewModel.createFileSummary("name1.xml", FileStatus.ACCEPTED)(messages(app)) mustBe expectedSummary
     }
 
     "must return the viewModel when fileStatus is rejected" in {
