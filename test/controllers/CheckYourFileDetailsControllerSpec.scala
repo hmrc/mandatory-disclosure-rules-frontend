@@ -24,6 +24,7 @@ import play.api.test.Helpers._
 import viewmodels.CheckYourFileDetailsViewModel
 import viewmodels.govuk.summarylist._
 import views.html.{CheckYourFileDetailsView, ThereIsAProblemView}
+import models.cssClassesType.CssClassesType
 
 class CheckYourFileDetailsControllerSpec extends SpecBase {
 
@@ -45,7 +46,7 @@ class CheckYourFileDetailsControllerSpec extends SpecBase {
 
         val list = SummaryListViewModel(CheckYourFileDetailsViewModel.getSummaryRows(vfd)(messages(application)))
           .withoutBorders()
-          .withCssClass("govuk-!-margin-bottom-0")
+          .withCssClass(CssClassesType.GOVUKMARGINBOTTOM)
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(list)(request, messages(application)).toString

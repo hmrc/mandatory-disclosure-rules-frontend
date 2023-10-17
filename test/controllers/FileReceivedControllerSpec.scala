@@ -19,11 +19,11 @@ package controllers
 import base.SpecBase
 import connectors.FileDetailsConnector
 import models.fileDetails.{Accepted, FileDetails}
+import models.cssClassesType.CssClassesType
 import models.{
   ConversationId,
   MultipleCorrectionsDeletions,
   MultipleNewInformation,
-  NormalMode,
   SingleCorrection,
   SingleDeletion,
   SingleNewInformation,
@@ -84,7 +84,7 @@ class FileReceivedControllerSpec extends SpecBase {
       )
     )
   ).withMargin()
-    .withCssClass("govuk-!-margin-bottom-0")
+    .withCssClass(CssClassesType.GOVUKMARGINBOTTOM)
 
   "FileReceived Controller" - {
 
@@ -365,7 +365,7 @@ class FileReceivedControllerSpec extends SpecBase {
             )
           )
         ).withMargin()
-          .withCssClass("govuk-!-margin-bottom-0")
+          .withCssClass(CssClassesType.GOVUKMARGINBOTTOM)
 
         status(result) mustEqual OK
         contentAsString(result) mustBe view(list, firstContactEmail, Some(secondContactEmail))(request, messages(application)).toString
