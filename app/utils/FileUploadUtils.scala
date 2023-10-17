@@ -14,24 +14,15 @@
  * limitations under the License.
  */
 
-package models.fileDetails
+package utils
 
-import julienrf.json.derived
-import play.api.libs.json.OFormat
+object FileUploadUtils {
 
-sealed trait FileStatus
 
-case object Pending extends FileStatus
-case object Accepted extends FileStatus
-case object RejectedSDES extends FileStatus
-case object RejectedSDESVirus extends FileStatus
-
-case class Rejected(error: ValidationErrors) extends FileStatus {
-  override def toString: String = "Rejected"
-}
-
-object FileStatus {
-  implicit val format: OFormat[FileStatus] = derived.oformat()
-  val ACCEPTED                             = "Accepted"
-  val REJECTED                             = "Rejected"
+  val EntityTooLarge  = "EntityTooLarge"
+  val InvalidArgument  = "InvalidArgument"
+  val OctetStream = "OctetStream"
+  val fileUpload = "file-upload"
+  val uploadFileErrorFileEmpty = "uploadFile.error.file.empty"
+  val octetStream = "octet-stream"
 }

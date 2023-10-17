@@ -44,7 +44,8 @@ class ContactPhoneOrganisationController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider()
+  val form  = formProvider()
+  val BLANK = ""
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData() andThen requireData) {
     implicit request =>
@@ -59,7 +60,7 @@ class ContactPhoneOrganisationController @Inject() (
   private def getContactName(userAnswers: UserAnswers): String =
     userAnswers.get(ContactNamePage) match {
       case Some(contactName) => contactName
-      case _                 => ""
+      case _                 => BLANK
     }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData() andThen requireData).async {

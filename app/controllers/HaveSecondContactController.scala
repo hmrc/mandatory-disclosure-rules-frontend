@@ -25,6 +25,7 @@ import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.CommonUtils
 import views.html.HaveSecondContactView
 
 import javax.inject.Inject
@@ -44,8 +45,8 @@ class HaveSecondContactController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  val form = formProvider()
-
+  val form  = formProvider()
+ç
   def onPageLoad(): Action[AnyContent] = (identify andThen getData() andThen requireData) {
     implicit request =>
       val preparedForm = request.userAnswers.get(HaveSecondContactPage) match {
@@ -63,7 +64,7 @@ class HaveSecondContactController @Inject() (
   private def getContactName(userAnswers: UserAnswers)(implicit messages: Messages): String =
     (userAnswers.get(ContactNamePage)) match {
       case Some(contactName) => contactName
-      case _                 => messages("default.firstContact.name")
+      case _                 => messages(CommonUtils.firstContactName)
     }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData() andThen requireData).async {

@@ -30,6 +30,7 @@ import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.CommonUtils
 import utils.FileProblemHelper.isProblemStatus
 import views.html.SendYourFileView
 
@@ -59,10 +60,10 @@ class SendYourFileController @Inject() (
         .get(ValidXMLPage)
         .map(_.messageSpecData.reportType)
         .flatMap {
-          case MultipleCorrectionsDeletions => Some("multipleCorrectionsDeletions")
-          case SingleCorrection             => Some("singleCorrection")
-          case SingleDeletion               => Some("singleDeletion")
-          case SingleOther                  => Some("singleOther")
+          case MultipleCorrectionsDeletions => Some(CommonUtils.multipleCorrectionsDeletions)
+          case SingleCorrection             => Some(CommonUtils.singleCorrection)
+          case SingleDeletion               => Some(CommonUtils.singleDeletion)
+          case SingleOther                  => Some(CommonUtils.singleOther)
           case _                            => None
         }
 

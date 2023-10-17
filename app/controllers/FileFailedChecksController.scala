@@ -24,6 +24,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.FileCheckViewModel
 import views.html.{FileFailedChecksView, ThereIsAProblemView}
+import models.fileDetails._
 
 import javax.inject.Inject
 
@@ -44,7 +45,7 @@ class FileFailedChecksController @Inject() (
       (request.userAnswers.get(ValidXMLPage), request.userAnswers.get(ConversationIdPage)) match {
         case (Some(xmlDetails), Some(conversationId)) =>
           val action  = routes.FileRejectedController.onPageLoadSlow(conversationId).url
-          val summary = FileCheckViewModel.createFileSummary(xmlDetails.fileName, "Rejected")
+          val summary = FileCheckViewModel.createFileSummary(xmlDetails.fileName, FileStatus.REJECTED)
           Ok(view(summary, action))
         case _ =>
           logger.warn("FileFailedChecksController: Unable to retrieve either XML information or ConversationId from UserAnswers")

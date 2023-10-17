@@ -26,6 +26,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.HaveTelephoneView
+import utils.CommonUtils
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -59,7 +60,7 @@ class HaveTelephoneController @Inject() (
   private def getContactName(userAnswers: UserAnswers, affinityType: AffinityType): String =
     (userAnswers.get(ContactNamePage), affinityType) match {
       case (Some(contactName), Organisation) => contactName
-      case _                                 => ""
+      case _                                 => CommonUtils.blank
     }
 
   def onSubmit(mode: Mode, affinityType: AffinityType): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
@@ -71,7 +72,7 @@ class HaveTelephoneController @Inject() (
           hasTelephone =>
             for {
               updatedAnswers     <- Future.fromTry(request.userAnswers.set(HaveTelephonePage, hasTelephone))
-              uaWithContactPhone <- if (!hasTelephone) Future.fromTry(updatedAnswers.set(ContactPhonePage, "")) else Future.successful(updatedAnswers)
+              uaWithContactPhone <- if (!hasTelephone) Future.fromTry(updatedAnswers.set(ContactPhonePage, CommonUtils.blank)) else Future.successful(updatedAnswers)
               _                  <- sessionRepository.set(uaWithContactPhone)
             } yield Redirect(navigator.nextPage(HaveTelephonePage, affinityType, mode, uaWithContactPhone))
         )

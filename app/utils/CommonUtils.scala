@@ -14,24 +14,18 @@
  * limitations under the License.
  */
 
-package models.fileDetails
+package utils
 
-import julienrf.json.derived
-import play.api.libs.json.OFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
-sealed trait FileStatus
+object CommonUtils {
 
-case object Pending extends FileStatus
-case object Accepted extends FileStatus
-case object RejectedSDES extends FileStatus
-case object RejectedSDESVirus extends FileStatus
-
-case class Rejected(error: ValidationErrors) extends FileStatus {
-  override def toString: String = "Rejected"
-}
-
-object FileStatus {
-  implicit val format: OFormat[FileStatus] = derived.oformat()
-  val ACCEPTED                             = "Accepted"
-  val REJECTED                             = "Rejected"
+  val blank: String = ""
+  val firstContactName  = "default.firstContact.name"
+  val secondContactName  = "default.secondContact.name"
+  val multipleCorrectionsDeletions = "multipleCorrectionsDeletions"
+  val singleCorrection = "singleCorrection"
+  val singleDeletion = "singleDeletion"
+  val singleOther = "singleOther"
 }

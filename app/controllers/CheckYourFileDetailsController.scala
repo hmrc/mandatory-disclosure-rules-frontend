@@ -25,6 +25,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import viewmodels.CheckYourFileDetailsViewModel
 import viewmodels.govuk.summarylist._
 import views.html.{CheckYourFileDetailsView, ThereIsAProblemView}
+import models.cssClassesType.CssClassesType
 
 import javax.inject.Inject
 
@@ -44,7 +45,9 @@ class CheckYourFileDetailsController @Inject() (
     implicit request =>
       request.userAnswers.get(ValidXMLPage) match {
         case Some(details) =>
-          val detailsList = SummaryListViewModel(CheckYourFileDetailsViewModel.getSummaryRows(details)).withoutBorders().withCssClass("govuk-!-margin-bottom-0")
+          val detailsList = SummaryListViewModel(CheckYourFileDetailsViewModel.getSummaryRows(details))
+            .withoutBorders()
+            .withCssClass(CssClassesType.GOVUKMARGINBOTTOM)
           Ok(view(detailsList))
         case _ =>
           logger.warn("CheckYourFileDetailsController: Unable to retrieve XML information from UserAnswers")

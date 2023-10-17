@@ -34,6 +34,7 @@ import repositories.SessionRepository
 import services.audit.AuditService
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.{CommonUtils, FileUploadUtils}
 import views.html.UploadFileView
 
 import javax.inject.Inject
@@ -83,10 +84,10 @@ class UploadFileController @Inject() (
   def showError(errorCode: String, errorMessage: String, errorRequestId: String): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
       errorCode match {
-        case "EntityTooLarge" =>
+        case FileUploadUtils.EntityTooLarge =>
           Future.successful(Redirect(routes.FileTooLargeController.onPageLoad()))
-        case "InvalidArgument" | "OctetStream" =>
-          val formWithErrors: Form[String] = form.withError("file-upload", "uploadFile.error.file.empty")
+        case FileUploadUtils.InvalidArgument | FileUploadUtils.OctetStream =>
+          val formWithErrors: Form[String] = form.withError(FileUploadUtils.fileUpload, FileUploadUtils.uploadFileErrorFileEmpty)
           toResponse(formWithErrors)
         case _ =>
           logger.warn(s"Upscan error $errorCode: $errorMessage, requestId is $errorRequestId")
@@ -104,10 +105,10 @@ class UploadFileController @Inject() (
             Redirect(routes.FileValidationController.onPageLoad().url)
           case Some(rejected: UploadRejected) =>
             sendAuditEvent(uploadId, rejected)
-            if (rejected.details.message.contains("octet-stream")) {
+            if (rejected.details.message.contains(FileUploadUtils.octetStream)) {
               logger.warn(s"Show errorForm on rejection $rejected")
               val errorReason = rejected.details.failureReason
-              Redirect(routes.UploadFileController.showError("OctetStream", errorReason, "").url)
+              Redirect(routes.UploadFileController.showError(FileUploadUtils.OctetStream, errorReason, CommonUtils.blank).url)
             } else {
               logger.warn(s"Upload rejected. Error details: ${rejected.details}")
               Redirect(routes.NotXMLFileController.onPageLoad().url)
