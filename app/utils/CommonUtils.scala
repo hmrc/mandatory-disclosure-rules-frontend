@@ -21,12 +21,12 @@ import java.time.format.DateTimeFormatter
 
 object CommonUtils {
 
-  val blank: String = ""
-  val firstContactName  = "default.firstContact.name"
-  val secondContactName  = "default.secondContact.name"
+  val blank: String                = ""
+  val firstContactName             = "default.firstContact.name"
+  val secondContactName            = "default.secondContact.name"
   val multipleCorrectionsDeletions = "multipleCorrectionsDeletions"
-  val singleCorrection = "singleCorrection"
-  val singleDeletion = "singleDeletion"
-  val singleOther = "singleOther"
-  val value = "value"
+  val singleCorrection             = "singleCorrection"
+  val singleDeletion               = "singleDeletion"
+  val singleOther                  = "singleOther"
+  val value                        = "value"
 }

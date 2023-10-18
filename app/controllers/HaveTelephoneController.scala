@@ -71,9 +71,10 @@ class HaveTelephoneController @Inject() (
           formWithErrors => Future.successful(BadRequest(view(formWithErrors, affinityType, getContactName(request.userAnswers, affinityType), mode))),
           hasTelephone =>
             for {
-              updatedAnswers     <- Future.fromTry(request.userAnswers.set(HaveTelephonePage, hasTelephone))
-              uaWithContactPhone <- if (!hasTelephone) Future.fromTry(updatedAnswers.set(ContactPhonePage, CommonUtils.blank)) else Future.successful(updatedAnswers)
-              _                  <- sessionRepository.set(uaWithContactPhone)
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(HaveTelephonePage, hasTelephone))
+              uaWithContactPhone <-
+                if (!hasTelephone) Future.fromTry(updatedAnswers.set(ContactPhonePage, CommonUtils.blank)) else Future.successful(updatedAnswers)
+              _ <- sessionRepository.set(uaWithContactPhone)
             } yield Redirect(navigator.nextPage(HaveTelephonePage, affinityType, mode, uaWithContactPhone))
         )
   }

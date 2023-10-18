@@ -18,8 +18,8 @@ package utils
 
 object RepositoryUtils {
 
-  val lastUpdated = "lastUpdated"
+  val lastUpdated    = "lastUpdated"
   val lastUpdatedIdx = "lastUpdatedIdx"
-  val userAnswers = "user-answers"
-  val id = "_id"
+  val userAnswers    = "user-answers"
+  val id             = "_id"
 }

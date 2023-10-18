@@ -18,11 +18,10 @@ package utils
 
 object FileUploadUtils {
 
-
-  val EntityTooLarge  = "EntityTooLarge"
-  val InvalidArgument  = "InvalidArgument"
-  val OctetStream = "OctetStream"
-  val fileUpload = "file-upload"
+  val EntityTooLarge           = "EntityTooLarge"
+  val InvalidArgument          = "InvalidArgument"
+  val OctetStream              = "OctetStream"
+  val fileUpload               = "file-upload"
   val uploadFileErrorFileEmpty = "uploadFile.error.file.empty"
-  val octetStream = "octet-stream"
+  val octetStream              = "octet-stream"
 }

@@ -25,6 +25,7 @@ import javax.inject.Inject
 class SecondContactHavePhoneFormProvider @Inject() extends Mappings {
 
   val requiredKey = "secondContactHavePhone.error.required"
+
   def apply(): Form[Boolean] =
     Form(
       CommonUtils.value -> boolean(requiredKey)

@@ -25,9 +25,9 @@ import javax.inject.Inject
 class SecondContactEmailFormProvider @Inject() extends Mappings with RegExConstants {
 
   private val maxLength = 132
-  val requiredKey = "secondContactEmail.error.required"
-  val invalidKey = "secondContactEmail.error.invalid"
-  val lengthKey = "secondContactEmail.error.length"
+  val requiredKey       = "secondContactEmail.error.required"
+  val invalidKey        = "secondContactEmail.error.invalid"
+  val lengthKey         = "secondContactEmail.error.length"
 
   def apply(): Form[String] =
     Form(

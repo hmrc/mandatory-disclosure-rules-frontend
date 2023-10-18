@@ -45,8 +45,8 @@ class HaveSecondContactController @Inject() (
     extends FrontendBaseController
     with I18nSupport {
 
-  val form  = formProvider()
-ç
+  val form = formProvider()
+
   def onPageLoad(): Action[AnyContent] = (identify andThen getData() andThen requireData) {
     implicit request =>
       val preparedForm = request.userAnswers.get(HaveSecondContactPage) match {

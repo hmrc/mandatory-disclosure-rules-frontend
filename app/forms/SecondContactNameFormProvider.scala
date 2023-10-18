@@ -25,16 +25,16 @@ import javax.inject.Inject
 class SecondContactNameFormProvider @Inject() extends Mappings with RegExConstants {
 
   private val maxLength = 35
-  val requiredKey = "secondContactName.error.required"
-  val lengthKey = "secondContactName.error.length"
-  val invalidKey = "secondContactName.error.invalid"
+  val requiredKey       = "secondContactName.error.required"
+  val lengthKey         = "secondContactName.error.length"
+  val invalidKey        = "secondContactName.error.invalid"
 
   def apply(): Form[String] =
     Form(
       CommonUtils.value -> validatedText(
         requiredKey,
-        lengthKey,
         invalidKey,
+        lengthKey,
         orgNameRegex,
         maxLength
       )

@@ -24,11 +24,12 @@ import javax.inject.Inject
 
 class ContactPhoneOrganisationFormProvider @Inject() extends Mappings with RegExConstants {
 
-  private val maxLength = 24
+  private val maxLength   = 24
   private val requiredKey = "contactPhoneOrganisation.error.required"
-  private val invalidKey = "contactPhoneOrganisation.error.invalid"
-  private val lengthKey = "contactPhoneOrganisation.error.length"
-  private val value = "value"
+  private val invalidKey  = "contactPhoneOrganisation.error.invalid"
+  private val lengthKey   = "contactPhoneOrganisation.error.length"
+  private val value       = "value"
+
   def apply(): Form[String] =
     Form(
       value -> validatedText(

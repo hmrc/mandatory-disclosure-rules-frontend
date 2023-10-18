@@ -26,7 +26,7 @@ import javax.inject.Inject
 class HaveTelephoneFormProvider @Inject() extends Mappings {
 
   val requiredKey = "haveTelephone.error.required"
-  val invalidKey = "error.boolean"
+  val invalidKey  = "error.boolean"
 
   def apply(): Form[Boolean] =
     Form(
