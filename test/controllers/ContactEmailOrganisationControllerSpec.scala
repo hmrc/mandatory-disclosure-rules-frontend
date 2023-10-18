@@ -16,7 +16,7 @@
 
 package controllers
 
-import base.SpecBase
+import base.{SpecBase, TestValues}
 import forms.ContactEmailOrganisationFormProvider
 import models.{AffinityType, NormalMode, UserAnswers}
 import navigation.{ContactDetailsNavigator, FakeContactDetailsNavigator}
@@ -73,7 +73,7 @@ class ContactEmailOrganisationControllerSpec extends SpecBase {
         .set(ContactNamePage, name)
         .success
         .value
-        .set(ContactEmailPage, "answer")
+        .set(ContactEmailPage, TestValues.userAnswer)
         .success
         .value
 
@@ -87,7 +87,7 @@ class ContactEmailOrganisationControllerSpec extends SpecBase {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill("answer"), name, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(TestValues.userAnswer), name, NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -106,7 +106,7 @@ class ContactEmailOrganisationControllerSpec extends SpecBase {
       running(application) {
         val request =
           FakeRequest(POST, contactEmailRoute)
-            .withFormUrlEncodedBody(("value", "some@email.com"))
+            .withFormUrlEncodedBody((TestValues.inputValue, TestValues.emailId))
 
         val result = route(application, request).value
 
@@ -127,9 +127,9 @@ class ContactEmailOrganisationControllerSpec extends SpecBase {
       running(application) {
         val request =
           FakeRequest(POST, contactEmailRoute)
-            .withFormUrlEncodedBody(("value", ""))
+            .withFormUrlEncodedBody((TestValues.inputValue, ""))
 
-        val boundForm = form.bind(Map("value" -> ""))
+        val boundForm = form.bind(Map(TestValues.inputValue -> ""))
 
         val view = application.injector.instanceOf[ContactEmailOrganisationView]
 

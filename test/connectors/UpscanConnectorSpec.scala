@@ -26,8 +26,17 @@ import uk.gov.hmrc.http.UpstreamErrorResponse
 
 class UpscanConnectorSpec extends Connector {
 
-  val fileSize           = 100L
-  val uploadId: UploadId = UploadId("12345")
+  val fileSize             = 100L
+  val uploadId: UploadId   = UploadId("12345")
+  val upScanDetailsUrl     = "/mandatory-disclosure-rules/upscan/details/12345"
+  val upScanStatusUrl      = "/mandatory-disclosure-rules/upscan/status/12345"
+  val callbackUrl          = "callbackUrl"
+  val downloadUrl          = "downloadUrl"
+  val formKey              = "formKey"
+  val formValue            = "formValue"
+  val checksum             = "1234"
+  val reference: Reference = Reference("Reference")
+  val name                 = "name"
 
   override def fakeApplication(): Application = new GuiceApplicationBuilder()
     .configure(
@@ -37,12 +46,12 @@ class UpscanConnectorSpec extends Connector {
     .build()
 
   lazy val connector: UpscanConnector = app.injector.instanceOf[UpscanConnector]
-  val request: UpscanInitiateRequest  = UpscanInitiateRequest("callbackUrl")
+  val request: UpscanInitiateRequest  = UpscanInitiateRequest(callbackUrl)
 
   "getUpscanFormData" - {
     "should return an UpscanInitiateResponse" - {
       "when upscan returns a valid successful response" in {
-        val body = PreparedUpload(Reference("Reference"), UploadForm("downloadUrl", Map("formKey" -> "formValue")))
+        val body = PreparedUpload(reference, UploadForm(downloadUrl, Map(formKey -> formValue)))
 
         stubPostResponse(connector.upscanInitiatePath, OK, Json.toJson(body).toString())
 
@@ -86,12 +95,12 @@ class UpscanConnectorSpec extends Connector {
     "should return an UploadSessionDetails" - {
       "when a valid successful response is returned" in {
         val body = UploadSessionDetails(_id = ObjectId.get(),
-                                        uploadId = UploadId("12345"),
-                                        reference = Reference("Reference"),
-                                        status = UploadedSuccessfully("name", "downloadUrl", fileSize, "1234")
+                                        uploadId = uploadId,
+                                        reference = reference,
+                                        status = UploadedSuccessfully(name, downloadUrl, fileSize, checksum)
         )
 
-        stubGetResponse("/mandatory-disclosure-rules/upscan/details/12345", OK, Json.toJson(body).toString())
+        stubGetResponse(upScanDetailsUrl, OK, Json.toJson(body).toString())
 
         whenReady(connector.getUploadDetails(uploadId)) {
           result =>
@@ -103,7 +112,7 @@ class UpscanConnectorSpec extends Connector {
 
     "should return None" - {
       "when an invalid response is returned" in {
-        stubGetResponse("/mandatory-disclosure-rules/upscan/details/12345", OK, Json.obj().toString())
+        stubGetResponse(upScanDetailsUrl, OK, Json.obj().toString())
 
         whenReady(connector.getUploadDetails(uploadId)) {
           result =>
@@ -127,11 +136,11 @@ class UpscanConnectorSpec extends Connector {
             | }
             |""".stripMargin
 
-        stubGetResponse("/mandatory-disclosure-rules/upscan/status/12345", OK, body)
+        stubGetResponse(upScanStatusUrl, OK, body)
 
         whenReady(connector.getUploadStatus(uploadId)) {
           result =>
-            result mustBe Some(UploadedSuccessfully("name", "downloadUrl", fileSize, "1234"))
+            result mustBe Some(UploadedSuccessfully(name, downloadUrl, fileSize, checksum))
         }
       }
 
@@ -143,7 +152,7 @@ class UpscanConnectorSpec extends Connector {
             | }
             |""".stripMargin
 
-        stubGetResponse("/mandatory-disclosure-rules/upscan/status/12345", OK, body)
+        stubGetResponse(upScanStatusUrl, OK, body)
 
         whenReady(connector.getUploadStatus(uploadId)) {
           result =>
@@ -159,7 +168,7 @@ class UpscanConnectorSpec extends Connector {
             | }
             |""".stripMargin
 
-        stubGetResponse("/mandatory-disclosure-rules/upscan/status/12345", OK, body)
+        stubGetResponse(upScanStatusUrl, OK, body)
 
         whenReady(connector.getUploadStatus(uploadId)) {
           result =>
@@ -175,7 +184,7 @@ class UpscanConnectorSpec extends Connector {
             | }
             |""".stripMargin
 
-        stubGetResponse("/mandatory-disclosure-rules/upscan/status/12345", OK, body)
+        stubGetResponse(upScanStatusUrl, OK, body)
 
         whenReady(connector.getUploadStatus(uploadId)) {
           result =>
@@ -191,7 +200,7 @@ class UpscanConnectorSpec extends Connector {
             | }
             |""".stripMargin
 
-        stubGetResponse("/mandatory-disclosure-rules/upscan/status/12345", OK, body)
+        stubGetResponse(upScanStatusUrl, OK, body)
 
         whenReady(connector.getUploadStatus(uploadId)) {
           result =>
@@ -202,7 +211,7 @@ class UpscanConnectorSpec extends Connector {
 
     "should return None" - {
       "when an invalid response is returned" in {
-        stubGetResponse("/mandatory-disclosure-rules/upscan/status/12345", OK, Json.obj().toString())
+        stubGetResponse(upScanStatusUrl, OK, Json.obj().toString())
 
         whenReady(connector.getUploadStatus(uploadId)) {
           result =>

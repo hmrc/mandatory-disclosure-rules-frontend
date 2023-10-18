@@ -37,6 +37,11 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class AuthActionSpec extends SpecBase {
 
+  val keyVal         = "HMRC-MDR-ORG"
+  val mdrId          = "MDRID"
+  val subscriptionId = "subscriptionId"
+  val internalId     = "internalID"
+
   class Harness(authAction: IdentifierAction) {
 
     def onPageLoad(): Action[AnyContent] = authAction {
@@ -120,13 +125,13 @@ class AuthActionSpec extends SpecBase {
 
           val mockAuthConnector: AuthConnector = mock[AuthConnector]
           val mdrEnrolment = Enrolment(
-            key = "HMRC-MDR-ORG",
-            identifiers = Seq(EnrolmentIdentifier("MDRID", "subscriptionId")),
+            key = keyVal,
+            identifiers = Seq(EnrolmentIdentifier(mdrId, subscriptionId)),
             state = "",
             delegatedAuthRule = None
           )
 
-          val retrieval: AuthRetrievals = Some("internalID") ~ Enrolments(Set(mdrEnrolment)) ~ Some(Organisation)
+          val retrieval: AuthRetrievals = Some(internalId) ~ Enrolments(Set(mdrEnrolment)) ~ Some(Organisation)
           when(mockAuthConnector.authorise[AuthRetrievals](any(), any())(any(), any())) thenReturn Future.successful(retrieval)
 
           val action = new AuthenticatedIdentifierAction(mockAuthConnector, appConfig, bodyParsers)
@@ -138,7 +143,7 @@ class AuthActionSpec extends SpecBase {
           val result = controller()(FakeRequest())
 
           status(result) mustBe OK
-          contentAsString(result) mustEqual "subscriptionId"
+          contentAsString(result) mustEqual subscriptionId
         }
       }
     }
@@ -157,13 +162,13 @@ class AuthActionSpec extends SpecBase {
 
           val mockAuthConnector: AuthConnector = mock[AuthConnector]
           val mdrEnrolment = Enrolment(
-            key = "HMRC-MDR-ORG",
-            identifiers = Seq(EnrolmentIdentifier("MDRID", "")),
+            key = keyVal,
+            identifiers = Seq(EnrolmentIdentifier(mdrId, "")),
             state = "",
             delegatedAuthRule = None
           )
 
-          val retrieval: AuthRetrievals = Some("internalID") ~ Enrolments(Set(mdrEnrolment)) ~ Some(Individual)
+          val retrieval: AuthRetrievals = Some(internalId) ~ Enrolments(Set(mdrEnrolment)) ~ Some(Individual)
           when(mockAuthConnector.authorise[AuthRetrievals](any(), any())(any(), any())) thenReturn Future.successful(retrieval)
 
           val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, appConfig, bodyParsers)
@@ -185,18 +190,19 @@ class AuthActionSpec extends SpecBase {
         val application = applicationBuilder(userAnswers = None).build()
 
         running(application) {
-          val bodyParsers = application.injector.instanceOf[BodyParsers.Default]
-          val appConfig   = application.injector.instanceOf[FrontendAppConfig]
-
+          val bodyParsers                      = application.injector.instanceOf[BodyParsers.Default]
+          val appConfig                        = application.injector.instanceOf[FrontendAppConfig]
+          val invalidEnrolment                 = "INVALID-ENROLMENT"
+          val id                               = "ID"
           val mockAuthConnector: AuthConnector = mock[AuthConnector]
           val mdrEnrolment = Enrolment(
-            key = "INVALID-ENROLMENT",
-            identifiers = Seq(EnrolmentIdentifier("ID", "")),
+            key = invalidEnrolment,
+            identifiers = Seq(EnrolmentIdentifier(id, "")),
             state = "",
             delegatedAuthRule = None
           )
 
-          val retrieval: AuthRetrievals = Some("internalID") ~ Enrolments(Set(mdrEnrolment)) ~ Some(Individual)
+          val retrieval: AuthRetrievals = Some(internalId) ~ Enrolments(Set(mdrEnrolment)) ~ Some(Individual)
           when(mockAuthConnector.authorise[AuthRetrievals](any(), any())(any(), any())) thenReturn Future.successful(retrieval)
 
           val authAction = new AuthenticatedIdentifierAction(mockAuthConnector, appConfig, bodyParsers)
@@ -223,8 +229,8 @@ class AuthActionSpec extends SpecBase {
 
           val mockAuthConnector: AuthConnector = mock[AuthConnector]
           val mdrEnrolment = Enrolment(
-            key = "HMRC-MDR-ORG",
-            identifiers = Seq(EnrolmentIdentifier("MDRID", "subscriptionId")),
+            key = keyVal,
+            identifiers = Seq(EnrolmentIdentifier(mdrId, subscriptionId)),
             state = "",
             delegatedAuthRule = None
           )

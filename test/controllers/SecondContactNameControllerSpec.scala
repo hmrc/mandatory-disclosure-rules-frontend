@@ -16,7 +16,7 @@
 
 package controllers
 
-import base.SpecBase
+import base.{SpecBase, TestValues}
 import forms.SecondContactNameFormProvider
 import models.UserAnswers
 import navigation.{ContactDetailsNavigator, FakeContactDetailsNavigator}
@@ -61,7 +61,7 @@ class SecondContactNameControllerSpec extends SpecBase with MockitoSugar {
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(SecondContactNamePage, "answer").success.value
+      val userAnswers = UserAnswers(userAnswersId).set(SecondContactNamePage, TestValues.userAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -73,7 +73,7 @@ class SecondContactNameControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill("answer"))(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(TestValues.userAnswer))(request, messages(application)).toString
       }
     }
 
@@ -92,7 +92,7 @@ class SecondContactNameControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, secondContactNameRoute)
-            .withFormUrlEncodedBody(("value", "answer"))
+            .withFormUrlEncodedBody((TestValues.inputValue, TestValues.userAnswer))
 
         val result = route(application, request).value
 
@@ -108,9 +108,9 @@ class SecondContactNameControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, secondContactNameRoute)
-            .withFormUrlEncodedBody(("value", ""))
+            .withFormUrlEncodedBody((TestValues.inputValue, ""))
 
-        val boundForm = form.bind(Map("value" -> ""))
+        val boundForm = form.bind(Map(TestValues.inputValue -> ""))
 
         val view = application.injector.instanceOf[SecondContactNameView]
 

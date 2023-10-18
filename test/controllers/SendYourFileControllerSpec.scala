@@ -16,7 +16,7 @@
 
 package controllers
 
-import base.SpecBase
+import base.{SpecBase, TestValues}
 import config.FrontendAppConfig
 import connectors.{FileDetailsConnector, SubmissionConnector}
 import models.fileDetails.FileErrorCode.FailedSchemaValidation
@@ -54,8 +54,6 @@ class SendYourFileControllerSpec extends SpecBase {
 
   val fileSize = 1000L
 
-  private val conversationId: ConversationId = ConversationId("conversationId")
-
   "SendYourFile Controller" - {
 
     val fileSize: Long = 100293L
@@ -64,8 +62,15 @@ class SendYourFileControllerSpec extends SpecBase {
 
       "must return OK and the correct view for MultipleNewInformation with no warning text for a GET" in {
 
-        val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR401, 2, "OECD1", MultipleNewInformation), fileSize, "1234"))
+        val userAnswers = UserAnswers(TestValues.id)
+          .set(
+            ValidXMLPage,
+            ValidatedFileData(TestValues.fileName,
+                              MessageSpecData(TestValues.messageRefId, MDR401, 2, TestValues.docTypeIndic, MultipleNewInformation),
+                              fileSize,
+                              TestValues.checkSum
+            )
+          )
           .success
           .value
 
@@ -85,9 +90,15 @@ class SendYourFileControllerSpec extends SpecBase {
       }
 
       "must return OK and the correct view for SingleNewInformation with no warning text for a GET" in {
-
-        val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR401, 1, "OECD1", SingleNewInformation), fileSize, "1234"))
+        val userAnswers = UserAnswers(TestValues.id)
+          .set(
+            ValidXMLPage,
+            ValidatedFileData(TestValues.fileName,
+                              MessageSpecData(TestValues.messageRefId, MDR401, 2, TestValues.docTypeIndic, SingleNewInformation),
+                              fileSize,
+                              TestValues.checkSum
+            )
+          )
           .success
           .value
 
@@ -107,9 +118,16 @@ class SendYourFileControllerSpec extends SpecBase {
       }
 
       "must return OK and the correct view with MultipleCorrectionsDeletions warning text for a GET" in {
-
-        val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 2, "OECD1", MultipleCorrectionsDeletions), fileSize, "1234"))
+        val userAnswers = UserAnswers(TestValues.id)
+          .set(
+            ValidXMLPage,
+            ValidatedFileData(
+              TestValues.fileName,
+              MessageSpecData(TestValues.messageRefId, MDR401, 2, TestValues.docTypeIndic, MultipleCorrectionsDeletions),
+              fileSize,
+              TestValues.checkSum
+            )
+          )
           .success
           .value
 
@@ -129,9 +147,15 @@ class SendYourFileControllerSpec extends SpecBase {
       }
 
       "must return OK and the correct view with singleCorrection warning text for a GET" in {
-
-        val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 1, "OECD1", SingleCorrection), fileSize, "1234"))
+        val userAnswers = UserAnswers(TestValues.id)
+          .set(
+            ValidXMLPage,
+            ValidatedFileData(TestValues.fileName,
+                              MessageSpecData(TestValues.messageRefId, MDR401, 2, TestValues.docTypeIndic, SingleCorrection),
+                              fileSize,
+                              TestValues.checkSum
+            )
+          )
           .success
           .value
 
@@ -152,8 +176,15 @@ class SendYourFileControllerSpec extends SpecBase {
 
       "must return OK and the correct view with singleDeletion warning text for a GET" in {
 
-        val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 1, "OECD1", SingleDeletion), fileSize, "1234"))
+        val userAnswers = UserAnswers(TestValues.id)
+          .set(
+            ValidXMLPage,
+            ValidatedFileData(TestValues.fileName,
+                              MessageSpecData(TestValues.messageRefId, MDR401, 2, TestValues.docTypeIndic, SingleDeletion),
+                              fileSize,
+                              TestValues.checkSum
+            )
+          )
           .success
           .value
 
@@ -173,9 +204,15 @@ class SendYourFileControllerSpec extends SpecBase {
       }
 
       "must return OK and the correct view with singleOther warning text for a GET" in {
-
-        val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 1, "OECD1", SingleOther), fileSize, "1234"))
+        val userAnswers = UserAnswers(TestValues.id)
+          .set(
+            ValidXMLPage,
+            ValidatedFileData(TestValues.fileName,
+                              MessageSpecData(TestValues.messageRefId, MDR401, 2, TestValues.docTypeIndic, SingleOther),
+                              fileSize,
+                              TestValues.checkSum
+            )
+          )
           .success
           .value
 
@@ -201,8 +238,16 @@ class SendYourFileControllerSpec extends SpecBase {
 
         val mockSubmissionConnector = mock[SubmissionConnector]
 
-        val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 2, "OECD1", MultipleCorrectionsDeletions), fileSize, "1234"))
+        val userAnswers = UserAnswers(TestValues.id)
+          .set(
+            ValidXMLPage,
+            ValidatedFileData(
+              TestValues.fileName,
+              MessageSpecData(TestValues.messageRefId, MDR401, 2, TestValues.docTypeIndic, MultipleCorrectionsDeletions),
+              fileSize,
+              TestValues.checkSum
+            )
+          )
           .success
           .value
           .set(URLPage, "url")
@@ -236,8 +281,16 @@ class SendYourFileControllerSpec extends SpecBase {
 
       "redirect to there is a problem page if userAnswers missing" in {
 
-        val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 2, "OECD1", MultipleCorrectionsDeletions), fileSize, "1234"))
+        val userAnswers = UserAnswers(TestValues.id)
+          .set(
+            ValidXMLPage,
+            ValidatedFileData(
+              TestValues.fileName,
+              MessageSpecData(TestValues.messageRefId, MDR401, 2, TestValues.docTypeIndic, MultipleCorrectionsDeletions),
+              fileSize,
+              TestValues.checkSum
+            )
+          )
           .success
           .value
 
@@ -256,8 +309,16 @@ class SendYourFileControllerSpec extends SpecBase {
       "redirect to there is a problem page on failing to submitDocument" in {
         val mockSubmissionConnector = mock[SubmissionConnector]
 
-        val userAnswers = UserAnswers("Id")
-          .set(ValidXMLPage, ValidatedFileData("fileName", MessageSpecData("messageRef", MDR402, 2, "OECD1", MultipleCorrectionsDeletions), fileSize, "1234"))
+        val userAnswers = UserAnswers(TestValues.id)
+          .set(
+            ValidXMLPage,
+            ValidatedFileData(
+              TestValues.fileName,
+              MessageSpecData(TestValues.messageRefId, MDR401, 2, TestValues.docTypeIndic, MultipleCorrectionsDeletions),
+              fileSize,
+              TestValues.checkSum
+            )
+          )
           .success
           .value
           .set(URLPage, "url")
@@ -289,8 +350,8 @@ class SendYourFileControllerSpec extends SpecBase {
 
         val mockFileDetailsConnector = mock[FileDetailsConnector]
 
-        val userAnswers = UserAnswers("Id")
-          .set(ConversationIdPage, conversationId)
+        val userAnswers = UserAnswers(TestValues.id)
+          .set(ConversationIdPage, TestValues.conversationId)
           .success
           .value
 
@@ -316,8 +377,8 @@ class SendYourFileControllerSpec extends SpecBase {
 
         val mockFileDetailsConnector = mock[FileDetailsConnector]
 
-        val userAnswers = UserAnswers("Id")
-          .set(ConversationIdPage, conversationId)
+        val userAnswers = UserAnswers(TestValues.id)
+          .set(ConversationIdPage, TestValues.conversationId)
           .success
           .value
 
@@ -343,8 +404,8 @@ class SendYourFileControllerSpec extends SpecBase {
 
         val mockFileDetailsConnector = mock[FileDetailsConnector]
 
-        val userAnswers = UserAnswers("Id")
-          .set(ConversationIdPage, conversationId)
+        val userAnswers = UserAnswers(TestValues.id)
+          .set(ConversationIdPage, TestValues.conversationId)
           .success
           .value
 
@@ -372,8 +433,8 @@ class SendYourFileControllerSpec extends SpecBase {
 
         val mockFileDetailsConnector = mock[FileDetailsConnector]
 
-        val userAnswers = UserAnswers("Id")
-          .set(ConversationIdPage, conversationId)
+        val userAnswers = UserAnswers(TestValues.id)
+          .set(ConversationIdPage, TestValues.conversationId)
           .success
           .value
 
@@ -401,8 +462,8 @@ class SendYourFileControllerSpec extends SpecBase {
 
         val mockFileDetailsConnector = mock[FileDetailsConnector]
 
-        val userAnswers = UserAnswers("Id")
-          .set(ConversationIdPage, conversationId)
+        val userAnswers = UserAnswers(TestValues.id)
+          .set(ConversationIdPage, TestValues.conversationId)
           .success
           .value
 
@@ -429,8 +490,8 @@ class SendYourFileControllerSpec extends SpecBase {
         val mockFileDetailsConnector = mock[FileDetailsConnector]
         val validationErrors         = ValidationErrors(Some(Seq(FileErrors(FailedSchemaValidation, None))), Some(Seq(RecordError(DocRefIDFormat, None, None))))
 
-        val userAnswers = UserAnswers("Id")
-          .set(ConversationIdPage, conversationId)
+        val userAnswers = UserAnswers(TestValues.id)
+          .set(ConversationIdPage, TestValues.conversationId)
           .success
           .value
 
@@ -456,8 +517,8 @@ class SendYourFileControllerSpec extends SpecBase {
 
         val mockFileDetailsConnector = mock[FileDetailsConnector]
 
-        val userAnswers = UserAnswers("Id")
-          .set(ConversationIdPage, conversationId)
+        val userAnswers = UserAnswers(TestValues.id)
+          .set(ConversationIdPage, TestValues.conversationId)
           .success
           .value
 
@@ -481,7 +542,7 @@ class SendYourFileControllerSpec extends SpecBase {
 
       "must return OK and load the page 'Technical difficulties' page when ConversationId is None" in {
 
-        val userAnswers = UserAnswers("Id")
+        val userAnswers = UserAnswers(TestValues.id)
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
           .build()

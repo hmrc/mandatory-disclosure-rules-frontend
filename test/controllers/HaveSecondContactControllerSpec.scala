@@ -16,7 +16,7 @@
 
 package controllers
 
-import base.SpecBase
+import base.{SpecBase, TestValues}
 import forms.HaveSecondContactFormProvider
 import models.UserAnswers
 import navigation.{ContactDetailsNavigator, FakeContactDetailsNavigator}
@@ -104,7 +104,7 @@ class HaveSecondContactControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, haveSecondContactRoute)
-            .withFormUrlEncodedBody(("value", "true"))
+            .withFormUrlEncodedBody((TestValues.inputValue, "true"))
 
         val result = route(application, request).value
 
@@ -122,9 +122,9 @@ class HaveSecondContactControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, haveSecondContactRoute)
-            .withFormUrlEncodedBody(("value", ""))
+            .withFormUrlEncodedBody((TestValues.inputValue, ""))
 
-        val boundForm = form.bind(Map("value" -> ""))
+        val boundForm = form.bind(Map(TestValues.inputValue -> ""))
 
         val view = application.injector.instanceOf[HaveSecondContactView]
 

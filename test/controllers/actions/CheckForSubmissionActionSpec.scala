@@ -16,7 +16,7 @@
 
 package controllers.actions
 
-import base.SpecBase
+import base.{SpecBase, TestValues}
 import controllers.routes
 import models.requests.DataRequest
 import models.upscan.UploadId
@@ -45,7 +45,7 @@ class CheckForSubmissionActionSpec extends SpecBase with EitherValues {
 
         val action = new Harness(false)
 
-        val result = action.callRefine(DataRequest(FakeRequest(), "id", "subscriptionId", Organisation, emptyUserAnswers)).map(_.left.value)
+        val result = action.callRefine(DataRequest(FakeRequest(), TestValues.id, TestValues.subscriptionId, Organisation, emptyUserAnswers)).map(_.left.value)
 
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustEqual routes.InformationSentController.onPageLoad().url
@@ -59,7 +59,7 @@ class CheckForSubmissionActionSpec extends SpecBase with EitherValues {
         val action = new Harness(false)
 
         val userAnswers = emptyUserAnswers.set(JourneyInProgressPage, true).success.value
-        val result      = action.callRefine(DataRequest(FakeRequest(), "id", "subscriptionId", Organisation, userAnswers)).futureValue
+        val result      = action.callRefine(DataRequest(FakeRequest(), TestValues.id, TestValues.subscriptionId, Organisation, userAnswers)).futureValue
 
         result.isRight mustBe true
       }
@@ -71,7 +71,7 @@ class CheckForSubmissionActionSpec extends SpecBase with EitherValues {
 
         val action = new Harness(true)
 
-        val result = action.callRefine(DataRequest(FakeRequest(), "id", "subscriptionId", Organisation, emptyUserAnswers)).map(_.left.value)
+        val result = action.callRefine(DataRequest(FakeRequest(), TestValues.id, TestValues.subscriptionId, Organisation, emptyUserAnswers)).map(_.left.value)
 
         status(result) mustBe SEE_OTHER
         redirectLocation(result).value mustEqual routes.InformationSentController.onPageLoad().url
@@ -84,8 +84,8 @@ class CheckForSubmissionActionSpec extends SpecBase with EitherValues {
 
         val action = new Harness(true)
 
-        val userAnswers = emptyUserAnswers.set(UploadIDPage, UploadId("id")).success.value
-        val result      = action.callRefine(DataRequest(FakeRequest(), "id", "subscriptionId", Organisation, userAnswers)).futureValue
+        val userAnswers = emptyUserAnswers.set(UploadIDPage, UploadId(TestValues.id)).success.value
+        val result      = action.callRefine(DataRequest(FakeRequest(), TestValues.id, TestValues.subscriptionId, Organisation, userAnswers)).futureValue
 
         result.isRight mustBe true
       }

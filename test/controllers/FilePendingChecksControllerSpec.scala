@@ -16,7 +16,7 @@
 
 package controllers
 
-import base.SpecBase
+import base.{SpecBase, TestValues}
 import connectors.FileDetailsConnector
 import models.fileDetails.FileErrorCode.{FailedSchemaValidation, MessageRefIDHasAlreadyBeenUsed}
 import models.fileDetails.RecordErrorCode.{DocRefIDFormat, MissingCorrDocRefId}
@@ -39,16 +39,14 @@ class FilePendingChecksControllerSpec extends SpecBase {
   "FilePendingChecks Controller" - {
 
     val mockFileDetailsConnector: FileDetailsConnector = mock[FileDetailsConnector]
-    val conversationId                                 = ConversationId("conversationId")
 
     "must return OK and the correct view for a GET when fileStatus is Pending" in {
 
-      val validXmlDetails = ValidatedFileData("name", MessageSpecData("messageRefId", MDR401, 2, "OECD1", MultipleNewInformation), fileSize, "1234")
       val userAnswers: UserAnswers = emptyUserAnswers
-        .set(ConversationIdPage, conversationId)
+        .set(ConversationIdPage, TestValues.conversationId)
         .success
         .value
-        .set(ValidXMLPage, validXmlDetails)
+        .set(ValidXMLPage, TestValues.validatedFileData)
         .success
         .value
 
@@ -60,7 +58,7 @@ class FilePendingChecksControllerSpec extends SpecBase {
         )
         .build()
 
-      val fileSummaryList = FileCheckViewModel.createFileSummary(validXmlDetails.fileName, "Pending")(messages(application))
+      val fileSummaryList = FileCheckViewModel.createFileSummary(TestValues.validatedFileData.fileName, "Pending")(messages(application))
       val action          = routes.FilePendingChecksController.onPageLoad().url
 
       running(application) {
@@ -70,18 +68,17 @@ class FilePendingChecksControllerSpec extends SpecBase {
         val view    = application.injector.instanceOf[FilePendingChecksView]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(fileSummaryList, action, "conversationId")(request, messages(application)).toString
+        contentAsString(result) mustEqual view(fileSummaryList, action, TestValues.conversationId.value)(request, messages(application)).toString
       }
     }
 
     "must redirect to ThereIsAProblem page when file status is invalid" in {
 
-      val validXmlDetails = ValidatedFileData("name", MessageSpecData("messageRefId", MDR401, 2, "OECD1", MultipleNewInformation), fileSize, "1234")
       val userAnswers: UserAnswers = emptyUserAnswers
-        .set(ConversationIdPage, conversationId)
+        .set(ConversationIdPage, TestValues.conversationId)
         .success
         .value
-        .set(ValidXMLPage, validXmlDetails)
+        .set(ValidXMLPage, TestValues.validatedFileData)
         .success
         .value
 
@@ -106,14 +103,13 @@ class FilePendingChecksControllerSpec extends SpecBase {
 
     "must redirect to File Problem Page when REJECTED status returned with 'problem' errors" in {
 
-      val validXmlDetails  = ValidatedFileData("name", MessageSpecData("messageRefId", MDR401, 2, "OECD1", MultipleNewInformation), fileSize, "1234")
       val validationErrors = ValidationErrors(Some(Seq(FileErrors(FailedSchemaValidation, None))), Some(Seq(RecordError(DocRefIDFormat, None, None))))
 
       val userAnswers: UserAnswers = emptyUserAnswers
-        .set(ConversationIdPage, conversationId)
+        .set(ConversationIdPage, TestValues.conversationId)
         .success
         .value
-        .set(ValidXMLPage, validXmlDetails)
+        .set(ValidXMLPage, TestValues.validatedFileData)
         .success
         .value
 
@@ -137,15 +133,14 @@ class FilePendingChecksControllerSpec extends SpecBase {
 
     "must redirect to File Problem Page when REJECTED status returned with regular errors" in {
 
-      val validXmlDetails = ValidatedFileData("name", MessageSpecData("messageRefId", MDR401, 2, "OECD1", MultipleNewInformation), fileSize, "1234")
       val validationErrors =
         ValidationErrors(Some(Seq(FileErrors(MessageRefIDHasAlreadyBeenUsed, None))), Some(Seq(RecordError(MissingCorrDocRefId, None, None))))
 
       val userAnswers: UserAnswers = emptyUserAnswers
-        .set(ConversationIdPage, conversationId)
+        .set(ConversationIdPage, TestValues.conversationId)
         .success
         .value
-        .set(ValidXMLPage, validXmlDetails)
+        .set(ValidXMLPage, TestValues.validatedFileData)
         .success
         .value
 
@@ -169,13 +164,11 @@ class FilePendingChecksControllerSpec extends SpecBase {
 
     "must redirect to virus Page when RejectedSDESVirus status returned with regular errors" in {
 
-      val validXmlDetails = ValidatedFileData("name", MessageSpecData("messageRefId", MDR401, 2, "OECD1", MultipleNewInformation), fileSize, "1234")
-
       val userAnswers: UserAnswers = emptyUserAnswers
-        .set(ConversationIdPage, conversationId)
+        .set(ConversationIdPage, TestValues.conversationId)
         .success
         .value
-        .set(ValidXMLPage, validXmlDetails)
+        .set(ValidXMLPage, TestValues.validatedFileData)
         .success
         .value
 
@@ -199,13 +192,11 @@ class FilePendingChecksControllerSpec extends SpecBase {
 
     "must redirect to problem Page when RejectedSDES status returned with regular errors" in {
 
-      val validXmlDetails = ValidatedFileData("name", MessageSpecData("messageRefId", MDR401, 2, "OECD1", MultipleNewInformation), fileSize, "1234")
-
       val userAnswers: UserAnswers = emptyUserAnswers
-        .set(ConversationIdPage, conversationId)
+        .set(ConversationIdPage, TestValues.conversationId)
         .success
         .value
-        .set(ValidXMLPage, validXmlDetails)
+        .set(ValidXMLPage, TestValues.validatedFileData)
         .success
         .value
 
@@ -229,13 +220,11 @@ class FilePendingChecksControllerSpec extends SpecBase {
 
     "must redirect to File Passed Checks Page when ACCEPTED status returned" in {
 
-      val validXmlDetails = ValidatedFileData("name", MessageSpecData("messageRefId", MDR401, 2, "OECD1", MultipleNewInformation), fileSize, "1234")
-
       val userAnswers: UserAnswers = emptyUserAnswers
-        .set(ConversationIdPage, conversationId)
+        .set(ConversationIdPage, TestValues.conversationId)
         .success
         .value
-        .set(ValidXMLPage, validXmlDetails)
+        .set(ValidXMLPage, TestValues.validatedFileData)
         .success
         .value
 

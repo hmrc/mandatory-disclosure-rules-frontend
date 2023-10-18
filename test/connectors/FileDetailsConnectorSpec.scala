@@ -37,11 +37,23 @@ class FileDetailsConnectorSpec extends Connector {
 
   lazy val connector: FileDetailsConnector = app.injector.instanceOf[FileDetailsConnector]
 
-  private val conversationId = ConversationId("conversationId3")
+  private val conversationId1 = ConversationId("conversationId1")
+  private val conversationId2 = ConversationId("conversationId2")
+  private val conversationId3 = ConversationId("conversationId3")
+  private val testXml1        = "test1.xml"
+  private val messageRefId1   = "messageRefId1"
 
+  private val testXml2      = "test2.xml"
+  private val messageRefId2 = "messageRefId2"
+
+  private val testXml3      = "test3.xml"
+  private val messageRefId3 = "messageRefId3"
+
+  private val dateString1   = "2022-02-10T15:35:37.636"
+  private val dateString2   = "2022-02-10T15:45:37.636"
   private val allFilesUrls  = "/mandatory-disclosure-rules/files/details"
-  private val fileUrl       = s"/mandatory-disclosure-rules/files/${conversationId.value}/details"
-  private val fileStatusUrl = s"/mandatory-disclosure-rules/files/${conversationId.value}/status"
+  private val fileUrl       = s"/mandatory-disclosure-rules/files/${conversationId3.value}/details"
+  private val fileStatusUrl = s"/mandatory-disclosure-rules/files/${conversationId3.value}/status"
 
   private val allFiles: String = """
       |[
@@ -90,20 +102,20 @@ class FileDetailsConnectorSpec extends Connector {
         val expectedResult = Some(
           Seq(
             FileDetails(
-              "test1.xml",
-              "messageRefId1",
+              testXml1,
+              messageRefId1,
               Some(SingleNewInformation),
-              LocalDateTime.parse("2022-02-10T15:35:37.636"),
-              LocalDateTime.parse("2022-02-10T15:35:37.636"),
+              LocalDateTime.parse(dateString1),
+              LocalDateTime.parse(dateString1),
               Pending,
-              ConversationId("conversationId1")
+              conversationId1
             ),
             fileDetails.FileDetails(
-              "test2.xml",
-              "messageRefId2",
+              testXml2,
+              messageRefId2,
               Some(SingleNewInformation),
-              LocalDateTime.parse("2022-02-10T15:35:37.636"),
-              LocalDateTime.parse("2022-02-10T15:45:37.636"),
+              LocalDateTime.parse(dateString1),
+              LocalDateTime.parse(dateString2),
               Rejected(
                 ValidationErrors(
                   Some(List(FileErrors(MessageRefIDHasAlreadyBeenUsed, Some("Duplicate message ref ID")))),
@@ -120,7 +132,7 @@ class FileDetailsConnectorSpec extends Connector {
                   )
                 )
               ),
-              ConversationId("conversationId2")
+              conversationId2
             )
           )
         )
@@ -158,19 +170,19 @@ class FileDetailsConnectorSpec extends Connector {
       "must return 'file details' when getFileDetails is successful" in {
         val expectedResult = Some(
           fileDetails.FileDetails(
-            "test3.xml",
-            "messageRefId3",
+            testXml3,
+            messageRefId3,
             Some(SingleNewInformation),
-            LocalDateTime.parse("2022-02-10T15:35:37.636"),
-            LocalDateTime.parse("2022-02-10T15:45:37.636"),
+            LocalDateTime.parse(dateString1),
+            LocalDateTime.parse(dateString2),
             Accepted,
-            ConversationId("conversationId3")
+            conversationId3
           )
         )
 
         stubGetResponse(fileUrl, OK, file)
 
-        val result = connector.getFileDetails(conversationId)
+        val result = connector.getFileDetails(conversationId3)
 
         result.futureValue mustBe expectedResult
       }
@@ -179,7 +191,7 @@ class FileDetailsConnectorSpec extends Connector {
 
         stubPostResponse(fileUrl, OK)
 
-        val result = connector.getFileDetails(conversationId)
+        val result = connector.getFileDetails(conversationId3)
 
         result.futureValue mustBe None
       }
@@ -189,7 +201,7 @@ class FileDetailsConnectorSpec extends Connector {
         val errorCode = errorCodes.sample.value
         stubPostResponse(fileUrl, errorCode)
 
-        val result = connector.getFileDetails(conversationId)
+        val result = connector.getFileDetails(conversationId3)
 
         result.futureValue mustBe None
 
@@ -203,7 +215,7 @@ class FileDetailsConnectorSpec extends Connector {
 
         stubGetResponse(fileStatusUrl, OK, fileStatus)
 
-        val result = connector.getStatus(conversationId)
+        val result = connector.getStatus(conversationId3)
 
         result.futureValue mustBe expectedResult
       }
@@ -212,7 +224,7 @@ class FileDetailsConnectorSpec extends Connector {
 
         stubPostResponse(fileStatusUrl, OK)
 
-        val result = connector.getStatus(conversationId)
+        val result = connector.getStatus(conversationId3)
 
         result.futureValue mustBe None
       }
@@ -222,7 +234,7 @@ class FileDetailsConnectorSpec extends Connector {
         val errorCode = errorCodes.sample.value
         stubPostResponse(fileStatusUrl, errorCode)
 
-        val result = connector.getStatus(conversationId)
+        val result = connector.getStatus(conversationId3)
 
         result.futureValue mustBe None
 

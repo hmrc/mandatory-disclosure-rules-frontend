@@ -16,7 +16,7 @@
 
 package controllers
 
-import base.SpecBase
+import base.{SpecBase, TestValues}
 import forms.ContactPhoneIndividualFormProvider
 import models.{NormalMode, UserAnswers}
 import navigation.{ContactDetailsNavigator, FakeContactDetailsNavigator}
@@ -61,7 +61,7 @@ class ContactPhoneIndividualControllerSpec extends SpecBase with MockitoSugar {
 
     "must populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = UserAnswers(userAnswersId).set(ContactPhonePage, "answer").success.value
+      val userAnswers = UserAnswers(userAnswersId).set(ContactPhonePage, TestValues.userAnswer).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -73,7 +73,7 @@ class ContactPhoneIndividualControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill("answer"), NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(TestValues.userAnswer), NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -92,7 +92,7 @@ class ContactPhoneIndividualControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, contactPhoneRoute)
-            .withFormUrlEncodedBody(("value", "0928273"))
+            .withFormUrlEncodedBody((TestValues.inputValue, TestValues.validContactNumber))
 
         val result = route(application, request).value
 
@@ -108,9 +108,9 @@ class ContactPhoneIndividualControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, contactPhoneRoute)
-            .withFormUrlEncodedBody(("value", ""))
+            .withFormUrlEncodedBody((TestValues.inputValue, ""))
 
-        val boundForm = form.bind(Map("value" -> ""))
+        val boundForm = form.bind(Map(TestValues.inputValue -> ""))
 
         val view = application.injector.instanceOf[ContactPhoneIndividualView]
 

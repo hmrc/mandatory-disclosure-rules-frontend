@@ -16,7 +16,7 @@
 
 package controllers
 
-import base.SpecBase
+import base.{SpecBase, TestValues}
 import models.{MDR401, MessageSpecData, MultipleNewInformation, UserAnswers, ValidatedFileData}
 import pages.ValidXMLPage
 import play.api.test.FakeRequest
@@ -33,9 +33,8 @@ class CheckYourFileDetailsControllerSpec extends SpecBase {
 
     "must return OK and the correct view for a GET" in {
 
-      val vfd: ValidatedFileData = ValidatedFileData("test.xml", MessageSpecData("GDC99999999", MDR401, 2, "OECD1", MultipleNewInformation), fileSize, "1234")
-      val ua: UserAnswers        = emptyUserAnswers.set(ValidXMLPage, vfd).success.value
-      val application            = applicationBuilder(userAnswers = Some(ua)).build()
+      val ua: UserAnswers = emptyUserAnswers.set(ValidXMLPage, TestValues.validatedFileData).success.value
+      val application     = applicationBuilder(userAnswers = Some(ua)).build()
 
       running(application) {
         val request = FakeRequest(GET, routes.CheckYourFileDetailsController.onPageLoad().url)
@@ -44,7 +43,7 @@ class CheckYourFileDetailsControllerSpec extends SpecBase {
 
         val view = application.injector.instanceOf[CheckYourFileDetailsView]
 
-        val list = SummaryListViewModel(CheckYourFileDetailsViewModel.getSummaryRows(vfd)(messages(application)))
+        val list = SummaryListViewModel(CheckYourFileDetailsViewModel.getSummaryRows(TestValues.validatedFileData)(messages(application)))
           .withoutBorders()
           .withCssClass(CssClassesType.GOVUKMARGINBOTTOM)
 

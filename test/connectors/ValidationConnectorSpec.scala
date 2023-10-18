@@ -32,9 +32,9 @@ class ValidationConnectorSpec extends Connector {
     )
     .build()
 
-  lazy val connector: ValidationConnector = app.injector.instanceOf[ValidationConnector]
-  val validationUrl                       = "/mandatory-disclosure-rules/validate-submission"
-
+  lazy val connector: ValidationConnector    = app.injector.instanceOf[ValidationConnector]
+  val validationUrl                          = "/mandatory-disclosure-rules/validate-submission"
+  val upscanURL                              = UpscanURL("someUrl")
   val failurePayloadResult: ValidationErrors = ValidationErrors(Seq(GenericError(1, Message("some error")), GenericError(2, Message("another error"))), None)
 
   "Validation Connector" - {
@@ -53,7 +53,6 @@ class ValidationConnectorSpec extends Connector {
 
     "must return a 200 and a Failure Object when failing validation" in {
 
-      val upscanURL    = UpscanURL("someUrl")
       val expectedBody = """
                                |{ "validationErrors": {
                                | "errors":[
@@ -83,8 +82,6 @@ class ValidationConnectorSpec extends Connector {
     "must return a InvalidXmlError when validation returns a Invalid XML in error message" in {
       stubPostResponse(validationUrl, BAD_REQUEST, "Invalid XML")
 
-      val upscanURL = UpscanURL("someUrl")
-
       val result = connector.sendForValidation(upscanURL)
 
       val message = s"POST of '${server.baseUrl() + validationUrl}' returned 400 (Bad Request). Response body 'Invalid XML'"
@@ -94,8 +91,6 @@ class ValidationConnectorSpec extends Connector {
 
     "must return a NonFatalErrors when validation returns a 400 (BAD_REQUEST) status" in {
       stubPostResponse(validationUrl, BAD_REQUEST, "Some error")
-
-      val upscanURL = UpscanURL("someUrl")
 
       val result = connector.sendForValidation(upscanURL)
 

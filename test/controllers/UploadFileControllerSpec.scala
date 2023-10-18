@@ -16,7 +16,7 @@
 
 package controllers
 
-import base.SpecBase
+import base.{SpecBase, TestValues}
 import connectors.UpscanConnector
 import forms.UploadFileFormProvider
 import generators.Generators
@@ -28,6 +28,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.UploadIDPage
 import play.api.Application
 import play.api.inject.bind
+
 import java.time.Instant
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{status, _}
@@ -91,13 +92,13 @@ class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
       verifyResult(Quarantined, Some(routes.VirusFileFoundController.onPageLoad().url))
       verifyResult(UploadRejected(ErrorDetails("REJECTED", "message")), Some(routes.NotXMLFileController.onPageLoad().url))
       verifyResult(Failed, Some(routes.ThereIsAProblemController.onPageLoad().url))
-      verifyResult(UploadedSuccessfully("name", "downloadUrl", fileSize, "1234"), Some(routes.FileValidationController.onPageLoad().url))
+      verifyResult(UploadedSuccessfully("name", "downloadUrl", fileSize, TestValues.checkSum), Some(routes.FileValidationController.onPageLoad().url))
 
     }
 
     "must show any returned error" in {
 
-      val request = FakeRequest(GET, routes.UploadFileController.showError("errorCode", "errorMessage", "errorReqId").url)
+      val request = FakeRequest(GET, routes.UploadFileController.showError(TestValues.errorCode, TestValues.errorMessage, TestValues.errorReqId).url)
       val result  = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
@@ -116,7 +117,7 @@ class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
     "must show errorForm when rejected upload has 'octet-stream' in message" in {
       val rejectedDetails = UploadDetails(
         Instant.now(),
-        "1234",
+        TestValues.checkSum,
         "application/octet-stream",
         "file-name" // Simulate a rejected octet-stream
       )

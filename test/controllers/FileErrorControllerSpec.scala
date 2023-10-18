@@ -24,11 +24,13 @@ import views.html.{FileErrorView, ThereIsAProblemView}
 
 class FileErrorControllerSpec extends SpecBase {
 
+  val inputFile = "example.xml"
+
   "FileError Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val userAnswers = emptyUserAnswers.set(InvalidXMLPage, "example.xml").success.value
+      val userAnswers = emptyUserAnswers.set(InvalidXMLPage, inputFile).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -41,7 +43,7 @@ class FileErrorControllerSpec extends SpecBase {
 
         status(result) mustEqual OK
 
-        contentAsString(result) mustEqual view("example.xml")(request, messages(application)).toString
+        contentAsString(result) mustEqual view(inputFile)(request, messages(application)).toString
       }
     }
 
