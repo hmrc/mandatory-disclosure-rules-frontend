@@ -24,11 +24,13 @@ import play.api.libs.json.Format
 import uk.gov.hmrc.mongo.MongoComponent
 import uk.gov.hmrc.mongo.play.json.PlayMongoRepository
 import uk.gov.hmrc.mongo.play.json.formats.MongoJavatimeFormats
+import utils.RepositoryUtils
 
 import java.time.{Clock, Instant}
 import java.util.concurrent.TimeUnit
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
+
 
 @Singleton
 class SessionRepository @Inject() (
@@ -42,9 +44,9 @@ class SessionRepository @Inject() (
       domainFormat = UserAnswers.format,
       indexes = Seq(
         IndexModel(
-          Indexes.ascending("lastUpdated"),
+          Indexes.ascending(RepositoryUtils.lastUpdated),
           IndexOptions()
-            .name("lastUpdatedIdx")
+            .name(RepositoryUtils.lastUpdatedIdx)
             .expireAfter(appConfig.cacheTtl, TimeUnit.SECONDS)
         )
       )
@@ -52,13 +54,13 @@ class SessionRepository @Inject() (
 
   implicit val instantFormat: Format[Instant] = MongoJavatimeFormats.instantFormat
 
-  private def byId(id: String): Bson = Filters.equal("_id", id)
+  private def byId(id: String): Bson = Filters.equal(RepositoryUtils.id, id)
 
   def keepAlive(id: String): Future[Boolean] =
     collection
       .updateOne(
         filter = byId(id),
-        update = Updates.set("lastUpdated", Instant.now(clock))
+        update = Updates.set(RepositoryUtils.lastUpdated, Instant.now(clock))
       )
       .toFuture
       .map(
