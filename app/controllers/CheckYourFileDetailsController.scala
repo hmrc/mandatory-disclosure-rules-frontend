@@ -47,7 +47,7 @@ class CheckYourFileDetailsController @Inject() (
         case Some(details) =>
           val detailsList = SummaryListViewModel(CheckYourFileDetailsViewModel.getSummaryRows(details))
             .withoutBorders()
-            .withCssClass(CssClassesType.GOVUKMARGINBOTTOM)
+            .withCssClass(CssClassesType.govukMarginBottom)
           Ok(view(detailsList))
         case _ =>
           logger.warn("CheckYourFileDetailsController: Unable to retrieve XML information from UserAnswers")

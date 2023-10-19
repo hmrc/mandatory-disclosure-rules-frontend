@@ -40,6 +40,7 @@ object TestValues {
   val errorCode                        = "errorCode"
   val errorMessage                     = "errorMessage"
   val errorReqId                       = "errorReqId"
+  val fileMimeType                     = "application/octet-stream"
   val messageSpecData: MessageSpecData = MessageSpecData(messageRefId, MDR401, 2, docTypeIndic, MultipleNewInformation)
 
   val validatedFileData: ValidatedFileData =

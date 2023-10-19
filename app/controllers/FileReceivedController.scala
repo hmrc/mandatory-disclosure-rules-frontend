@@ -61,7 +61,7 @@ class FileReceivedController @Inject() (
                 val detailsList =
                   SummaryListViewModel(FileReceivedViewModel.getSummaryRows(details, details.reportType))
                     .withMargin()
-                    .withCssClass(CssClassesType.GOVUKMARGINBOTTOM)
+                    .withCssClass(CssClassesType.govukMarginBottom)
                 for {
                   updatedAnswers <- Future.fromTry(request.userAnswers.remove(UploadIDPage))
                   _              <- sessionRepository.set(updatedAnswers)

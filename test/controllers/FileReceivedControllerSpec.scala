@@ -73,7 +73,7 @@ class FileReceivedControllerSpec extends SpecBase {
       )
     )
   ).withMargin()
-    .withCssClass(CssClassesType.GOVUKMARGINBOTTOM)
+    .withCssClass(CssClassesType.govukMarginBottom)
 
   "FileReceived Controller" - {
 
@@ -354,7 +354,7 @@ class FileReceivedControllerSpec extends SpecBase {
             )
           )
         ).withMargin()
-          .withCssClass(CssClassesType.GOVUKMARGINBOTTOM)
+          .withCssClass(CssClassesType.govukMarginBottom)
 
         status(result) mustEqual OK
         contentAsString(result) mustBe view(list, firstContactEmail, Some(secondContactEmail))(request, messages(application)).toString

@@ -17,5 +17,5 @@
 package models.cssClassesType
 
 object CssClassesType {
-  val GOVUKMARGINBOTTOM = "govuk-!-margin-bottom-0"
+  val govukMarginBottom = "govuk-!-margin-bottom-0"
 }

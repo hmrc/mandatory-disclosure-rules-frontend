@@ -41,6 +41,9 @@ class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
   val fileSize                                 = 1000L
   val uploadId: UploadId                       = UploadId("12345")
   val fakeUpscanConnector: FakeUpscanConnector = app.injector.instanceOf[FakeUpscanConnector]
+  val failureReasonRejected                    = "REJECTED"
+  val name                                     = "name"
+  val downloadUrl                              = "downloadUrl"
 
   val userAnswers: UserAnswers = UserAnswers(userAnswersId)
     .set(UploadIDPage, UploadId("uploadId"))
@@ -90,9 +93,9 @@ class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
       verifyResult(InProgress, Some(routes.UploadFileController.getStatus(uploadId).url))
       verifyResult(Quarantined, Some(routes.VirusFileFoundController.onPageLoad().url))
-      verifyResult(UploadRejected(ErrorDetails("REJECTED", "message")), Some(routes.NotXMLFileController.onPageLoad().url))
+      verifyResult(UploadRejected(ErrorDetails(failureReasonRejected, TestValues.errorMessage)), Some(routes.NotXMLFileController.onPageLoad().url))
       verifyResult(Failed, Some(routes.ThereIsAProblemController.onPageLoad().url))
-      verifyResult(UploadedSuccessfully("name", "downloadUrl", fileSize, TestValues.checkSum), Some(routes.FileValidationController.onPageLoad().url))
+      verifyResult(UploadedSuccessfully(name, downloadUrl, fileSize, TestValues.checkSum), Some(routes.FileValidationController.onPageLoad().url))
 
     }
 
@@ -118,10 +121,11 @@ class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
       val rejectedDetails = UploadDetails(
         Instant.now(),
         TestValues.checkSum,
-        "application/octet-stream",
-        "file-name" // Simulate a rejected octet-stream
+        TestValues.fileMimeType,
+        TestValues.fileName // Simulate a rejected octet-stream
       )
-      val rejected = UploadRejected(ErrorDetails("REJECTED", "message"))
+
+      val rejected = UploadRejected(ErrorDetails(failureReasonRejected, TestValues.errorMessage))
 
       fakeUpscanConnector.setStatus(rejected)
 
@@ -133,7 +137,7 @@ class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
     }
 
     "must redirect to ThereIsAProblemController on other rejection errors" in {
-      val otherRejected = UploadRejected(ErrorDetails("REJECTED", "other-error-message"))
+      val otherRejected = UploadRejected(ErrorDetails(failureReasonRejected, "other-error-message"))
 
       fakeUpscanConnector.setStatus(otherRejected)
 
