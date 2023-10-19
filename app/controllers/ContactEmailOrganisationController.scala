@@ -45,7 +45,7 @@ class ContactEmailOrganisationController @Inject() (
     with I18nSupport {
 
   val form = formProvider()
-  val NAME = "default.firstContact.name"
+  val name = "default.firstContact.name"
 
   def onPageLoad(mode: Mode): Action[AnyContent] = (identify andThen getData.apply() andThen requireData) {
     implicit request =>
@@ -60,7 +60,7 @@ class ContactEmailOrganisationController @Inject() (
   private def getContactName(userAnswers: UserAnswers, affinityType: AffinityType)(implicit messages: Messages): String =
     (userAnswers.get(ContactNamePage), affinityType) match {
       case (Some(contactName), Organisation) => contactName
-      case _                                 => messages(NAME)
+      case _                                 => messages(name)
     }
 
   def onSubmit(mode: Mode): Action[AnyContent] = (identify andThen getData.apply() andThen requireData).async {

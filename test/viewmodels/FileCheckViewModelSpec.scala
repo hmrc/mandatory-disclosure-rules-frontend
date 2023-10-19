@@ -42,7 +42,7 @@ class FileCheckViewModelSpec extends SpecBase {
         SummaryListRow(Key(Text("Result of automatic checks")), Value(HtmlContent("<strong class='govuk-tag govuk-tag--green'>Passed</strong>")), "", None)
       )
 
-      FileCheckViewModel.createFileSummary("name1.xml", FileStatus.ACCEPTED)(messages(app)) mustBe expectedSummary
+      FileCheckViewModel.createFileSummary("name1.xml", "Accepted")(messages(app)) mustBe expectedSummary
     }
 
     "must return the viewModel when fileStatus is rejected" in {

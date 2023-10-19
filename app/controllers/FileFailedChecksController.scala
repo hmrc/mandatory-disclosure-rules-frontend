@@ -45,7 +45,7 @@ class FileFailedChecksController @Inject() (
       (request.userAnswers.get(ValidXMLPage), request.userAnswers.get(ConversationIdPage)) match {
         case (Some(xmlDetails), Some(conversationId)) =>
           val action  = routes.FileRejectedController.onPageLoadSlow(conversationId).url
-          val summary = FileCheckViewModel.createFileSummary(xmlDetails.fileName, FileStatus.REJECTED)
+          val summary = FileCheckViewModel.createFileSummary(xmlDetails.fileName, FileStatus.rejected)
           Ok(view(summary, action))
         case _ =>
           logger.warn("FileFailedChecksController: Unable to retrieve either XML information or ConversationId from UserAnswers")

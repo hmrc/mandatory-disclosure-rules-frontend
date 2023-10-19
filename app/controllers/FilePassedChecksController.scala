@@ -45,7 +45,7 @@ class FilePassedChecksController @Inject() (
       (request.userAnswers.get(ValidXMLPage), request.userAnswers.get(ConversationIdPage)) match {
         case (Some(xmlDetails), Some(conversationId)) =>
           val action  = routes.FileReceivedController.onPageLoadSlow(conversationId).url
-          val summary = FileCheckViewModel.createFileSummary(xmlDetails.fileName, FileStatus.ACCEPTED)
+          val summary = FileCheckViewModel.createFileSummary(xmlDetails.fileName, FileStatus.accepted)
           Ok(view(summary, action))
 
         case _ =>
