@@ -16,7 +16,7 @@
 
 package controllers
 
-import base.SpecBase
+import base.{SpecBase, TestValues}
 import models.{MDR401, MessageSpecData, MultipleNewInformation, UserAnswers, ValidatedFileData}
 import pages.ValidXMLPage
 import play.api.test.FakeRequest
@@ -24,6 +24,7 @@ import play.api.test.Helpers._
 import viewmodels.CheckYourFileDetailsViewModel
 import viewmodels.govuk.summarylist._
 import views.html.{CheckYourFileDetailsView, ThereIsAProblemView}
+import models.cssClassesType.CssClassesType
 
 class CheckYourFileDetailsControllerSpec extends SpecBase {
 
@@ -32,9 +33,8 @@ class CheckYourFileDetailsControllerSpec extends SpecBase {
 
     "must return OK and the correct view for a GET" in {
 
-      val vfd: ValidatedFileData = ValidatedFileData("test.xml", MessageSpecData("GDC99999999", MDR401, 2, "OECD1", MultipleNewInformation), fileSize, "1234")
-      val ua: UserAnswers        = emptyUserAnswers.set(ValidXMLPage, vfd).success.value
-      val application            = applicationBuilder(userAnswers = Some(ua)).build()
+      val ua: UserAnswers = emptyUserAnswers.set(ValidXMLPage, TestValues.validatedFileData).success.value
+      val application     = applicationBuilder(userAnswers = Some(ua)).build()
 
       running(application) {
         val request = FakeRequest(GET, routes.CheckYourFileDetailsController.onPageLoad().url)
@@ -43,9 +43,9 @@ class CheckYourFileDetailsControllerSpec extends SpecBase {
 
         val view = application.injector.instanceOf[CheckYourFileDetailsView]
 
-        val list = SummaryListViewModel(CheckYourFileDetailsViewModel.getSummaryRows(vfd)(messages(application)))
+        val list = SummaryListViewModel(CheckYourFileDetailsViewModel.getSummaryRows(TestValues.validatedFileData)(messages(application)))
           .withoutBorders()
-          .withCssClass("govuk-!-margin-bottom-0")
+          .withCssClass(CssClassesType.govukMarginBottom)
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view(list)(request, messages(application)).toString

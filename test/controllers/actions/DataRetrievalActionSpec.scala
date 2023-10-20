@@ -16,7 +16,7 @@
 
 package controllers.actions
 
-import base.SpecBase
+import base.{SpecBase, TestValues}
 import models.UserAnswers
 import models.requests.{IdentifierRequest, OptionalDataRequest}
 import play.api.test.FakeRequest
@@ -39,10 +39,10 @@ class DataRetrievalActionSpec extends SpecBase {
       "must set userAnswers to 'None' in the request" in {
 
         val sessionRepository = mock[SessionRepository]
-        when(sessionRepository.get("id")) thenReturn Future(None)
+        when(sessionRepository.get(TestValues.id)) thenReturn Future(None)
         val action = new Harness(sessionRepository)
 
-        val result = action.callTransform(IdentifierRequest(FakeRequest(), "id", "subscriptionId", Organisation)).futureValue
+        val result = action.callTransform(IdentifierRequest(FakeRequest(), TestValues.id, TestValues.subscriptionId, Organisation)).futureValue
 
         result.userAnswers must not be defined
       }
@@ -53,10 +53,10 @@ class DataRetrievalActionSpec extends SpecBase {
       "must build a userAnswers object and add it to the request" in {
 
         val sessionRepository = mock[SessionRepository]
-        when(sessionRepository.get("id")) thenReturn Future(Some(UserAnswers("id")))
+        when(sessionRepository.get(TestValues.id)) thenReturn Future(Some(UserAnswers(TestValues.id)))
         val action = new Harness(sessionRepository)
 
-        val result = action.callTransform(new IdentifierRequest(FakeRequest(), "id", "subscriptionId", Organisation)).futureValue
+        val result = action.callTransform(new IdentifierRequest(FakeRequest(), TestValues.id, TestValues.subscriptionId, Organisation)).futureValue
 
         result.userAnswers mustBe defined
       }

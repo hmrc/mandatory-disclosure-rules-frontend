@@ -16,7 +16,7 @@
 
 package controllers
 
-import base.SpecBase
+import base.{SpecBase, TestValues}
 import connectors.FileDetailsConnector
 import generators.ModelGenerators
 import models.fileDetails.{Accepted, FileDetails, Rejected, ValidationErrors}
@@ -35,9 +35,7 @@ import scala.concurrent.Future
 
 class FileRejectedControllerSpec extends SpecBase with ModelGenerators with ScalaCheckPropertyChecks {
 
-  private val fileName       = "CornerShop"
-  private val conversationId = ConversationId("conversationId")
-  private val messageRefId   = "messageRefId"
+  private val fileName = "CornerShop"
 
   "FileRejected Controller" - {
 
@@ -59,19 +57,19 @@ class FileRejectedControllerSpec extends SpecBase with ModelGenerators with Scal
             Some(
               FileDetails(
                 fileName,
-                messageRefId,
+                TestValues.messageRefId,
                 Some(SingleNewInformation),
                 LocalDateTime.parse("2022-01-01T10:30:00.000"),
                 LocalDateTime.parse("2022-01-01T10:30:00.000"),
                 Rejected(validationErrors),
-                conversationId
+                TestValues.conversationId
               )
             )
           )
         )
 
       running(application) {
-        val request = FakeRequest(GET, routes.FileRejectedController.onPageLoadFast(conversationId).url)
+        val request = FakeRequest(GET, routes.FileRejectedController.onPageLoadFast(TestValues.conversationId).url)
 
         val result = route(application, request).value
 
@@ -95,7 +93,7 @@ class FileRejectedControllerSpec extends SpecBase with ModelGenerators with Scal
       when(mockFileDetailsConnector.getFileDetails(any())(any(), any())).thenReturn(Future.successful(None))
 
       running(application) {
-        val request = FakeRequest(GET, routes.FileRejectedController.onPageLoadFast(conversationId).url)
+        val request = FakeRequest(GET, routes.FileRejectedController.onPageLoadFast(TestValues.conversationId).url)
 
         val result = route(application, request).value
 
@@ -117,19 +115,19 @@ class FileRejectedControllerSpec extends SpecBase with ModelGenerators with Scal
             Some(
               FileDetails(
                 fileName,
-                messageRefId,
+                TestValues.messageRefId,
                 Some(SingleNewInformation),
                 LocalDateTime.parse("2022-01-01T10:30:00.000"),
                 LocalDateTime.parse("2022-01-01T10:30:00.000"),
                 Accepted,
-                conversationId
+                TestValues.conversationId
               )
             )
           )
         )
 
       running(application) {
-        val request = FakeRequest(GET, routes.FileRejectedController.onPageLoadFast(conversationId).url)
+        val request = FakeRequest(GET, routes.FileRejectedController.onPageLoadFast(TestValues.conversationId).url)
 
         val result = route(application, request).value
 

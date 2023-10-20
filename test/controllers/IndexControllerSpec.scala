@@ -16,7 +16,7 @@
 
 package controllers
 
-import base.SpecBase
+import base.{SpecBase, TestValues}
 import connectors.FileDetailsConnector
 import models.fileDetails.{Accepted, FileDetails}
 import models.{ConversationId, SingleNewInformation, UserAnswers}
@@ -51,7 +51,7 @@ class IndexControllerSpec extends SpecBase {
           )
           .build()
 
-        val userAnswers = UserAnswers("id")
+        val userAnswers = UserAnswers(TestValues.id)
         when(mockSubscriptionService.getContactDetails(any[UserAnswers]())(any[HeaderCarrier]()))
           .thenReturn(Future.successful(Some(userAnswers)))
         when(mockSessionRepository.set(any[UserAnswers]())).thenReturn(Future.successful(true))
@@ -60,13 +60,13 @@ class IndexControllerSpec extends SpecBase {
             Future.successful(
               Some(
                 Seq(
-                  FileDetails("FileName",
-                              "messageRefId",
+                  FileDetails(TestValues.fileName,
+                              TestValues.messageRefId,
                               Some(SingleNewInformation),
                               LocalDateTime.now(),
                               LocalDateTime.now(),
                               Accepted,
-                              ConversationId("conversationId")
+                              TestValues.conversationId
                   )
                 )
               )
@@ -82,7 +82,7 @@ class IndexControllerSpec extends SpecBase {
 
           status(result) mustEqual OK
 
-          contentAsString(result) mustEqual view("subscriptionId",
+          contentAsString(result) mustEqual view(TestValues.subscriptionId,
                                                  controllers.routes.ChangeOrganisationContactDetailsController.onPageLoad().url,
                                                  showRecentFiles = true
           )(
@@ -105,7 +105,7 @@ class IndexControllerSpec extends SpecBase {
           )
           .build()
 
-        val userAnswers = UserAnswers("id")
+        val userAnswers = UserAnswers(TestValues.id)
         when(mockSubscriptionService.getContactDetails(any[UserAnswers]())(any[HeaderCarrier]()))
           .thenReturn(Future.successful(Some(userAnswers)))
         when(mockSessionRepository.set(any[UserAnswers]())).thenReturn(Future.successful(true))
@@ -121,7 +121,7 @@ class IndexControllerSpec extends SpecBase {
 
           status(result) mustEqual OK
 
-          contentAsString(result) mustEqual view("subscriptionId",
+          contentAsString(result) mustEqual view(TestValues.subscriptionId,
                                                  controllers.routes.ChangeOrganisationContactDetailsController.onPageLoad().url,
                                                  showRecentFiles = false
           )(

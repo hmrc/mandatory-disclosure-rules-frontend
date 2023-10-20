@@ -14,24 +14,19 @@
  * limitations under the License.
  */
 
-package forms
+package utils
 
-import forms.mappings.Mappings
-import play.api.data.Form
-import utils.RegExConstants
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
-import javax.inject.Inject
+object CommonUtils {
 
-class ContactEmailFormProvider @Inject() extends Mappings with RegExConstants {
-
-  private val maxLength   = 132
-  private val requiredKey = "contactEmail.error.required"
-  private val invalidKey  = "contactEmail.error.invalid"
-  private val lengthKey   = "contactEmail.error.length"
-  private val value       = "value"
-
-  def apply(): Form[String] =
-    Form(
-      value -> validatedText(requiredKey, invalidKey, lengthKey, emailRegex, maxLength)
-    )
+  val blank: String                = ""
+  val firstContactName             = "default.firstContact.name"
+  val secondContactName            = "default.secondContact.name"
+  val multipleCorrectionsDeletions = "multipleCorrectionsDeletions"
+  val singleCorrection             = "singleCorrection"
+  val singleDeletion               = "singleDeletion"
+  val singleOther                  = "singleOther"
+  val value                        = "value"
 }

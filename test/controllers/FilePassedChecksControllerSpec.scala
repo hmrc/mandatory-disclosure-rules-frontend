@@ -16,8 +16,8 @@
 
 package controllers
 
-import base.SpecBase
-import models.{CheckMode, ConversationId, MDR401, MessageSpecData, MultipleNewInformation, ValidatedFileData}
+import base.{SpecBase, TestValues}
+import models.fileDetails.FileStatus
 import pages.{ConversationIdPage, ValidXMLPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -26,20 +26,15 @@ import views.html.{FilePassedChecksView, ThereIsAProblemView}
 
 class FilePassedChecksControllerSpec extends SpecBase {
 
-  val fileSize = 1000L
-
   "FilePassedChecks Controller" - {
 
     "must return OK and the correct view for a GET" in {
 
-      val conversationId  = ConversationId("conversationId")
-      val validXmlDetails = ValidatedFileData("name", MessageSpecData("messageRefId", MDR401, 2, "OECD1", MultipleNewInformation), fileSize, "1234")
-
       val userAnswers = emptyUserAnswers
-        .set(ValidXMLPage, validXmlDetails)
+        .set(ValidXMLPage, TestValues.validatedFileData)
         .success
         .value
-        .set(ConversationIdPage, conversationId)
+        .set(ConversationIdPage, TestValues.conversationId)
         .success
         .value
 
@@ -47,8 +42,8 @@ class FilePassedChecksControllerSpec extends SpecBase {
 
       running(application) {
 
-        val fileSummaryList = FileCheckViewModel.createFileSummary(validXmlDetails.fileName, "Accepted")(messages(application))
-        val action          = routes.FileReceivedController.onPageLoadSlow(conversationId).url
+        val fileSummaryList = FileCheckViewModel.createFileSummary(TestValues.validatedFileData.fileName, FileStatus.accepted)(messages(application))
+        val action          = routes.FileReceivedController.onPageLoadSlow(TestValues.conversationId).url
         val request         = FakeRequest(GET, routes.FilePassedChecksController.onPageLoad().url)
         val result          = route(application, request).value
         val view            = application.injector.instanceOf[FilePassedChecksView]

@@ -16,7 +16,7 @@
 
 package controllers
 
-import base.SpecBase
+import base.{SpecBase, TestValues}
 import connectors.UpscanConnector
 import forms.UploadFileFormProvider
 import generators.Generators
@@ -28,6 +28,7 @@ import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.UploadIDPage
 import play.api.Application
 import play.api.inject.bind
+
 import java.time.Instant
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{status, _}
@@ -40,6 +41,9 @@ class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
   val fileSize                                 = 1000L
   val uploadId: UploadId                       = UploadId("12345")
   val fakeUpscanConnector: FakeUpscanConnector = app.injector.instanceOf[FakeUpscanConnector]
+  val failureReasonRejected                    = "REJECTED"
+  val name                                     = "name"
+  val downloadUrl                              = "downloadUrl"
 
   val userAnswers: UserAnswers = UserAnswers(userAnswersId)
     .set(UploadIDPage, UploadId("uploadId"))
@@ -89,15 +93,15 @@ class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
 
       verifyResult(InProgress, Some(routes.UploadFileController.getStatus(uploadId).url))
       verifyResult(Quarantined, Some(routes.VirusFileFoundController.onPageLoad().url))
-      verifyResult(UploadRejected(ErrorDetails("REJECTED", "message")), Some(routes.NotXMLFileController.onPageLoad().url))
+      verifyResult(UploadRejected(ErrorDetails(failureReasonRejected, TestValues.errorMessage)), Some(routes.NotXMLFileController.onPageLoad().url))
       verifyResult(Failed, Some(routes.ThereIsAProblemController.onPageLoad().url))
-      verifyResult(UploadedSuccessfully("name", "downloadUrl", fileSize, "1234"), Some(routes.FileValidationController.onPageLoad().url))
+      verifyResult(UploadedSuccessfully(name, downloadUrl, fileSize, TestValues.checkSum), Some(routes.FileValidationController.onPageLoad().url))
 
     }
 
     "must show any returned error" in {
 
-      val request = FakeRequest(GET, routes.UploadFileController.showError("errorCode", "errorMessage", "errorReqId").url)
+      val request = FakeRequest(GET, routes.UploadFileController.showError(TestValues.errorCode, TestValues.errorMessage, TestValues.errorReqId).url)
       val result  = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
@@ -116,11 +120,12 @@ class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
     "must show errorForm when rejected upload has 'octet-stream' in message" in {
       val rejectedDetails = UploadDetails(
         Instant.now(),
-        "1234",
-        "application/octet-stream",
-        "file-name" // Simulate a rejected octet-stream
+        TestValues.checkSum,
+        TestValues.fileMimeType,
+        TestValues.fileName // Simulate a rejected octet-stream
       )
-      val rejected = UploadRejected(ErrorDetails("REJECTED", "message"))
+
+      val rejected = UploadRejected(ErrorDetails(failureReasonRejected, TestValues.errorMessage))
 
       fakeUpscanConnector.setStatus(rejected)
 
@@ -132,7 +137,7 @@ class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
     }
 
     "must redirect to ThereIsAProblemController on other rejection errors" in {
-      val otherRejected = UploadRejected(ErrorDetails("REJECTED", "other-error-message"))
+      val otherRejected = UploadRejected(ErrorDetails(failureReasonRejected, "other-error-message"))
 
       fakeUpscanConnector.setStatus(otherRejected)
 

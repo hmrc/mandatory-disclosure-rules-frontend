@@ -16,7 +16,7 @@
 
 package controllers
 
-import base.SpecBase
+import base.{SpecBase, TestValues}
 import forms.ContactEmailFormProvider
 import models.{AffinityType, NormalMode, UserAnswers}
 import navigation.{ContactDetailsNavigator, FakeContactDetailsNavigator}
@@ -36,11 +36,12 @@ class ContactEmailControllerSpec extends SpecBase {
 
   override def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new ContactEmailFormProvider()
-  val form         = formProvider()
-  val organisation = AffinityType(Organisation)
-  val individual   = AffinityType(Individual)
-  val name         = "name"
+  val formProvider  = new ContactEmailFormProvider()
+  val form          = formProvider()
+  val organisation  = AffinityType(Organisation)
+  val individual    = AffinityType(Individual)
+  val name          = "name"
+  val valueRequired = "value"
 
   lazy val contactEmailRoute = routes.ContactEmailController.onPageLoad().url
   lazy val havePhonelRoute   = routes.HaveTelephoneController.onPageLoad(individual).url
@@ -74,7 +75,7 @@ class ContactEmailControllerSpec extends SpecBase {
         .set(ContactNamePage, name)
         .success
         .value
-        .set(ContactEmailPage, "answer")
+        .set(ContactEmailPage, TestValues.userAnswer)
         .success
         .value
 
@@ -88,7 +89,7 @@ class ContactEmailControllerSpec extends SpecBase {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill("answer"), individual, name, NormalMode)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(TestValues.userAnswer), individual, name, NormalMode)(request, messages(application)).toString
       }
     }
 
@@ -107,7 +108,7 @@ class ContactEmailControllerSpec extends SpecBase {
       running(application) {
         val request =
           FakeRequest(POST, contactEmailRoute)
-            .withFormUrlEncodedBody(("value", "some@email.com"))
+            .withFormUrlEncodedBody((valueRequired, TestValues.emailId))
 
         val result = route(application, request).value
 
@@ -128,9 +129,9 @@ class ContactEmailControllerSpec extends SpecBase {
       running(application) {
         val request =
           FakeRequest(POST, contactEmailRoute)
-            .withFormUrlEncodedBody(("value", ""))
+            .withFormUrlEncodedBody((valueRequired, TestValues.blank))
 
-        val boundForm = form.bind(Map("value" -> ""))
+        val boundForm = form.bind(Map(valueRequired -> TestValues.blank))
 
         val view = application.injector.instanceOf[ContactEmailView]
 

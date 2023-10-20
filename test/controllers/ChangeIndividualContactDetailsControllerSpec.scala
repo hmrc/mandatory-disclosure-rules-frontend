@@ -16,7 +16,7 @@
 
 package controllers
 
-import base.SpecBase
+import base.{SpecBase, TestValues}
 import models.UserAnswers
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers.any
@@ -57,7 +57,7 @@ class ChangeIndividualContactDetailsControllerSpec extends SpecBase with BeforeA
 
           status(result) mustEqual OK
           val doc = Jsoup.parse(contentAsString(result))
-          doc.getElementById("submit").text().trim mustBe "Confirm and send"
+          doc.getElementById(TestValues.submit).text().trim mustBe TestValues.confirmAndSend
         }
       }
 
@@ -78,7 +78,7 @@ class ChangeIndividualContactDetailsControllerSpec extends SpecBase with BeforeA
 
           status(result) mustEqual OK
           val doc = Jsoup.parse(contentAsString(result))
-          doc.getElementsContainingText("Confirm and send").isEmpty mustBe true
+          doc.getElementsContainingText(TestValues.confirmAndSend).isEmpty mustBe true
         }
       }
 

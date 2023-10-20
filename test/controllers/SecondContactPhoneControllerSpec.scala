@@ -16,7 +16,7 @@
 
 package controllers
 
-import base.SpecBase
+import base.{SpecBase, TestValues}
 import forms.SecondContactPhoneFormProvider
 import models.UserAnswers
 import navigation.{ContactDetailsNavigator, FakeContactDetailsNavigator}
@@ -69,7 +69,7 @@ class SecondContactPhoneControllerSpec extends SpecBase with MockitoSugar {
         .set(SecondContactNamePage, name)
         .success
         .value
-        .set(SecondContactPhonePage, "answer")
+        .set(SecondContactPhonePage, TestValues.userAnswer)
         .success
         .value
 
@@ -83,7 +83,7 @@ class SecondContactPhoneControllerSpec extends SpecBase with MockitoSugar {
         val result = route(application, request).value
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(form.fill("answer"), name)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(form.fill(TestValues.userAnswer), name)(request, messages(application)).toString
       }
     }
 
@@ -104,7 +104,7 @@ class SecondContactPhoneControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, secondContactPhoneRoute)
-            .withFormUrlEncodedBody(("value", "0928273"))
+            .withFormUrlEncodedBody((TestValues.inputValue, TestValues.validContactNumber))
 
         val result = route(application, request).value
 
@@ -122,9 +122,9 @@ class SecondContactPhoneControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, secondContactPhoneRoute)
-            .withFormUrlEncodedBody(("value", ""))
+            .withFormUrlEncodedBody((TestValues.inputValue, ""))
 
-        val boundForm = form.bind(Map("value" -> ""))
+        val boundForm = form.bind(Map(TestValues.inputValue -> ""))
 
         val view = application.injector.instanceOf[SecondContactPhoneView]
 

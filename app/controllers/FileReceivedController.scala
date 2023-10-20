@@ -28,6 +28,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.ContactEmailHelper.getContactEmails
 import viewmodels.FileReceivedViewModel
 import viewmodels.govuk.summarylist._
+import models.cssClassesType.CssClassesType
 import views.html.{FileReceivedView, ThereIsAProblemView}
 
 import javax.inject.Inject
@@ -60,7 +61,7 @@ class FileReceivedController @Inject() (
                 val detailsList =
                   SummaryListViewModel(FileReceivedViewModel.getSummaryRows(details, details.reportType))
                     .withMargin()
-                    .withCssClass("govuk-!-margin-bottom-0")
+                    .withCssClass(CssClassesType.govukMarginBottom)
                 for {
                   updatedAnswers <- Future.fromTry(request.userAnswers.remove(UploadIDPage))
                   _              <- sessionRepository.set(updatedAnswers)

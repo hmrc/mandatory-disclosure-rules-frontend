@@ -18,13 +18,16 @@ package forms
 
 import forms.mappings.Mappings
 import play.api.data.Form
+import utils.CommonUtils
 
 import javax.inject.Inject
 
 class SecondContactHavePhoneFormProvider @Inject() extends Mappings {
 
+  val requiredKey = "secondContactHavePhone.error.required"
+
   def apply(): Form[Boolean] =
     Form(
-      "value" -> boolean("secondContactHavePhone.error.required")
+      CommonUtils.value -> boolean(requiredKey)
     )
 }

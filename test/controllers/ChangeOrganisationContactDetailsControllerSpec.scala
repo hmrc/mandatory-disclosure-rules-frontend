@@ -16,7 +16,7 @@
 
 package controllers
 
-import base.SpecBase
+import base.{SpecBase, TestValues}
 import models.UserAnswers
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers.any
@@ -60,7 +60,7 @@ class ChangeOrganisationContactDetailsControllerSpec extends SpecBase with Befor
 
           status(result) mustEqual OK
           val doc = Jsoup.parse(contentAsString(result))
-          doc.getElementsContainingText("Confirm and send").isEmpty mustBe false
+          doc.getElementsContainingText(TestValues.confirmAndSend).isEmpty mustBe false
         }
       }
 
@@ -82,7 +82,7 @@ class ChangeOrganisationContactDetailsControllerSpec extends SpecBase with Befor
 
           status(result) mustEqual OK
           val doc = Jsoup.parse(contentAsString(result))
-          doc.getElementsContainingText("Confirm and send").isEmpty mustBe true
+          doc.getElementsContainingText(TestValues.confirmAndSend).isEmpty mustBe true
         }
       }
 

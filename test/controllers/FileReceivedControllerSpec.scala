@@ -16,20 +16,11 @@
 
 package controllers
 
-import base.SpecBase
+import base.{SpecBase, TestValues}
 import connectors.FileDetailsConnector
 import models.fileDetails.{Accepted, FileDetails}
-import models.{
-  ConversationId,
-  MultipleCorrectionsDeletions,
-  MultipleNewInformation,
-  NormalMode,
-  SingleCorrection,
-  SingleDeletion,
-  SingleNewInformation,
-  SingleOther,
-  UserAnswers
-}
+import models.cssClassesType.CssClassesType
+import models.{MultipleCorrectionsDeletions, MultipleNewInformation, SingleCorrection, SingleDeletion, SingleNewInformation, SingleOther, UserAnswers}
 import org.mockito.ArgumentMatchers.any
 import pages.{ContactEmailPage, SecondContactEmailPage}
 import play.api.inject.bind
@@ -49,8 +40,6 @@ class FileReceivedControllerSpec extends SpecBase {
 
   val mockFileDetailsConnector: FileDetailsConnector = mock[FileDetailsConnector]
 
-  val messageRefId       = "messageRefId"
-  val conversationId     = ConversationId("conversationId")
   val time               = "10:30am"
   val date               = "1 January 2022"
   val firstContactEmail  = "first@email.com"
@@ -70,7 +59,7 @@ class FileReceivedControllerSpec extends SpecBase {
     Seq(
       SummaryListRow(
         key = Key(Text("File ID (MessageRefId)")),
-        value = ValueViewModel(HtmlContent(messageRefId)),
+        value = ValueViewModel(HtmlContent(TestValues.messageRefId)),
         actions = None
       ),
       SummaryListRow(
@@ -84,7 +73,7 @@ class FileReceivedControllerSpec extends SpecBase {
       )
     )
   ).withMargin()
-    .withCssClass("govuk-!-margin-bottom-0")
+    .withCssClass(CssClassesType.govukMarginBottom)
 
   "FileReceived Controller" - {
 
@@ -102,19 +91,19 @@ class FileReceivedControllerSpec extends SpecBase {
             Some(
               FileDetails(
                 "name",
-                messageRefId,
+                TestValues.messageRefId,
                 Some(MultipleNewInformation),
                 localTimeDate,
                 localTimeDate,
                 Accepted,
-                conversationId
+                TestValues.conversationId
               )
             )
           )
         )
 
       running(application) {
-        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoadFast(conversationId).url)
+        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoadFast(TestValues.conversationId).url)
 
         val result = route(application, request).value
 
@@ -141,19 +130,19 @@ class FileReceivedControllerSpec extends SpecBase {
             Some(
               FileDetails(
                 "name",
-                messageRefId,
+                TestValues.messageRefId,
                 Some(SingleOther),
                 localTimeDate,
                 localTimeDate,
                 Accepted,
-                conversationId
+                TestValues.conversationId
               )
             )
           )
         )
 
       running(application) {
-        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoadFast(conversationId).url)
+        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoadFast(TestValues.conversationId).url)
 
         val result = route(application, request).value
 
@@ -178,19 +167,19 @@ class FileReceivedControllerSpec extends SpecBase {
             Some(
               FileDetails(
                 "name",
-                messageRefId,
+                TestValues.messageRefId,
                 Some(MultipleCorrectionsDeletions),
                 localTimeDate,
                 localTimeDate,
                 Accepted,
-                conversationId
+                TestValues.conversationId
               )
             )
           )
         )
 
       running(application) {
-        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoadFast(conversationId).url)
+        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoadFast(TestValues.conversationId).url)
 
         val result = route(application, request).value
 
@@ -217,19 +206,19 @@ class FileReceivedControllerSpec extends SpecBase {
             Some(
               FileDetails(
                 "name",
-                messageRefId,
+                TestValues.messageRefId,
                 Some(SingleNewInformation),
                 localTimeDate,
                 localTimeDate,
                 Accepted,
-                conversationId
+                TestValues.conversationId
               )
             )
           )
         )
 
       running(application) {
-        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoadFast(conversationId).url)
+        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoadFast(TestValues.conversationId).url)
 
         val result = route(application, request).value
 
@@ -256,19 +245,19 @@ class FileReceivedControllerSpec extends SpecBase {
             Some(
               FileDetails(
                 "name",
-                messageRefId,
+                TestValues.messageRefId,
                 Some(SingleCorrection),
                 localTimeDate,
                 localTimeDate,
                 Accepted,
-                conversationId
+                TestValues.conversationId
               )
             )
           )
         )
 
       running(application) {
-        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoadFast(conversationId).url)
+        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoadFast(TestValues.conversationId).url)
 
         val result = route(application, request).value
 
@@ -295,19 +284,19 @@ class FileReceivedControllerSpec extends SpecBase {
             Some(
               FileDetails(
                 "name",
-                messageRefId,
+                TestValues.messageRefId,
                 Some(SingleDeletion),
                 localTimeDate,
                 localTimeDate,
                 Accepted,
-                conversationId
+                TestValues.conversationId
               )
             )
           )
         )
 
       running(application) {
-        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoadFast(conversationId).url)
+        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoadFast(TestValues.conversationId).url)
 
         val result = route(application, request).value
 
@@ -334,19 +323,19 @@ class FileReceivedControllerSpec extends SpecBase {
             Some(
               FileDetails(
                 "name",
-                messageRefId,
+                TestValues.messageRefId,
                 None,
                 localTimeDate,
                 localTimeDate,
                 Accepted,
-                conversationId
+                TestValues.conversationId
               )
             )
           )
         )
 
       running(application) {
-        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoadFast(conversationId).url)
+        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoadFast(TestValues.conversationId).url)
 
         val result = route(application, request).value
 
@@ -356,7 +345,7 @@ class FileReceivedControllerSpec extends SpecBase {
           Seq(
             SummaryListRow(
               key = Key(Text("File ID (MessageRefId)")),
-              value = ValueViewModel(HtmlContent(messageRefId)),
+              value = ValueViewModel(HtmlContent(TestValues.messageRefId)),
               actions = None
             ),
             SummaryListRow(
@@ -365,7 +354,7 @@ class FileReceivedControllerSpec extends SpecBase {
             )
           )
         ).withMargin()
-          .withCssClass("govuk-!-margin-bottom-0")
+          .withCssClass(CssClassesType.govukMarginBottom)
 
         status(result) mustEqual OK
         contentAsString(result) mustBe view(list, firstContactEmail, Some(secondContactEmail))(request, messages(application)).toString
@@ -385,19 +374,19 @@ class FileReceivedControllerSpec extends SpecBase {
             Some(
               FileDetails(
                 "name",
-                messageRefId,
+                TestValues.messageRefId,
                 Some(SingleOther),
                 localTimeDate,
                 localTimeDate,
                 Accepted,
-                conversationId
+                TestValues.conversationId
               )
             )
           )
         )
 
       running(application) {
-        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoadFast(conversationId).url)
+        val request = FakeRequest(GET, routes.FileReceivedController.onPageLoadFast(TestValues.conversationId).url)
 
         val result = route(application, request).value
 

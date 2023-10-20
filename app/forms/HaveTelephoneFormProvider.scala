@@ -19,18 +19,22 @@ package forms
 import forms.mappings.Mappings
 import models.AffinityType
 import play.api.data.Form
+import utils.CommonUtils
 
 import javax.inject.Inject
 
 class HaveTelephoneFormProvider @Inject() extends Mappings {
 
+  val requiredKey = "haveTelephone.error.required"
+  val invalidKey  = "error.boolean"
+
   def apply(): Form[Boolean] =
     Form(
-      "value" -> boolean("haveTelephone.error.required")
+      CommonUtils.value -> boolean(requiredKey)
     )
 
   def apply(affinityType: AffinityType): Form[Boolean] =
     Form(
-      "value" -> boolean(s"haveTelephone.error.required.$affinityType")
+      CommonUtils.value -> boolean(s"haveTelephone.error.required.$affinityType")
     )
 }

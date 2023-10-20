@@ -14,24 +14,8 @@
  * limitations under the License.
  */
 
-package forms
+package models.cssClassesType
 
-import forms.mappings.Mappings
-import play.api.data.Form
-import utils.RegExConstants
-
-import javax.inject.Inject
-
-class ContactEmailFormProvider @Inject() extends Mappings with RegExConstants {
-
-  private val maxLength   = 132
-  private val requiredKey = "contactEmail.error.required"
-  private val invalidKey  = "contactEmail.error.invalid"
-  private val lengthKey   = "contactEmail.error.length"
-  private val value       = "value"
-
-  def apply(): Form[String] =
-    Form(
-      value -> validatedText(requiredKey, invalidKey, lengthKey, emailRegex, maxLength)
-    )
+object CssClassesType {
+  val govukMarginBottom = "govuk-!-margin-bottom-0"
 }

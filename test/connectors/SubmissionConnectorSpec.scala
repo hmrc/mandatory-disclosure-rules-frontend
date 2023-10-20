@@ -40,14 +40,18 @@ class SubmissionConnectorSpec extends Connector {
   val messageSpec                         = MessageSpecData("x9999", MDR401, 2, "OECD1", MultipleNewInformation)
   val uploadId                            = UploadId("uploadId")
   val fileSize                            = 1000L
-
+  val enrolmentID                         = "enrolmentID"
+  val documentUrl                         = "dummyURL"
+  val checkSum                            = "1234"
+  val fileName                            = "test-file.xml"
+  val badFileName                         = "test-bad-file.xml"
   "SubmissionConnector" - {
 
     "must return a 200 on successful submission of xml" in {
 
       stubPostResponse(submitUrl, OK, Json.toJson(conversationId).toString())
 
-      whenReady(connector.submitDocument(SubmissionDetails("test-file.xml", uploadId, "enrolmentID", fileSize, "dummyURL", "1234", messageSpec))) {
+      whenReady(connector.submitDocument(SubmissionDetails(fileName, uploadId, enrolmentID, fileSize, documentUrl, checkSum, messageSpec))) {
         result =>
           result.value mustBe conversationId
       }
@@ -56,7 +60,7 @@ class SubmissionConnectorSpec extends Connector {
     "must return a 400 when submission of xml fails with BadRequest" in {
       stubPostResponse(submitUrl, BAD_REQUEST)
 
-      whenReady(connector.submitDocument(SubmissionDetails("test-bad-file.xml", uploadId, "enrolmentID", fileSize, "dummyUrl", "1234", messageSpec))) {
+      whenReady(connector.submitDocument(SubmissionDetails(badFileName, uploadId, enrolmentID, fileSize, documentUrl, checkSum, messageSpec))) {
         result =>
           result mustBe None
       }
@@ -65,7 +69,7 @@ class SubmissionConnectorSpec extends Connector {
     "must return a 500 when submission of xml fails with InternalServer Error" in {
       stubPostResponse(submitUrl, INTERNAL_SERVER_ERROR)
 
-      whenReady(connector.submitDocument(SubmissionDetails("test-file.xml", uploadId, "enrolmentID", fileSize, "dummyURL", "1234", messageSpec))) {
+      whenReady(connector.submitDocument(SubmissionDetails(fileName, uploadId, enrolmentID, fileSize, documentUrl, checkSum, messageSpec))) {
         result =>
           result mustBe None
       }

@@ -16,7 +16,7 @@
 
 package controllers
 
-import base.SpecBase
+import base.{SpecBase, TestValues}
 import forms.HaveTelephoneFormProvider
 import models.{NormalMode, Organisation, UserAnswers}
 import navigation.{ContactDetailsNavigator, FakeContactDetailsNavigator}
@@ -89,7 +89,7 @@ class HaveTelephoneControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, haveTelephoneRoute)
-            .withFormUrlEncodedBody(("value", "true"))
+            .withFormUrlEncodedBody((TestValues.inputValue, "true"))
 
         val result = route(application, request).value
 
@@ -113,7 +113,7 @@ class HaveTelephoneControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, haveTelephoneRoute)
-            .withFormUrlEncodedBody(("value", "false"))
+            .withFormUrlEncodedBody((TestValues.inputValue, "false"))
 
         val result = route(application, request).value
 
@@ -129,7 +129,7 @@ class HaveTelephoneControllerSpec extends SpecBase with MockitoSugar {
       running(application) {
         val request =
           FakeRequest(POST, haveTelephoneRoute)
-            .withFormUrlEncodedBody(("value", ""))
+            .withFormUrlEncodedBody((TestValues.inputValue, ""))
 
         val result = route(application, request).value
 

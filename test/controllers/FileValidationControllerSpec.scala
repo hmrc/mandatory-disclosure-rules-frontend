@@ -16,7 +16,7 @@
 
 package controllers
 
-import base.SpecBase
+import base.{SpecBase, TestValues}
 import connectors.{UpscanConnector, ValidationConnector}
 import helpers.FakeUpscanConnector
 import models.upscan.{Reference, UploadId, UploadSessionDetails, UploadedSuccessfully}
@@ -69,11 +69,10 @@ class FileValidationControllerSpec extends SpecBase with BeforeAndAfterEach {
     "must redirect to Check your answers and present the correct view for a GET" in {
 
       val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
-      val messageSpecData                                = MessageSpecData("XBG1999999", MDR401, 2, "OECD1", MultipleNewInformation)
       val expectedData: JsObject =
-        Json.obj("uploadID" -> UploadId("123"), "validXML" -> ValidatedFileData("afile", messageSpecData, fileSize, "1234"), "url" -> downloadURL)
+        Json.obj("uploadID" -> UploadId("123"), "validXML" -> ValidatedFileData("afile", TestValues.messageSpecData, fileSize, "1234"), "url" -> downloadURL)
 
-      when(mockValidationConnector.sendForValidation(any())(any(), any())).thenReturn(Future.successful(Right(messageSpecData)))
+      when(mockValidationConnector.sendForValidation(any())(any(), any())).thenReturn(Future.successful(Right(TestValues.messageSpecData)))
       when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
       fakeUpscanConnector.setDetails(uploadDetails)
 

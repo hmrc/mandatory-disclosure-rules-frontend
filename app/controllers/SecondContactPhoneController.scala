@@ -25,6 +25,7 @@ import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import utils.CommonUtils
 import views.html.SecondContactPhoneView
 
 import javax.inject.Inject
@@ -59,7 +60,7 @@ class SecondContactPhoneController @Inject() (
   private def getSecondContactName(userAnswers: UserAnswers)(implicit messages: Messages): String =
     (userAnswers.get(SecondContactNamePage)) match {
       case Some(contactName) => contactName
-      case _                 => messages("default.secondContact.name")
+      case _                 => messages(CommonUtils.secondContactName)
     }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
