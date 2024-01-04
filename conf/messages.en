@@ -346,7 +346,6 @@ fileReceived.p1twoEmail = We have sent a confirmation email to {0} and {1}.
 fileReceived.subheading = What happens next
 fileReceived.p2 = We will contact you if we have any questions about your report.
 fileReceived.print = Print this page
-fileReceived.thoughts = What did you think of this service? (opens in new tab)
 
 fileStatus.title = Result of automatic checks
 fileStatus.heading = Result of automatic checks
