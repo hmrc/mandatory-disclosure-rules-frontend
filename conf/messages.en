@@ -345,6 +345,10 @@ fileReceived.p1oneEmail = We have sent a confirmation email to {0}.
 fileReceived.p1twoEmail = We have sent a confirmation email to {0} and {1}.
 fileReceived.subheading = What happens next
 fileReceived.p2 = We will contact you if we have any questions about your report.
+fileReceived.heading.a = Before you go
+fileReceived.p1.a = Your feedback helps us make our service better.
+fileReceived.p2.a.link = Take our survey
+fileReceived.p2.a = {0} to share your feedback on this service. It takes about 1 minute to complete.
 fileReceived.print = Print this page
 
 fileStatus.title = Result of automatic checks

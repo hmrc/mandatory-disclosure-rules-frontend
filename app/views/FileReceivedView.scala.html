@@ -49,6 +49,12 @@
 
     <p class="govuk-body">@messages("fileReceived.p2")</p>
 
+   <h2 class="govuk-heading-m govuk-!-padding-top-2">@messages("fileReceived.heading.a")</h2>
+
+   <p class="govuk-body">@messages("fileReceived.p1.a")</p>
+
+   <p class="govuk-body">@Html(messages("fileReceived.p2.a", link(appConfig.signOutUrl, "fileReceived.p2.a.link")))</p>
+
     <ul class="govuk-list">
         <li>@printLink("fileReceived.print")</li>
         <li>@link(routes.IndexController.onPageLoad.url, "site.backToReportPage")</li>
