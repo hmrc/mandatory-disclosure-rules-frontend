@@ -15,7 +15,6 @@
  *@
 
 @import config.FrontendAppConfig
-@import uk.gov.hmrc.hmrcfrontend.views.config.StandardBetaBanner
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcStandardPage
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage._
 @import views.html.helper.CSPNonce
@@ -27,7 +26,6 @@
     hmrcLanguageSelect: HmrcLanguageSelect,
     hmrcTimeoutDialog: HmrcTimeoutDialog,
     hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
-    standardBetaBanner: StandardBetaBanner
 )
 
 
@@ -66,9 +64,6 @@
         serviceURLs = ServiceURLs(
             serviceUrl = Some(routes.IndexController.onPageLoad.url),
             signOutUrl = if(showSignOut) Some(controllers.auth.routes.AuthController.signOut.url) else None,
-        ),
-        banners = Banners(
-            phaseBanner = Some(standardBetaBanner(url = appConfig.feedbackUrl))
         ),
         pageTitle = Some(pageTitle),
         templateOverrides = TemplateOverrides(

@@ -30,9 +30,6 @@ class FrontendAppConfig @Inject() (configuration: Configuration, servicesConfig:
   val host: String    = configuration.get[String]("host")
   val appName: String = configuration.get[String]("appName")
 
-  def feedbackUrl(implicit request: RequestHeader): String =
-    s"${contactFrontendConfig.baseUrl.get}/contact/beta-feedback?service=${contactFrontendConfig.serviceId.get}&backUrl=${SafeRedirectUrl(host + request.uri).encodedUrl}"
-
   val loginUrl: String                 = configuration.get[String]("urls.login")
   val loginContinueUrl: String         = configuration.get[String]("urls.loginContinue")
   val signOutUrl: String               = configuration.get[String]("urls.signOut")
