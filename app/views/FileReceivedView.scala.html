@@ -53,7 +53,7 @@
 
    <p class="govuk-body">@messages("fileReceived.p1.a")</p>
 
-   <p class="govuk-body">@Html(messages("fileReceived.p2.a", link(appConfig.signOutUrl, "fileReceived.p2.a.link")))</p>
+   <p class="govuk-body">@Html(messages("fileReceived.p2.a", link(appConfig.signOutUrl, "fileReceived.p2.a.link", id = Some("feedback-link"), openInNewWindow = true)))</p>
 
     <ul class="govuk-list">
         <li>@printLink("fileReceived.print")</li>
