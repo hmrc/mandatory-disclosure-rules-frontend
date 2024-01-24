@@ -55,8 +55,10 @@
 
    <p class="govuk-body">@Html(messages("fileReceived.p2.a", link(appConfig.signOutUrl, "fileReceived.p2.a.link", id = Some("feedback-link"), openInNewWindow = true)))</p>
 
-    <ul class="govuk-list">
-        <li>@printLink("fileReceived.print")</li>
-        <li>@link(routes.IndexController.onPageLoad.url, "site.backToReportPage")</li>
-    </ul>
+    <div class="govuk-!-padding-top-2">
+        <ul class="govuk-list">
+            <li>@printLink("fileReceived.print")</li>
+            <li>@link(routes.IndexController.onPageLoad.url, "site.backToReportPage")</li>
+        </ul>
+    </div>
 }
