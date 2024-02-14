@@ -87,7 +87,9 @@ class FileRejectedViewModelSpec extends SpecBase {
               TableRow(Text("800"), None, "", None, None, Map("id" -> "code_800")),
               TableRow(HtmlContent(""), None, "", None, None, Map("id" -> "docRefId_800")),
               TableRow(
-                HtmlContent("The DocRefId has already been used in this file or a file previously received, it must be unique"),
+                HtmlContent(
+                  "DocRefId values must be unique for:<ol class ='govuk-list govuk-list--bullet govuk-!-margin-top-2 govuk-!-margin-bottom-0'><li>the Disclosing section and MdrReport section within the same report (MdrBody) in this file</li><li>each report (MdrBody) in this file</li><li>this file compared to a previously accepted file for the same or a different arrangement</li></ol>"
+                ),
                 None,
                 "",
                 None,
