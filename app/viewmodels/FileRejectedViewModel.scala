@@ -106,6 +106,18 @@ object FileRejectedViewModel {
         recordError =>
           recordError.code match {
             case RecordErrorCode.CustomError => handleCustomErrors(recordError.details, recordError.docRefIDInError)
+            case RecordErrorCode.DocRefIDAlreadyUsed =>
+              (Messages(s"fileRejected.80000.key"),
+               HtmlContent(docIdContent(recordError.docRefIDInError.getOrElse(Nil))),
+               HtmlContent(
+                 Html(
+                   s"${Messages(s"fileRejected.80000.value1")}" +
+                     s"<ol class ='govuk-list govuk-list--bullet govuk-!-margin-top-2 govuk-!-margin-bottom-0'><li>${Messages(s"fileRejected.80000.value2")}</li>" +
+                     s"<li>${Messages(s"fileRejected.80000.value3")}</li>" +
+                     s"<li>${Messages(s"fileRejected.80000.value4")}</li></ol>"
+                 )
+               )
+              )
             case RecordErrorCode.MessageTypeIndic =>
               (Messages(s"fileRejected.80010.key"),
                HtmlContent(docIdContent(recordError.docRefIDInError.getOrElse(Nil))),
