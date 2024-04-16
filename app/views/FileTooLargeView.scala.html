@@ -28,12 +28,7 @@
 
     <h1 class="govuk-heading-l">@messages("fileTooLarge.heading")</h1>
 
-    <p class="govuk-body">@Html(messages("fileTooLarge.p1", link(s"mailto:${appConfig.enquireEmailLink}", "fileTooLarge.link")))</p>
-    <p class="govuk-body">@messages("fileTooLarge.p2")</p>
-    <ul class="govuk-list govuk-list--bullet" style="padding-left:20px;list-style-type:disc">
-        <li>@messages("fileTooLarge.b1")</li>
-        <li>@messages("fileTooLarge.b2")</li>
-    </ul>
+    <p class="govuk-body">@Html(messages("fileTooLarge.p1"))</p>
 
     <ul class="govuk-list">
         <li>@link(routes.UploadFileController.onPageLoad().url, "problemPage.uploadLink")</li>
