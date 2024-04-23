@@ -43,10 +43,10 @@ error.summary.title = There is a problem
 
 index.title = Report cross-border arrangements for Mandatory Disclosure Rules (MDR)
 index.heading = Report cross-border arrangements for Mandatory Disclosure Rules (MDR)
-index.p1 = You can report new information, or corrections and deletions, by {0}.
-index.p1.link = uploading an XML file
+index.p1 = You can report new information, or corrections and deletions, by uploading an XML file.
 index.p2 = The file must include your MDR ID {0} and be 100MB or less.
 index.p3 = You can also:
+index.button = Upload an XML file
 index.bullet1 = view results of checks on your recently sent files
 index.bullet2 = find out more about MDR XML files
 index.bullet3 = change your contact details

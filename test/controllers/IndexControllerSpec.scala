@@ -82,9 +82,11 @@ class IndexControllerSpec extends SpecBase {
 
           status(result) mustEqual OK
 
-          contentAsString(result) mustEqual view(TestValues.subscriptionId,
-                                                 controllers.routes.ChangeOrganisationContactDetailsController.onPageLoad().url,
-                                                 showRecentFiles = true
+          contentAsString(result) mustEqual view(
+            TestValues.subscriptionId,
+            routes.UploadFileController.onPageLoad().url,
+            controllers.routes.ChangeOrganisationContactDetailsController.onPageLoad().url,
+            showRecentFiles = true
           )(
             request,
             messages(application)
@@ -121,9 +123,11 @@ class IndexControllerSpec extends SpecBase {
 
           status(result) mustEqual OK
 
-          contentAsString(result) mustEqual view(TestValues.subscriptionId,
-                                                 controllers.routes.ChangeOrganisationContactDetailsController.onPageLoad().url,
-                                                 showRecentFiles = false
+          contentAsString(result) mustEqual view(
+            TestValues.subscriptionId,
+            routes.UploadFileController.onPageLoad().url,
+            controllers.routes.ChangeOrganisationContactDetailsController.onPageLoad().url,
+            showRecentFiles = false
           )(
             request,
             messages(application)

@@ -61,7 +61,7 @@ class IndexController @Inject() (
                 _ =>
                   fileConnector.getAllFileDetails map {
                     fileDetails =>
-                      Ok(view(request.subscriptionId, changeDetailsUrl, fileDetails.isDefined))
+                      Ok(view(request.subscriptionId, routes.UploadFileController.onPageLoad().url, changeDetailsUrl, fileDetails.isDefined))
                   }
               }
             case _ =>

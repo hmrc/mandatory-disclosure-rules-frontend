@@ -19,10 +19,11 @@
 @this(
     layout: templates.Layout,
     link: components.Link,
-    appConfig: FrontendAppConfig
+    appConfig: FrontendAppConfig,
+    govukButton: GovukButton
 )
 
-@(mdrID: String, changeDetailsUrl: String, showRecentFiles: Boolean)(implicit request: Request[_], messages: Messages)
+@(mdrID: String, uploadFileRedirect: String, changeDetailsUrl: String, showRecentFiles: Boolean)(implicit request: Request[_], messages: Messages)
 
 @layout(
     pageTitle    = titleNoForm(messages("index.title")),
@@ -31,7 +32,7 @@
 
     <h1 class="govuk-heading-l">@messages("index.heading")</h1>
 
-    <p class="govuk-body">@Html(messages("index.p1", link(routes.UploadFileController.onPageLoad().url, "index.p1.link")))</p>
+    <p class="govuk-body">@messages("index.p1")</p>
 
     <p class="govuk-body">@messages("index.p2", mdrID)</p>
 
@@ -46,6 +47,12 @@
         <li>@link(changeDetailsUrl, "index.bullet3")</li>
 
     </ul>
+
+    <p class="govuk-body govuk-!-margin-top-2">
+        @govukButton(
+            ButtonViewModel(messages("index.button")).withAttribute( "id" -> "submit").asLink(uploadFileRedirect)
+        )
+    </p>
 
     <p class="govuk-body">@Html(messages("index.p4", link("mailto:aeoi.enquiries@hmrc.gov.uk", "index.p4.link")))</p>
 }
