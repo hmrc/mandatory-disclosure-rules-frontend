@@ -19,9 +19,7 @@ package config
 import com.google.inject.{Inject, Singleton}
 import play.api.Configuration
 import play.api.i18n.Lang
-import play.api.mvc.RequestHeader
 import uk.gov.hmrc.hmrcfrontend.config.ContactFrontendConfig
-import uk.gov.hmrc.play.bootstrap.binders.SafeRedirectUrl
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 @Singleton
@@ -62,4 +60,8 @@ class FrontendAppConfig @Inject() (configuration: Configuration, servicesConfig:
   val cacheTtl: Int = configuration.get[Int]("mongodb.timeToLiveInSeconds")
 
   val spinnerCounter: Int = configuration.get[Int]("spinner.counter")
+
+  val maxNormalFileSizeBytes: Long       = configuration.get[Long]("max-normal-file-size-bytes")
+  val largeFileWaitDurationMinutes: Int  = configuration.get[Int]("large-file-wait-duration-minutes")
+  val normalFileWaitDurationMinutes: Int = configuration.get[Int]("normal-file-wait-duration-minutes")
 }
