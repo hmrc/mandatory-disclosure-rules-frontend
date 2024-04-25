@@ -16,6 +16,7 @@
 
 package controllers
 
+import config.FrontendAppConfig
 import connectors.FileDetailsConnector
 import controllers.actions._
 import models.fileDetails.{Pending, Rejected, RejectedSDES, RejectedSDESVirus, ValidationErrors, Accepted => FileStatusAccepted}
@@ -34,6 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class FilePendingChecksController @Inject() (
   override val messagesApi: MessagesApi,
+  frontendAppConfig: FrontendAppConfig,
   identify: IdentifierAction,
   getData: DataRetrievalAction,
   requireData: DataRequiredAction,
@@ -70,7 +72,12 @@ class FilePendingChecksController @Inject() (
                   for {
                     updatedAnswers <- Future.fromTry(request.userAnswers.remove(UploadIDPage))
                     _              <- sessionRepository.set(updatedAnswers)
-                  } yield Ok(view(summary, routes.FilePendingChecksController.onPageLoad().url, conversationId.value))
+                  } yield {
+                    val waitDurationMinutes = if (xmlDetails.fileSize > frontendAppConfig.maxNormalFileSizeBytes) {
+                      frontendAppConfig.largeFileWaitDurationMinutes
+                    } else frontendAppConfig.normalFileWaitDurationMinutes
+                    Ok(view(summary, routes.FilePendingChecksController.onPageLoad().url, conversationId.value, waitDurationMinutes))
+                  }
                 case _ => Future.successful(InternalServerError(errorView()))
               }
             case _ =>

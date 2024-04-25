@@ -17,11 +17,12 @@
 package controllers
 
 import base.{SpecBase, TestValues}
+import config.FrontendAppConfig
 import connectors.FileDetailsConnector
+import models.UserAnswers
 import models.fileDetails.FileErrorCode.{FailedSchemaValidation, MessageRefIDHasAlreadyBeenUsed}
 import models.fileDetails.RecordErrorCode.{DocRefIDFormat, MissingCorrDocRefId}
 import models.fileDetails.{Pending, Rejected, ValidationErrors, Accepted => FileStatusAccepted, _}
-import models.{ConversationId, MDR401, MessageSpecData, MultipleNewInformation, UserAnswers, ValidatedFileData}
 import org.mockito.ArgumentMatchers.any
 import pages.{ConversationIdPage, ValidXMLPage}
 import play.api.inject.bind
@@ -36,17 +37,19 @@ class FilePendingChecksControllerSpec extends SpecBase {
 
   val fileSize = 1000L
 
+  val maxNormalFileSizeInBytes = 3145728L
+
   "FilePendingChecks Controller" - {
 
     val mockFileDetailsConnector: FileDetailsConnector = mock[FileDetailsConnector]
 
-    "must return OK and the correct view for a GET when fileStatus is Pending" in {
+    "must return OK and the correct view for a GET when fileStatus is Pending for normal file" in {
 
       val userAnswers: UserAnswers = emptyUserAnswers
         .set(ConversationIdPage, TestValues.conversationId)
         .success
         .value
-        .set(ValidXMLPage, TestValues.validatedFileData)
+        .set(ValidXMLPage, TestValues.validatedFileData.copy(fileSize = maxNormalFileSizeInBytes))
         .success
         .value
 
@@ -63,12 +66,52 @@ class FilePendingChecksControllerSpec extends SpecBase {
 
       running(application) {
 
-        val request = FakeRequest(GET, routes.FilePendingChecksController.onPageLoad().url)
-        val result  = route(application, request).value
-        val view    = application.injector.instanceOf[FilePendingChecksView]
+        val request   = FakeRequest(GET, routes.FilePendingChecksController.onPageLoad().url)
+        val result    = route(application, request).value
+        val view      = application.injector.instanceOf[FilePendingChecksView]
+        val appConfig = application.injector.instanceOf[FrontendAppConfig]
 
         status(result) mustEqual OK
-        contentAsString(result) mustEqual view(fileSummaryList, action, TestValues.conversationId.value)(request, messages(application)).toString
+        contentAsString(result) mustEqual view(fileSummaryList, action, TestValues.conversationId.value, appConfig.normalFileWaitDurationMinutes)(
+          request,
+          messages(application)
+        ).toString
+      }
+    }
+
+    "must return OK and the correct view for a GET when fileStatus is Pending for large file" in {
+
+      val userAnswers: UserAnswers = emptyUserAnswers
+        .set(ConversationIdPage, TestValues.conversationId)
+        .success
+        .value
+        .set(ValidXMLPage, TestValues.validatedFileData.copy(fileSize = maxNormalFileSizeInBytes + 1))
+        .success
+        .value
+
+      when(mockFileDetailsConnector.getStatus(any())(any(), any())).thenReturn(Future.successful(Some(Pending)))
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(
+          bind[FileDetailsConnector].toInstance(mockFileDetailsConnector)
+        )
+        .build()
+
+      val fileSummaryList = FileCheckViewModel.createFileSummary(TestValues.validatedFileData.fileName, "Pending")(messages(application))
+      val action          = routes.FilePendingChecksController.onPageLoad().url
+
+      running(application) {
+
+        val request   = FakeRequest(GET, routes.FilePendingChecksController.onPageLoad().url)
+        val result    = route(application, request).value
+        val view      = application.injector.instanceOf[FilePendingChecksView]
+        val appConfig = application.injector.instanceOf[FrontendAppConfig]
+
+        status(result) mustEqual OK
+        contentAsString(result) mustEqual view(fileSummaryList, action, TestValues.conversationId.value, appConfig.largeFileWaitDurationMinutes)(
+          request,
+          messages(application)
+        ).toString
       }
     }
 
