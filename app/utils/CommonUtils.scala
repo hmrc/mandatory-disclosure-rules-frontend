@@ -16,9 +16,6 @@
 
 package utils
 
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-
 object CommonUtils {
 
   val blank: String                = ""
