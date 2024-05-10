@@ -22,7 +22,6 @@ object AppDependencies {
     "org.scalatestplus"   %% "mockito-3-4"                   % "3.2.10.0",
     "org.mockito"         %% "mockito-scala"                 % "1.17.31",
     "uk.gov.hmrc.mongo"   %% s"hmrc-mongo-test-$playVersion" % mongoVersion,
-    "com.vladsch.flexmark" % "flexmark-all"                  % "0.64.8",
     "wolfendale"          %% "scalacheck-gen-regexp"         % "0.1.2"
   ).map(_ % Test)
 
