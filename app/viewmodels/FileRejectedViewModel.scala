@@ -50,7 +50,7 @@ object FileRejectedViewModel {
       .mkString(" ")
   )
 
-  // noinspection ScalaStyle
+  //noinspection ScalaStyle
   private def handleCustomErrors(errorDetails: Option[String], docRefIDInError: Option[Seq[String]])(implicit
     messages: Messages
   ): (String, HtmlContent, HtmlContent) =

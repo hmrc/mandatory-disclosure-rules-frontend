@@ -19,7 +19,7 @@ package controllers
 import config.FrontendAppConfig
 import connectors.{FileDetailsConnector, SubmissionConnector}
 import controllers.actions.{CheckForSubmissionAction, DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import models.fileDetails.{Accepted => FileStatusAccepted, Pending, Rejected, RejectedSDES, RejectedSDESVirus, ValidationErrors}
+import models.fileDetails.{Pending, Rejected, RejectedSDES, RejectedSDESVirus, ValidationErrors, Accepted => FileStatusAccepted}
 import models.submissions.SubmissionDetails
 import models.upscan.URL
 import models.{MultipleCorrectionsDeletions, SingleCorrection, SingleDeletion, SingleOther, ValidatedFileData}

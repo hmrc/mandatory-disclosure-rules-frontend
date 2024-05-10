@@ -18,7 +18,7 @@ package controllers
 
 import base.{SpecBase, TestValues}
 import connectors.FileDetailsConnector
-import models.SingleNewInformation
+import models.{SingleNewInformation}
 import models.fileDetails.{FileDetails, Pending}
 import org.mockito.ArgumentMatchers.any
 import play.api.inject.bind

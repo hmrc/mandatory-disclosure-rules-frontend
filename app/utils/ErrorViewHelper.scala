@@ -27,8 +27,8 @@ class ErrorViewHelper @Inject() () extends Logging {
 
   def generateTable(error: Seq[GenericError])(implicit messages: Messages): Seq[Seq[TableRow]] = {
     logger.warn(s"Schema validation failed: ${error.map {
-        er => s"${er.lineNumber} - ${Messages(er.message.messageKey, er.message.args)}"
-      }}")
+      er => s"${er.lineNumber} - ${Messages(er.message.messageKey, er.message.args)}"
+    }}")
     error.map {
       er =>
         Seq(
