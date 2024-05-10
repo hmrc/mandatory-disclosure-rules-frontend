@@ -112,7 +112,7 @@ class FileValidationControllerSpec extends SpecBase with BeforeAndAfterEach {
       val expectedData                                   = Json.obj("invalidXML" -> "afile")
 
       fakeUpscanConnector.setDetails(uploadDetails)
-      //noinspection ScalaStyle
+      // noinspection ScalaStyle
 
       when(mockValidationConnector.sendForValidation(any())(any(), any())).thenReturn(Future.successful(Left(InvalidXmlError("sax exception"))))
       when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))

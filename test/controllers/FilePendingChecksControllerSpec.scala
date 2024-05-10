@@ -22,7 +22,7 @@ import connectors.FileDetailsConnector
 import models.UserAnswers
 import models.fileDetails.FileErrorCode.{FailedSchemaValidation, MessageRefIDHasAlreadyBeenUsed}
 import models.fileDetails.RecordErrorCode.{DocRefIDFormat, MissingCorrDocRefId}
-import models.fileDetails.{Pending, Rejected, ValidationErrors, Accepted => FileStatusAccepted, _}
+import models.fileDetails.{Accepted => FileStatusAccepted, Pending, Rejected, ValidationErrors, _}
 import org.mockito.ArgumentMatchers.any
 import pages.{ConversationIdPage, ValidXMLPage}
 import play.api.inject.bind

@@ -62,7 +62,7 @@ class HaveSecondContactController @Inject() (
   }
 
   private def getContactName(userAnswers: UserAnswers)(implicit messages: Messages): String =
-    (userAnswers.get(ContactNamePage)) match {
+    userAnswers.get(ContactNamePage) match {
       case Some(contactName) => contactName
       case _                 => messages(CommonUtils.firstContactName)
     }

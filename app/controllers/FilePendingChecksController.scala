@@ -19,7 +19,7 @@ package controllers
 import config.FrontendAppConfig
 import connectors.FileDetailsConnector
 import controllers.actions._
-import models.fileDetails.{Pending, Rejected, RejectedSDES, RejectedSDESVirus, ValidationErrors, Accepted => FileStatusAccepted}
+import models.fileDetails.{Accepted => FileStatusAccepted, Pending, Rejected, RejectedSDES, RejectedSDESVirus, ValidationErrors}
 import pages.{ConversationIdPage, UploadIDPage, ValidXMLPage}
 import play.api.i18n.Lang.logger
 import play.api.i18n.{I18nSupport, MessagesApi}
