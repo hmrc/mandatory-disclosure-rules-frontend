@@ -18,7 +18,7 @@ package forms
 
 import forms.mappings.Mappings
 import play.api.data.Form
-import utils.{CommonUtils, FileUploadUtils}
+import utils.FileUploadUtils
 
 import javax.inject.Inject
 

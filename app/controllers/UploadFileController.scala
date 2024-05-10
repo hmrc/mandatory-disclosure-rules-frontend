@@ -16,7 +16,6 @@
 
 package controllers
 
-import akka.actor.ActorSystem
 import config.FrontendAppConfig
 import connectors.UpscanConnector
 import controllers.actions._
@@ -24,6 +23,8 @@ import forms.UploadFileFormProvider
 import models.audit.{AuditFileUpload, AuditType}
 import models.requests.DataRequest
 import models.upscan._
+import org.apache.pekko.actor.ActorSystem
+import org.apache.pekko
 import pages.UploadIDPage
 import play.api.Logging
 import play.api.data.Form
@@ -98,7 +99,7 @@ class UploadFileController @Inject() (
   def getStatus(uploadId: UploadId): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
       // Delay the call to make sure the backend db has been populated by the upscan callback first
-      akka.pattern.after(config.upscanCallbackDelayInSeconds.seconds, actorSystem.scheduler) {
+      pekko.pattern.after(config.upscanCallbackDelayInSeconds.seconds, actorSystem.scheduler) {
         upscanConnector.getUploadStatus(uploadId) map {
           case Some(file: UploadedSuccessfully) =>
             sendAuditEvent(uploadId, file)
