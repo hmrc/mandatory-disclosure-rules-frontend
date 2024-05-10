@@ -62,7 +62,7 @@ lazy val root = (project in file("."))
         )
     ),
     // prevent removal of unused code which generates warning errors due to use of third-party libs
-    uglifyCompressOptions := Seq("unused=false", "dead_code=false", "warnings=false"),
+    uglifyCompressOptions := Seq("unused=false", "dead_code=false"),
     uglifyOps             := UglifyOps.singleFile,
     pipelineStages        := Seq(digest),
     // below line required to force asset pipeline to operate in dev rather than only prod
