@@ -135,7 +135,7 @@ class FileStatusViewModelSpec extends SpecBase {
             TableRow(Text("18 Mar 2022 11:09am"), None, "", None, None, Map()),
             TableRow(HtmlContent("<strong class='govuk-tag govuk-tag--purple'>Problem</strong>"), None, "", None, None, Map()),
             TableRow(
-              HtmlContent("<a href='/report-under-mandatory-disclosure-rules/report/file-not-accepted' class='govuk-link'>Contact us</a>"),
+              HtmlContent("<a href='/report-under-mandatory-disclosure-rules/report/problem/file-not-accepted' class='govuk-link'>Contact us</a>"),
               None,
               "app-custom-class mdr-width-next",
               None,
@@ -195,7 +195,7 @@ class FileStatusViewModelSpec extends SpecBase {
             TableRow(Text("18 Mar 2022 11:09am"), None, "", None, None, Map()),
             TableRow(HtmlContent("<strong class='govuk-tag govuk-tag--purple'>Problem</strong>"), None, "", None, None, Map()),
             TableRow(
-              HtmlContent("<a href='/report-under-mandatory-disclosure-rules/report/file-not-accepted' class='govuk-link'>Contact us</a>"),
+              HtmlContent("<a href='/report-under-mandatory-disclosure-rules/report/problem/file-not-accepted' class='govuk-link'>Contact us</a>"),
               None,
               "app-custom-class mdr-width-next",
               None,
@@ -208,7 +208,7 @@ class FileStatusViewModelSpec extends SpecBase {
             TableRow(Text("17 Mar 2022 11:09am"), None, "", None, None, Map()),
             TableRow(HtmlContent("<strong class='govuk-tag govuk-tag--purple'>Problem</strong>"), None, "", None, None, Map()),
             TableRow(
-              HtmlContent("<a href='/report-under-mandatory-disclosure-rules/report/file-not-accepted' class='govuk-link'>Contact us</a>"),
+              HtmlContent("<a href='/report-under-mandatory-disclosure-rules/report/problem/file-not-accepted' class='govuk-link'>Contact us</a>"),
               None,
               "app-custom-class mdr-width-next",
               None,

@@ -97,6 +97,6 @@ GET        /report/still-checking-your-file                                   co
 
 GET        /report/file-failed-checks                                         controllers.FileFailedChecksController.onPageLoad()
 
-GET        /report/problem/file-not-accepted                                          controllers.FileProblemController.onPageLoad()
+GET        /report/problem/file-not-accepted                                  controllers.FileProblemController.onPageLoad()
 
 GET        /problem/information-sent                                          controllers.InformationSentController.onPageLoad()
