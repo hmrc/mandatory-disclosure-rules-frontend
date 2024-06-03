@@ -425,7 +425,7 @@ class SendYourFileControllerSpec extends SpecBase {
 
           status(result) mustEqual OK
 
-          contentAsJson(result) shouldBe Json.toJson(URL(routes.FileProblemController.onPageLoad().url))
+          contentAsJson(result) shouldBe Json.toJson(URL(routes.ThereIsAProblemController.onPageLoad().url))
         }
       }
 
