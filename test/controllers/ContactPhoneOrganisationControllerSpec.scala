@@ -22,7 +22,8 @@ import models.{NormalMode, UserAnswers}
 import navigation.{ContactDetailsNavigator, FakeContactDetailsNavigator}
 import org.mockito.ArgumentMatchers.any
 import org.scalatestplus.mockito.MockitoSugar
-import pages.ContactPhonePage
+import pages.{ContactNamePage, ContactPhonePage}
+import play.api.data.Form
 import play.api.inject.bind
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -34,12 +35,12 @@ import scala.concurrent.Future
 
 class ContactPhoneOrganisationControllerSpec extends SpecBase with MockitoSugar {
 
-  override def onwardRoute = Call("GET", "/foo")
+  override def onwardRoute: Call = Call("GET", "/foo")
 
   val formProvider = new ContactPhoneOrganisationFormProvider()
-  val form         = formProvider()
+  val form: Form[String] = formProvider()
 
-  lazy val contactPhoneRoute = routes.ContactPhoneOrganisationController.onPageLoad().url
+  lazy val contactPhoneRoute: String = routes.ContactPhoneOrganisationController.onPageLoad().url
 
   "ContactPhone Organisation Controller" - {
 
@@ -118,6 +119,28 @@ class ContactPhoneOrganisationControllerSpec extends SpecBase with MockitoSugar 
 
         status(result) mustEqual BAD_REQUEST
         contentAsString(result) mustEqual view(boundForm, "", NormalMode)(request, messages(application)).toString
+      }
+    }
+
+    "must return a Bad Request and errors when invalid data is submitted and show contact Name" in {
+      val userAnswers = emptyUserAnswers
+        .set(ContactNamePage, "SomeName").success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      running(application) {
+        val request =
+          FakeRequest(POST, contactPhoneRoute)
+            .withFormUrlEncodedBody((TestValues.inputValue, ""))
+
+        val boundForm = form.bind(Map(TestValues.inputValue -> ""))
+
+        val view = application.injector.instanceOf[ContactPhoneOrganisationView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual BAD_REQUEST
+        contentAsString(result) mustEqual view(boundForm, "SomeName", NormalMode)(request, messages(application)).toString
       }
     }
 

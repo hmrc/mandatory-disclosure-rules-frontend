@@ -120,6 +120,16 @@ class UpscanConnectorSpec extends Connector {
         }
 
       }
+
+      "when an BAD_REQUEST response is returned" in {
+        stubGetResponse(upScanDetailsUrl, BAD_REQUEST , Json.obj().toString())
+
+        whenReady(connector.getUploadDetails(uploadId)) {
+          result =>
+            result mustBe None
+        }
+
+      }
     }
   }
 
