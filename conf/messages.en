@@ -232,6 +232,10 @@ contactName.change.hidden = Change contact name
 detailsUpdated.title = Contact details updated
 detailsUpdated.heading = Contact details updated
 detailsUpdated.p1 = We will use your new details if we need to contact you.
+detailsUpdated.heading.a = Before you go
+detailsUpdated.p1.a = Your feedback helps us make our service better.
+detailsUpdated.p2.a.link = Take a short survey
+detailsUpdated.p2.a= {0} to share your feedback on this service.
 
 fileError.title = There is a problem with your file
 fileError.heading = There is a problem with your file
