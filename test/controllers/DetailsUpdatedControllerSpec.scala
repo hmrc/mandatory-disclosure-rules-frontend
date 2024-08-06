@@ -38,6 +38,10 @@ class DetailsUpdatedControllerSpec extends SpecBase {
 
         status(result) mustEqual OK
         contentAsString(result) mustEqual view()(request, messages(application)).toString
+        contentAsString(result) must include("Before you go")
+        contentAsString(result) must include("Your feedback helps us make our service better.")
+        contentAsString(result) must include("Take a short survey")
+        contentAsString(result) must include("to share your feedback on this service.")
       }
     }
   }

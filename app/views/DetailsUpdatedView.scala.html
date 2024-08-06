@@ -15,11 +15,13 @@
  *@
 
 @import views.html.components.Link
+@import config.FrontendAppConfig
 
 @this(
         layout: templates.Layout,
         govukPanel : GovukPanel,
-        link: Link
+        link: Link,
+        appConfig: FrontendAppConfig
 )
 
 @()(implicit request: Request[_], messages: Messages)
@@ -32,5 +34,10 @@
 
     <p class="govuk-body">@messages("detailsUpdated.p1")</p>
 
-  <p class="govuk-body">@link(routes.IndexController.onPageLoad.url, "site.backToReportPage")</p>
+    <p class="govuk-body">@link(routes.IndexController.onPageLoad.url, "site.backToReportPage")</p>
+    <h2 class="govuk-heading-m">@messages("detailsUpdated.heading.a")</h2>
+
+    <p class="govuk-body">@messages("detailsUpdated.p1.a")</p>
+
+    <p class="govuk-body">@Html(messages("detailsUpdated.p2.a", link(appConfig.signOutUrl, "detailsUpdated.p2.a.link", id = Some("feedback-link"), openInNewWindow = true)))</p>
 }
