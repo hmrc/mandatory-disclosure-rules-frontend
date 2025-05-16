@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,9 +69,6 @@ trait InputFluency {
 
     def withHint(hint: Hint): Input =
       input copy (hint = Some(hint))
-
-    def withFormGroupClasses(classes: String): Input =
-      input copy (formGroupClasses = classes)
 
     def withCssClass(newClass: String): Input =
       input copy (classes = s"${input.classes} $newClass")

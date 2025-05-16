@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package models.upscan
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class UpscanIdentifiers(uploadId: UploadId, fileReference: Reference)
 
 object UpscanIdentifiers {
-  implicit val format = Json.format[UpscanIdentifiers]
+  implicit val format: OFormat[UpscanIdentifiers] = Json.format[UpscanIdentifiers]
 }

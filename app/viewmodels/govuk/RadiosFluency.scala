@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -94,9 +94,6 @@ trait RadiosFluency {
 
     def withHint(hint: Hint): Radios =
       radios copy (hint = Some(hint))
-
-    def withFormGroupClasses(classes: String): Radios =
-      radios copy (formGroupClasses = classes)
 
     def withIdPrefix(prefix: String): Radios =
       radios copy (idPrefix = Some(prefix))

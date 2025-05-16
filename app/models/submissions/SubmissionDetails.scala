@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2025 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ package models.submissions
 
 import models.MessageSpecData
 import models.upscan.UploadId
-import play.api.libs.json.Json
+import play.api.libs.json.{Json, OFormat}
 
 case class SubmissionDetails(fileName: String,
                              uploadId: UploadId,
@@ -30,5 +30,5 @@ case class SubmissionDetails(fileName: String,
 )
 
 object SubmissionDetails {
-  implicit val format = Json.format[SubmissionDetails]
+  implicit val format: OFormat[SubmissionDetails] = Json.format[SubmissionDetails]
 }

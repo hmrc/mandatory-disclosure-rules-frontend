@@ -12,7 +12,7 @@ val silencerVersion      = "1.7.16"
 
 // move shared settings from `microservice` here
 ThisBuild / majorVersion := 0
-ThisBuild / scalaVersion := "2.13.12"
+ThisBuild / scalaVersion := "2.13.16"
 
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin)
