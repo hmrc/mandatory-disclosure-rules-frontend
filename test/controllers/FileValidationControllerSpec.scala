@@ -151,5 +151,34 @@ class FileValidationControllerSpec extends SpecBase with BeforeAndAfterEach {
 
       status(result) mustBe INTERNAL_SERVER_ERROR
     }
+
+    "must redirect to filename lengthy page if filename is too long" in {
+
+      val givenFilename =
+        """sample-mdr-file-individual-very_very-very_very-sample-mdr-file-individual-very_very-very_very-sample-mdr-file-individual-
+          |very_very-very_very-sample-mdr-file-individual-very_very-very_very""".stripMargin
+
+      val userAnswersCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
+      val expectedData: JsObject                         = Json.obj("filenameLengthy" -> givenFilename)
+
+      when(mockValidationConnector.sendForValidation(any())(any(), any())).thenReturn(Future.successful(Right(TestValues.messageSpecData)))
+      when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
+      val givenUploadDetails = UploadSessionDetails(
+        new ObjectId(),
+        UploadId("123"),
+        Reference("123"),
+        UploadedSuccessfully(givenFilename, downloadURL, fileSize, "1234")
+      )
+      fakeUpscanConnector.setDetails(givenUploadDetails)
+
+      val request                = FakeRequest(GET, routes.FileValidationController.onPageLoad().url)
+      val result: Future[Result] = route(application, request).value
+
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result).value mustEqual routes.FilenameLengthyController.onPageLoad().url
+
+      verify(mockSessionRepository, times(1)).set(userAnswersCaptor.capture())
+      userAnswersCaptor.getValue.data mustEqual expectedData
+    }
   }
 }

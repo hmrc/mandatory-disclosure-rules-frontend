@@ -48,8 +48,10 @@ class FileValidationController @Inject() (
     with I18nSupport
     with Logging {
 
+  private val maxFilenameLength = 170
   private case class ExtractedFileStatus(name: String, downloadUrl: String, size: Long, checkSum: String)
 
+  //noinspection ScalaStyle
   def onPageLoad(): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
       request.userAnswers
@@ -66,34 +68,43 @@ class FileValidationController @Inject() (
                     logger.error("File not uploaded successfully")
                     Future.successful(InternalServerError(errorView()))
                   } {
-                    downloadDetails =>
-                      validationConnector.sendForValidation(UpscanURL(downloadDetails.downloadUrl)) flatMap {
-                        case Right(messageSpecData) =>
-                          for {
-                            updatedAnswers <- Future.fromTry(
-                              request.userAnswers.set(ValidXMLPage,
-                                                      ValidatedFileData(downloadDetails.name, messageSpecData, downloadDetails.size, downloadDetails.checkSum)
+                    downloadDetails: ExtractedFileStatus =>
+                      if (downloadDetails.name.length > maxFilenameLength) {
+
+                        for {
+                          updatedAnswers <- Future.fromTry(UserAnswers(request.userId).set(FilenameLengthyPage, downloadDetails.name))
+                          _              <- sessionRepository.set(updatedAnswers)
+                        } yield Redirect(navigator.nextPage(FilenameLengthyPage, NormalMode, updatedAnswers))
+
+                      } else {
+                        validationConnector.sendForValidation(UpscanURL(downloadDetails.downloadUrl)) flatMap {
+                          case Right(messageSpecData) =>
+                            for {
+                              updatedAnswers <- Future.fromTry(
+                                request.userAnswers.set(ValidXMLPage,
+                                                        ValidatedFileData(downloadDetails.name, messageSpecData, downloadDetails.size, downloadDetails.checkSum)
+                                )
                               )
-                            )
-                            updatedAnswersWithURL <- Future.fromTry(updatedAnswers.set(URLPage, downloadDetails.downloadUrl))
-                            _                     <- sessionRepository.set(updatedAnswersWithURL)
-                          } yield Redirect(navigator.nextPage(ValidXMLPage, NormalMode, updatedAnswers))
+                              updatedAnswersWithURL <- Future.fromTry(updatedAnswers.set(URLPage, downloadDetails.downloadUrl))
+                              _                     <- sessionRepository.set(updatedAnswersWithURL)
+                            } yield Redirect(navigator.nextPage(ValidXMLPage, NormalMode, updatedAnswers))
 
-                        case Left(ValidationErrors(errors, _)) =>
-                          for {
-                            updatedAnswers           <- Future.fromTry(UserAnswers(request.userId).set(InvalidXMLPage, downloadDetails.name))
-                            updatedAnswersWithErrors <- Future.fromTry(updatedAnswers.set(GenericErrorPage, errors))
-                            _                        <- sessionRepository.set(updatedAnswersWithErrors)
-                          } yield Redirect(navigator.nextPage(InvalidXMLPage, NormalMode, updatedAnswers))
+                          case Left(ValidationErrors(errors, _)) =>
+                            for {
+                              updatedAnswers           <- Future.fromTry(UserAnswers(request.userId).set(InvalidXMLPage, downloadDetails.name))
+                              updatedAnswersWithErrors <- Future.fromTry(updatedAnswers.set(GenericErrorPage, errors))
+                              _                        <- sessionRepository.set(updatedAnswersWithErrors)
+                            } yield Redirect(navigator.nextPage(InvalidXMLPage, NormalMode, updatedAnswers))
 
-                        case Left(InvalidXmlError(_)) =>
-                          for {
-                            updatedAnswers <- Future.fromTry(UserAnswers(request.userId).set(InvalidXMLPage, downloadDetails.name))
-                            _              <- sessionRepository.set(updatedAnswers)
-                          } yield Redirect(routes.FileErrorController.onPageLoad())
+                          case Left(InvalidXmlError(_)) =>
+                            for {
+                              updatedAnswers <- Future.fromTry(UserAnswers(request.userId).set(InvalidXMLPage, downloadDetails.name))
+                              _              <- sessionRepository.set(updatedAnswers)
+                            } yield Redirect(routes.FileErrorController.onPageLoad())
 
-                        case _ =>
-                          Future.successful(InternalServerError(errorView()))
+                          case _ =>
+                            Future.successful(InternalServerError(errorView()))
+                        }
                       }
                   }
               }
