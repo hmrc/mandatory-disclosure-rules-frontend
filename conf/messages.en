@@ -442,3 +442,4 @@ filenameError.bullet2 = View the errors on this page
 filenameError.bullet3 = Refer to the {0} and use it to update your file
 filenameError.bullet3.link = MDR technical guidance for XML files
 filenameError.bullet4 = Upload your updated file
+filenameError.msg = The filename must be shorter than 170 characters
