@@ -432,3 +432,14 @@ fileProblem.link = aeoi.enquiries@hmrc.gov.uk
 informationSent.title = You have already sent this information
 informationSent.heading = You have already sent this information
 informationSent.p1 = We will contact you if we have any questions about the details you have provided.
+
+filenameError.title = There is a problem with your filename
+filenameError.heading = There is a problem with your filename
+filenameError.p1 = We cannot accept the file {0} because the filename is longer than 170 characters.
+filenameError.subheading1 = What you can do next
+filenameError.bullet1 = Print this page
+filenameError.bullet2 = View the errors on this page
+filenameError.bullet3 = Refer to the {0} and use it to update your file
+filenameError.bullet3.link = MDR technical guidance for XML files
+filenameError.bullet4 = Upload your updated file
+filenameError.msg = The filename must be shorter than 170 characters

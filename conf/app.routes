@@ -34,6 +34,8 @@ GET         /report/problem/data-errors                                       co
 
 GET         /report/problem/invalid-xml-file                                  controllers.FileErrorController.onPageLoad()
 
+GET         /report/problem/invalid-xml-filename                              controllers.FilenameLengthyController.onPageLoad()
+
 GET         /report/fast/problem/business-rule-errors/:conversationId         controllers.FileRejectedController.onPageLoadFast(conversationId: ConversationId)
 GET         /report/problem/business-rule-errors/:conversationId              controllers.FileRejectedController.onPageLoadSlow(conversationId: ConversationId)
 
