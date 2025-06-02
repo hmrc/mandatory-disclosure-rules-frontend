@@ -37,7 +37,7 @@ class ContactPhoneOrganisationControllerSpec extends SpecBase with MockitoSugar 
 
   override def onwardRoute: Call = Call("GET", "/foo")
 
-  val formProvider       = new ContactPhoneOrganisationFormProvider()
+  val formProvider = new ContactPhoneOrganisationFormProvider()
   val form: Form[String] = formProvider()
 
   lazy val contactPhoneRoute: String = routes.ContactPhoneOrganisationController.onPageLoad().url
@@ -124,9 +124,7 @@ class ContactPhoneOrganisationControllerSpec extends SpecBase with MockitoSugar 
 
     "must return a Bad Request and errors when invalid data is submitted and show contact Name" in {
       val userAnswers = emptyUserAnswers
-        .set(ContactNamePage, "SomeName")
-        .success
-        .value
+        .set(ContactNamePage, "SomeName").success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
