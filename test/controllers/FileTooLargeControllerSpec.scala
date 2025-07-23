@@ -21,7 +21,9 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.FileTooLargeView
 
-class FileTooLargeControllerSpec extends SpecBase {
+import scala.concurrent.ExecutionContext
+
+class FileTooLargeControllerSpec (implicit val ec: ExecutionContext) extends SpecBase {
 
   "FileTooLarge Controller" - {
 

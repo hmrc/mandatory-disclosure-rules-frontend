@@ -24,7 +24,9 @@ import play.api.test.Helpers._
 import viewmodels.FileCheckViewModel
 import views.html.{FilePassedChecksView, ThereIsAProblemView}
 
-class FilePassedChecksControllerSpec extends SpecBase {
+import scala.concurrent.ExecutionContext
+
+class FilePassedChecksControllerSpec (implicit val ec: ExecutionContext) extends SpecBase {
 
   "FilePassedChecks Controller" - {
 

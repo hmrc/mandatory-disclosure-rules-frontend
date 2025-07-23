@@ -24,7 +24,9 @@ import play.api.test.Helpers._
 import viewmodels.FileCheckViewModel
 import views.html.{FileFailedChecksView, ThereIsAProblemView}
 
-class FileFailedChecksControllerSpec extends SpecBase {
+import scala.concurrent.ExecutionContext
+
+class FileFailedChecksControllerSpec (implicit val ec: ExecutionContext) extends SpecBase {
 
   val fileSize = 1000L
 

@@ -24,9 +24,9 @@ import play.api.http.Status.{INTERNAL_SERVER_ERROR, OK}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext
 
-class SubscriptionConnectorSpec extends Connector with ModelGenerators {
+class SubscriptionConnectorSpec (implicit val ec: ExecutionContext) extends Connector with ModelGenerators {
 
   override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(

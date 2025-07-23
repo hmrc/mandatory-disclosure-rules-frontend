@@ -22,7 +22,9 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.{FileErrorView, ThereIsAProblemView}
 
-class FileErrorControllerSpec extends SpecBase {
+import scala.concurrent.ExecutionContext
+
+class FileErrorControllerSpec (implicit val ec: ExecutionContext) extends SpecBase {
 
   val inputFile = "example.xml"
 

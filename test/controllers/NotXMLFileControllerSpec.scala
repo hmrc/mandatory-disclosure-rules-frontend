@@ -21,7 +21,9 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.NotXMLFileView
 
-class NotXMLFileControllerSpec extends SpecBase {
+import scala.concurrent.ExecutionContext
+
+class NotXMLFileControllerSpec (implicit val ec: ExecutionContext) extends SpecBase {
 
   "NotXMLFile Controller" - {
 

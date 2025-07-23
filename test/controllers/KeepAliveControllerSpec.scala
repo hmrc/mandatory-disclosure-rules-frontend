@@ -23,9 +23,9 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class KeepAliveControllerSpec extends SpecBase {
+class KeepAliveControllerSpec (implicit val ec: ExecutionContext) extends SpecBase {
 
   "keepAlive" - {
 

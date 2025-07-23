@@ -31,9 +31,9 @@ import viewmodels.FileRejectedViewModel
 import views.html.FileRejectedView
 
 import java.time.LocalDateTime
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class FileRejectedControllerSpec extends SpecBase with ModelGenerators with ScalaCheckPropertyChecks {
+class FileRejectedControllerSpec (implicit val ec: ExecutionContext) extends SpecBase with ModelGenerators with ScalaCheckPropertyChecks {
 
   private val fileName = "CornerShop"
 

@@ -22,7 +22,9 @@ import models.fileDetails.RecordErrorCode.{CustomError, DocRefIDFormat, MissingC
 import models.fileDetails.{FileErrors, RecordError, ValidationErrors}
 import viewmodels.FileRejectedViewModel.{error_details_901, error_details_910}
 
-class FileProblemHelperSpec extends SpecBase {
+import scala.concurrent.ExecutionContext
+
+class FileProblemHelperSpec (implicit val ec: ExecutionContext) extends SpecBase {
 
   "isProblemStatus" - {
 

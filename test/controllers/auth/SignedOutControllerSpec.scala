@@ -21,7 +21,9 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.auth.SignedOutView
 
-class SignedOutControllerSpec extends SpecBase {
+import scala.concurrent.ExecutionContext
+
+class SignedOutControllerSpec (implicit val ec: ExecutionContext) extends SpecBase {
 
   "SignedOut Controller" - {
 

@@ -34,9 +34,9 @@ import viewmodels.govuk.summarylist._
 import views.html.{FileReceivedView, ThereIsAProblemView}
 
 import java.time.LocalDateTime
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class FileReceivedControllerSpec extends SpecBase {
+class FileReceivedControllerSpec (implicit val ec: ExecutionContext) extends SpecBase {
 
   val mockFileDetailsConnector: FileDetailsConnector = mock[FileDetailsConnector]
 

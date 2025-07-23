@@ -30,9 +30,9 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.SecondContactEmailView
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class SecondContactEmailControllerSpec extends SpecBase with MockitoSugar {
+class SecondContactEmailControllerSpec (implicit val ec: ExecutionContext) extends SpecBase with MockitoSugar {
 
   override def onwardRoute = Call("GET", "/foo")
 

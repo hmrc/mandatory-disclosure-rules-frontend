@@ -18,7 +18,7 @@ package controllers
 
 import base.{SpecBase, TestValues}
 import connectors.FileDetailsConnector
-import models.{SingleNewInformation}
+import models.SingleNewInformation
 import models.fileDetails.{FileDetails, Pending}
 import org.mockito.ArgumentMatchers.any
 import play.api.inject.bind
@@ -28,9 +28,9 @@ import viewmodels.FileStatusViewModel
 import views.html.FileStatusView
 
 import java.time.LocalDateTime
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class FileStatusControllerSpec extends SpecBase {
+class FileStatusControllerSpec (implicit val ec: ExecutionContext) extends SpecBase {
 
   private val mockFileConnector = mock[FileDetailsConnector]
 

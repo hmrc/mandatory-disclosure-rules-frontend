@@ -32,7 +32,7 @@ import views.html.IndexView
 import java.time.LocalDateTime
 import scala.concurrent.{ExecutionContext, Future}
 
-class IndexControllerSpec extends SpecBase {
+class IndexControllerSpec (implicit val ec: ExecutionContext) extends SpecBase {
 
   "Index Controller" - {
 

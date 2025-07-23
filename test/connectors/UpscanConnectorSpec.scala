@@ -24,7 +24,9 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.UpstreamErrorResponse
 
-class UpscanConnectorSpec extends Connector {
+import scala.concurrent.ExecutionContext
+
+class UpscanConnectorSpec (implicit val ec: ExecutionContext) extends Connector {
 
   val fileSize             = 100L
   val uploadId: UploadId   = UploadId("12345")

@@ -22,7 +22,9 @@ import models.{GenericError, Message}
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
 
-class ErrorViewHelperSpec extends SpecBase with Generators {
+import scala.concurrent.ExecutionContext
+
+class ErrorViewHelperSpec (implicit val ec: ExecutionContext) extends SpecBase with Generators {
 
   "generateTable" - {
 

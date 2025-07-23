@@ -34,9 +34,9 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{status, _}
 import views.html.UploadFileView
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
+class UploadFileControllerSpec (implicit val ec: ExecutionContext) extends SpecBase with ScalaCheckPropertyChecks with Generators {
 
   val fileSize                                 = 1000L
   val uploadId: UploadId                       = UploadId("12345")

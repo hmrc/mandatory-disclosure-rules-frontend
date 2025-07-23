@@ -31,9 +31,9 @@ import play.api.test.Helpers._
 import viewmodels.FileCheckViewModel
 import views.html.{FilePendingChecksView, ThereIsAProblemView}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class FilePendingChecksControllerSpec extends SpecBase {
+class FilePendingChecksControllerSpec (implicit val ec: ExecutionContext) extends SpecBase {
 
   val fileSize = 1000L
 

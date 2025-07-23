@@ -31,9 +31,9 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.ContactPhoneOrganisationView
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class ContactPhoneOrganisationControllerSpec extends SpecBase with MockitoSugar {
+class ContactPhoneOrganisationControllerSpec (implicit val ec: ExecutionContext) extends SpecBase with MockitoSugar {
 
   override def onwardRoute: Call = Call("GET", "/foo")
 

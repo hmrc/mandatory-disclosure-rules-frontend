@@ -21,7 +21,9 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.ThereIsAProblemView
 
-class ThereIsAProblemControllerSpec extends SpecBase {
+import scala.concurrent.ExecutionContext
+
+class ThereIsAProblemControllerSpec (implicit val ec: ExecutionContext) extends SpecBase {
 
   "ThereIsAProblem Controller" - {
 

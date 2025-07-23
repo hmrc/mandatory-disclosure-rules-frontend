@@ -26,7 +26,9 @@ import viewmodels.govuk.summarylist._
 import views.html.{CheckYourFileDetailsView, ThereIsAProblemView}
 import models.cssClassesType.CssClassesType
 
-class CheckYourFileDetailsControllerSpec extends SpecBase {
+import scala.concurrent.ExecutionContext
+
+class CheckYourFileDetailsControllerSpec (implicit val ec: ExecutionContext) extends SpecBase {
 
   val fileSize = 100L
   "CheckYourFileDetails Controller" - {

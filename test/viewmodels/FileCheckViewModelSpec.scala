@@ -17,11 +17,13 @@
 package viewmodels
 
 import base.SpecBase
-import models.fileDetails.{FileStatus}
+import models.fileDetails.FileStatus
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{HtmlContent, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{Key, SummaryListRow, Value}
 
-class FileCheckViewModelSpec extends SpecBase {
+import scala.concurrent.ExecutionContext
+
+class FileCheckViewModelSpec (implicit val ec: ExecutionContext) extends SpecBase {
 
   "FileCheckViewModel" - {
 

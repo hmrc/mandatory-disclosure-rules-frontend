@@ -30,9 +30,9 @@ import repositories.SessionRepository
 import uk.gov.hmrc.auth.core.AffinityGroup.{Individual, Organisation}
 import views.html.ContactEmailView
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class ContactEmailControllerSpec extends SpecBase {
+class ContactEmailControllerSpec (implicit val ec: ExecutionContext) extends SpecBase {
 
   override def onwardRoute = Call("GET", "/foo")
 

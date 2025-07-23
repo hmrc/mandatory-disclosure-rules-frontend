@@ -50,7 +50,7 @@ import views.html.SendYourFileView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class SendYourFileControllerSpec extends SpecBase {
+class SendYourFileControllerSpec (implicit val ec: ExecutionContext) extends SpecBase {
 
   val fileSize = 1000L
 
