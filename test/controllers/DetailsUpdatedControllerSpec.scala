@@ -21,9 +21,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.DetailsUpdatedView
 
-import scala.concurrent.ExecutionContext
-
-class DetailsUpdatedControllerSpec (implicit val ec: ExecutionContext) extends SpecBase {
+class DetailsUpdatedControllerSpec extends SpecBase {
 
   "DetailsUpdated Controller" - {
 

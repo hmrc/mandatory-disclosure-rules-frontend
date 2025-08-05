@@ -30,9 +30,9 @@ import play.api.test.Helpers._
 import repositories.SessionRepository
 import views.html.HaveTelephoneView
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
-class HaveTelephoneControllerSpec (implicit val ec: ExecutionContext) extends SpecBase with MockitoSugar {
+class HaveTelephoneControllerSpec extends SpecBase with MockitoSugar {
 
   override def onwardRoute = Call("GET", "/foo")
 

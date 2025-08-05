@@ -23,9 +23,7 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.{HeadCell, Table}
 
-import scala.concurrent.ExecutionContext
-
-class FileRejectedViewModelSpec (implicit val ec: ExecutionContext) extends SpecBase {
+class FileRejectedViewModelSpec extends SpecBase {
 
   val header = Some(
     List(

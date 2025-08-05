@@ -19,9 +19,7 @@ package models
 import base.SpecBase
 import play.api.libs.json.Json
 
-import scala.concurrent.ExecutionContext
-
-class MessageSpecDataSpec (implicit val ec: ExecutionContext) extends SpecBase {
+class MessageSpecDataSpec extends SpecBase {
 
   "MessageSpecDataSpec" - {
     "must serialize MessageSpec" in {

@@ -21,9 +21,7 @@ import models.fileDetails.FileStatus
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{HtmlContent, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{Key, SummaryListRow, Value}
 
-import scala.concurrent.ExecutionContext
-
-class FileCheckViewModelSpec (implicit val ec: ExecutionContext) extends SpecBase {
+class FileCheckViewModelSpec extends SpecBase {
 
   "FileCheckViewModel" - {
 

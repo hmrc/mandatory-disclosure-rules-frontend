@@ -27,9 +27,9 @@ import play.api.test.Helpers._
 import services.SubscriptionService
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
-class ChangeOrganisationContactDetailsControllerSpec (implicit val ec: ExecutionContext) extends SpecBase with BeforeAndAfterEach {
+class ChangeOrganisationContactDetailsControllerSpec extends SpecBase with BeforeAndAfterEach {
 
   val mockSubscriptionService: SubscriptionService = mock[SubscriptionService]
 

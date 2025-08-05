@@ -21,9 +21,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.FileProblemView
 
-import scala.concurrent.ExecutionContext
-
-class FileProblemControllerSpec (implicit val ec: ExecutionContext) extends SpecBase {
+class FileProblemControllerSpec extends SpecBase {
 
   "FileProblem Controller" - {
 

@@ -21,9 +21,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.VirusFileFoundView
 
-import scala.concurrent.ExecutionContext
-
-class VirusFileFoundControllerSpec (implicit val ec: ExecutionContext) extends SpecBase {
+class VirusFileFoundControllerSpec extends SpecBase {
 
   "VirusFileFound Controller" - {
 

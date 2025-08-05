@@ -25,9 +25,7 @@ import uk.gov.hmrc.govukfrontend.views.Aliases.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.TableRow
 import views.html.InvalidXMLFileView
 
-import scala.concurrent.ExecutionContext
-
-class InvalidXMLFileControllerSpec (implicit val ec: ExecutionContext) extends SpecBase {
+class InvalidXMLFileControllerSpec extends SpecBase {
 
   private val fileName = "fileName"
   private val error    = "Some Error"

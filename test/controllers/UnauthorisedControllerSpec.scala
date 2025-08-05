@@ -21,9 +21,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.UnauthorisedView
 
-import scala.concurrent.ExecutionContext
-
-class UnauthorisedControllerSpec (implicit val ec: ExecutionContext) extends SpecBase {
+class UnauthorisedControllerSpec extends SpecBase {
 
   "Unauthorised Controller" - {
 

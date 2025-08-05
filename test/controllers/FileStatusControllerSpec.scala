@@ -28,9 +28,9 @@ import viewmodels.FileStatusViewModel
 import views.html.FileStatusView
 
 import java.time.LocalDateTime
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
 
-class FileStatusControllerSpec (implicit val ec: ExecutionContext) extends SpecBase {
+class FileStatusControllerSpec extends SpecBase {
 
   private val mockFileConnector = mock[FileDetailsConnector]
 

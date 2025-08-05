@@ -20,9 +20,8 @@ import base.SpecBase
 import play.api.libs.json.Json
 
 import java.time.Instant
-import scala.concurrent.ExecutionContext
 
-class UploadCallbackSpec (implicit val ec: ExecutionContext) extends SpecBase {
+class UploadCallbackSpec extends SpecBase {
 
   "Call back body" - {
     "must marshall correctly when upload is finished" in {

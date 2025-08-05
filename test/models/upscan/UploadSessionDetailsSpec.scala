@@ -20,9 +20,7 @@ import base.SpecBase
 import org.bson.types.ObjectId
 import play.api.libs.json.Json
 
-import scala.concurrent.ExecutionContext
-
-class UploadSessionDetailsSpec (implicit val ec: ExecutionContext) extends SpecBase {
+class UploadSessionDetailsSpec extends SpecBase {
 
   def str2Hex(str: String): Array[Byte] = {
     val bytes = new Array[Byte](str.length / 2)

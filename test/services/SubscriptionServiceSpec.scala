@@ -31,7 +31,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class SubscriptionServiceSpec (implicit val ec: ExecutionContext) extends SpecBase with ModelGenerators {
+class SubscriptionServiceSpec extends SpecBase with ModelGenerators {
 
   val mockSubscriptionConnector: SubscriptionConnector = mock[SubscriptionConnector]
 

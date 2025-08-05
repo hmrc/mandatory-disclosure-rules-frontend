@@ -24,9 +24,7 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages._
 
-import scala.concurrent.ExecutionContext
-
-class ContactDetailsNavigatorSpec (implicit val ec: ExecutionContext) extends SpecBase with ScalaCheckPropertyChecks with Generators {
+class ContactDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
   val navigator: ContactDetailsNavigator = new ContactDetailsNavigator
 
   "Navigator" - {

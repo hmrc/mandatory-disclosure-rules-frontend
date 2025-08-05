@@ -23,9 +23,10 @@ import play.api.test.FakeRequest
 import repositories.SessionRepository
 import uk.gov.hmrc.auth.core.AffinityGroup.Organisation
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
-class DataRetrievalActionSpec (implicit val ec: ExecutionContext) extends SpecBase {
+class DataRetrievalActionSpec extends SpecBase {
 
   class Harness(sessionRepository: SessionRepository) extends DataRetrievalActionProvider(sessionRepository) {
     def callTransform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] = transform(request)

@@ -21,9 +21,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.InformationSentView
 
-import scala.concurrent.ExecutionContext
-
-class InformationSentControllerSpec (implicit val ec: ExecutionContext) extends SpecBase {
+class InformationSentControllerSpec extends SpecBase {
 
   "informationSent Controller" - {
 
