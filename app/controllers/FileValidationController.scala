@@ -48,7 +48,7 @@ class FileValidationController @Inject() (
     with I18nSupport
     with Logging {
 
-  private val maxFilenameLength = 170
+  private val maxFilenameLength = 100
   private case class ExtractedFileStatus(name: String, downloadUrl: String, size: Long, checkSum: String)
 
   //noinspection ScalaStyle
