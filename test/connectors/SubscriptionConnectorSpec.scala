@@ -23,7 +23,6 @@ import play.api.Application
 import play.api.http.Status.{INTERNAL_SERVER_ERROR, OK}
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
-
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class SubscriptionConnectorSpec extends Connector with ModelGenerators {

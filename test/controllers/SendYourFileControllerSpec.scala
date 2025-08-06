@@ -24,20 +24,7 @@ import models.fileDetails.RecordErrorCode.DocRefIDFormat
 import models.fileDetails._
 import models.submissions.SubmissionDetails
 import models.upscan.{URL, UploadId}
-import models.{
-  ConversationId,
-  MDR401,
-  MDR402,
-  MessageSpecData,
-  MultipleCorrectionsDeletions,
-  MultipleNewInformation,
-  SingleCorrection,
-  SingleDeletion,
-  SingleNewInformation,
-  SingleOther,
-  UserAnswers,
-  ValidatedFileData
-}
+import models.{ConversationId, MDR401, MDR402, MessageSpecData, MultipleCorrectionsDeletions, MultipleNewInformation, SingleCorrection, SingleDeletion, SingleNewInformation, SingleOther, UserAnswers, ValidatedFileData}
 import org.mockito.ArgumentMatchers.any
 import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
 import pages.{ConversationIdPage, URLPage, UploadIDPage, ValidXMLPage}

@@ -26,6 +26,7 @@ import viewmodels.govuk.summarylist._
 import views.html.{CheckYourFileDetailsView, ThereIsAProblemView}
 import models.cssClassesType.CssClassesType
 
+
 class CheckYourFileDetailsControllerSpec extends SpecBase {
 
   val fileSize = 100L

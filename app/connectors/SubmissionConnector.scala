@@ -20,16 +20,16 @@ import config.FrontendAppConfig
 import models.ConversationId
 import models.submissions.SubmissionDetails
 import play.api.Logging
+import uk.gov.hmrc.http.HttpErrorFunctions.is2xx
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.HttpReads.is2xx
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse, StringContextOps}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class SubmissionConnector @Inject() (httpClient: HttpClient, config: FrontendAppConfig) extends Logging {
 
-  val submitUrl = s"${config.mdrUrl}/mandatory-disclosure-rules/submit"
+  val submitUrl = url"${config.mdrUrl}/mandatory-disclosure-rules/submit"
 
   def submitDocument(submissionDetails: SubmissionDetails)(implicit
     hc: HeaderCarrier,
