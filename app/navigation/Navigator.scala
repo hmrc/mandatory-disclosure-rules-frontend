@@ -27,9 +27,10 @@ import javax.inject.{Inject, Singleton}
 class Navigator @Inject() () {
 
   private val normalRoutes: Page => UserAnswers => Call = {
-    case InvalidXMLPage => _ => routes.InvalidXMLFileController.onPageLoad()
-    case ValidXMLPage   => _ => routes.CheckYourFileDetailsController.onPageLoad()
-    case _              => _ => routes.IndexController.onPageLoad
+    case InvalidXMLPage      => _ => routes.InvalidXMLFileController.onPageLoad()
+    case ValidXMLPage        => _ => routes.CheckYourFileDetailsController.onPageLoad()
+    case FilenameLengthyPage => _ => routes.FilenameLengthyController.onPageLoad()
+    case _                   => _ => routes.IndexController.onPageLoad
   }
 
   private val checkRouteMap: Page => UserAnswers => Call = {
