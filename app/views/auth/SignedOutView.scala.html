@@ -14,9 +14,13 @@
  * limitations under the License.
  *@
 
+@import config.FrontendAppConfig
+
 @this(
     layout: templates.Layout,
-    link: components.Link
+    link: components.Link,
+    govukButton: GovukButton,
+    appConfig: FrontendAppConfig
 )
 
 @()(implicit request: Request[_], messages: Messages)
@@ -30,6 +34,11 @@
 
     <h1 class="govuk-heading-l">@messages("signedOut.heading")</h1>
 
-    <p class="govuk-body">@link(routes.IndexController.onPageLoad.url, "site.backToReportPage")</p>
+    <p class="govuk-body">@messages("signedOut.guidance")</p>
+
+    @govukButton(
+        ButtonViewModel(messages("site.signIn")).withAttribute("id" -> "submit")
+            .asLink(appConfig.loginUrl)
+    )
 
 }

@@ -47,7 +47,7 @@ Mandatory Disclosure Rules runs on port 10018
       enrolmentKey = "HMRC-MDR-ORG"  
       identifier = "MDRID"  
       identifier value = "XAMDR0009234567"
-      redirect url = "/report-under-mandatory-disclosure-rules"
+      redirect url = "http://localhost:10018/report-under-mandatory-disclosure-rules"
       
 #### *Acceptance test repo*:  
 [mandatory-disclosure-rules-file-upload-ui-tests](https://github.com/hmrc/mandatory-disclosure-rules-file-upload-ui-tests)
