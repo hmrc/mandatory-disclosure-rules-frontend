@@ -32,6 +32,7 @@ import play.api.mvc.Result
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import repositories.SessionRepository
+import views.html.FilenameLengthyView
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 
@@ -174,11 +175,15 @@ class FileValidationControllerSpec extends SpecBase with BeforeAndAfterEach {
       val request                = FakeRequest(GET, routes.FileValidationController.onPageLoad().url)
       val result: Future[Result] = route(application, request).value
 
+      val view = application.injector.instanceOf[FilenameLengthyView]
+
       status(result) mustBe SEE_OTHER
       redirectLocation(result).value mustEqual routes.FilenameLengthyController.onPageLoad().url
 
       verify(mockSessionRepository, times(1)).set(userAnswersCaptor.capture())
       userAnswersCaptor.getValue.data mustEqual expectedData
+
+      view(givenFilename)(request, messages(application)).toString must include("the filename is longer than 100 characters")
     }
   }
 }
