@@ -1,5 +1,6 @@
 $govuk-assets-path: "/disclose-cross-border-arrangements/upload/assets/lib/govuk-frontend/govuk/assets/";
 $hmrc-assets-path: "/disclose-cross-border-arrangements/upload/assets/lib/hmrc-frontend/hmrc/assets";
+$govuk-new-organisation-colours: true;
 
 @import "lib/govuk-frontend/dist/govuk/base";
 @import "partials/spinner";
