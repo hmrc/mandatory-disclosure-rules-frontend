@@ -17,14 +17,14 @@
 package connectors
 
 import config.FrontendAppConfig
-import models.upscan._
+import models.upscan.*
 import play.api.Logging
 import play.api.http.HeaderNames
 import play.api.http.Status.OK
 import play.api.libs.json.{JsError, JsSuccess}
-import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.HttpErrorFunctions.is2xx
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse, StringContextOps}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -51,14 +51,14 @@ class UpscanConnector @Inject() (configuration: FrontendAppConfig, httpClient: H
   }
 
   def requestUpload(uploadId: UploadId, fileReference: Reference)(implicit hc: HeaderCarrier): Future[UploadId] = {
-    val uploadUrl = s"$backendUrl/upscan/upload"
+    val uploadUrl = url"$backendUrl/upscan/upload"
     httpClient.POST[UpscanIdentifiers, HttpResponse](uploadUrl, UpscanIdentifiers(uploadId, fileReference)).map {
       _ => uploadId
     }
   }
 
   def getUploadDetails(uploadId: UploadId)(implicit hc: HeaderCarrier): Future[Option[UploadSessionDetails]] = {
-    val detailsUrl = s"$backendUrl/upscan/details/${uploadId.value}"
+    val detailsUrl = url"$backendUrl/upscan/details/${uploadId.value}"
     httpClient.GET[HttpResponse](detailsUrl).map {
       response =>
         response.status match {
@@ -77,7 +77,7 @@ class UpscanConnector @Inject() (configuration: FrontendAppConfig, httpClient: H
   }
 
   def getUploadStatus(uploadId: UploadId)(implicit hc: HeaderCarrier): Future[Option[UploadStatus]] = {
-    val statusUrl = s"$backendUrl/upscan/status/${uploadId.value}"
+    val statusUrl = url"$backendUrl/upscan/status/${uploadId.value}"
     httpClient.GET[HttpResponse](statusUrl).map {
       response =>
         response.status match {

@@ -20,10 +20,11 @@ import base.{SpecBase, TestValues}
 import models.UserAnswers
 import org.jsoup.Jsoup
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
 import play.api.inject.bind
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import services.SubscriptionService
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -33,9 +34,9 @@ class ChangeIndividualContactDetailsControllerSpec extends SpecBase with BeforeA
 
   val mockSubscriptionService: SubscriptionService = mock[SubscriptionService]
 
-  override def beforeEach: Unit = {
+  override def beforeEach(): Unit = {
     reset(mockSubscriptionService)
-    super.beforeEach
+    super.beforeEach()
   }
 
   "ChangeIndividualContactDetails Controller" - {

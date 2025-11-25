@@ -11,12 +11,12 @@ val silencerVersion      = "1.7.16"
 
 // move shared settings from `microservice` here
 ThisBuild / majorVersion := 0
-ThisBuild / scalaVersion := "2.13.16"
+ThisBuild / scalaVersion := "3.3.7"
 
 lazy val root = (project in file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
-  .settings(inConfig(Test)(testSettings): _*)
+  .settings(inConfig(Test)(testSettings) *)
   .settings(ThisBuild / useSuperShell := false)
   .settings(CodeCoverageSettings.settings)
   .settings(
@@ -37,7 +37,6 @@ lazy val root = (project in file("."))
       "viewmodels.govuk.all._"
     ),
     PlayKeys.playDefaultPort := 10018,
-    scalacOptions ++= Seq("-feature"),
     libraryDependencies ++= AppDependencies(),
     retrieveManaged := true,
     // concatenate js
@@ -62,22 +61,22 @@ lazy val root = (project in file("."))
     uglify / includeFilter := GlobFilter("application.js")
   )
   .settings(
-    scalacOptions ++= Seq("-Ypatmat-exhaust-depth", "off"),
     scalacOptions ++= Seq(
+      "-feature",
       "-Wconf:src=routes/.*:s",
-      "-Wconf:cat=unused-imports&site=.*views\\.html.*:s",
-      "-Wconf:src=.+/test/.+:s",
-      "-Wconf:cat=deprecation&msg=\\.*()\\.*:s",
-      "-Wconf:cat=unused-imports&site=<empty>:s",
-      "-Wconf:cat=unused&src=.*RoutesPrefix\\.scala:s",
-      "-Wconf:cat=unused&src=.*Routes\\.scala:s",
-      "-Wconf:cat=unused&src=.*ReverseRoutes\\.scala:s",
-      "-Wconf:cat=unused&src=.*JavaScriptReverseRoutes\\.scala:s",
-      "-Xlint:-byname-implicit"
+      "-Wconf:msg=unused import&src=html/.*:s",
+      "-Wconf:msg=.+/test/.+:s",
+      "-Wconf:msg=deprecation&msg=\\.*()\\.*:s",
+      "-Wconf:msg=unused import&src=<empty>:s",
+      "-Wconf:msg=unused&src=.*RoutesPrefix\\.scala:s",
+      "-Wconf:msg=unused&src=.*Routes\\.scala:s",
+      "-Wconf:msg=unused&src=.*ReverseRoutes\\.scala:s",
+      "-Wconf:msg=unused&src=.*JavaScriptReverseRoutes\\.scala:s",
+      "-Wconf:msg=Flag.*repeatedly:s"
     )
   )
 
-lazy val testSettings: Seq[Def.Setting[_]] = Seq(
+lazy val testSettings: Seq[Def.Setting[?]] = Seq(
   fork := true,
   javaOptions ++= Seq(
     "-Dconfig.resource=test.application.conf"

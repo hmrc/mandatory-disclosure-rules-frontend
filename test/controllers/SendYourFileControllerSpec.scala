@@ -21,17 +21,30 @@ import config.FrontendAppConfig
 import connectors.{FileDetailsConnector, SubmissionConnector}
 import models.fileDetails.FileErrorCode.FailedSchemaValidation
 import models.fileDetails.RecordErrorCode.DocRefIDFormat
-import models.fileDetails._
+import models.fileDetails.*
 import models.submissions.SubmissionDetails
 import models.upscan.{URL, UploadId}
-import models.{ConversationId, MDR401, MDR402, MessageSpecData, MultipleCorrectionsDeletions, MultipleNewInformation, SingleCorrection, SingleDeletion, SingleNewInformation, SingleOther, UserAnswers, ValidatedFileData}
+import models.{
+  ConversationId,
+  MDR401,
+  MessageSpecData,
+  MultipleCorrectionsDeletions,
+  MultipleNewInformation,
+  SingleCorrection,
+  SingleDeletion,
+  SingleNewInformation,
+  SingleOther,
+  UserAnswers,
+  ValidatedFileData
+}
 import org.mockito.ArgumentMatchers.any
-import org.scalatest.matchers.should.Matchers.convertToAnyShouldWrapper
+import org.mockito.Mockito.{times, verify, when}
+import org.scalatest.matchers.should.Matchers.shouldBe
 import pages.{ConversationIdPage, URLPage, UploadIDPage, ValidXMLPage}
 import play.api.inject.bind
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import uk.gov.hmrc.http.HeaderCarrier
 import views.html.SendYourFileView
 

@@ -28,7 +28,7 @@ trait FieldBehaviours extends FormSpec with ScalaCheckPropertyChecks with Genera
     "must bind valid data" in {
 
       forAll(validDataGenerator -> "validDataItem") {
-        dataItem: String =>
+        (dataItem: String) =>
           val result = form.bind(Map(fieldName -> dataItem)).apply(fieldName)
           result.value.value mustBe dataItem
       }

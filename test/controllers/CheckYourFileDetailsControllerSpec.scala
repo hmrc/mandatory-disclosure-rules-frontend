@@ -17,7 +17,7 @@
 package controllers
 
 import base.{SpecBase, TestValues}
-import models.{MDR401, MessageSpecData, MultipleNewInformation, UserAnswers, ValidatedFileData}
+import models.{UserAnswers, ValidatedFileData}
 import pages.ValidXMLPage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -25,7 +25,6 @@ import viewmodels.CheckYourFileDetailsViewModel
 import viewmodels.govuk.summarylist._
 import views.html.{CheckYourFileDetailsView, ThereIsAProblemView}
 import models.cssClassesType.CssClassesType
-
 
 class CheckYourFileDetailsControllerSpec extends SpecBase {
 

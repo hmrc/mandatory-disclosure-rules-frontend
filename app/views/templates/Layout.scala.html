@@ -23,8 +23,6 @@
     appConfig: FrontendAppConfig,
     hmrcStandardPage: HmrcStandardPage,
     hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
-    hmrcLanguageSelect: HmrcLanguageSelect,
-    hmrcTimeoutDialog: HmrcTimeoutDialog,
     hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
 )
 
@@ -38,7 +36,7 @@
                 countdown           = Some(appConfig.countdown),
                 keepAliveUrl        = Some(routes.KeepAliveController.keepAlive.url),
                 keepAliveButtonText = Some(messages("timeout.keepAlive")),
-                signOutUrl          = controllers.auth.routes.AuthController.signOut.url,
+                signOutUrl          = controllers.auth.routes.AuthController.signOut().url,
                 timeoutUrl          = Some(controllers.auth.routes.SignedOutController.onPageLoad.url),
                 signOutButtonText   = Some(messages("timeout.signOut")),
                 title               = Some(messages("timeout.title")),
@@ -63,7 +61,7 @@
     HmrcStandardPageParams(
         serviceURLs = ServiceURLs(
             serviceUrl = Some(routes.IndexController.onPageLoad.url),
-            signOutUrl = if(showSignOut) Some(controllers.auth.routes.AuthController.signOut.url) else None,
+            signOutUrl = if(showSignOut) Some(controllers.auth.routes.AuthController.signOut().url) else None,
         ),
         pageTitle = Some(pageTitle),
         templateOverrides = TemplateOverrides(

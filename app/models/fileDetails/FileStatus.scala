@@ -15,9 +15,7 @@
  */
 
 package models.fileDetails
-
-import julienrf.json.derived
-import play.api.libs.json.OFormat
+import play.api.libs.json._
 
 sealed trait FileStatus
 
@@ -31,7 +29,61 @@ case class Rejected(error: ValidationErrors) extends FileStatus {
 }
 
 object FileStatus {
-  implicit val format: OFormat[FileStatus] = derived.oformat()
-  val accepted                             = "Accepted"
-  val rejected                             = "Rejected"
+
+  val accepted = "Accepted"
+  val rejected = "Rejected"
+
+  implicit val rejectedFormat: OFormat[Rejected] = Json.format[Rejected]
+
+  implicit val format: Format[FileStatus] = new Format[FileStatus] {
+
+    override def reads(json: JsValue): JsResult[FileStatus] =
+      json match {
+        case JsObject(fields) =>
+          fields.toList match {
+
+            case ("Pending", JsObject(_)) :: Nil =>
+              JsSuccess(Pending)
+
+            case ("Accepted", JsObject(_)) :: Nil =>
+              JsSuccess(Accepted)
+
+            case ("RejectedSDES", JsObject(_)) :: Nil =>
+              JsSuccess(RejectedSDES)
+
+            case ("RejectedSDESVirus", JsObject(_)) :: Nil =>
+              JsSuccess(RejectedSDESVirus)
+
+            case ("Rejected", obj: JsObject) :: Nil =>
+              obj.validate[Rejected]
+
+            case (other, _) :: Nil =>
+              JsError(s"Unknown FileStatus: $other")
+
+            case _ =>
+              JsError("Invalid FileStatus JSON")
+          }
+
+        case _ =>
+          JsError("FileStatus must be an object")
+      }
+
+    override def writes(fs: FileStatus): JsValue = fs match {
+
+      case Pending =>
+        Json.obj("Pending" -> Json.obj())
+
+      case Accepted =>
+        Json.obj("Accepted" -> Json.obj())
+
+      case RejectedSDES =>
+        Json.obj("RejectedSDES" -> Json.obj())
+
+      case RejectedSDESVirus =>
+        Json.obj("RejectedSDESVirus" -> Json.obj())
+
+      case r: Rejected =>
+        Json.obj("Rejected" -> Json.toJson(r))
+    }
+  }
 }

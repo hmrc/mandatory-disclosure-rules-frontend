@@ -19,11 +19,12 @@ package controllers
 import base.{SpecBase, TestValues}
 import connectors.FileDetailsConnector
 import models.fileDetails.{Accepted, FileDetails}
-import models.{ConversationId, SingleNewInformation, UserAnswers}
+import models.{SingleNewInformation, UserAnswers}
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import play.api.inject.bind
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import repositories.SessionRepository
 import services.SubscriptionService
 import uk.gov.hmrc.http.HeaderCarrier

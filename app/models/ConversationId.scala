@@ -34,7 +34,7 @@ object ConversationId {
   implicit lazy val pathBindable: PathBindable[ConversationId] = new PathBindable[ConversationId] {
 
     override def bind(key: String, value: String): Either[String, ConversationId] =
-      implicitly[PathBindable[String]].bind(key, value).right.map(ConversationId(_))
+      implicitly[PathBindable[String]].bind(key, value).map(ConversationId(_))
 
     override def unbind(key: String, value: ConversationId): String =
       value.value

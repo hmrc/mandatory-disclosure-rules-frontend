@@ -22,15 +22,16 @@ import models.fileDetails.{Accepted, FileDetails}
 import models.cssClassesType.CssClassesType
 import models.{MultipleCorrectionsDeletions, MultipleNewInformation, SingleCorrection, SingleDeletion, SingleNewInformation, SingleOther, UserAnswers}
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import pages.{ContactEmailPage, SecondContactEmailPage}
 import play.api.inject.bind
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import uk.gov.hmrc.govukfrontend.views.Aliases.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{Key, SummaryListRow}
 import utils.DateTimeFormatUtil.{dateFormatter, timeFormatter}
-import viewmodels.govuk.summarylist._
+import viewmodels.govuk.summarylist.*
 import views.html.{FileReceivedView, ThereIsAProblemView}
 
 import java.time.LocalDateTime

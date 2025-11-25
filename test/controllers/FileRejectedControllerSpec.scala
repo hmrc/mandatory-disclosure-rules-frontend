@@ -20,13 +20,14 @@ import base.{SpecBase, TestValues}
 import connectors.FileDetailsConnector
 import generators.ModelGenerators
 import models.fileDetails.{Accepted, FileDetails, Rejected, ValidationErrors}
-import models.{ConversationId, SingleNewInformation}
+import models.SingleNewInformation
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import org.scalacheck.Arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.inject.bind
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import viewmodels.FileRejectedViewModel
 import views.html.FileRejectedView
 

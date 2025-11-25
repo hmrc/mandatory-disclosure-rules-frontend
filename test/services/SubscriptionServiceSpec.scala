@@ -21,8 +21,9 @@ import connectors.SubscriptionConnector
 import generators.ModelGenerators
 import models.subscription.{ContactInformation, IndividualDetails, OrganisationDetails, ResponseDetail}
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import org.scalacheck.Arbitrary
-import pages._
+import pages.*
 import play.api.Application
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder

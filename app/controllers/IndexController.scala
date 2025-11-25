@@ -46,7 +46,7 @@ class IndexController @Inject() (
     with I18nSupport
     with Logging {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData.apply) async {
+  def onPageLoad: Action[AnyContent] = (identify andThen getData.apply()) async {
     implicit request =>
       setContactDetailsFlag(request.userAnswers.getOrElse(UserAnswers(request.userId))).flatMap {
         ua =>

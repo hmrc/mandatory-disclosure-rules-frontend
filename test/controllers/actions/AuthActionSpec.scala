@@ -20,13 +20,16 @@ import base.SpecBase
 import com.google.inject.Inject
 import config.FrontendAppConfig
 import controllers.routes
+import models.requests.IdentifierRequest
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
+import play.api.mvc
 import play.api.mvc.Results.Ok
 import play.api.mvc.{Action, AnyContent, BodyParsers, Results}
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import uk.gov.hmrc.auth.core.AffinityGroup.{Individual, Organisation}
-import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.auth.core.*
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{~, Retrieval}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -136,7 +139,7 @@ class AuthActionSpec extends SpecBase {
 
           val action = new AuthenticatedIdentifierAction(mockAuthConnector, appConfig, bodyParsers)
           val controller = action {
-            request =>
+            (request: IdentifierRequest[AnyContent]) =>
               val value = request.subscriptionId
               Ok(value)
           }

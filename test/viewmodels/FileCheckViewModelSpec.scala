@@ -17,7 +17,6 @@
 package viewmodels
 
 import base.SpecBase
-import models.fileDetails.FileStatus
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{HtmlContent, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{Key, SummaryListRow, Value}
 

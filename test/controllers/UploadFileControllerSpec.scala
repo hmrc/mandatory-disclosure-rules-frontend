@@ -22,16 +22,15 @@ import forms.UploadFileFormProvider
 import generators.Generators
 import helpers.FakeUpscanConnector
 import models.UserAnswers
-import models.upscan._
+import models.upscan.*
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.UploadIDPage
 import play.api.Application
 import play.api.inject.bind
-
-import java.time.Instant
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{status, _}
+import play.api.test.Helpers.{status, *}
 import views.html.UploadFileView
 
 import scala.concurrent.Future
@@ -118,12 +117,6 @@ class UploadFileControllerSpec extends SpecBase with ScalaCheckPropertyChecks wi
     }
 
     "must show errorForm when rejected upload has 'octet-stream' in message" in {
-      val rejectedDetails = UploadDetails(
-        Instant.now(),
-        TestValues.checkSum,
-        TestValues.fileMimeType,
-        TestValues.fileName // Simulate a rejected octet-stream
-      )
 
       val rejected = UploadRejected(ErrorDetails(failureReasonRejected, TestValues.errorMessage))
 
