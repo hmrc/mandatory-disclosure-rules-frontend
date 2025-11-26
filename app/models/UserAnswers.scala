@@ -86,7 +86,9 @@ object UserAnswers {
       (__ \ "_id").write[String] and
         (__ \ "data").write[JsObject] and
         (__ \ "lastUpdated").write(MongoJavatimeFormats.instantFormat)
-    )(unlift(UserAnswers.unapply))
+    )(
+      o => Tuple.fromProductTyped(o)
+    )
   }
 
   implicit val format: OFormat[UserAnswers] = OFormat(reads, writes)

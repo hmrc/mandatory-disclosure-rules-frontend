@@ -16,7 +16,7 @@
 
 package models.fileDetails
 
-import play.api.libs.json.{__, JsString, Reads, Writes}
+import play.api.libs.json.{__, JsString, JsValue, Reads, Writes}
 
 sealed abstract class RecordErrorCode(val code: String)
 
@@ -52,25 +52,24 @@ object RecordErrorCode {
     CustomError
   )
 
-  implicit val writes: Writes[RecordErrorCode] = Writes[RecordErrorCode] {
-    x =>
-      JsString(x.code)
-  }
+  given Writes[RecordErrorCode] with
+    def writes(x: RecordErrorCode): JsValue = JsString(x.code)
 
-  implicit val reads: Reads[RecordErrorCode] = __.read[String].map {
-    case "80000"   => DocRefIDAlreadyUsed
-    case "80001"   => DocRefIDFormat
-    case "80002"   => CorrDocRefIdUnknown
-    case "80003"   => CorrDocRefIdNoLongerValid
-    case "80004"   => CorrDocRefIdForNewData
-    case "80005"   => MissingCorrDocRefId
-    case "80008"   => ResendOption
-    case "80009"   => DeleteParentRecord
-    case "80010"   => MessageTypeIndic
-    case "80011"   => CorrDocRefIDTwiceInSameMessage
-    case "80013"   => UnknownDocRefID
-    case "80014"   => DocRefIDIsNoLongerValid
-    case "99999"   => CustomError
-    case otherCode => UnknownRecordErrorCode(otherCode)
-  }
+  given Reads[RecordErrorCode] =
+    __.read[String].map {
+      case "80000"   => DocRefIDAlreadyUsed
+      case "80001"   => DocRefIDFormat
+      case "80002"   => CorrDocRefIdUnknown
+      case "80003"   => CorrDocRefIdNoLongerValid
+      case "80004"   => CorrDocRefIdForNewData
+      case "80005"   => MissingCorrDocRefId
+      case "80008"   => ResendOption
+      case "80009"   => DeleteParentRecord
+      case "80010"   => MessageTypeIndic
+      case "80011"   => CorrDocRefIDTwiceInSameMessage
+      case "80013"   => UnknownDocRefID
+      case "80014"   => DocRefIDIsNoLongerValid
+      case "99999"   => CustomError
+      case otherCode => UnknownRecordErrorCode(otherCode)
+    }
 }

@@ -18,9 +18,9 @@ package viewmodels
 
 import base.SpecBase
 import models.{ConversationId, SingleNewInformation}
-import models.fileDetails.FileErrorCode.{fileErrorCodesForProblemStatus, CustomError => FileCustomError}
+import models.fileDetails.FileErrorCode.{fileErrorCodesForProblemStatus, CustomError as FileCustomError}
 import models.fileDetails.RecordErrorCode.CustomError
-import models.fileDetails._
+import models.fileDetails.*
 import uk.gov.hmrc.govukfrontend.views.Aliases.{TableRow, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.table.{HeadCell, Table}

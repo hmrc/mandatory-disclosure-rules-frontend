@@ -52,7 +52,7 @@ class FileReceivedController @Inject() (
     implicit request =>
       fileDetailsConnector.getFileDetails(conversationId) flatMap {
         fileDetails =>
-          (getContactEmails, fileDetails) match {
+          (getContactEmails(), fileDetails) match {
             case (Some(emails), Some(details)) =>
               if (details.reportType.contains(SingleOther)) {
                 logger.warn("FileReceivedController: Test data submitted but successful outcome")

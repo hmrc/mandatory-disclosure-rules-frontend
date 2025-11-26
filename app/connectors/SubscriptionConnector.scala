@@ -21,7 +21,7 @@ import models.subscription.{RequestDetailForUpdate, ResponseDetail}
 import play.api.Logging
 import uk.gov.hmrc.http.HttpReads.Implicits.readRaw
 import uk.gov.hmrc.http.HttpErrorFunctions.is2xx
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse, StringContextOps}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -30,7 +30,7 @@ class SubscriptionConnector @Inject() (val config: FrontendAppConfig, val http: 
 
   def readSubscription()(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[ResponseDetail]] = {
 
-    val url = s"${config.mdrUrl}/mandatory-disclosure-rules/subscription/read-subscription"
+    val url = url"${config.mdrUrl}/mandatory-disclosure-rules/subscription/read-subscription"
     http
       .POSTEmpty(url)
       .map {
@@ -50,7 +50,7 @@ class SubscriptionConnector @Inject() (val config: FrontendAppConfig, val http: 
 
   def updateSubscription(requestDetail: RequestDetailForUpdate)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] = {
 
-    val url = s"${config.mdrUrl}/mandatory-disclosure-rules/subscription/update-subscription"
+    val url = url"${config.mdrUrl}/mandatory-disclosure-rules/subscription/update-subscription"
     http
       .POST[RequestDetailForUpdate, HttpResponse](url, requestDetail)
       .map {

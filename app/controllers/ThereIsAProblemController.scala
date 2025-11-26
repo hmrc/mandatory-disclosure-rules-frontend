@@ -33,7 +33,7 @@ class ThereIsAProblemController @Inject() (
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData.apply) {
+  def onPageLoad: Action[AnyContent] = (identify andThen getData.apply()) {
     implicit request =>
       Ok(view())
   }

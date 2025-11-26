@@ -19,6 +19,7 @@ package controllers.actions
 import base.{SpecBase, TestValues}
 import models.UserAnswers
 import models.requests.{IdentifierRequest, OptionalDataRequest}
+import org.mockito.Mockito.when
 import play.api.test.FakeRequest
 import repositories.SessionRepository
 import uk.gov.hmrc.auth.core.AffinityGroup.Organisation

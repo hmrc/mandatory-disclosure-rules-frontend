@@ -22,7 +22,8 @@ import models.fileDetails.{FileDetails, FileStatus}
 import play.api.Logging
 import uk.gov.hmrc.http.HttpReads.Implicits.readRaw
 import uk.gov.hmrc.http.HttpErrorFunctions.is2xx
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse, StringContextOps}
+import play.api.libs.json._
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -30,11 +31,11 @@ import scala.concurrent.{ExecutionContext, Future}
 class FileDetailsConnector @Inject() (httpClient: HttpClient, config: FrontendAppConfig) extends Logging {
 
   def getAllFileDetails(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[Seq[FileDetails]]] = {
-    val url = s"${config.mdrUrl}/mandatory-disclosure-rules/files/details"
+    val url = url"${config.mdrUrl}/mandatory-disclosure-rules/files/details"
+
     httpClient.GET[HttpResponse](url).map {
       case responseMessage if is2xx(responseMessage.status) =>
-        responseMessage.json
-          .asOpt[Seq[FileDetails]]
+        responseMessage.json.asOpt[Seq[FileDetails]]
       case _ =>
         logger.warn("FileDetailsConnector: Failed to get AllFileDetails")
         None
@@ -42,7 +43,7 @@ class FileDetailsConnector @Inject() (httpClient: HttpClient, config: FrontendAp
   }
 
   def getFileDetails(conversationId: ConversationId)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[FileDetails]] = {
-    val url = s"${config.mdrUrl}/mandatory-disclosure-rules/files/${conversationId.value}/details"
+    val url = url"${config.mdrUrl}/mandatory-disclosure-rules/files/${conversationId.value}/details"
     httpClient.GET(url).map {
       case responseMessage if is2xx(responseMessage.status) =>
         responseMessage.json
@@ -54,7 +55,7 @@ class FileDetailsConnector @Inject() (httpClient: HttpClient, config: FrontendAp
   }
 
   def getStatus(conversationId: ConversationId)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[FileStatus]] = {
-    val url = s"${config.mdrUrl}/mandatory-disclosure-rules/files/${conversationId.value}/status"
+    val url = url"${config.mdrUrl}/mandatory-disclosure-rules/files/${conversationId.value}/status"
     httpClient.GET(url).map {
       case responseMessage if is2xx(responseMessage.status) =>
         responseMessage.json.asOpt[FileStatus]

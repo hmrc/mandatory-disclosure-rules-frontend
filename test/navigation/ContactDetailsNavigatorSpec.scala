@@ -43,6 +43,26 @@ class ContactDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks
         }
       }
 
+      "must go from Contact Name page to Contact Email page" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            navigator
+              .nextPage(ContactNamePage, individual, CheckMode, answers)
+              .mustBe(routes.ContactEmailController.onPageLoad())
+        }
+      }
+
+      "must go from Have Telephone page to Contact Phone Individual page" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers.set(HaveTelephonePage, true).success.value
+
+            navigator
+              .nextPage(HaveTelephonePage, individual, CheckMode, updatedAnswers)
+              .mustBe(routes.ContactPhoneIndividualController.onPageLoad())
+        }
+      }
+
       "must go from Contact Phone page to Change Organisation Details page" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
@@ -64,7 +84,7 @@ class ContactDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks
         }
       }
 
-      "must go from Contact Name page to Contact Email page" in {
+      "must go from Contact Name page to Contact Email Organisation page" in {
         forAll(arbitrary[UserAnswers]) {
           answers =>
             navigator
@@ -153,6 +173,28 @@ class ContactDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks
           answers =>
             navigator
               .nextPage(SecondContactPhonePage, organisation, CheckMode, answers)
+              .mustBe(routes.ChangeOrganisationContactDetailsController.onPageLoad())
+        }
+      }
+
+      "must go from Have Telephone page to Contact Phone Organisation page" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers.set(HaveTelephonePage, true).success.value
+
+            navigator
+              .nextPage(HaveTelephonePage, organisation, CheckMode, updatedAnswers)
+              .mustBe(routes.ContactPhoneOrganisationController.onPageLoad())
+        }
+      }
+
+      "must go from Have Telephone page to Contact Phone Organisation page if phone not set" in {
+        forAll(arbitrary[UserAnswers]) {
+          answers =>
+            val updatedAnswers = answers.set(HaveTelephonePage, false).success.value
+
+            navigator
+              .nextPage(HaveTelephonePage, organisation, CheckMode, updatedAnswers)
               .mustBe(routes.ChangeOrganisationContactDetailsController.onPageLoad())
         }
       }

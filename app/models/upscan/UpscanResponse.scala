@@ -31,7 +31,7 @@ object UpscanInitiateResponse {
   implicit val format: OFormat[UpscanInitiateResponse] = Json.format[UpscanInitiateResponse]
 }
 
-case class Reference(value: String) extends AnyVal
+case class Reference(value: String)
 
 case class UploadForm(href: String, fields: Map[String, String])
 

@@ -42,10 +42,9 @@ trait Formatters {
 
       private val baseFormatter = stringFormatter(requiredKey, args)
 
-      override def bind(key: String, data: Map[String, String]) =
+      override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Boolean] =
         baseFormatter
           .bind(key, data)
-          .right
           .flatMap {
             case "true"  => Right(true)
             case "false" => Right(false)
@@ -62,12 +61,10 @@ trait Formatters {
 
       private val baseFormatter = stringFormatter(requiredKey, args)
 
-      override def bind(key: String, data: Map[String, String]) =
+      override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], Int] =
         baseFormatter
           .bind(key, data)
-          .right
           .map(_.replace(",", ""))
-          .right
           .flatMap {
             case s if s.matches(decimalRegexp) =>
               Left(Seq(FormError(key, wholeNumberKey, args)))
@@ -80,7 +77,7 @@ trait Formatters {
                 )
           }
 
-      override def unbind(key: String, value: Int) =
+      override def unbind(key: String, value: Int): Map[String, String] =
         baseFormatter.unbind(key, value.toString)
     }
 
@@ -92,7 +89,7 @@ trait Formatters {
       private val baseFormatter = stringFormatter(requiredKey, args)
 
       override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], A] =
-        baseFormatter.bind(key, data).right.flatMap {
+        baseFormatter.bind(key, data).flatMap {
           str =>
             ev.withName(str)
               .map(Right.apply)
@@ -108,16 +105,18 @@ trait Formatters {
     override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], String] =
       data.get(key) match {
         case None =>
-          msgArg.isEmpty match {
-            case true  => Left(Seq(FormError(key, errorKey)))
-            case false => Left(Seq(FormError(key, errorKey, Seq(msgArg))))
+          if (msgArg.isEmpty) {
+            Left(Seq(FormError(key, errorKey)))
+          } else {
+            Left(Seq(FormError(key, errorKey, Seq(msgArg))))
           }
         case Some(s) =>
           s.trim match {
             case "" =>
-              msgArg.isEmpty match {
-                case true  => Left(Seq(FormError(key, errorKey)))
-                case false => Left(Seq(FormError(key, errorKey, Seq(msgArg))))
+              if (msgArg.isEmpty) {
+                Left(Seq(FormError(key, errorKey)))
+              } else {
+                Left(Seq(FormError(key, errorKey, Seq(msgArg))))
               }
             case s1 => Right(s1)
           }
@@ -140,7 +139,6 @@ trait Formatters {
       override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], String] =
         dataFormatter
           .bind(key, data)
-          .right
           .flatMap {
             case str if !str.matches(regex)    => Left(Seq(FormError(key, invalidKey)))
             case str if str.length > maxLength => Left(Seq(FormError(key, lengthKey)))

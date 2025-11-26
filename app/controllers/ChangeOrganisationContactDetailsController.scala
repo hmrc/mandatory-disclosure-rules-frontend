@@ -45,7 +45,7 @@ class ChangeOrganisationContactDetailsController @Inject() (
 ) extends FrontendBaseController
     with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = (identify andThen getData.apply andThen requireData andThen checkForSubmission()).async {
+  def onPageLoad: Action[AnyContent] = (identify andThen getData.apply() andThen requireData andThen checkForSubmission()).async {
     implicit request =>
       val checkUserAnswersHelper = CheckYourAnswersHelper(request.userAnswers)
 

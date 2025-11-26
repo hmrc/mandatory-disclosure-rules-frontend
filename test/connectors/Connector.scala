@@ -30,7 +30,7 @@ trait Connector extends SpecBase with WireMockHelper with Generators with ScalaC
   val errorCodes: Gen[Int] = Gen.oneOf(400, 403, 404, 405, 409, 500, 503)
   val mdrId                = "MDRID"
 
-  def stubPostResponse(url: String, status: Int, body: String = Json.obj().toString()): StubMapping =
+  def stubPostResponse(url: String, status: Int, body: String = Json.obj().toString): StubMapping =
     server.stubFor(
       post(urlEqualTo(url))
         .willReturn(
@@ -40,7 +40,7 @@ trait Connector extends SpecBase with WireMockHelper with Generators with ScalaC
         )
     )
 
-  def stubGetResponse(url: String, status: Int, body: String = Json.obj().toString()): StubMapping =
+  def stubGetResponse(url: String, status: Int, body: String = Json.obj().toString): StubMapping =
     server.stubFor(
       WireMock
         .get(urlEqualTo(url))

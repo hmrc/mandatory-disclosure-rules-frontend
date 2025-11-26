@@ -51,7 +51,7 @@ class FileValidationController @Inject() (
   private val maxFilenameLength = 100
   private case class ExtractedFileStatus(name: String, downloadUrl: String, size: Long, checkSum: String)
 
-  //noinspection ScalaStyle
+  // noinspection ScalaStyle
   def onPageLoad(): Action[AnyContent] = (identify andThen getData() andThen requireData).async {
     implicit request =>
       request.userAnswers
@@ -68,7 +68,7 @@ class FileValidationController @Inject() (
                     logger.error("File not uploaded successfully")
                     Future.successful(InternalServerError(errorView()))
                   } {
-                    downloadDetails: ExtractedFileStatus =>
+                    (downloadDetails: ExtractedFileStatus) =>
                       if (downloadDetails.name.length > maxFilenameLength) {
 
                         for {

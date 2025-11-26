@@ -21,7 +21,7 @@ import models.upscan.UpscanURL
 import models.{Errors, InvalidXmlError, MessageSpecData, NonFatalErrors, SubmissionValidationFailure, SubmissionValidationResult, SubmissionValidationSuccess}
 import play.api.Logging
 import play.api.http.Status.OK
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse, StringContextOps}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
@@ -29,7 +29,7 @@ import scala.util.control.NonFatal
 
 class ValidationConnector @Inject() (http: HttpClient, config: FrontendAppConfig) extends Logging {
 
-  val url = s"${config.mdrUrl}/mandatory-disclosure-rules/validate-submission"
+  val url = url"${config.mdrUrl}/mandatory-disclosure-rules/validate-submission"
 
   def sendForValidation(upScanUrl: UpscanURL)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Either[Errors, MessageSpecData]] =
     http

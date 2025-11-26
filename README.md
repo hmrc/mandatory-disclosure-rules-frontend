@@ -48,8 +48,25 @@ Mandatory Disclosure Rules runs on port 10018
       identifier = "MDRID"  
       identifier value = "XAMDR0009234567"
       redirect url = "http://localhost:10018/report-under-mandatory-disclosure-rules"
+
+## Testing
+
+#### Precheck
+Before creating a PR, run all test suites together with Scoverage and ScalaFMT code formatting:
+
+    ./precheck.sh
+
+#### Unit tests
+You can run unit test suite with
+
+    sbt test
+
+#### Integration Tests
+To run integration test suit, execute
+
+    sbt it/test
       
-#### *Acceptance test repo*:  
+#### Acceptance test repo*:  
 [mandatory-disclosure-rules-file-upload-ui-tests](https://github.com/hmrc/mandatory-disclosure-rules-file-upload-ui-tests)
       
 ## Requirements

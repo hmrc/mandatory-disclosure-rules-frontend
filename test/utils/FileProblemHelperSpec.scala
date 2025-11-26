@@ -17,7 +17,7 @@
 package utils
 
 import base.SpecBase
-import models.fileDetails.FileErrorCode.{FailedSchemaValidation, MessageRefIDHasAlreadyBeenUsed, UnknownFileErrorCode, CustomError => FileCustomError}
+import models.fileDetails.FileErrorCode.{CustomError => FileCustomError, FailedSchemaValidation, MessageRefIDHasAlreadyBeenUsed, UnknownFileErrorCode}
 import models.fileDetails.RecordErrorCode.{CustomError, DocRefIDFormat, MissingCorrDocRefId, UnknownRecordErrorCode}
 import models.fileDetails.{FileErrors, RecordError, ValidationErrors}
 import viewmodels.FileRejectedViewModel.{error_details_901, error_details_910}

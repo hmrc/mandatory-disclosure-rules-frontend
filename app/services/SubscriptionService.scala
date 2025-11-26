@@ -30,7 +30,7 @@ import scala.util.Try
 class SubscriptionService @Inject() (subscriptionConnector: SubscriptionConnector)(implicit ec: ExecutionContext) extends Logging {
 
   def getContactDetails(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Option[UserAnswers]] =
-    subscriptionConnector.readSubscription map {
+    subscriptionConnector.readSubscription() map {
       responseOpt =>
         responseOpt.flatMap {
           responseDetail =>
@@ -39,7 +39,7 @@ class SubscriptionService @Inject() (subscriptionConnector: SubscriptionConnecto
     }
 
   def updateContactDetails(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Boolean] =
-    subscriptionConnector.readSubscription flatMap {
+    subscriptionConnector.readSubscription() flatMap {
       case Some(responseDetails) =>
         RequestDetailForUpdate.convertToRequestDetails(responseDetails, userAnswers) match {
           case Some(requestDetails) => subscriptionConnector.updateSubscription(requestDetails)
@@ -53,7 +53,7 @@ class SubscriptionService @Inject() (subscriptionConnector: SubscriptionConnecto
     }
 
   def isContactInformationUpdated(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Option[Boolean]] =
-    subscriptionConnector.readSubscription map {
+    subscriptionConnector.readSubscription() map {
       case Some(responseDetail) =>
         val secondaryContact = (userAnswers.get(HaveSecondContactPage), responseDetail.secondaryContact, userAnswers.get(SecondContactNamePage)) match {
           case (Some(true), _, Some(orgName)) => populateResponseDetails[SecondaryContactDetailsPages](userAnswers, OrganisationDetails(orgName), None)

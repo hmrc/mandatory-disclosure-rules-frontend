@@ -23,7 +23,7 @@ import play.api.data.{Form, FormError}
 
 trait FormSpec extends AnyFreeSpec with Matchers with OptionValues {
 
-  def checkForError(form: Form[_], data: Map[String, String], expectedErrors: Seq[FormError]) =
+  def checkForError(form: Form[_], data: Map[String, String], expectedErrors: Seq[FormError]): Any =
     form
       .bind(data)
       .fold(

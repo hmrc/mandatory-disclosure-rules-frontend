@@ -20,10 +20,11 @@ import base.{SpecBase, TestValues}
 import connectors.{UpscanConnector, ValidationConnector}
 import helpers.FakeUpscanConnector
 import models.upscan.{Reference, UploadId, UploadSessionDetails, UploadedSuccessfully}
-import models.{GenericError, InvalidXmlError, MDR401, Message, MessageSpecData, MultipleNewInformation, UserAnswers, ValidatedFileData, ValidationErrors}
+import models.{GenericError, InvalidXmlError, Message, UserAnswers, ValidatedFileData, ValidationErrors}
 import org.bson.types.ObjectId
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.{reset, times, verify, when}
 import org.scalatest.BeforeAndAfterEach
 import pages.UploadIDPage
 import play.api.inject.bind
@@ -43,7 +44,7 @@ class FileValidationControllerSpec extends SpecBase with BeforeAndAfterEach {
 
   implicit val ec: ExecutionContextExecutor = scala.concurrent.ExecutionContext.global
 
-  override def beforeEach: Unit =
+  override def beforeEach(): Unit =
     reset(mockSessionRepository)
 
   val fakeUpscanConnector: FakeUpscanConnector = app.injector.instanceOf[FakeUpscanConnector]
@@ -113,7 +114,7 @@ class FileValidationControllerSpec extends SpecBase with BeforeAndAfterEach {
       val expectedData                                   = Json.obj("invalidXML" -> "afile")
 
       fakeUpscanConnector.setDetails(uploadDetails)
-      //noinspection ScalaStyle
+      // noinspection ScalaStyle
 
       when(mockValidationConnector.sendForValidation(any())(any(), any())).thenReturn(Future.successful(Left(InvalidXmlError("sax exception"))))
       when(mockSessionRepository.set(any())).thenReturn(Future.successful(true))
