@@ -29,6 +29,7 @@ import uk.gov.hmrc.http.client.HttpClientV2
 import java.net.URI
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success, Try}
 
 class FileDetailsConnector @Inject() (httpClient: HttpClientV2, config: FrontendAppConfig) extends Logging {
 
@@ -60,7 +61,13 @@ class FileDetailsConnector @Inject() (httpClient: HttpClientV2, config: Frontend
     val url = url"${config.mdrUrl}/mandatory-disclosure-rules/files/${conversationId.value}/status"
     httpClient.get(url).execute[HttpResponse].map {
       httpResponse =>
-        httpResponse.json.asOpt[FileStatus]
+        Try(httpResponse.json.asOpt[FileStatus]) match {
+          case Success(fileStatus) =>
+            fileStatus
+          case Failure(_) =>
+            logger.warn("FileDetailsConnector: Failed to getStatus")
+            None
+        }
     }
   }
 }
