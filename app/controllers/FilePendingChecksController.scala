@@ -18,12 +18,12 @@ package controllers
 
 import config.FrontendAppConfig
 import connectors.FileDetailsConnector
-import controllers.actions._
-import models.fileDetails.{Accepted => FileStatusAccepted, Pending, Rejected, RejectedSDES, RejectedSDESVirus, ValidationErrors}
+import controllers.actions.*
+import models.fileDetails.{Pending, Rejected, RejectedSDES, RejectedSDESVirus, ValidationErrors, Accepted as FileStatusAccepted}
 import pages.{ConversationIdPage, UploadIDPage, ValidXMLPage}
 import play.api.i18n.Lang.logger
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc._
+import play.api.mvc.*
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.FileProblemHelper.isProblemStatus
