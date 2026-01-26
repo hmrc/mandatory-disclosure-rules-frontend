@@ -39,7 +39,7 @@ object FileStatus {
   implicit val format: Format[FileStatus] = new Format[FileStatus] {
 
     override def reads(json: JsValue): JsResult[FileStatus] = {
-      (json \ "type") match {
+      val r = (json \ "type") match {
 
         case JsDefined(JsString("Pending")) =>
           JsSuccess(Pending)
@@ -65,6 +65,23 @@ object FileStatus {
 
         case _: JsUndefined =>
           JsError("Missing field: type")
+      }
+
+      r.orElse {
+        json match {
+          case JsObject(fields) if fields.size == 1 =>
+            fields.head match {
+              case ("Pending", _)           => JsSuccess(Pending)
+              case ("Accepted", _)          => JsSuccess(Accepted)
+              case ("RejectedSDES", _)      => JsSuccess(RejectedSDES)
+              case ("RejectedSDESVirus", _) => JsSuccess(RejectedSDESVirus)
+              case ("Rejected", value)      => rejectedFormat.reads(value)
+              case (other, _)               => JsError(s"Unknown FileStatus key: $other")
+            }
+
+          case _ =>
+            JsError("Unable to determine FileStatus")
+        }
       }
     }
 
