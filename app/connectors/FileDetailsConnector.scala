@@ -58,8 +58,9 @@ class FileDetailsConnector @Inject() (httpClient: HttpClientV2, config: Frontend
 
   def getStatus(conversationId: ConversationId)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[FileStatus]] = {
     val url = url"${config.mdrUrl}/mandatory-disclosure-rules/files/${conversationId.value}/status"
-    httpClient.get(url).execute[HttpResponse].map { httpResponse =>
-      httpResponse.json.asOpt[FileStatus]
+    httpClient.get(url).execute[HttpResponse].map {
+      httpResponse =>
+        httpResponse.json.asOpt[FileStatus]
     }
   }
 }

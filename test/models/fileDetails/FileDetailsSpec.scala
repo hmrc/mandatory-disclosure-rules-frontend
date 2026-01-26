@@ -34,14 +34,8 @@ class FileDetailsSpec extends SpecBase with Generators with ScalaCheckPropertyCh
       val validationError = Arbitrary.arbitrary[ValidationErrors].sample.value
 
       val fileDetail1 = FileDetails("test1.xml", "messageRefId1", Some(SingleNewInformation), date, date, Pending, ConversationId("XGD11111"))
-      val fileDetail2 = FileDetails("test2.xml",
-                                                "messageRefId2",
-                                                Some(SingleNewInformation),
-                                                date,
-                                                date.plusSeconds(11),
-                                                Rejected(validationError),
-                                                ConversationId("XGD11111")
-      )
+      val fileDetail2 =
+        FileDetails("test2.xml", "messageRefId2", Some(SingleNewInformation), date, date.plusSeconds(11), Rejected(validationError), ConversationId("XGD11111"))
       val fileDetail3 =
         FileDetails("test3.xml", "messageRefId3", Some(SingleNewInformation), date, date.plusSeconds(25), Accepted, ConversationId("XGD11111"))
 

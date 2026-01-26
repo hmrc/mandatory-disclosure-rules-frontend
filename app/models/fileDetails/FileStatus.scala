@@ -54,7 +54,8 @@ object FileStatus {
           JsSuccess(RejectedSDESVirus)
 
         case JsDefined(JsString("Rejected")) =>
-          (json \ "error").validate[ValidationErrors]
+          (json \ "error")
+            .validate[ValidationErrors]
             .map(Rejected.apply)
 
         case JsDefined(JsString(other)) =>
