@@ -20,7 +20,7 @@ import scoverage.ScoverageKeys
 object CodeCoverageSettings {
   private val excludedPackages: Seq[String] = Seq(
     "<empty>",
-    ".*(Reverse|BuildInfo|Routes|components|repositories|javascript|viewmodels|ViewUtils|GuiceInjector|views" +
+    ".*(Reverse|BuildInfo|Routes|components|repositories|javascript|viewmodels|models|ViewUtils|GuiceInjector|views" +
       "|RegExConstants|ControllerConfiguration|LanguageSwitchController|testOnlyDoNotUseInAppConf).*"
   )
 
