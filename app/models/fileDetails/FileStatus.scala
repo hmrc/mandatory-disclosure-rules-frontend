@@ -15,7 +15,8 @@
  */
 
 package models.fileDetails
-import play.api.libs.json._
+import play.api.libs.json.*
+import play.api.libs.functional.syntax.*
 
 sealed trait FileStatus
 
@@ -37,36 +38,53 @@ object FileStatus {
 
   implicit val format: Format[FileStatus] = new Format[FileStatus] {
 
-    override def reads(json: JsValue): JsResult[FileStatus] =
-      json match {
-        case JsObject(fields) =>
-          fields.toList match {
+    override def reads(json: JsValue): JsResult[FileStatus] = {
+      val r = (json \ "type") match {
 
-            case ("Pending", JsObject(_)) :: Nil =>
-              JsSuccess(Pending)
+        case JsDefined(JsString("Pending")) =>
+          JsSuccess(Pending)
 
-            case ("Accepted", JsObject(_)) :: Nil =>
-              JsSuccess(Accepted)
+        case JsDefined(JsString("Accepted")) =>
+          JsSuccess(Accepted)
 
-            case ("RejectedSDES", JsObject(_)) :: Nil =>
-              JsSuccess(RejectedSDES)
+        case JsDefined(JsString("RejectedSDES")) =>
+          JsSuccess(RejectedSDES)
 
-            case ("RejectedSDESVirus", JsObject(_)) :: Nil =>
-              JsSuccess(RejectedSDESVirus)
+        case JsDefined(JsString("RejectedSDESVirus")) =>
+          JsSuccess(RejectedSDESVirus)
 
-            case ("Rejected", obj: JsObject) :: Nil =>
-              obj.validate[Rejected]
+        case JsDefined(JsString("Rejected")) =>
+          (json \ "error")
+            .validate[ValidationErrors]
+            .map(Rejected.apply)
 
-            case (other, _) :: Nil =>
-              JsError(s"Unknown FileStatus: $other")
+        case JsDefined(JsString(other)) =>
+          JsError(s"Unknown FileStatus: $other")
 
-            case _ =>
-              JsError("Invalid FileStatus JSON")
-          }
+        case JsDefined(_) =>
+          JsError("FileStatus.type must be a string")
 
-        case _ =>
-          JsError("FileStatus must be an object")
+        case _: JsUndefined =>
+          JsError("Missing field: type")
       }
+
+      r.orElse {
+        json match {
+          case JsObject(fields) if fields.size == 1 =>
+            fields.head match {
+              case ("Pending", _)           => JsSuccess(Pending)
+              case ("Accepted", _)          => JsSuccess(Accepted)
+              case ("RejectedSDES", _)      => JsSuccess(RejectedSDES)
+              case ("RejectedSDESVirus", _) => JsSuccess(RejectedSDESVirus)
+              case ("Rejected", value)      => rejectedFormat.reads(value)
+              case (other, _)               => JsError(s"Unknown FileStatus key: $other")
+            }
+
+          case _ =>
+            JsError("Unable to determine FileStatus")
+        }
+      }
+    }
 
     override def writes(fs: FileStatus): JsValue = fs match {
 

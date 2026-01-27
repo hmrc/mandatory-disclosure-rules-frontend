@@ -23,17 +23,20 @@ import play.api.Logging
 import uk.gov.hmrc.http.HttpReads.Implicits.readRaw
 import uk.gov.hmrc.http.HttpErrorFunctions.is2xx
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse, StringContextOps}
-import play.api.libs.json._
+import play.api.libs.json.*
+import uk.gov.hmrc.http.client.HttpClientV2
 
+import java.net.URI
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success, Try}
 
-class FileDetailsConnector @Inject() (httpClient: HttpClient, config: FrontendAppConfig) extends Logging {
+class FileDetailsConnector @Inject() (httpClient: HttpClientV2, config: FrontendAppConfig) extends Logging {
 
   def getAllFileDetails(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[Seq[FileDetails]]] = {
-    val url = url"${config.mdrUrl}/mandatory-disclosure-rules/files/details"
+    val url = s"${config.mdrUrl}/mandatory-disclosure-rules/files/details"
 
-    httpClient.GET[HttpResponse](url).map {
+    httpClient.get(new URI(url).toURL).execute[HttpResponse].map {
       case responseMessage if is2xx(responseMessage.status) =>
         responseMessage.json.asOpt[Seq[FileDetails]]
       case _ =>
@@ -44,7 +47,7 @@ class FileDetailsConnector @Inject() (httpClient: HttpClient, config: FrontendAp
 
   def getFileDetails(conversationId: ConversationId)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[FileDetails]] = {
     val url = url"${config.mdrUrl}/mandatory-disclosure-rules/files/${conversationId.value}/details"
-    httpClient.GET(url).map {
+    httpClient.get(url).execute[HttpResponse].map {
       case responseMessage if is2xx(responseMessage.status) =>
         responseMessage.json
           .asOpt[FileDetails]
@@ -56,12 +59,15 @@ class FileDetailsConnector @Inject() (httpClient: HttpClient, config: FrontendAp
 
   def getStatus(conversationId: ConversationId)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[FileStatus]] = {
     val url = url"${config.mdrUrl}/mandatory-disclosure-rules/files/${conversationId.value}/status"
-    httpClient.GET(url).map {
-      case responseMessage if is2xx(responseMessage.status) =>
-        responseMessage.json.asOpt[FileStatus]
-      case _ =>
-        logger.warn("FileDetailsConnector: Failed to getStatus")
-        None
+    httpClient.get(url).execute[HttpResponse].map {
+      httpResponse =>
+        Try(httpResponse.json.asOpt[FileStatus]) match {
+          case Success(fileStatus) =>
+            fileStatus
+          case Failure(_) =>
+            logger.warn("FileDetailsConnector: Failed to getStatus")
+            None
+        }
     }
   }
 }
