@@ -22,7 +22,7 @@ import models.fileDetails.{FileDetails, FileStatus}
 import play.api.Logging
 import uk.gov.hmrc.http.HttpReads.Implicits.readRaw
 import uk.gov.hmrc.http.HttpErrorFunctions.is2xx
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse, StringContextOps}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 import play.api.libs.json.*
 import uk.gov.hmrc.http.client.HttpClientV2
 
@@ -59,15 +59,23 @@ class FileDetailsConnector @Inject() (httpClient: HttpClientV2, config: Frontend
 
   def getStatus(conversationId: ConversationId)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[FileStatus]] = {
     val url = url"${config.mdrUrl}/mandatory-disclosure-rules/files/${conversationId.value}/status"
-    httpClient.get(url).execute[HttpResponse].map {
-      httpResponse =>
-        Try(httpResponse.json.asOpt[FileStatus]) match {
-          case Success(fileStatus) =>
-            fileStatus
-          case Failure(_) =>
-            logger.warn("FileDetailsConnector: Failed to getStatus")
-            None
-        }
-    }
+    httpClient
+      .get(url)
+      .execute[HttpResponse]
+      .map {
+        httpResponse =>
+          Try(httpResponse.json.asOpt[FileStatus]) match {
+            case Success(fileStatus) =>
+              fileStatus
+            case Failure(_) =>
+              logger.warn("FileDetailsConnector: Failed to getStatus")
+              None
+          }
+      }
+      .recover {
+        case ex =>
+          logger.warn(s"FileDetailsConnector: call to fetch status failed: ${ex.getMessage}")
+          None
+      }
   }
 }
