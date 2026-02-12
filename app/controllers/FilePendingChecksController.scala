@@ -64,6 +64,7 @@ class FilePendingChecksController @Inject() (
             case Some(RejectedSDESVirus) =>
               Future.successful(Redirect(routes.VirusFileFoundController.onPageLoad()))
             case Some(RejectedSDES) =>
+              logger.error(s"file with conversation: $conversationId has status: $RejectedSDES")
               Future.successful(Redirect(routes.ThereIsAProblemController.onPageLoad()))
             case Some(Pending) =>
               val summary = FileCheckViewModel.createFileSummary(xmlDetails.fileName, Pending.toString)
