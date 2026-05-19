@@ -21,15 +21,18 @@ import models.upscan.*
 import play.api.Logging
 import play.api.http.HeaderNames
 import play.api.http.Status.OK
-import play.api.libs.json.{JsError, JsSuccess}
+import play.api.libs.json.{JsError, JsSuccess, Json}
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.HttpErrorFunctions.is2xx
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse, StringContextOps}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 
+import java.net.URI
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class UpscanConnector @Inject() (configuration: FrontendAppConfig, httpClient: HttpClient)(implicit ec: ExecutionContext) extends Logging {
+class UpscanConnector @Inject() (configuration: FrontendAppConfig, httpClient: HttpClientV2)(implicit ec: ExecutionContext) extends Logging {
 
   private val headers = Map(
     HeaderNames.CONTENT_TYPE -> "application/json"
@@ -45,21 +48,21 @@ class UpscanConnector @Inject() (configuration: FrontendAppConfig, httpClient: H
       Some(upscanMaxSize * 1048576),
       Some("text/xml")
     )
-    httpClient.POST[UpscanInitiateRequest, PreparedUpload](upscanInitiateUrl, body, headers.toSeq).map {
+    httpClient.post(new URI(upscanInitiateUrl).toURL).setHeader(headers.toSeq: _*).withBody(Json.toJson(body)).execute[PreparedUpload].map {
       _.toUpscanInitiateResponse
     }
   }
 
   def requestUpload(uploadId: UploadId, fileReference: Reference)(implicit hc: HeaderCarrier): Future[UploadId] = {
     val uploadUrl = url"$backendUrl/upscan/upload"
-    httpClient.POST[UpscanIdentifiers, HttpResponse](uploadUrl, UpscanIdentifiers(uploadId, fileReference)).map {
+    httpClient.post(uploadUrl).withBody(Json.toJson(UpscanIdentifiers(uploadId, fileReference))).execute[HttpResponse].map {
       _ => uploadId
     }
   }
 
   def getUploadDetails(uploadId: UploadId)(implicit hc: HeaderCarrier): Future[Option[UploadSessionDetails]] = {
     val detailsUrl = url"$backendUrl/upscan/details/${uploadId.value}"
-    httpClient.GET[HttpResponse](detailsUrl).map {
+    httpClient.get(detailsUrl).execute[HttpResponse].map {
       response =>
         response.status match {
           case status if is2xx(status) =>
@@ -78,7 +81,7 @@ class UpscanConnector @Inject() (configuration: FrontendAppConfig, httpClient: H
 
   def getUploadStatus(uploadId: UploadId)(implicit hc: HeaderCarrier): Future[Option[UploadStatus]] = {
     val statusUrl = url"$backendUrl/upscan/status/${uploadId.value}"
-    httpClient.GET[HttpResponse](statusUrl).map {
+    httpClient.get(statusUrl).execute[HttpResponse].map {
       response =>
         response.status match {
           case OK =>

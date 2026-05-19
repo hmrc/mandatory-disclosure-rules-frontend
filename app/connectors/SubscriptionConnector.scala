@@ -19,20 +19,24 @@ package connectors
 import config.FrontendAppConfig
 import models.subscription.{RequestDetailForUpdate, ResponseDetail}
 import play.api.Logging
+import play.api.libs.json.Json
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 import uk.gov.hmrc.http.HttpReads.Implicits.readRaw
 import uk.gov.hmrc.http.HttpErrorFunctions.is2xx
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse, StringContextOps}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class SubscriptionConnector @Inject() (val config: FrontendAppConfig, val http: HttpClient) extends Logging {
+class SubscriptionConnector @Inject() (val config: FrontendAppConfig, val http: HttpClientV2) extends Logging {
 
   def readSubscription()(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[ResponseDetail]] = {
 
     val url = url"${config.mdrUrl}/mandatory-disclosure-rules/subscription/read-subscription"
     http
-      .POSTEmpty(url)
+      .post(url)
+      .execute[HttpResponse]
       .map {
         case responseMessage if is2xx(responseMessage.status) =>
           responseMessage.json
@@ -52,7 +56,9 @@ class SubscriptionConnector @Inject() (val config: FrontendAppConfig, val http: 
 
     val url = url"${config.mdrUrl}/mandatory-disclosure-rules/subscription/update-subscription"
     http
-      .POST[RequestDetailForUpdate, HttpResponse](url, requestDetail)
+      .post(url)
+      .withBody(Json.toJson(requestDetail))
+      .execute[HttpResponse]
       .map {
         responseMessage =>
           logger.warn(s"updateSubscription: Status ${responseMessage.status} has been received when update subscription was called")
