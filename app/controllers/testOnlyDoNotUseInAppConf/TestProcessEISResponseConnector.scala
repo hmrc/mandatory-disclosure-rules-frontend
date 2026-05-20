@@ -19,14 +19,17 @@ package controllers.testOnlyDoNotUseInAppConf
 import config.FrontendAppConfig
 import play.api.Logging
 import play.api.http.HeaderNames
-import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import play.api.libs.ws.DefaultBodyWritables.writeableOf_String
+import uk.gov.hmrc.http.HttpReads.Implicits.*
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
+import java.net.URI
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.xml.NodeSeq
 
-class TestProcessEISResponseConnector @Inject() (httpClient: HttpClient, config: FrontendAppConfig)(implicit
+class TestProcessEISResponseConnector @Inject() (httpClient: HttpClientV2, config: FrontendAppConfig)(implicit
   executionContext: ExecutionContext
 ) extends Logging {
 
@@ -40,6 +43,6 @@ class TestProcessEISResponseConnector @Inject() (httpClient: HttpClient, config:
       HeaderNames.AUTHORIZATION -> "Bearer token"
     )
 
-    httpClient.POSTString[HttpResponse](submitUrl, xmlDocument.toString(), headers)
+    httpClient.post(new URI(submitUrl).toURL).setHeader(headers: _*).withBody(xmlDocument.toString()).execute[HttpResponse]
   }
 }
