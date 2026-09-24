@@ -27,7 +27,7 @@
 
 @(fileDetails: SummaryList, firstContactEmail: String, secondContactEmail:Option[String])(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = titleNoForm(messages("fileReceived.title")), showBackLink = false) {
+@layout(pageTitle = titleNoForm(messages("fileReceived.title")), showBackLink = false, displayUserResearchBanner = true) {
 
     @govukPanel(Panel(
         title = Text(messages("fileReceived.heading"))

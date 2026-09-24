@@ -21,6 +21,7 @@ import play.api.Configuration
 import play.api.i18n.Lang
 import uk.gov.hmrc.hmrcfrontend.config.ContactFrontendConfig
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import play.api.i18n.Messages
 
 @Singleton
 class FrontendAppConfig @Inject() (configuration: Configuration, servicesConfig: ServicesConfig, contactFrontendConfig: ContactFrontendConfig) {
@@ -39,6 +40,12 @@ class FrontendAppConfig @Inject() (configuration: Configuration, servicesConfig:
   val enquireEmailLink: String = configuration.get[String]("urls.emailLink")
 
   lazy val homePageUrl: String = configuration.get[String]("urls.homepage")
+
+  lazy val userResearchBannerEnabled: Boolean =
+    configuration.getOptional[Boolean]("features.user-research-banner").getOrElse(false)
+
+  def userResearchBannerUrl(implicit messages: Messages): String =
+    configuration.get[String](s"urls.user-research-banner-${messages.lang.code}")
 
   val upscanInitiateHost: String        = servicesConfig.baseUrl("upscan")
   val upscanRedirectBase: String        = configuration.get[String]("microservice.services.upscan.redirect-base")
